@@ -5,7 +5,7 @@ include_once('phpGitHubApi.php');
 $github = new phpGitHubApi();
 
 $repos = $github->getRepoApi()->getUserRepos('abtris');
-
+krsort($repos);
 $out.="";
 
 foreach ($repos as $r) {
