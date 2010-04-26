@@ -12,7 +12,7 @@ foreach ($repos as $r) {
 	if ($r['name']!='abtris.github.com') {
 	
 	$out.= "<div class='repo'>
-					<h2><a href='{$r['url']}'>{$r['name']}</a></h2>
+					<h3><a href='{$r['url']}'>{$r['name']}</a></h3>
 					<p>{$r['description']}</p>
 				</div>";
 	}
