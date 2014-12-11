@@ -1,0 +1,362 @@
+{
+    "timeline": {
+        "headline": "VCS Timeline",
+        "type": "default",
+        "text": "",
+        "startData": "1972",
+        "date": [
+            {
+                "headline": "Source Code Control System (SCCS)",
+                "startDate": "1972",
+                "endDate": "",
+                "text": "Marc J. Rochkind",
+                "asset": {
+                    "media": "/images/timeline/image-19-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Revision Control System (RCS)",
+                "startDate": "1981",
+                "endDate": "1995",
+                "text": "Walter F. Tichy",
+                "asset": {
+                    "media": "/images/timeline/image-18-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "PVCS Version Manager",
+                "startDate": "1985",
+                "endDate": "",
+                "text": "Polytron Version Control System",
+                "asset": {
+                    "media": "/images/timeline/image-17-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "IBM Rational ClearCase",
+                "startDate": "1990",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-15-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Concurrent Versions System (CVS)",
+                "startDate": "1990",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-16-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "SourceSafe",
+                "startDate": "1991",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-31-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Visual SourceSafe (VSS)",
+                "startDate": "1994",
+                "endDate": "2005",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-11-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Microsoft Delta",
+                "startDate": "1994",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-29-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Configuration Management Version Control (CMVC)",
+                "startDate": "1994",
+                "endDate": "2008",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-28-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Perforce (P4)",
+                "startDate": "1995",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-20-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Borland StarTeam",
+                "startDate": "1995",
+                "endDate": "2009",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-10-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Sun WorkShop TeamWare",
+                "startDate": "1996",
+                "endDate": "2000",
+                "text": "Evan Adams, Glenn Skinner and Larry McVoy ",
+                "asset": {
+                    "media": "/images/timeline/image-22-1-1-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "CVSNT",
+                "startDate": "1998",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-30-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "BitKeeper",
+                "startDate": "1998",
+                "endDate": "",
+                "text": "Larry McVoy ",
+                "asset": {
+                    "media": "/images/timeline/image-21-1-1-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Subversion",
+                "startDate": "2000",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-2-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "GNU Arch",
+                "startDate": "2001",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-14-1-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Darcs",
+                "startDate": "2002",
+                "endDate": "",
+                "text": "Haskell",
+                "asset": {
+                    "media": "/images/timeline/image-12-1-1-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "AccuRev",
+                "startDate": "2002",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-13-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Distributed Concurrent Versions System (DCVS)",
+                "startDate": "2002",
+                "endDate": "2006",
+                "text": "elego Software Solutions GmbH",
+                "asset": {
+                    "media": "/images/timeline/image-4-1-2.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "SVK",
+                "startDate": "2003",
+                "endDate": "2009",
+                "text": "Best Practical",
+                "asset": {
+                    "media": "/images/timeline/image-27-1-1-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "SourceGear Vault",
+                "startDate": "2003",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-26-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Monotone",
+                "startDate": "2003",
+                "endDate": "",
+                "text": "Nathaniel Smith, Graydon Hoare",
+                "asset": {
+                    "media": "/images/timeline/image-3-1-1-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Microsoft TFVC",
+                "startDate": "2005",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-9-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Mercurial",
+                "startDate": "2005",
+                "endDate": "",
+                "text": "Matt Mackall",
+                "asset": {
+                    "media": "/images/timeline/image-8-1-1-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Git",
+                "startDate": "2005",
+                "endDate": "",
+                "text": "Linus Torvalds",
+                "asset": {
+                    "media": "/images/timeline/image-3-1-2.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Fossil",
+                "startDate": "2006",
+                "endDate": "",
+                "text": "D. Richard Hipp, \\nBug Tracking And Wiki ",
+                "asset": {
+                    "media": "/images/timeline/image-4-1-1-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Canonical Bazaar",
+                "startDate": "2007",
+                "endDate": "",
+                "text": "Martin Pool\\nCanonical Ltd.",
+                "asset": {
+                    "media": "/images/timeline/image-6-1-1-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "Apple TimeMachine",
+                "startDate": "2007",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-2-2.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "IBM Rational Team Concert",
+                "startDate": "2008",
+                "endDate": "",
+                "text": "",
+                "asset": {
+                    "media": "/images/timeline/image-2.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "SourceGear Veracity",
+                "startDate": "2011",
+                "endDate": "",
+                "text": "Bug tracker, SCRUM",
+                "asset": {
+                    "media": "/images/timeline/image-25-1-1-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "FogCreek Kiln Harmony",
+                "startDate": "2013",
+                "endDate": "",
+                "text": "Git and Mercurial in one software\\nhttp://www.fogcreek.com/kiln/",
+                "asset": {
+                    "media": "/images/timeline/image-1-1.png",
+                    "credit": "",
+                    "caption": ""
+                }
+            },
+            {
+                "headline": "",
+                "startDate": null,
+                "endDate": null,
+                "text": null,
+                "asset": {
+                    "media": "",
+                    "credit": "",
+                    "caption": ""
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,1470 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Prskavčí blog</title>
+  <meta name="author" content="Ladislav Prskavec">
+
+  
+  <meta name="description" content="Použití databáze pro ukládání logů se používá často pro analýzu logů. Technicky napojit databázi RBMS (MySQL) pomocí Zend_Log_Writer_Db není žádný &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.prskavec.net/page//page/5/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+<meta name="google-site-verification" content="mepQHhq6JPqzvIjErdB-A6hp3UKAYIlYHN7xPUL8JUM" />
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/feed/index.html" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.prskavec.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archív</a></li>
+  <li><a href="/prednasky">Přednášky</a></li>  
+  <li><a href="/skoleni">Školení</a></li>
+  <li><a href="/kontakt">Kontakt</a></li>  
+</ul>
+
+</nav> 
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/08/zend-framework-a-nosql-pro-ukladani-logu-ve-webovych-aplikaci-dil-1-couchdb/">Zend Framework a NoSQL pro ukládání logů ve webových aplikací, díl prvnío CouchDb</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-24T00:00:00+02:00" pubdate data-updated="true">24. 08. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Použití databáze pro ukládání logů se používá často pro analýzu logů. Technicky napojit databázi RBMS (MySQL) pomocí Zend_Log_Writer_Db není žádný problém. Ale vidím tu nevýhodu v tom, že musíte mít schema podle toho co ukládáte za logy. Pokud se rozhodnete použít NOSQL databázi (CouchDb, MongoDb) nemusíte se o schema starat.</p>
+
+<p>V tomto článku si napsat vlastní Zend_Log_Writer pro CouchDb a jak si potom lehce zobrazíme příslušné logy. Napíšeme si také jednoduchou map funkci pro view v CouchDb, kterou v aplikaci použijeme.</p>
+
+<p>Nejprve si projedeme jak se používá <a href="http://framework.zend.com/manual/en/zend.log.writers.html">Zend_Log_Writer_Db, syntaxi najdete v manuálu</a>. Tabulka v db musí mít pevně dané schéma, která namapujete v konfiguraci writeru.</p>
+
+<p>Implementaci vlastního App_Log_Writer_CouchDb provedeme třeba takto:</p>
+
+<pre class="code php">class App_Log_Writer_CouchDb extends Zend_Log_Writer_Abstract
+{
+    /**
+     * Db
+     * @var Phly_Couch
+     */
+    private $_db;
+    /**
+     * CouchDb host localhost default
+     * @var string
+     */
+    private $_host;
+    /**
+     * Couchdb port 3184 default
+     * @var int
+     */
+    private $_port;
+    /**
+     *
+     * @param array $params
+     * @return void
+     */
+    public function __construct($dbname, $options = null)
+    {
+        if (is_null($options)) {
+            $options['host'] = "localhost";
+            $options['port'] = "5984";
+            $options['db'] = $dbname;
+        }
+        $this-&gt;_db = new Phly_Couch($options);
+    }
+
+    static public function factory($config)
+    {
+        $config = self::_parseConfig($config);
+        return $config;
+    }
+    /**
+     * @param array $event
+     * @return void
+     */
+    protected function _write($event)
+    {
+        // action body
+        $doc = new Phly_Couch_Document($event);
+        $result = $this-&gt;_db-&gt;docSave($doc);
+        // return array ok, id, rev
+        $info = $result-&gt;getInfo();
+        if (!$info['ok']) {
+            throw new Zend_Log_Exception("Error in save to CouchDb");
+        }
+    }
+
+}</pre>
+
+
+<p>Není na tom jak vidíte nic složitého, implementuje funkce <em>_constructor, factory a </em>write funkci a je to.</p>
+
+<p>Samozřejmě je to kus Zend Frameworku, který potrebuje konfiguraci.</p>
+
+<pre class="code">autoloaderNamespaces.phly = "Phly_"
+autoloaderNamespaces.app = "App_"
+; Options for CouchDb
+couchdb.host = prskavec.couchone.com
+couchdb.port = 80
+couchdb.db = "test-log"
+</pre>
+
+
+<p>Pro správu CouchDb jsem použil vestavěný Futon.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/08/Screen-shot-2010-08-22-at-8.04.37.png"><img class="aligncenter size-medium wp-image-2613" title="CouchDb" src="http://blog.prskavec.net/wp-content/uploads/2010/08/Screen-shot-2010-08-22-at-8.04.37-300x187.png" alt="" width="300" height="187" /></a></p>
+
+<p>Vytvořil jsem testovací db <strong>&ldquo;test-log&rdquo;</strong> a v ní pohled, který v kódu potom používám. Vytvoříte temporary_view, které potom při ukládání ložíte do příslušného designu a view. U mě to bylo použité <code>logger/log_by_prior</code>.</p>
+
+<pre class="jush">  function(doc) {
+    if (doc.priority) {
+       emit(doc.priority, [doc.priorityName, doc.timestamp, doc.message, doc.module, doc.controller]);
+    }
+  }
+</pre>
+
+
+<p>Toto view potom volá controller, který načítá data pro zobrazení dat z databáze.</p>
+
+<pre class="code">class IndexController extends Zend_Controller_Action
+{
+    protected $_config;
+
+    public function preDispatch()
+    {
+            $this-&gt;_config = new Zend_Config_Ini('../application/configs/'.
+                    'application.ini', APPLICATION_ENV);
+    }
+
+    public function indexAction()
+    {
+         $db = new Phly_Couch($this-&gt;_config-&gt;couchdb);
+
+         $this-&gt;view-&gt;form = $form = new App_Form_Filter();
+         if ($this-&gt;getRequest()-&gt;isPost()) {
+             $formData = $this-&gt;getRequest()-&gt;getPost();
+             if ($form-&gt;isValid($formData)) {
+                 $filterValue = $form-&gt;getValue('filter');
+                 Zend_Debug::dump($filterValue);
+                 if (empty($filterValue) &amp;&amp; $filterValue===0) $filterValue = null;
+                 $result = $db-&gt;view('logger','log_by_prior', $filterValue, array("db"=&gt;$this-&gt;_config-&gt;couchdb-&gt;db));
+             } else {
+             $form-&gt;populate($formData);
+             }
+         } else {
+            $result = $db-&gt;view('logger','log_by_prior', null, array("db"=&gt;$this-&gt;_config-&gt;couchdb-&gt;db));
+         }
+         $this-&gt;view-&gt;docs = $result-&gt;toArray();
+         $this-&gt;view-&gt;messages = $this-&gt;_helper-&gt;flashMessenger-&gt;getMessages();
+
+         $logger = new Zend_Log();
+         $r = new ReflectionClass($logger);
+         $this-&gt;view-&gt;priorities = array_flip($r-&gt;getConstants());
+
+    }
+
+    public function logAction()
+    {
+          $id = $this-&gt;_request-&gt;getParam('id', 0);  
+
+          $logger = new Zend_Log();
+          $format = '%timestamp% %priorityName% (%priority%): '.
+            '[%module%] [%controller%] %message%';
+          $formatter = new Zend_Log_Formatter_Simple($format);
+
+          $writer = new App_Log_Writer_CouchDb($this-&gt;_config-&gt;couchdb-&gt;db, $this-&gt;_config-&gt;couchdb);
+          $writer-&gt;setFormatter($formatter);
+
+          $logger-&gt;addWriter($writer);
+          $logger-&gt;setEventItem('module', $this-&gt;getRequest()-&gt;getModuleName());
+          $logger-&gt;setEventItem('controller', $this-&gt;getRequest()-&gt;getControllerName());
+          $logger-&gt;log("Testovani chyba", $id);
+          $this-&gt;_helper-&gt;flashMessenger-&gt;addMessage('Log item saved');
+          $this-&gt;_helper-&gt;redirector('index');
+    }
+
+}
+</pre>
+
+
+<p>Controller obsahuje dvě akce a to vlastní zobrazení v indexAction a metodu, která záznamy vytváří logAction. V logAction je vidět výhoda neexistence schématu, protože jsem si přidal další informace bez potřeby měnit schéma databáze.</p>
+
+<h3>PHP a CouchDb</h3>
+
+
+<p>Použil jsem knihovnu <a href="http://weierophinney.net/phly/">Phly_Couch pro práci s CouchDb</a>, jen jsem musel funkci lehce aktualizovat pro současnou verzi CouchDb 1.0.1, kterou jsem použil.</p>
+
+<p>Aktualizovanou verzi Phly_CouchDb najdete v mém <a href="http://github.com/abtris/phly">forku na githubu</a>, celou ukázkovou aplikaci <a href="http://github.com/abtris/phplogger-couchdb">php_couchdb_logger</a> také.</p>
+
+<p>Pro přístup ke CouchDb můžete použít i jiné knihovny, například <a href="http://arbitracker.org/phpillow.html">PHPillow</a>, která vypadá celkem aktualizovaně. Já jsem použil knihovnu, kterou napsal Matthew Weier O&#8217;Phinney hlavně proto, že je psaná přímo pro Zend Framework. Má přehledný a dobře napsaný kód, kde jsem si upravil jen to co jsem se potřeboval.</p>
+
+<h3>CouchDb</h3>
+
+
+<p>Na Mac OS X si můžete nainstalovat CouchDb jako na linuxu ze zdrojáků nebo použít balík, který mi přijde ideální. Podrobné informace o <a href="http://wiki.apache.org/couchdb/Installation">instalaci jsou ve wiki</a>, případně se podívejte tam.</p>
+
+<h3>Závěr</h3>
+
+
+<p>Myslím, že to je jednoduchý příklad jak například použít CouchDb, který se pro začátek práce s CouchDb může hodit. Pokud chcete dělat náročnějši vyhledavání na logy, je potřeba použit <a href="http://github.com/rnewson/couchdb-lucene/">CouchDb Lucene</a>. Pokud se chcete dozvědět více o CouchDb tak doporučuji jít na přednášku <a href="http://webexpo.cz/prednasky/development/">Karla Minaříka na letošním Webexpu</a>.</p>
+
+<p>V dalším pokračování si ukážeme jak by se to dělalo v MongoDb.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/07/jak-jsem-si-koupil-amazon-kindle/">Jak jsem si koupil Amazon Kindle</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-14T00:00:00+02:00" pubdate data-updated="true">14. 07. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Čtečka knih Amazon kindle byla nedávno s nástupem iPadu zlevněna tak jsem se rozhodl zakoupit ji pro své používání, protože již touto dobu používám kindle v telefonu s Androidem a na počítači.</p>
+
+<p>Objednal jsem 8.7.2010 a doporučeno bylo 13.7.2010 pomocí UPS. Cena $187 (s pouzdrem a zálohou na clo $287) &ndash; cca 6000 Kč.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/07/kindle.jpg"><img src="http://blog.prskavec.net/wp-content/uploads/2010/07/kindle-300x226.jpg" alt="" width="300" height="226" class="aligncenter size-medium wp-image-963" /></a></p>
+
+<p>Kindle byl aktivovaný na můj účet na Amazonu. Firmware 2.3, provedl jsem upgrade na <a href="http://www.amazon.com/gp/help/customer/display.html?nodeId=200324680">poslední verzi 2.5.2</a>, která přidá možnost zaheslování, zoom v PDF, podporu facebook, twitter a další.</p>
+
+<p>Dostat do Kindlu obsah není žádný problém, stačí ho připojit přes USB (microusb) a přenést přes mass storage. Pokud je PDF, Mobi čtečka se si s tím bezproblémů poradí. Pokud máte ePub, html je potřeba to převést. Můžete použít službu Amazonu, která vám za malý poplatek převede a pošle dokument. Toto řešení jsem nevyzkoušel, protože se mi nechtělo za to platit. Stáhnul jsem si <a href="http://www.amazon.com/gp/feature.html?docId=1000234621">kindlegen</a>, pomocí kterého si to můžete převést sami. Převedl jsem HTML manuál PHP (40MB) do formátu mobi (16MB). Převod trval 1h, ale úspěšně se to provedl. V Kindlu pokud chcete vyhledávat chvíli trvá než si ho zaindexuje.</p>
+
+<p>Pokud chcete nějaké české tituly tak kromě PDF (napr. <a href="http://knihy.nic.cz">knihy.nic.cz</a>) dopočuji i <a href="http://palmknihy.cz/">palmknihy.cz</a>, kde sice <a href="http://www.nakupujvamerice.cz/clanek.php?clanek=amazon-kindle-3-z-usa">Kindle</a> není přímo zmíněn, ale formát Mobi Unicode funguje bez problémů. Jako další dobrý zdroj se dá použít <a href="http://www.root.cz/knihy/">Elektronická knihovna Root.cz</a>, kde se najdou volné tituly ke stažení anglicky i česky.</p>
+
+<p>Samozřejmě máte v angličtině k dispozici 620 000 titulů přímo na Amazonu. Nejsou to jen knihy, ale i časopisy a noviny. Z čech tam najdete jenom <a href="http://www.praguepost.com/">Prague Post </a>. Kdybu měli Mladou frontu, tak si ji hned předplatím.</p>
+
+<p>Pokud máte zajímavé typy pro Kindle tak se námi podělte v komentářích, pokud nic o elektronických čtečkách nevíte doporučuji <a href="http://met.blog.root.cz/2010/04/21/jak-evoluuje-elektronicky-ctenar/">článek Martina Hassmana</a> a postřehy <a href="http://www.sovavsiti.cz/weblog/151/amazon-pocmarane-knihy">Marka Prokopa</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/06/xdebug-2-1-instalace-ze-zdrojovych-kodu/">Xdebug 2.1 instalace ze zdrojových kódů</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-30T00:00:00+02:00" pubdate data-updated="true">30. 06. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Včera vyšela nová verze <a href="http://derickrethans.nl/xdebug-2.1-released.html">Xdebug 2.1</a>. Z hlavních novinek bych zdůraznil podporu pro PHP 5.3 a další můžete vyčíst z Derickova oznámení.</p>
+
+<p>Xdebug jsem instaloval na Mac OS X 10.6.4 a Ubuntu 9.10 a bez problémů jsem to zkompiloval ze zdrojových kódů.</p>
+
+<p>V Ubuntu i na Macu je potřeba mít podporu pro kompilaci ze zdrojových kódů. V ubuntu je to balíček build-essential a autoconf a na Macovi Xcode s příslušenstvím, případně si přes Port doinstalujete co potřebujete.</p>
+
+<ul>
+    <li>Stáhnout zdrojové kódy xdebugu, rozbalit a dat kompilovat.
+<pre class="bash">wget http://www.xdebug.org/files/xdebug-2.1.0.tgz
+tar -xzf xdebug-2.1.0.tgz
+cd xdebug-2.1.0/
+phpize
+./configure --enable-xdebug
+make</pre>
+</li>
+    <li>Knihovnu najdete v <code>xdebug-2.1.0/modules/xdebug.so</code></li>
+    <li>Knihovnu nakopirujte k ostatním knihovnám, případně kam chcete</li>
+    <li>Přidejte nakonec do <code>php.ini</code> řádek
+<pre class="bash">zend_extension=/cesta-k-modulum/xdebug.so</pre>
+</li>
+    <li>Nezapomeňte restartovat server</li>
+</ul>
+
+
+<p>Pokud máte nějaké potíže s kompilací nebo s Xdebugem, klidně se ozvěte ve komentářích.</p>
+
+<p>P.S.: Pokud instalujete xdebug poprvé nezapomeňte zkontrolovat zda máte správně konfiguraci pro debugging pro IDE (např. NetBeans)</p>
+
+<pre class="bash">xdebug.remote_enable=1
+xdebug.remote_host=localhost
+xdebug.remote_port=9000
+xdebug.remote_handler=dbgp
+xdebug.profiler_enable=1
+xdebug.profiler_output_dir="/tmp/xdebug"
+</pre>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/06/adblock-neni-vrazda-ale-zkuste-si-ho-nechat-zapnuty/">Adblock není vražda, ale zkuste si ho nechat zapnutý!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-28T00:00:00+02:00" pubdate data-updated="true">28. 06. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Po <a href="http://zdrojak.root.cz/clanky/adblock-neni-vrazda/">přečtení článku z minulého týdne</a> jsem si myslel, že brzo začne někdo uživatele adblocku blokovat. Dnes jsem narazil na první a určitě ne jediny z nich.</p>
+
+<p>Při hledání češtiny do Wordpresu 3.0 jsem narazil na stránku <a href="http://www.cwordpress.cz/navody/instalace-cestiny-do-wordpressu.html">kde vyskočí zajímavé</a> okno, která mě přesměruje na stránku upozorňující na to, že mám zapnutý adblock (Firefox 3.6.4, Ubuntu 9.10).</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/06/Adblock.png"><img class="aligncenter size-medium wp-image-940" src="http://blog.prskavec.net/wp-content/uploads/2010/06/Adblock-300x160.png" alt="" width="300" height="160" /></a></p>
+
+<p>Chápu <a href="http://www.cpalead.com/">CPALead</a>, že jim to kazí obchody, ale nechápu provozovatele stránek, kteří se takto připravují o návštěvníky. Protože vám nedají jinou šanci než odejít nebo adblock vypnout. Příjemnější by bylo na stránce upozornění a ne přesměrování někam, kde nemám šanci ani zjistit, co s tím má přechozí stránka společného.</p>
+
+<p>Tak tedy ne!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/05/subversion-post-commit-pro-vice-projektu-v-jednom-repository/">Subversion post-commit pro více projektů v jednom repository</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-26T00:00:00+02:00" pubdate data-updated="true">26. 05. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud máte strukturu repository podobnou této:</p>
+
+<pre>/repository/project1/trunk
+/repository/project1/branches
+/repository/project1/tags
+/repository/project2/trunk
+/repository/project2/branches
+/repository/project2/tags</pre>
+
+
+<p>a chtěli jste dělat nějakou akci pro jednotlivé projekty nebo jen pro některé je potřeba si trochu pohrát s post-commitem. Zde uvádím příklad na posílání mailu jen pro projekty, které začínají &ldquo;php_&rdquo;.</p>
+
+<pre>#!/bin/sh
+# POST-COMMIT HOOK
+REPOS="$1"
+REV="$2"
+REPNAME="${1##*/}"
+SVNLOOK="/usr/bin/svnlook"
+AWK="/usr/bin/awk"
+GREP="/bin/egrep"
+ERR="/tmp/errors"  
+
+TEST=1
+
+CHANGED=`$SVNLOOK changed  -r "$REV" "$REPOS" | $AWK '{print $2}' | $GREP ^php_`
+for FILE in $CHANGED 
+do
+    # echo $FILE &gt;&gt; $ERR 
+    TEST=0
+done 
+
+if [ $TEST = 0 ]; then
+    /srv/svn/tools/commit-email.pl "$REPOS" "$REV" adresat@email.com -h svn.hostname.cz -s "SVN: $REPNAME" &gt; /tmp/postcommit-log 2&gt;&amp;1
+    # echo "Send mail" &gt;&gt; $ERR
+    exit 0
+fi
+</pre>
+
+
+<p>Post commit je upraven tak, že pomocí svnlook si zjistí provedené změny a podle nich se zachová, tak se dá řídit celá logika akce, kterou chcete vykonat.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/subversion-dnes-a-zitra/">Subversion dnes a zítra</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-30T00:00:00+02:00" pubdate data-updated="true">30. 04. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><!--        @page { margin: 0.79in }        P { margin-bottom: 0.08in } -->
+
+
+<p>Já osobně jsem začal pracovat s někde kolem roku 2000 se systémem CVS z kterého jsem nebyl vůbec nadšený, hned jak jsem se pokusil něco přejmenovat. Později jsem přešel na Subversion, který mě v té době nadechl a to mi celkem vydrželo po dlouhou dobu než jsem před několika lety začal koketovat s distribuovanými systémy a teď asi rok už aktivně používám Git a pře ním jsem si hrál s Bazaar a Mercurialem. Na Subversion jsem, ale nijak nezanevřel a stále ho používáme ve firmě jako jediný verzovací systém v poměrně slušném nasazení (asi 100 repositářů, několik desítek GB místa). Znám limity Subversion a podle toho s ním zacházím.</p>
+
+<p>Verzovací systémy jsou tu už 38 let, první verzovací systém SCCS vznikal v Bellových laboratořích v roce 1972. Dodnes existuje na mnoha unixových systémech v GNU variantě.</p>
+
+<p>Protože SCCS to byl proprietární verzovací systém, vytvořil na Walter F. Tichy  na Pordue University open source variantu tohoto software pojmenovanou RCS. RCS se dodnes používá například v Twiki pro uchovávání historie stránek.</p>
+
+<p>Následovali další jako CVS, PRCS (Project Revision Control systém). CVS byla původně jen nadstavba na RCS, sada skriptů, které používali příkazy RCS. Většinu vlastností CVS má poděděnou od RCS.</p>
+
+<p>Subversion vznikl nový verzovací systém, který odstraní chyby co lidem vadili v CVS a byl napsán úplně znova i když filozoficky se hodně držel původního CVS, ale byl tree oriented, což přineslo některé výhody, ale i nevýhody.</p>
+
+<p>Protože řada vývojářů nebyla s CVS spokojená vznikali další systémy a za některými stál i Microsoft, který přišel se svým verzovacím systémem Delta v roce 1994. Tento systém dlouho nevydržel, protože MS udělal výhodou akvizici a koupil firmu SourceSafe a další rok už vydal nový verzovací systém VSS. Tento systém měl mnoho nevýhod a pokud někdo s ním pracoval určitě mi dá za pravdu, že to nebylo jednoduché. Problémy se zamykáním souborů, přenos přes sdílené disky apod. V roce 2005 naštěstí MS představil moderní centralizovaný systém, který je součásti TFS, který jako datové úložiště používá MS SQL.</p>
+
+<p>Larry McVoy je klíčová osobnost návrhu verzovacích systémů. Stál u vývoje verzovacího systému  Sun TeamWare, který vedl Evan Adams a potom na základě těchto zkušeností vytvořil BitKeeper. To jsou první distribuované verzovací systémy. TeamWare byl postavený na základech SCCS, přesto přinesl spoustu nových věcí, které dali později vzniknou dnešním systémům. Implementace TeamWare začala v roce 1991, to můžeme považovat za datum vzniku distribuovaných systémů.</p>
+
+<p>TeamWare to začal, ale BitKeeper může za vznik Gitu a Mercurialu, kteří patří dnes mezi nejznámější distribuované verzovací systémy. Společnost BitKeeper se na základě událostí v roce 2005 rozhodla odebrat (reverse enginnering na linux konferenci pomoci telnetu) volné použití linuxové komunitě, která BitKeeper používala k vývoji jádra.</p>
+
+<p>To vedlo ke vzniku Gitu (Linus Torvald) a Mercurial (Matt Mackall) v roce 2005. Git je inspirován BitKeeperem a Monotone (sha1 hash), také velkou část práce na něm udělal Petr Baudiš, který stojí například za frontendem Cogito  a příklad git-filter-branch.</p>
+
+<p>Výhody Gitu vidím v těchto vlastnostech:</p>
+
+<ul>
+    <li>pružnost   (moderní různá worklow)</li>
+    <li>lokální   větve</li>
+    <li>jednoduchý a   rychlý merge</li>
+    <li>rychlost a  offline commit</li>
+    <li>vysoký     failover, díky lokálním kompletním kopiím</li>
+</ul>
+
+
+<p>Tak proč všichni nepoužívají Git, ale Subversion? Je proto několik důvodů.</p>
+
+<ol>
+    <li>ne všichni     považují tyto výhody za důležité, priority mají jinde</li>
+    <li>pro SVN mluví  vysoká rozšířenost, snadná dostupnost v mnoha IDE</li>
+    <li>vynikající    TortoiseSVN, který pomáhá více než by se na první pohled mohlo    zdát</li>
+    <li>dostupný   placený support včetně tvoření balíků pro linux, windows     (CollabNet)</li>
+    <li>http, apache    pro snadné začlenění do každé sítě</li>
+    <li>napojeni    ldap, active diretory nastavení práv až na úrověň každého   adresáře</li>
+    <li>znalost</li>
+</ol>
+
+
+<p>Proto více než 80% firem dnes používá Subversion.</p>
+
+<p>Dnes je důležité používat určitě aktuální verzi Subversion, vůbec nedoporučuji pracovat s verzemi 1.4 a nižší, které nepodporovali mergeinfo. Subversion má desetileté výročí. Ale stále je to malé dítě, které potřebuje dospět. Už jsou pryč dětské nemoci, ale některé problémy přetrvávají.</p>
+
+<p>Subversion byl začleněn pod Apache Foudation do toho doufám, že se trochu akceleruje vývoj Subversion k následujícím verzím. Tým kolem SVN si je dobře vědom věcí, které SVN scházejí a dobře vědí, že to není jednoduché je odstranit. Proto existuje tato roadmapa.</p>
+
+<p>Je to roadmapa přibližně na 4 roky dopředu, klíčový bude letošek a uvidíme jak se podaří vývoj verze 1.7 o které budu teď. K ostatním verzím se vrátím později.</p>
+
+<p>Verze 1.7 by měla obsahovat tyto novinky</p>
+
+<ul>
+    <li>httpv2</li>
+    <li>wc-ng</li>
+    <li>svn patch</li>
+</ul>
+
+
+<p>Nová verze HTTPv2 by měla přinést větší rychlost při zachování všech výhod http protokolu.</p>
+
+<p>Pracovní kopie nové generace je důležitá součást nutná pro další následné změny, které odstraní dnešní problémy (tree conflict, rename tracking). Bude to sqlite databáze v jednom adresáři .svn, kde budou všechny potřebná metadata o repository.</p>
+
+<p>Svn patch jen umožní to co umí příkaz patch v linux, drobnost, která v svn chyběla.</p>
+
+<p>Ve verzi 1.8, která by měla být za rok bychom se snad díky nové WC-NG mohli již dočkat sledování přejmenovaných souborů napříč historii. Nastavení pro jednotlivé repository ne jen globálně a vylepšení problémů s tree conflicty.</p>
+
+<p>Co bude v dalších verzích uvidíme, autoři slibují nový FS, nový editor a další vylepšení. Uvidíme zda se do budoucna dočkáme třeba i offline commitů.</p>
+
+<p>Na závěr bych chtěl shrnout co by jste si měli odnést těchto 4 věci:</p>
+
+<ul>
+    <li>pokud máte         subversion, ujistěte se že používáte poslední verze</li>
+    <li>pokud chcete        přejít na DVCS mějte pro to dobré zdůvodnění nedělejte to       je kvůli módě</li>
+    <li>na      subversion se stále pracuje</li>
+    <li>existují       distribuované verzovací systémy a přinášejí něco nového</li>
+</ul>
+
+
+<p>Tento článek je přepis mojí přednášky na <a href="http://www.slideshare.net/ladislavprskavec/subversion-dnes-a-ztra">Teched 2010</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/5-alternativnich-systemu-jak-tvorit-slidy/">5 alternativních systémů jak tvořit slidy</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-26T00:00:00+02:00" pubdate data-updated="true">26. 04. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><!--:en-->
+
+
+<p>Pokud občas nebo více přednášíte, určitě jste zkusili nějaký tento program na tvorbu slidů. Já žádný z nich nepovažuji za ideální, hlavně pokud potřebujete mít ve slidech zdrojové kódy. Pokud máte slidy v html nebo xml můžete je verzovat pomocí například Gitu nebo SVN, to vám půjde s binárními formáty také, ale neuvidíte ty diffy, které jsou užitečné.</p>
+
+<ul>
+    <li><a href="http://office.microsoft.com/en-us/powerpoint/">Microsoft PowerPoint</a></li>
+    <li><a href="http://www.openoffice.org/product/impress.html">OpenOffice Impress</a></li>
+    <li><a href="http://www.apple.com/iwork/keynote/">Apple Keynote</a></li>
+    <li><a href="http://prezi.com/">Prezi </a>- více v článku Martina Hassmana <a href="http://met.blog.root.cz/2010/04/11/umi-tohle-i-vas-prezentacni-system-aneb-jak-jsem-zkousel-prezi/">Umí tohle i váš prezentační systém? Aneb jak jsem zkoušel Prezi</a></li>
+</ul>
+
+
+<p>Určitě jich bude ještě více. Pokud pracujete s HTML a XML máte další možnosti, ať jsou to <a href="http://www.miwie.org/presentations/html/dbslides.html">Docbook slides</a> nebo některá varianta založená na HTML nebo markupu (<a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>, <a href="http://en.wikipedia.org/wiki/Textile_%28markup_language%29">Textile</a>, <a href="http://texy.info/cs/syntax">Texy</a>).</p>
+
+<p>Dnes tu představím 5 systémů, které generují HTML nebo se slidy v HTML přímo píšou.</p>
+
+<ol>
+    <li>S5</li>
+    <li>Swinger</li>
+    <li>Slidedown</li>
+    <li>W3C (Slidy, B5, slidemaker)</li>
+    <li>JUSH slides</li>
+</ol>
+
+
+<p><strong>1. <a href="http://meyerweb.com/eric/tools/s5/">S5</a></strong>
+Klasické slidy v HTML dole je vidět jak vypadá jednoduchý předpis.</p>
+
+<pre>
+
+
+<title><em>[slide show title]</em></title>
+
+
+
+
+
+
+
+
+<div>
+
+<div></div>
+<div></div>
+<div>
+<div></div>
+</div>
+
+</div>
+<div>
+
+<div>
+<h1><em>[slide title]</em></h1>
+</div>
+
+</div>
+
+
+</pre>
+
+
+<p>Demo je k dispozici na <a href="http://meyerweb.com/eric/tools/s5/s5-intro.html"><a href="http://meyerweb.com/eric/tools/s5/s5-intro.html">http://meyerweb.com/eric/tools/s5/s5-intro.html</a></a></p>
+
+<p><strong>2. <a href="http://github.com/quirkey/swinger">Swinger</a></strong></p>
+
+<p>Toto řešení je zajímavé, že máte k dispozici celý editor markupu a všechny data jsou uloženy v CouchDb. Aplikace i prohlížení slidů je jen HTML a Javascript.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot.png"><img class="aligncenter size-medium wp-image-901" src="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot-300x177.png" alt="" width="300" height="177" /></a></p>
+
+<p>Online verze <a href="http://swinger.quirkey.com/"><a href="http://swinger.quirkey.com/">http://swinger.quirkey.com/</a></a></p>
+
+<p><strong>3. <a href="http://github.com/nakajima/slidedown">Slidedown</a></strong>
+Řešení založené na Ruby, které podle předpisu v markdownu vygeneruje html prezentaci včetně zvýraznění ruby syntaxe i šablon.</p>
+
+<pre>!SLIDE
+
+# This is my talk
+
+!SLIDE
+
+## I hope you enjoy it
+
+!SLIDE code
+
+    def foo
+      :bar
+    end
+
+!SLIDE
+
+Google is [here](http://google.com)
+
+!SLIDE
+
+# Questions?</pre>
+
+
+<p>Zvýraznění syntaxe se dělá takto, například pro javascript.</p>
+
+<pre>@@@ js
+    function foo() {
+      return 'bar';
+    }
+@@@</pre>
+
+
+<p>Demo je dostupné zde <a href="http://nakajima.github.com/slidedown/"><a href="http://nakajima.github.com/slidedown/">http://nakajima.github.com/slidedown/</a></a></p>
+
+<p><strong>4. W3C Talks Tools (<a href="http://www.w3.org/Talks/Tools/">Slidy, B5, Slidemaker/slideme</a>)</strong></p>
+
+<p>Struktura je velmi jednoduchá, základní část je tvořena tagem <div class="slide"></div></p>
+
+<p>a jsou přidané třídy pro speciální chování.</p>
+
+<pre><div>
+  <h1>Analysts - "Open standards programming will become
+  mainstream, focused around VoiceXML"</h1>
+  <!-- use CSS positioning and scaling for adaptive layout -->
+  <img src="trends.png" width="50%" style="float:left" alt="projected growth of VoiceXML" /> 
+
+  <blockquote>
+    VoiceXML will dominate the voice environment, due to its
+    flexibility and eventual multimodal capabilities
+  </blockquote><br /> 
+
+  <p style="text-align:center">Source Data Monitor, March
+  2004</p>
+</div></pre>
+
+
+<p><a href="http://www.w3.org/Talks/Tools/Slidy/#%281%29">Slidy demo</a></p>
+
+<p><strong>5. <a href="http://abtris.github.com/slides/">JUSH Slides</a></strong></p>
+
+<p>Poslední je moje vlastní řešení je založené na W3C Slidy a je doplněné o <a href="http://jush.sourceforge.net/">JUSH zvýrazňovač</a>, který pomůže v tom co já nejvíce potřebuji.</p>
+
+<p>Kromě zvýraznění přidá JUSH linky na dokumentaci u klíčových slov pro html, javascript, php a další. To udělá ze slidů dobrý studijní materiál.</p>
+
+<p>Za další výhodu vidím jednoduchý předpis v html, jen používání xmp tagu není ideální.</p>
+
+<pre><div class="slide">
+    <h1>Filter Input</h1>
+
+<pre><form method="post">
+   <label for="username">Username:</label>
+   <label for="password">Password:</label>
+   <label for="color">Select:</label>
+                                            Red
+                                            Blue
+                                     
+   
+</form></pre>
+
+<pre>// c_type extension
+$clean = array();
+if (c_type_aplha($_POST['username']) {
+    $clean['username'] = $_POST['username'];
+}
+// filter
+$args = array('username' =&gt; FILTER_SANITIZE_STRING, ...);
+$myinputs = filter_input_array(INPUT_POST, $args);
+</pre>
+    <ul>
+
+        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.validate.php">http://cz.php.net/manual/en/filter.filters.validate.php</a>&#8220;&gt;Validate filters</a></li>
+        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.sanitize.php">http://cz.php.net/manual/en/filter.filters.sanitize.php</a>&#8220;&gt;Sanitize filters</a></li>
+    </ul>
+</div></pre>
+
+
+<p>Pokud máte nějaké další zajímavé řešení podělte se s námi v komentářích.<!--:--><!--:cs-->Pokud občas nebo více přednášíte, určitě jste zkusili nějaký tento program na tvorbu slidů. Já žádný z nich nepovažuji za ideální, hlavně pokud potřebujete mít ve slidech zdrojové kódy. Pokud máte slidy v html nebo xml můžete je verzovat pomocí například Gitu nebo SVN, to vám půjde s binárními formáty také, ale neuvidíte ty diffy, které jsou užitečné.</p>
+
+<ul>
+    <li><a href="http://office.microsoft.com/en-us/powerpoint/">Microsoft PowerPoint</a></li>
+    <li><a href="http://www.openoffice.org/product/impress.html">OpenOffice Impress</a></li>
+    <li><a href="http://www.apple.com/iwork/keynote/">Apple Keynote</a></li>
+    <li><a href="http://prezi.com/">Prezi </a>- více v článku Martina Hassmana <a href="http://met.blog.root.cz/2010/04/11/umi-tohle-i-vas-prezentacni-system-aneb-jak-jsem-zkousel-prezi/">Umí tohle i váš prezentační systém? Aneb jak jsem zkoušel Prezi</a></li>
+</ul>
+
+
+<p>Určitě jich bude ještě více. Pokud pracujete s HTML a XML máte další možnosti, ať jsou to <a href="http://www.miwie.org/presentations/html/dbslides.html">Docbook slides</a> nebo některá varianta založená na HTML nebo markupu (<a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>, <a href="http://en.wikipedia.org/wiki/Textile_%28markup_language%29">Textile</a>, <a href="http://texy.info/cs/syntax">Texy</a>).</p>
+
+<p>Dnes tu představím 5 systémů, které generují HTML nebo se slidy v HTML přímo píšou.</p>
+
+<ol>
+    <li>S5</li>
+    <li>Swinger</li>
+    <li>Slidedown</li>
+    <li>W3C (Slidy, B5, slidemaker)</li>
+    <li>JUSH slides</li>
+</ol>
+
+
+<p><strong>1. <a href="http://meyerweb.com/eric/tools/s5/">S5</a></strong></p>
+
+<p>Klasické slidy v HTML dole je vidět jak vypadá jednoduchý předpis.</p>
+
+<pre>
+
+
+<title><em>[slide show title]</em></title>
+
+
+
+
+
+
+
+
+<div>
+
+<div></div>
+<div></div>
+<div>
+<div></div>
+</div>
+
+</div>
+<div>
+
+<div>
+<h1><em>[slide title]</em></h1>
+</div>
+
+</div>
+
+
+</pre>
+
+
+<p>Demo je k dispozici na <a href="http://meyerweb.com/eric/tools/s5/s5-intro.html"><a href="http://meyerweb.com/eric/tools/s5/s5-intro.html">http://meyerweb.com/eric/tools/s5/s5-intro.html</a></a></p>
+
+<p><strong>2. <a href="http://github.com/quirkey/swinger">Swinger</a></strong></p>
+
+<p>Toto řešení je zajímavé, že máte k dispozici celý editor markupu a všechny data jsou uloženy v CouchDb. Aplikace i prohlížení slidů je jen HTML a Javascript.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot.png"><img class="aligncenter size-medium wp-image-901" src="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot-300x177.png" alt="" width="300" height="177" /></a></p>
+
+<p>Online verze <a href="http://swinger.quirkey.com/"><a href="http://swinger.quirkey.com/">http://swinger.quirkey.com/</a></a></p>
+
+<p><strong>3. <a href="http://github.com/nakajima/slidedown">Slidedown</a></strong></p>
+
+<p>Řešení založené na Ruby, které podle předpisu v markdownu vygeneruje html prezentaci včetně zvýraznění ruby syntaxe i šablon.</p>
+
+<pre>!SLIDE
+
+# This is my talk
+
+!SLIDE
+
+## I hope you enjoy it
+
+!SLIDE code
+
+    def foo
+      :bar
+    end
+
+!SLIDE
+
+Google is [here](http://google.com)
+
+!SLIDE
+
+# Questions?</pre>
+
+
+<p>Zvýraznění syntaxe se dělá takto, například pro javascript.</p>
+
+<pre>@@@ js
+    function foo() {
+      return 'bar';
+    }
+@@@</pre>
+
+
+<p>Demo je dostupné zde <a href="http://nakajima.github.com/slidedown/"><a href="http://nakajima.github.com/slidedown/">http://nakajima.github.com/slidedown/</a></a></p>
+
+<p><strong>4. W3C Talks Tools (<a href="http://www.w3.org/Talks/Tools/">Slidy, B5, Slidemaker/slideme</a>)</strong></p>
+
+<p>Struktura je velmi jednoduchá, základní část je tvořena tagem <div class="slide"></div></p>
+
+<p>a jsou přidané třídy pro speciální chování.</p>
+
+<pre><div>
+  <h1>Analysts - "Open standards programming will become
+  mainstream, focused around VoiceXML"</h1>
+  <!-- use CSS positioning and scaling for adaptive layout -->
+  <img src="trends.png" width="50%" style="float:left" alt="projected growth of VoiceXML" /> 
+
+  <blockquote>
+    VoiceXML will dominate the voice environment, due to its
+    flexibility and eventual multimodal capabilities
+  </blockquote><br /> 
+
+  <p style="text-align:center">Source Data Monitor, March
+  2004</p>
+</div></pre>
+
+
+<p><a href="http://www.w3.org/Talks/Tools/Slidy/#%281%29">Slidy demo</a></p>
+
+<p><strong>5. <a href="http://abtris.github.com/slides/">JUSH Slides</a></strong></p>
+
+<p>Poslední je moje vlastní řešení je založené na W3C Slidy a je doplněné o <a href="http://jush.sourceforge.net/">JUSH zvýrazňovač</a>, který pomůže v tom co já nejvíce potřebuji.</p>
+
+<p>Kromě zvýraznění přidá JUSH linky na dokumentaci u klíčových slov pro html, javascript, php a další. To udělá ze slidů dobrý studijní materiál.</p>
+
+<p>Za další výhodu vidím jednoduchý předpis v html, jen používání xmp tagu není ideální.</p>
+
+<pre><div class="slide">
+    <h1>Filter Input</h1>
+
+<pre><form method="post">
+   <label for="username">Username:</label>
+   <label for="password">Password:</label>
+   <label for="color">Select:</label>
+                                            Red
+                                            Blue
+                                     
+   
+</form></pre>
+
+<pre>// c_type extension
+$clean = array();
+if (c_type_aplha($_POST['username']) {
+    $clean['username'] = $_POST['username'];
+}
+// filter
+$args = array('username' =&gt; FILTER_SANITIZE_STRING, ...);
+$myinputs = filter_input_array(INPUT_POST, $args);
+</pre>
+    <ul>
+
+        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.validate.php">http://cz.php.net/manual/en/filter.filters.validate.php</a>&#8220;&gt;Validate filters</a></li>
+        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.sanitize.php">http://cz.php.net/manual/en/filter.filters.sanitize.php</a>&#8220;&gt;Sanitize filters</a></li>
+    </ul>
+</div></pre>
+
+
+<p>Pokud máte nějaké další zajímavé řešení podělte se s námi v komentářích.<!--:--></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/internet-developer-forum-2010/">Internet Developer Forum 2010</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-07T00:00:00+02:00" pubdate data-updated="true">07. 04. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dnes 7.4.2010 se koná v NTK v Praze, Dejvicích konference pro vývojáře webových aplikaci, kterou pořádá <a href="http://konference.iinfo.cz/">Iinfo.cz</a></p>
+
+<p>V průběhu dne tu na blogu budu aktualizovat reportáž z konference a postřehy.</p>
+
+<p>9:01 Konference stále nazačala, ale sedím v sále a mám wifi připojení a přes NTK-SIMPLE, pro jistotu jsem si rychle zřídil na svoji OpenCard členství v knihovně NTK.</p>
+
+<p>9:03 Petr Krčmář oznamuje, že se start protáhne, snad to nebude platit o celé konferenci.</p>
+
+<p>9:15 Petr Krčmář zahajuje konferenci</p>
+
+<p><strong>Pro koho děláme web &ndash; Adam Fendrych</strong></p>
+
+<p>Klasická přednáška o přístupnosti, fakta dobrá, trochu chybí tempo a vtip. Celkem ze začátku nic zajímavého.</p>
+
+<p>Zaujali mě základní údaje pro návrh UI</p>
+
+<ul>
+    <li> věk</li>
+    <li> pohlaví</li>
+    <li> sociální skupina, zázemí</li>
+    <li> vzdělání</li>
+    <li> zkušenosti s počítačem</li>
+    <li> znalost tématu</li>
+    <li> základní potřeby</li>
+</ul>
+
+
+<p>Prý si máme vybudovat vztah se svými personami pro testování. Konstra persony je celkem detailní, obsahuje jméno, věk, pohlaví a specifikace potřeb a jak na něj váš web odpoví. Prostě use case s pěknou fotkou ;&ndash;)
+Person bychom měli více, mít i negativní pro kterou web neděláme. Musí vycházet z výzkumu a měli by je přijmou všichni kdo se podílí na webu.</p>
+
+<p>Segmentace webu podle cílových skupin nutí uživatele se rozhodnout a pokud se nedokáže zařadit jednoznačně a bez přemýšlení. To není vždy jednoduché.</p>
+
+<p>Kritice podléhá web <a href="http://www.cvut.cz">ČVUT.</a> To je celkem zajímavé, hlavně že to je moje dílko i když poněkud starší. Naštěstí přednášející opravdu nebyl nikdy cílová skupina.</p>
+
+<p>Proč testovat?</p>
+
+<ul>
+    <li> Dokonalý design nikdo nenavrhne</li>
+    <li> Ověřit funkčnost řešení s uživateli</li>
+    <li> Odhady chování uživatelů jsou ze 75% chybné!</li>
+</ul>
+
+
+<p>Já si myslím, že dokonalý design prostě neexistuje. Ale testovat je určitě potřeba.</p>
+
+<p>dále přednáška pokračuje <a href="http://www.test147.com/testovaci">testování</a> wireframů, papírových wireframů.</p>
+
+<p><em>Kdo to všechno udělá?</em>
+Investor, Manažer, Textař (copywriter), Grafik, Kodér, Programátor, Marketér</p>
+
+<p>Doufejte, že nikdo z nich.</p>
+
+<p>U nás často dělá všechno jediný člověk UX Designer.</p>
+
+<p>24.3. <a href="http://www.uxcamp.cz">UXCamp.cz</a></p>
+
+<p>10:40 Po přestávce pokračuje <strong>Daniel Steigerwald &ndash; Třídy, dědičnost a OOP v javascriptu</strong></p>
+
+<p>Daniel má pěkný styl, dobře se poslouchá a nenudí. Navazuje na svůj seriál na zdrojáku. Pěkná přednáška, hlavně doporučení, že dobrá kniha o JS neexistuje. Hlavně ne Croforda.</p>
+
+<p>11:30 David Grudl přišel včas, ale ne dříve a pokračuje s <strong>NETTE, RIA, UX, AJAXE to rýmuje</strong></p>
+
+<p>David je stálice konferencí a jeho přednáška zatím vypadá podobně jako na WebExpu.</p>
+
+<p>Kdy používat RIA, nejlépe nikdy! To se mi líbí. Použít jen pro to když máte skutečně pádný důvod.
+Celá živá ukázka byla o autocomplete v Nette.</p>
+
+<p>Oběd, no nic moc. Mohli by se pro příště polepšit. Moderování přebral Petr Koubský.</p>
+
+<p>13:30 <strong>Honza Král a NOSQL Databáze</strong></p>
+
+<p>Naposledy jsem Honzu viděl ve Fractal baru, kde předváděl Redis v akci při implementaci twitteru v Pythonu, článek o NOSQL <a href="http://blog.prskavec.net/2009/11/nosql-databze-v-php/">najdete i tady na blogu</a>.</p>
+
+<p>Pro masivní datové úložiště, které je potřeba škálovat Honza doporučuje <a href="http://cassandra.apache.org/">Cassandru</a>.</p>
+
+<p>Nasazení NOSQL v Čechách? Analýza logů pomocí ukládání přímo do MongoDb.</p>
+
+<p>14:30 <strong><a href="http://www.knesl.com">Jiří Knesl</a> &ndash; Základní chyby vývojářů a Agile jako řešení</strong></p>
+
+<ul> 
+   <li>prototypování pomocí Blueprint a HTML, CSS s použitím verzovacího systému (ukázka pomocí Mercurialu)</li>
+  <li>testovat (unittesty, testy seleniem) - na radu Honzy Krále zkuste Selenium nahradit pomocí <a href="http://twill.idyll.org/">Twill</a></li>
+  <li>řízení- agilní řízení, funguje na bázi procesů a je do jisté míry samořídící
+   <ul>
+      <li>čas</li>
+     <li>priority</li>
+     <li>komunikace</li>
+     <li>produktivita</li>
+     <li>zábava</li>
+     <li>peníze</li>
+</ul>
+</li>
+</ul>
+
+
+<p>Celkově mi přijde, že to není moc přínosné v reálném nasazení pokud je firma řízená procesy jako třeba ta naše. Je to škoda, že ne všechno je testovatelné na úrovni unittestů a naše silně heterogenní systémy PHP, PHP CMS a JAVA v jednom se nedají na úrovni kódu testovat na úrovni, která by stačila. Řešení pomocí <a href="http://www.automatedqa.com/products/testcomplete/">TestComplete</a> (nebo Selenium) není úplně spasitelné.</p>
+
+<p>v 15:50 bude konference zakončena panelovou diskuzí.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/jush-wordpress-plugin/">JUSH Wordpress plugin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-02T00:00:00+02:00" pubdate data-updated="true">02. 04. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud chcete použít ve Wordpressu <a href="http://php.vrana.cz/vytvareni-odkazu-do-dokumentace.php">odkazy do dokumentace</a> pomocí <a href="http://jush.sourceforge.net/">JUSH</a>, můžete použít <a href="http://github.com/abtris/jushplugin">plugin do Wordpressu</a>.</p>
+
+<p><strong>Ukázka:</strong></p>
+
+<pre class="jush">
+&lt;table onclick="alert(this.rows.length);" cellspacing="0" cellpadding="2"&gt;
+&lt;meta http-equiv="Content-Type: text/html"&gt;
+</pre>
+
+
+
+
+<pre class="jush-php">
+mail("", "", "", "From:")
+ini_set("display_errors", true)
+</pre>
+
+
+<pre class="jush-sql">
+SELECT NOW() FROM `table` WHERE `id` > 22 GROUP BY `text` ORDER BY `name`
+</pre>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/02/jetbrains-phpstorm/">JetBrains PhpStorm</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-25T00:00:00+01:00" pubdate data-updated="true">25. 02. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Vývojových prostředí pro PHP je docela hojnost. Sám používám v práci Zend Studio 7.1 a doma Netbeans 6.8. Minulý rok přišla firma JetBrains, která je známá svým IDE pro Javu IDEA, s vývojovým prostředím pro PHP, které se jmenuje <a href="http://www.jetbrains.com/webide/features/index.html#PHP_IDE">PhpStorm (dříve WebIDE)</a>. V současné době je nové IDE stále ve vývoji. Brzo se dočkáme beta verze a myslím do léta snad i finální verze.</p>
+
+<p><a href="http://blogs.jetbrains.com/webide/">PhpStorm</a> (dále PS) je na platformě IDEA, což považuji za velkou výhodu. Dají se použít pluginy pro Ideu v PhpStorm. Kvalita pluginů v Idea mi přijde o poznání lepší než pro Eclipse.</p>
+
+<p>[caption id=&ldquo;attachment_818&rdquo; align=&ldquo;aligncenter&rdquo; width=&ldquo;300&rdquo; caption=&ldquo;JetBrains PhpStorm (WebIDE)&rdquo;]<a href="http://blog.prskavec.net/wp-content/uploads/2010/02/PhpStormWI-94.335-1.png"><img src="http://blog.prskavec.net/wp-content/uploads/2010/02/PhpStormWI-94.335-1-300x266.png" alt="" width="300" height="266" class="size-medium wp-image-818" /></a>[/caption]</p>
+
+<p><strong>Hlavní přednosti vidím v těchto bodech:</strong></p>
+
+<ul>
+    <li>Podpora pro Git, je to jediné IDE s opravdu slušným pluginem. Podpora pro SVN je samozřejmě také. Zkoušel jsem plugin pro Git v Netbeansech i Eclipse a nikde mi to moc dobře nefungovalo, nebo mi tam chyběli potřebné příkazy.</li>
+    <li>Vynikající editor, který je o poznání chytřejší než například v Netbeans. Je to vidět zvláště pokud něco refaktorujete. Pozná zda funkce již závorky má či nemá, nedoplňuje dvojité uvozovky nesmyslně jak se mi to stává často v Netbeans.</li>
+    <li>Podpora XSLT, XML. Pokud používáte jako šablonovací systém XSL tak to velmi ulehčuje práci. Podpora pro XSLT je i v Zend Studiu, ale tady to mají vyladěné do detailů. Mě to funguje spolehlivěji než v Zendu.</li>
+    <li>Multiplatformost je daná tím, že aplikace je napsaná v Javě a proto není problém ani Windows, Linux nebo Mac.</li>
+    <li>Podpora pro Smarty (pokud používáte)</li>
+    <li>Podpora pro PhpUnit</li>
+    <li>Podpora pro Debuggery (xdebug už funguje, zend debugger slibují)</li>
+    <li>Podpora pro Phpdoc (doplňování) </li>
+    <li>Editor s dopňovaním pro JS a HTML</li>
+</ul>
+
+
+<p>Pěkná věc je třeba produktivity guide, radí co a jak dělat lépe:
+[caption id=&ldquo;attachment_828&rdquo; align=&ldquo;aligncenter&rdquo; width=&ldquo;300&rdquo; caption=&ldquo;JetBrains PhpStorm Productivity Guide&rdquo;]<a href="http://blog.prskavec.net/wp-content/uploads/2010/02/Screenshot-Productivity-Guide.png"><img src="http://blog.prskavec.net/wp-content/uploads/2010/02/Screenshot-Productivity-Guide-300x262.png" alt="JetBrains-PhpStorm-Productivity-Guide" width="300" height="262" class="size-medium wp-image-828" /></a>[/caption]</p>
+
+<p><strong>Nevýhody a nejasnosti v současnosti</strong></p>
+
+<ul>
+    <li>Horší podpora formátovaní, chybí podpora checkstyle. Formátování lze celkem detailně sice nastavit, ale zatím nefungoval náhled a chtělo by to podporu pro PEAR, Zend checkstyle.</li>
+    <li>Zatím neznámá licenční politika a cena, ale předpokládám ze to bude podobné jako Zend studio, kterému chtějí konkurovat jak uvedli minulý rok na konferenci ZendCon&#8217;09</li>
+    <li>Zatím na linuxu chybí installler, na windows jsem to nezkoušel.</li>
+    <li>Chybí globální nastavení pro include path pro doplňovaní syntaxe, musíte do projektu přidat zatím ručně, líbilo by se mi to v globálním nastavení pro PHP.</li>
+    <li>Nepodporuje worksety. V Eclipse jsem si oblíbil worksety pro různé typy projektů (Zend, Nette, Examples,&#8230;), to mi přijde užitečné, ale není to nutné.</li>
+    <li>Chybí UI pro Phpunit, který je moc pěkně udělaný v Netbeans. Pokud programujete podle TDD je to dost užitečné.</li>
+</ul>
+
+
+<p><strong>Závěr</strong>
+Myslím, že mezi IDE, které jsou zdarma mi přijde v současné době nejlepší asi Netbeans. Vývoj postupuje celkem pěkně dopředu, vylepšené automatické formátování v 6.9 bude jistě přínosem. Jedinou nevýhodu vidím v editoru, který se občas chová divně, ale dá se to přežít.</p>
+
+<p>Z komerčních znám jen PhpStorm a ZendStudio a přijde mi práce v obou podobná. Jen v PhpStrormu jsou trochu dál. Je to tím, že IDEA jako prostředí je daleko před ostatními a spousta funkcí v něm obsažená pro Javu se do ostatním Java IDE pomalu dostává. Pro PHP je IDE od JetBrains sice nové, ale oni mají velké zkušenosti s vývojem IDE a myslí to s konkurencí pro Zend Studio vážně a na té práci je to vidět.</p>
+
+<p>Pokud máte zkušenosti s PhpStorm na jiných platformách podělte se s ostatními v komentářích.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/page//page/6/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/page//page/4/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://blog.prskavec.net" alt="Home"><img class="icons" src="/images/Home.png" ></a>
+      <a href="http://blog.prskavec.net/archives/" alt="Archives"><img  class="icons" src="/images/Calendar.png"></a>
+      <a href="mailto:ladislav@prskavec.net" alt="E-Mail"><img  class="icons" src="/images/Envelope.png"></a>
+      <a href="http://blog.prskavec.net/atom.xml" alt="subscribe feed"><img class="icons" src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Ladislav Prskavec</h1>
+  <p style="margin-top:6px;"><img src="/images/avatar.jpg" style="float:left; margin-right:10px;" width="100" height="115" /><a href="http://github.com/abtris/">Programátor</a>, otec, <a href="http://www.dzogchen.cz">buddhista</a>, milovník dobrého jídla, knih, nových technologí a hraček pro všechny s&nbsp;duší dítěte.
+</p>
+  <br style="clear:left;"/>
+</section>
+<section>
+  <h1>Poslední příspěvky</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/11/docker/">docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subversion</h1>
+  <p style="margin-top:6px; text-align:center"><a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11" onClick="_gaq.push(['_trackEvent', 'link', 'itunes/subversion', 'svn-promo-sidebar-vpravo']);"><img src="http://a2.mzstatic.com/us/r30/Publication/v4/5c/1a/66/5c1a667d-2f78-b9b2-31ec-7c06ab9b74e8/B_SUBVERSION.225x225-75.jpg" style="float:left; margin-right:10px; width:172px; height:225px;" /></a>
+</p>
+  <br style="clear:left;"/>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+LadislavPrskavec?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <h1>GitHub</h1>
+
+<iframe src="http://githubbadge.appspot.com/badge/abtris" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+</section>
+<section>
+  <h1>Twitter</h1>
+  <a class="twitter-timeline" width="250" height="500" href="https://twitter.com/abtris" data-widget-id="345276838232326144">Tweets by @abtris</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ladislav Prskavec -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79221-21']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter21617953 = new Ya.Metrika({id:21617953,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21617953" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'prskavecblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/all.js?v=1412111651"></script>
+
+
+
+</body>
+</html>

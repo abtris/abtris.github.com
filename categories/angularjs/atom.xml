@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Kategorie: angularjs | Prskavčí blog]]></title>
+  <link href="http://blog.prskavec.net/categories/angularjs/atom.xml" rel="self"/>
+  <link href="http://blog.prskavec.net/"/>
+  <updated>2014-12-11T17:20:46+01:00</updated>
+  <id>http://blog.prskavec.net/</id>
+  <author>
+    <name><![CDATA[Ladislav Prskavec]]></name>
+    <email><![CDATA[ladislav@prskavec.net]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Firebase a AngularJS]]></title>
+    <link href="http://blog.prskavec.net/2013/08/firebase-a-angularjs/"/>
+    <updated>2013-08-29T11:31:00+02:00</updated>
+    <id>http://blog.prskavec.net/2013/08/firebase-a-angularjs</id>
+    <content type="html"><![CDATA[<p>Dnešní většina aplikací v javascriptu má architekturu klient server. Pokud nechcete psát nějaký backend pro vaši aplikaci, můžete se tomu vyhnout pokud použijete nějaký druh úložiště (databáze), která vám k tomu přidá i funkce, které má nějaký backend napsaný např. v nodejs nebo php.</p>
+
+<!--more-->
+
+
+<p>Těmto řešením se věnuje web <a href="http://nobackend.org/solutions.html">nobackend.org</a>, kde se dají najít tyto řešení:</p>
+
+<ul>
+<li> <a href="https://backendless.com/">Backendless</a></li>
+<li> <a href="http://deployd.com/">deployd</a> &ndash;  <a href="http://docs.deployd.com/docs/collections/examples/a-simple-todo-app-with-angular.md">example in angularjs</a></li>
+<li> <a href="http://www.firebase.com">Firebase</a></li>
+<li> <a href="http://hood.ie/">Hoodie</a></li>
+<li> <a href="http://www.kinvey.com/">Kinvey</a></li>
+<li> <a href="https://parse.com/">Parse</a></li>
+<li> <a href="http://remotestorage.io/">remoteStorage</a></li>
+<li> <a href="http://sockethub.org/">Sockethub</a></li>
+</ul>
+
+
+<p>Bohužel jsem neměl tolik času, abych podrobně prozkoumal všechny řešení. O Firebase jsem se dozvěděl z přednášky na meetupu:</p>
+
+<iframe width="640" height="360" src="http://blog.prskavec.net//www.youtube.com/embed/C7ZI7z7qnHU?rel=0" frameborder="0" allowfullscreen></iframe>
+
+
+<p>Z této přednášky jsem vycházel pro svoji přednášku na <a href="http://www.praguejs.cz">PragueJS</a>.</p>
+
+<h2>Firebase</h2>
+
+<p>Zajímavé na tomto projektu je, že je to poměrně mladý projekt, ale který vznikl z projektu Envolve (2009), což je skupinový chat pro tisíce websites. Zjistili, že vyvíjený backend je užitečný pro více druhů aplikací než jenom chat a nabídli ho jako produkt Firebase.</p>
+
+<p>Hlavní věci, které dělají Firebase zajímavou jsou:
+&ndash; JSON formát pro data
+&ndash; je to dokumentová databáze v mnoha směrech mi připomíná práci např. s CouchDb
+&ndash; REST každý dokument má HTTP endpoint s kterým se dá pracovat, můžete používát API v přes HTTP, nativní knihovny pro Android (Java) a iOS (Objective-C) a javascript.
+&ndash; přímo od autorů je knihovna pro práci s AngularJS &ndash; <a href="http://angularfire.com/">AngularFire</a> a pro práci s Backbone &ndash; <a href="https://github.com/firebase/backfire">BackFire</a>.
+&ndash; real-time synchronizace dat, pokud přistupujete z více klientů tak se změny projeví v milisekundách
+&ndash; automatic scaling je pěkná věc pokud potřebujete opravdu řešit hodně klientů, autoři slibují, že je jedno pokud máte 1 klienta nebo 1 milion a že nebudete muset nic na aplikaci měnit, což je dost ambiciózní, ale vzhledem ke klientům jako je Atlassian, CodeAcademy, CBS a další řekl bych že už si to více než ověřili
+&ndash; security &ndash; bezpečnost je řešena celkem jednoduše a přitom celkem se dá dobře nastavit přes <a href="https://www.firebase.com/docs/security/security-rules.html">security rules</a>. Vlastní přihlašovnání je podporováno přes jejich <a href="https://www.firebase.com/docs/security/authentication.html">Firebase Simple Login</a> nebo můžete použít nějakou vlastní implementaci.
+&ndash; servery nepotřebujete. Firebase je schopná nahradit aplikaci psanou na serveru, jde jen o to zvážit kdy to ještě stačí a kdy už potřebujete nějaké další části infrastruktury navíc.</p>
+
+<h2>AngularFire</h2>
+
+<p>AngularFire je modul, který řeší vlastní authentikaci pomocí angularFireAuth.</p>
+
+<p>Stačí mít includnuté tyto soubory pro práci s firebase.</p>
+
+<pre><code>&lt;script src="https://cdn.firebase.com/v0/firebase.js"/&gt;
+&lt;script src="https://cdn.firebase.com/v0/firebase-simple-login.js"/&gt;
+&lt;script src="angularFire.js"/&gt;
+</code></pre>
+
+<p>potom v controlleru se předá angularFireAuth přes dependency injection</p>
+
+<pre><code>function MyController($scope, angularFireAuth) {
+    var url = "https://&lt;my-firebase&gt;.firebaseio.com/";
+    angularFireAuth.initialize(url, {scope: $scope, name: "user"});
+}
+</code></pre>
+
+<p>v šabloně potom máte vlastní přihlašování</p>
+
+<pre><code>&lt;span ng-show="user"&gt;
+ | &lt;a ng-click="logout()"&gt;Logout&lt;/a&gt;
+&lt;/span&gt;
+&lt;span ng-hide="user"&gt;&lt;a ng-click="login()"&gt;Login&lt;/a&gt;&lt;/span&gt;
+</code></pre>
+
+<p>metody pro login přes Firebase simple login, které použijí facebook takto jednoduše deklarujete</p>
+
+<pre><code>$scope.login = function() {
+    angularFireAuth.login("facebook");
+};
+$scope.logout = function() {
+    angularFireAuth.logout();
+};
+</code></pre>
+
+<p>AngularFire podporuje <a href="http://angularfire.com/documentation.html#implicit">implicitní</a> a <a href="http://angularfire.com/documentation.html#explicit">explicitní data binding</a>. Příklady najdete v dokumentaci.</p>
+
+<h2>Firebase Open Source</h2>
+
+<p>Na <a href="http://firebase.github.io/">githubu</a> najdete všechny příklady a zdrojové kódy, ke všemu co se vyvíjí kolem Firebase. Postupně to přibývá a většina demo příkladů jsou reálně použitelné za ty nejzajímavější bych zmínil:</p>
+
+<ul>
+<li><a href="http://www.firepad.io/">Firepad</a></li>
+<li><a href="http://firebase.github.io/firechat/">Firechat</a></li>
+<li><a href="http://firefeed.io/">Firefeed</a></li>
+</ul>
+
+
+<h2>Závěr</h2>
+
+<p>Tyto nové databáze jsou velmi zajímavé, ale těžko se asi porovná to nejzajímavější a to jak se vypořádají s konflikty při synchronizaci. Pokud používáte nějako jako je Evernote nebo nějaký todo list a máte ho na počítači, mobilu a tabletu. Sami víte jak je obtížné pokud nejsou všechny zařízení stále online občas udržet konzistenci. Ve Firebase se to dá částečně řešit pomocí security rules, ale stejně si občas myslím, že může být problém.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Šablony v AngularJS]]></title>
+    <link href="http://blog.prskavec.net/2012/08/angualarjs-templates/"/>
+    <updated>2012-08-14T21:40:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/08/angualarjs-templates</id>
+    <content type="html"><![CDATA[<p>Pokud začínáte s <a href="http://www.angularjs.org">AngularJS</a> je dobré pro aplikace použít <a href="https://github.com/angular/angular-seed">angular-seed</a>.</p>
+
+<!--more-->
+
+
+<h2>Jednotlivé šablony v samostatných souborech</h2>
+
+<p>Šablony v angular-seed jsou rozděleny do samostatných souborů.</p>
+
+<pre><code>app/
+    js/
+        app.js
+    partials/
+        partial1.html
+        partial2.html
+</code></pre>
+
+<p>v app.js se potom načítají samostatně</p>
+
+<pre><code>$routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: MyCtrl1});
+$routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: MyCtrl2});
+</code></pre>
+
+<p>Důležité je AngularJS sice používa template cache, ale pro každý soubor si sáhne samostatně a udělá 2 requesty, což nemusí být optimální obzvláště pokud byste měli 20 šablon.</p>
+
+<p>Tento způsob se hodí při vývoji, abyste měli šablony samostatně pro přehlednost.</p>
+
+<h2>Inline šablony</h2>
+
+<p>V manuálu najdete jak vkládat <a href="http://docs.angularjs.org/api/ng.directive:script">šablony</a>, přímo do stránek pomocí script tagu.</p>
+
+<pre><code>&lt;script type="text/ng-template" id="partial1.html"&gt;
+&lt;p&gt;This is the partial for view 1.&lt;/p&gt;
+&lt;/script&gt;
+</code></pre>
+
+<p>Ty se dají použít velmi dobře. Pokud je to menší kód, ale jinak je lepší mít v samostatných souborech. V kódu se na ně odkážete pomocí jména v id parametru.</p>
+
+<pre><code>$routeProvider.when('/view1', {templateUrl: 'partial1.html', controller: MyCtrl1});
+</code></pre>
+
+<h2>Kombinace obou způsobů</h2>
+
+<p>Jak jsem to konzultoval s Vojtou Jínou z AngularJS teamu. Pro development je dobré použít jednotlivé šablony samostatně, ale pro nasazení je dobré spojit šablony do jednoho souboru, abyste ušetřili requesty.</p>
+
+<p>Dá se použít například <a href="http://gruntjs.com/">GruntJS</a> script pro vložení samostaných šablon pro vývoj do inline šablon. Ukázkový script udělal <a href="https://github.com/vojtajina">Vojta Jína</a>.</p>
+
+<p><div><script src='https://gist.github.com/3347478.js'></script>
+<noscript><pre><code>module.exports = function(grunt) {
+
+  grunt.initConfig({
+    inline: {
+      'index.html': ['tpl/*.html']
+    }
+  });
+
+  grunt.registerMultiTask('inline', 'Inline AngularJS templates into single file.', function() {
+    var SCRIPT = '&lt;script type=&quot;text/ng-template&quot; id=&quot;&lt;%= id %&gt;&quot;&gt;&lt;%= content %&gt;&lt;/script&gt;\n';
+
+    var html = '$1\n\n';
+    grunt.file.expandFiles(this.data).forEach(function(file) {
+      grunt.log.writeln('Inlining ' + file);
+      html += grunt.template.process(SCRIPT, {id: file, content: grunt.file.read(file)});
+    });
+
+    var result = this.target;
+    grunt.file.write(result, grunt.file.read(result).replace(/(&lt;body[^&gt;]*&gt;)/, html));
+  });
+};
+</code></pre></noscript></div>
+</p>
+
+<h2>Další možnosti</h2>
+
+<p>K tomu článku mě přivedl tento tweet.</p>
+
+<p><blockquote><p>Nevíte někdo jak v #angularjs docílit toho abych měl jeden (externí) soubor se všema šablonama?</p><footer><strong>@PatrikVotocek <a href="https://twitter.com/PatrikVotocek/statuses/235100756905189376">https://twitter.com/PatrikVotocek/statuses/235100756905189376</a></strong></footer></blockquote></p>
+
+<p>To by předpokládalo řešení, že budeme mít soubor s šablonami a zkusíme ho načíst a zpracovat. Musíte vytvořit falešnou template cache a tu použít, díky Vojtovy za implementaci.</p>
+
+<p><div><script src='https://gist.github.com/3354046.js'></script>
+<noscript><pre><code>&lt;script type=&quot;text/ng-template&quot; id=&quot;one.html&quot;&gt;
+&lt;div&gt;This is first template&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type=&quot;text/ng-template&quot; id=&quot;two.html&quot;&gt;
+&lt;div&gt;This is second template&lt;/div&gt;
+&lt;/script&gt;
+</code></pre></noscript></div>
+</p>
+
+<p>Rozhodně to, ale není něco co byste měli používat i když to funguje.</p>
+
+<h1>Závěr</h1>
+
+<p>Držte se toho jak je to v AngularJS vymyšlené, zbastlit lze všechno, ale není to ideální a proto používejte samostatné šablony na vývoj a při deploymentu to dejte do stránky to je nejlepší způsob.</p>
+]]></content>
+  </entry>
+  
+</feed>

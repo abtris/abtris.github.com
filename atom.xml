@@ -1,0 +1,1242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Prskavčí blog]]></title>
+  <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
+  <link href="http://blog.prskavec.net/"/>
+  <updated>2014-12-11T17:20:46+01:00</updated>
+  <id>http://blog.prskavec.net/</id>
+  <author>
+    <name><![CDATA[Ladislav Prskavec]]></name>
+    <email><![CDATA[ladislav@prskavec.net]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Zapier a zasílání zůstatku z banky zdarma na mobil]]></title>
+    <link href="http://blog.prskavec.net/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/"/>
+    <updated>2014-12-11T16:29:00+01:00</updated>
+    <id>http://blog.prskavec.net/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil</id>
+    <content type="html"><![CDATA[<h2>Motivace</h2>
+
+<p>Banky posílají změnu zůstatku emailem a SMS. Za SMS začínájí účtovat třeba i 2Kč což mi přijde fakt hrůza. Tak jsem si řekl jak dostat ten email do telefonu pomocí push notifikace, aby mě to nestálo moc peněz a dalo se případně používat univerzálně.</p>
+
+<h2>Pushover</h2>
+
+<p>Služba <a href="https://pushover.net/">Pushover</a> není zcela zdarma, ale zaplatíte jen jednorázově při nákupu aplikace nebo při aktivaci desktop notifkací. A získáte tím možnost zasílat notifikace skoro z čehokoliv a kam potřebujete. Můžete konfigurovat kdy nechcete být rušeni (noc, víkendy apod.).</p>
+
+<h2>Parse emails by Zapier</h2>
+
+<p>Služba <a href="https://zapier.com/">Zapier</a> má zajímavou <a href="http://parser.zapier.com/">službu na parsování dat z emailu</a>, která se zatím zdarma a nenašel jsem jinou, který by byla dobrá pro tento můj problém. Existují sice služby na parsování emailů, ale ty jsou spíše děláný na zpracování velkého množství emailů a nejsou zdarma.</p>
+
+<p>Na službě si zřídíte emailovou schránku na kterou si přepošlete email z banky, označíte si v něm část co chcete posílat na mobil. Služba potom toto políčko poskytne jako placeholder pro zpracování a poslání dále.</p>
+
+<h2>Zapier</h2>
+
+<p>V Zapieru potom nakonfigurujete zpracování emailů z vaší schránky na parseru a poslání na mobil pomocí pushover. Zkoušel jsem třeba i hangouts, ale nedošlo mi to všechna zařízení a není to tak komfortní jako pushover.</p>
+
+<h2>Závěr</h2>
+
+<p>I bez programování můžete vyzrát na chytráky co si snaží za služby s minimálními nároky účtovat hromady peněz a <a href="https://zapier.com/">Zapier</a> nebo <a href="https://ifttt.com">IFTTT</a> jsou na  to super pomocníci.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Git a pre-commit hook pro kontrolu syntaxe]]></title>
+    <link href="http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/"/>
+    <updated>2014-01-06T19:29:00+01:00</updated>
+    <id>http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich</id>
+    <content type="html"><![CDATA[<p>Pokud pracujete s gitem nebo jiným verzovacím systémem, určitě jste se setkali s hooky. Pro kontrolu než provedete commit, který se jmenuje pre-commit a hodí se zejména pro kontrolu syntaxe. Já mám několik hooků, které kontrolují php, js, xml a ruby. Říkal jsem si, že by to chtělo je refactorovat a udělat z nich použitelný kód.</p>
+
+<h2>Ochtra</h2>
+
+<p>Naštěstí jsem to dělat nemusel, protože vznikl malý projekt <a href="https://github.com/kvz/ochtra">ochtra</a>  (One Commit Hook To Rule All).</p>
+
+<p>Tento projekt teď umí kontrolovat Ruby, JavaScript, Python, Bash, Dash, Go, PHP, XML, JSON, YAML. A co se mi zvláště líbí je, že autor pěkně popsal instalaci, která je potřeba, aby vám hook fungoval automaticky, když použijete git clone.</p>
+
+<h3>Instalace</h3>
+
+<p>Potřebujete git 1.7, kde je podpora pro git templates.</p>
+
+<pre><code>mkdir -p ~/.gittemplate/hooks
+curl https://raw.github.com/kvz/ochtra/master/pre-commit -o ~/.gittemplate/hooks/pre-commit \
+ &amp;&amp; chmod u+x $_
+git config --global init.templatedir '~/.gittemplate'
+</code></pre>
+
+<p>Instalace vytvoří adresář s template pro git, která se použije pokud dáte git clone, případne git init.</p>
+
+<p>Git init potřebujete pokud už máte projekty někde vyclonované.</p>
+
+<pre><code>cd my-project
+rm .git/hooks/pre-commit
+git init
+</code></pre>
+
+<p>Celý projekt má i testy a podpora je pro všechno co mě napadlo. Pokud něco někomu chybí tak se ozvěte nebude to problém přidat.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[docker]]></title>
+    <link href="http://blog.prskavec.net/2013/11/docker/"/>
+    <updated>2013-11-28T08:25:00+01:00</updated>
+    <id>http://blog.prskavec.net/2013/11/docker</id>
+    <content type="html"><![CDATA[<p>Pokud se zajímáte o to jak nasazovat aplikace na svoje servery, pronajaté VPS nebo doc cloudu, měli by jste si něco o této poměrně mladé technologii přečíst nebo vidět.</p>
+
+<h2>Co to je docker?</h2>
+
+<p>Pěkně podrobně to najdete na samotném webu <a href="http://www.docker.io/the_whole_story/">docker.io</a> a také jsem to snažil postihnout ve své <a href="http://youtu.be/oZ86BoAUtSQ">přednášce na letošním Devfestu</a>.</p>
+
+<iframe width="640" height="360" src="http://blog.prskavec.net//www.youtube.com/embed/oZ86BoAUtSQ?rel=0" frameborder="0" allowfullscreen></iframe>
+
+
+<!-- more -->
+
+
+<h2>Co se do přednášky nevešlo</h2>
+
+<p>Všechny příklady, které jsem nestihl předvést naživo jsou v <a href="https://github.com/abtris/devfest-2013">repository</a> a jsou pro verzi 0.6.7 a mezi Devfestem a tímto článkem už stačila vyjít verze 0.7, která je revoluční v podpoře více distribucí (Fedora, RHEL, Ubuntu, Debian, Suse, Gentoo, Arch). Přidáný storage drivers o kterých jsem mluvil kromě AuFS je to VFS a DEVICEMAPPER a brzo budou další ZFS, Gluster, Ceph.</p>
+
+<h2>Závěr</h2>
+
+<p>Autoři slibují v další verzi se zaměřit hlavně na kvalitu, doplnění dokumentace a api. Je před nimi mnoho práce, ale čím dál více lidí docker používá i v produkci. O dockeru budu mluvit 13.12. také v rámci <a href="http://webovky.vse.cz/web-inkognito">Web Inkognito</a> a 3-4.12.2013 se koná celosvětový Docker <a href="http://www.meetup.com/Docker-Prague-Czech-Republic/events/152779712/">HackDay</a>, pokud by jste se chtěli zůčastnit nebo pomocí s organizací místa kde se to bude konat dejte vědět mě nebo organizátorům.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jenkins polling a git-notify]]></title>
+    <link href="http://blog.prskavec.net/2013/09/jenkins-polling-a-git-notify/"/>
+    <updated>2013-09-05T10:01:00+02:00</updated>
+    <id>http://blog.prskavec.net/2013/09/jenkins-polling-a-git-notify</id>
+    <content type="html"><![CDATA[<p>Minulý rok jsem psal o tom, že <a href="http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo/">polling v Jenkinsu je zlo</a>. To stále platí, ale i když máte tento přístup nemusí to stačit.</p>
+
+<!--more-->
+
+
+<p>Tady je příklad hooku pro gitolite, který používáme na některých repository.</p>
+
+<div><script src='https://gist.github.com/5625369.js'></script>
+<noscript><pre><code>#!/bin/bash
+
+NOBOLD=&quot;\033[0m&quot;
+BOLD=&quot;\033[1m&quot;
+BLACK=&quot;\033[30m&quot;
+GREY=&quot;\033[0m&quot;
+RED=&quot;\033[31m&quot;
+GREEN=&quot;\033[32m&quot;
+YELLOW=&quot;\033[33m&quot;
+BLUE=&quot;\033[34m&quot;
+MAGENTA=&quot;\033[35m&quot;
+CYAN=&quot;\033[36m&quot;
+WHITE=&quot;\033[37m&quot;
+
+# V +1007
+
+# Peff helped:
+# http://thread.gmane.org/gmane.comp.version-control.git/118626
+
+syntax_check=&quot;xmllint --noout &quot;
+tmp=$(mktemp /tmp/git.update.XXXXXX)
+log=$(mktemp /tmp/git.update.log.XXXXXX)
+tree=$(mktemp /tmp/git.diff-tree.XXXXXX)
+
+git diff-tree -r &quot;$2&quot; &quot;$3&quot; &gt; $tree
+ 
+echo
+echo diff-tree:
+cat $tree
+
+exit_status=0
+
+while read old_mode new_mode old_sha1 new_sha1 status name
+do
+  # skip lines showing parent commit
+  test -z &quot;$new_sha1&quot; &amp;&amp; continue
+  # skip deletions
+  [ &quot;$new_sha1&quot; = &quot;0000000000000000000000000000000000000000&quot; ] &amp;&amp; continue
+  # check all files for unmerged signs
+    mergefail=`git cat-file blob $new_sha1 | grep -e &quot;^&lt;&lt;&lt;&lt;&lt;&lt;&quot; -e &quot;^&gt;&gt;&gt;&gt;&gt;&gt;&quot;`
+    if [[ &quot;$mergefail&quot; != &quot;&quot; ]]
+    then
+      echo
+      echo &quot;umerged file $name&quot; &gt;&amp;2
+      echo &quot;$mergefail&quot; &gt;&amp;2
+      echo
+      exit_status=1
+    fi
+
+  # Only test .xml, xsl(t)? files
+  if [[ $name =~ [.]xml$|xsl(t)?$ ]]
+  then
+    git cat-file blob $new_sha1 &gt; $tmp
+    set -o pipefail
+    $syntax_check $tmp 2&gt;&amp;1 | sed 's|/tmp/git.update.......:\([0-9]*\)$|JOJOMOJO:\1|'&gt; $log
+    if [[ $? != 0 ]]
+    then
+      echo
+      echo -e &quot;$(cat $log | sed 's|JOJOMOJO|'\\${RED}${name}\\${NOBOLD}'|')&quot; &gt;&amp;2
+      echo -e &quot;For more details run this: ${CYAN} git diff $old_sha1 $new_sha1 ${NOBOLD}&quot; &gt;&amp;2
+      echo
+      exit_status=1
+    fi
+  fi
+
+  # CRLF check only java, xml
+  if [[ $name =~ [.]java$|xml$ ]]
+  then  
+    git cat-file blob $new_sha1 &gt; $tmp
+    RESULT=`grep -Pl '\r\n' $tmp`
+    echo $RESULT
+    if [ &quot;$RESULT&quot; = &quot;$tmp&quot; ]; then
+          echo &quot;###################################################################################################&quot; &gt;&amp;2
+          echo &quot;# '$name' contains CRLF! Dear Windows developer, please activate the GIT core.autocrlf feature,&quot; &gt;&amp;2
+          echo &quot;# or change the line endings to LF before trying to push.&quot; &gt;&amp;2
+          echo &quot;# Use 'git config core.autocrlf true' to activate CRLF conversion.&quot; &gt;&amp;2
+          echo &quot;# OR use 'git reset HEAD~1' to undo your last commit and fix the line endings.&quot; &gt;&amp;2
+          echo &quot;###################################################################################################&quot; &gt;&amp;2
+          exit_status=1
+    fi  
+  fi
+
+done &lt; $tree
+
+# jenkins polling
+branch=$(git rev-parse --symbolic --abbrev-ref $1)
+escaped_branch=$(echo $branch | sed s:/:%2F:g)
+
+refname=&quot;$1&quot;
+oldrev=&quot;$2&quot;
+newrev=&quot;$3&quot;
+# --- Check types
+# if $newrev is 0000...0000, it's a commit to delete a ref.
+zero=&quot;0000000000000000000000000000000000000000&quot;
+if [ &quot;$newrev&quot; = &quot;$zero&quot; ]; then
+  newrev_type=delete
+else
+  newrev_type=$(git cat-file -t $newrev)
+fi
+skip_notify=0
+echo &quot;$refname $newrev_type&quot; &gt;&amp;2
+case &quot;$refname&quot;,&quot;$newrev_type&quot; in
+  refs/tags/*,delete)
+    # delete tag
+    skip_notify=1
+    echo &quot;Delete tag&quot; &gt;&amp;2
+    ;;
+  refs/heads/*,delete)
+    # delete branch
+    skip_notify=1
+    echo &quot;Delete branch&quot; &gt;&amp;2
+    ;;
+  refs/remotes/*,delete)
+    # delete tracking branch
+    skip_notify=1
+    echo &quot;Delete tracking branch&quot; &gt;&amp;2
+    ;;
+  *)
+esac
+if [[ &quot;$skip_notify&quot; == &quot;0&quot; ]]
+then
+  REPOSITORY_BASENAME=$(basename &quot;$PWD&quot;)
+  curl &quot;http://jenkins.firma.cz/git/notifyCommit?url=ssh://git@git.firma.cz/$REPOSITORY_BASENAME&amp;branch=$escaped_branch&quot;
+fi
+
+rm -f $log $tmp $tree
+exit $exit_status
+
+</code></pre></noscript></div>
+
+
+<p>Občas je potřeba notifikovat jen větev, která se změní, aby to nepustilo zbytečně joby, kde změny neproběhli.</p>
+
+<p>Nejdůležitější části, jsou detekce větve, escape lomítka ve jménech větve.</p>
+
+<pre><code>branch=$(git rev-parse --symbolic --abbrev-ref $1)
+escaped_branch=$(echo $branch | sed s:/:%2F:g)
+</code></pre>
+
+<p>potom vlastní git-notify volání curlem.</p>
+
+<pre><code>REPOSITORY_BASENAME=$(basename "$PWD")
+curl "http://jenkins.firma.cz/git/notifyCommit?url=ssh://git@git.firma.cz/$REPOSITORY_BASENAME&amp;branch=$escaped_branch"
+</code></pre>
+
+<p>Snad to bude někomu užitečné také, pokud si chcete o Jenkinsu popovídat <a href="http://blog.prskavec.net/skoleni/">více, dejte vědět</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Firebase a AngularJS]]></title>
+    <link href="http://blog.prskavec.net/2013/08/firebase-a-angularjs/"/>
+    <updated>2013-08-29T11:31:00+02:00</updated>
+    <id>http://blog.prskavec.net/2013/08/firebase-a-angularjs</id>
+    <content type="html"><![CDATA[<p>Dnešní většina aplikací v javascriptu má architekturu klient server. Pokud nechcete psát nějaký backend pro vaši aplikaci, můžete se tomu vyhnout pokud použijete nějaký druh úložiště (databáze), která vám k tomu přidá i funkce, které má nějaký backend napsaný např. v nodejs nebo php.</p>
+
+<!--more-->
+
+
+<p>Těmto řešením se věnuje web <a href="http://nobackend.org/solutions.html">nobackend.org</a>, kde se dají najít tyto řešení:</p>
+
+<ul>
+<li> <a href="https://backendless.com/">Backendless</a></li>
+<li> <a href="http://deployd.com/">deployd</a> &ndash;  <a href="http://docs.deployd.com/docs/collections/examples/a-simple-todo-app-with-angular.md">example in angularjs</a></li>
+<li> <a href="http://www.firebase.com">Firebase</a></li>
+<li> <a href="http://hood.ie/">Hoodie</a></li>
+<li> <a href="http://www.kinvey.com/">Kinvey</a></li>
+<li> <a href="https://parse.com/">Parse</a></li>
+<li> <a href="http://remotestorage.io/">remoteStorage</a></li>
+<li> <a href="http://sockethub.org/">Sockethub</a></li>
+</ul>
+
+
+<p>Bohužel jsem neměl tolik času, abych podrobně prozkoumal všechny řešení. O Firebase jsem se dozvěděl z přednášky na meetupu:</p>
+
+<iframe width="640" height="360" src="http://blog.prskavec.net//www.youtube.com/embed/C7ZI7z7qnHU?rel=0" frameborder="0" allowfullscreen></iframe>
+
+
+<p>Z této přednášky jsem vycházel pro svoji přednášku na <a href="http://www.praguejs.cz">PragueJS</a>.</p>
+
+<h2>Firebase</h2>
+
+<p>Zajímavé na tomto projektu je, že je to poměrně mladý projekt, ale který vznikl z projektu Envolve (2009), což je skupinový chat pro tisíce websites. Zjistili, že vyvíjený backend je užitečný pro více druhů aplikací než jenom chat a nabídli ho jako produkt Firebase.</p>
+
+<p>Hlavní věci, které dělají Firebase zajímavou jsou:
+&ndash; JSON formát pro data
+&ndash; je to dokumentová databáze v mnoha směrech mi připomíná práci např. s CouchDb
+&ndash; REST každý dokument má HTTP endpoint s kterým se dá pracovat, můžete používát API v přes HTTP, nativní knihovny pro Android (Java) a iOS (Objective-C) a javascript.
+&ndash; přímo od autorů je knihovna pro práci s AngularJS &ndash; <a href="http://angularfire.com/">AngularFire</a> a pro práci s Backbone &ndash; <a href="https://github.com/firebase/backfire">BackFire</a>.
+&ndash; real-time synchronizace dat, pokud přistupujete z více klientů tak se změny projeví v milisekundách
+&ndash; automatic scaling je pěkná věc pokud potřebujete opravdu řešit hodně klientů, autoři slibují, že je jedno pokud máte 1 klienta nebo 1 milion a že nebudete muset nic na aplikaci měnit, což je dost ambiciózní, ale vzhledem ke klientům jako je Atlassian, CodeAcademy, CBS a další řekl bych že už si to více než ověřili
+&ndash; security &ndash; bezpečnost je řešena celkem jednoduše a přitom celkem se dá dobře nastavit přes <a href="https://www.firebase.com/docs/security/security-rules.html">security rules</a>. Vlastní přihlašovnání je podporováno přes jejich <a href="https://www.firebase.com/docs/security/authentication.html">Firebase Simple Login</a> nebo můžete použít nějakou vlastní implementaci.
+&ndash; servery nepotřebujete. Firebase je schopná nahradit aplikaci psanou na serveru, jde jen o to zvážit kdy to ještě stačí a kdy už potřebujete nějaké další části infrastruktury navíc.</p>
+
+<h2>AngularFire</h2>
+
+<p>AngularFire je modul, který řeší vlastní authentikaci pomocí angularFireAuth.</p>
+
+<p>Stačí mít includnuté tyto soubory pro práci s firebase.</p>
+
+<pre><code>&lt;script src="https://cdn.firebase.com/v0/firebase.js"/&gt;
+&lt;script src="https://cdn.firebase.com/v0/firebase-simple-login.js"/&gt;
+&lt;script src="angularFire.js"/&gt;
+</code></pre>
+
+<p>potom v controlleru se předá angularFireAuth přes dependency injection</p>
+
+<pre><code>function MyController($scope, angularFireAuth) {
+    var url = "https://&lt;my-firebase&gt;.firebaseio.com/";
+    angularFireAuth.initialize(url, {scope: $scope, name: "user"});
+}
+</code></pre>
+
+<p>v šabloně potom máte vlastní přihlašování</p>
+
+<pre><code>&lt;span ng-show="user"&gt;
+ | &lt;a ng-click="logout()"&gt;Logout&lt;/a&gt;
+&lt;/span&gt;
+&lt;span ng-hide="user"&gt;&lt;a ng-click="login()"&gt;Login&lt;/a&gt;&lt;/span&gt;
+</code></pre>
+
+<p>metody pro login přes Firebase simple login, které použijí facebook takto jednoduše deklarujete</p>
+
+<pre><code>$scope.login = function() {
+    angularFireAuth.login("facebook");
+};
+$scope.logout = function() {
+    angularFireAuth.logout();
+};
+</code></pre>
+
+<p>AngularFire podporuje <a href="http://angularfire.com/documentation.html#implicit">implicitní</a> a <a href="http://angularfire.com/documentation.html#explicit">explicitní data binding</a>. Příklady najdete v dokumentaci.</p>
+
+<h2>Firebase Open Source</h2>
+
+<p>Na <a href="http://firebase.github.io/">githubu</a> najdete všechny příklady a zdrojové kódy, ke všemu co se vyvíjí kolem Firebase. Postupně to přibývá a většina demo příkladů jsou reálně použitelné za ty nejzajímavější bych zmínil:</p>
+
+<ul>
+<li><a href="http://www.firepad.io/">Firepad</a></li>
+<li><a href="http://firebase.github.io/firechat/">Firechat</a></li>
+<li><a href="http://firefeed.io/">Firefeed</a></li>
+</ul>
+
+
+<h2>Závěr</h2>
+
+<p>Tyto nové databáze jsou velmi zajímavé, ale těžko se asi porovná to nejzajímavější a to jak se vypořádají s konflikty při synchronizaci. Pokud používáte nějako jako je Evernote nebo nějaký todo list a máte ho na počítači, mobilu a tabletu. Sami víte jak je obtížné pokud nejsou všechny zařízení stále online občas udržet konzistenci. Ve Firebase se to dá částečně řešit pomocí security rules, ale stejně si občas myslím, že může být problém.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jaký bude AngularJS 1.2?]]></title>
+    <link href="http://blog.prskavec.net/2013/06/angularjs-1-dot-2/"/>
+    <updated>2013-06-13T22:08:00+02:00</updated>
+    <id>http://blog.prskavec.net/2013/06/angularjs-1-dot-2</id>
+    <content type="html"><![CDATA[<p>Pokud sledujete dění kolem frameworku <a href="http://angularjs.org">AngularJS</a> tak jste jistě zaznamenali, že se pracuje na nové verzi 1.2, která je teď blízko k dokončení. V masteru mají dnes verzi pojmenovanou jako verzi 1.1.8 a brzy se snad dočkáme finální verze. Zkusím zde popsat nejdůležitější věci z <a href="https://docs.google.com/presentation/d/1WHCcp3G3HxoE7b_ut_ERKJF4zQK_P4qFlESjE2E9AUQ/preview?sle=true#slide=id.geaf70e8e_16">prezentace</a> na meetupu 11.6. co prezentovali Igor Minár a Brad Green.</p>
+
+<!--more-->
+
+
+<h2>ng-animate</h2>
+
+<p><a href="http://yearofmoo-articles.github.io/angularjs-2nd-animation-article/app/#/">Deklarativní animace</a> pro aplikace v Angularu. Podpora pro CSS animace a přechody s možností fallbacku pomocí JS. Pro vlastní animace je dobré použít některou s knihoven pro CSS animace (Greensock.js, <a href="http://daneden.me/animate/">Animate.css</a>, Custom CSS3 Keyframes).
+Direktiva se stará o práci s DOMem, nastavuje potřebné třídy a timing, také zabraňuje vnořeným animacím.</p>
+
+<h2>$http</h2>
+
+<p>Měla by být přidána podpora pro blob a authentication (metoda withCredentials). Budete si moci více nastavit XSRF header a názvy cookie. Přidá se podpora pro zrušení requestů a podpora pro around interceptors.</p>
+
+<p>Around interceptors se dají dobře využít například při authentication, asynchronní zpracování request/response a práci s chybami. Například chcete provést request a server vrátí, že vypršela session a pomocí interceptoru vyvoláte přihlášení a potom pokračuje původní request.</p>
+
+<h2>$resource</h2>
+
+<p>Více konfiguračních nastavení (hlavičky, url), api bude vylepšené o podporu promise a měli by být k dispozici i interceptory.</p>
+
+<h2>$route a ngView</h2>
+
+<p>Separátní moduly, rozšíření o možnost zachycení všech parametrů a přidána podpora pro animace.</p>
+
+<pre><code>    when('/users/:userId/params/*params/'
+</code></pre>
+
+<h2>ngRepeat</h2>
+
+<p>V této snad nejpotřebnější direktivě je přidána podpora pro animace, potom je možnost opakovat sadu elementů (multi-element repeater) pomocí ng-repeat-start a ng-repeat-end a v neposlední řadě podpora track by paramteru, kdy se dá kontrolovat asociace mezi modelem a DOMem.</p>
+
+<h2>Controller as</h2>
+
+<p>Tato konstrukce nám umožní jednoduší zápis a není potřeba používat v controlleru $scope (samozřejmě pokud ho nepotřebujete např. při $watch()).</p>
+
+<pre><code>    &lt;body ng-controller="DemoController as demo"&gt;
+    &lt;tr ng-repeat="student in demo.students"&gt;
+        &lt;td&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/body&gt;
+
+    function DemoController() {
+        this.students = [ ... ]
+    }
+</code></pre>
+
+<h2>ng-if</h2>
+
+<p>Tato direktiva přejatá z projektu AngularUI umožňuje udělat podmínku na kompilaci části šablony a reší některé problémy, které se nadali zvládnout pomocí ngShow a ngHide.</p>
+
+<h2>Expressions</h2>
+
+<p>Podpora pro nové operátory: ===, !==, ?
+Konečně lze napsat:</p>
+
+<pre><code>    ng-class="loggedIn ? 'user': 'anonym'"
+</code></pre>
+
+<h2>ngTouch</h2>
+
+<p>Podpora pro touch eventy v ngClick a ngSwipe.</p>
+
+<h2>Shrnutí</h2>
+
+<p>Přibude jestě několik vylepšení pro bezpečnost (CSP) a vylepší error hlášky, také by se měla zlepšit dokumentace a bude interaktivní tutorial. Dema a detaily najdete také ve videu na <a href="https://www.youtube.com/watch?v=W13qDdJDHp8&amp;feature=c4-overview">youtube</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)]]></title>
+    <link href="http://blog.prskavec.net/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/"/>
+    <updated>2013-06-01T11:23:00+02:00</updated>
+    <id>http://blog.prskavec.net/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs</id>
+    <content type="html"><![CDATA[<p>Javascriptový framework AngularJS se stává čím dám tím populárnější. Letos vyjde několik prvních knih na něj zaměřených. Recenzi té úplně první z nich vám dnes nabízíme.</p>
+
+<p>Více na <a href="http://www.zdrojak.cz/clanky/menard-instant-angularjs-starter-recenze/">zdrojak.cz</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[NodeJS Hosting]]></title>
+    <link href="http://blog.prskavec.net/2013/03/nodejs-hosting/"/>
+    <updated>2013-03-31T21:20:00+02:00</updated>
+    <id>http://blog.prskavec.net/2013/03/nodejs-hosting</id>
+    <content type="html"><![CDATA[<p>Mám několik webů, které jsou na NodeJS. Spousta lidí zná moje weby o javascriptu <a href="http://praguejs.cz">PragueJS</a>, které běží na NodeJS a je napsaný <a href="http://expressjs.com/">ExpressJS</a>. Web je napsaný v coffee-scriptu. Nic extra, ale řešil jsem kde web hostovat.</p>
+
+<!--more-->
+
+
+<h2>Heroku</h2>
+
+<p>Jako první jsem zvolil <a href="http://heroku.com/">Heroku</a>, kde musíte upravit a lehce nastavení v package.json, aby Heroku vědělo jakou verzi NodeJS a NPM má pro kompilaci použít.</p>
+
+<p>package.json</p>
+
+<pre><code>...
+"main" : "app.coffee",
+"scripts": {
+    "start": "NODE_ENV=production coffee app.coffee"
+},
+"engines": {
+    "node": "0.8.x",
+    "npm":  "1.2.x"
+},
+...
+</code></pre>
+
+<p>Nastavit environment properties na production</p>
+
+<pre><code>heroku config:set NODE_ENV=production
+</code></pre>
+
+<p> a nastavení portu na kterém to na Heroku běží (PORT).</p>
+
+<pre><code>app.set 'port', process.env.PORT or 5000
+app.listen app.settings.port
+</code></pre>
+
+<p>Pro spuštění je potřeba nastavit Procfile, kde je co se má pouštět.</p>
+
+<p>Procfile</p>
+
+<pre><code>web: coffee app.coffee
+</code></pre>
+
+<p>Kompletní dokumentaci najdete přímo na stránkách <a href="https://devcenter.heroku.com/articles/nodejs">Heroku</a>.</p>
+
+<h2>OpenShift</h2>
+
+<p>Pro zálohu jsem využil <a href="https://www.openshift.com/">RedHat PaaS Openshift</a>, kde musíte využít jejich vlastní nástroj na vytvoření základ aplikace.</p>
+
+<p>V .openshift adresáři se nastaví všechno včetně kompilace různé verze NodeJS.</p>
+
+<p>.openshift/action_hooks/pre_start_nodejs-0.6</p>
+
+<pre><code>export NODE_ENV=production
+export PATH=$PATH:~/app-root/repo/node_modules/coffee-script/bin
+</code></pre>
+
+<p>Web běží za proxy a narozdíl od Heroku je potřeba nastavit kromě portu (OPENSHIFT_NODEJS_PORT) i interní IP adresu (OPENSHIFT_INTERNAL_IP).</p>
+
+<pre><code>  app.set 'port', process.env.OPENSHIFT_NODEJS_PORT || 8080;
+  app.set 'ipaddress', process.env.OPENSHIFT_INTERNAL_IP
+</code></pre>
+
+<p>Musel upravit package.json, aby šel přímo pustit coffee-script, protože ho OpenShift ho zatím v době implementace nepodporoval.</p>
+
+<pre><code>...
+"main" : "app.coffee",
+  "scripts": {
+    "start": "~/app-root/repo/node_modules/coffee-script/bin/coffee app.coffee"
+},    
+...
+</code></pre>
+
+<h2>Další hostingy</h2>
+
+<p>Na <a href="http://saewitz.com/node-dot-js-websocket-hosting-roundup/">webu</a> najdete zajímavé srovnání z pohledu podpory WebSockets. V tomhle ohledu je problém hlavně v nejvíce používanému Heroku, kde je podpora velmi špatná.</p>
+
+<p>Další hostingy jako jsou <a href="http://www.nodejitsu.com">Nodejitsu</a>, <a href="http://aws.amazon.com/elasticbeanstalk/">AWS Elastic Beanstalk</a>, <a href="https://modulus.io/">Modulus</a> a <a href="https://www.appfog.com/">AppFog</a> jsou podobné a služby poskytují. Nejlepší podporu pro Websockety má Nodejitsu a Modulus, které jsou placené. Na Openshiftu jsem websockety nezkoušel podpora byt tam měla být.</p>
+
+<p>Všechy moje zdrojáky jsou k dispoci na Githubu, <a href="https://github.com/abtris/cologne-js">Heroku na masteru</a> a <a href="https://github.com/abtris/cologne-js/tree/openshift">Openshift</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[RailsGirls v Praze]]></title>
+    <link href="http://blog.prskavec.net/2012/12/railsgirls-v-praze/"/>
+    <updated>2012-12-19T06:53:00+01:00</updated>
+    <id>http://blog.prskavec.net/2012/12/railsgirls-v-praze</id>
+    <content type="html"><![CDATA[<p>V Praze 14-15. 12. 2012 se uskutečnil jedinečný projekt v rámci mezinárodní komunity, která se zaměřuje na to dostat do technice ženy a dívky.</p>
+
+<!--more-->
+
+
+
+
+<blockquote><p>Our aim is to give tools and a community for women to understand technology and to build their ideas. We do this by providing a great experience on building things and by making technology more approachable.</p><footer><strong>RailsGirls website,</strong> <cite><a href='http://railsgirls.com'>railsgirls.com/&hellip;</a></cite></footer></blockquote>
+
+
+<p>Já jsem se celé akce zúčastnil jako jeden z organizátorů a také jsem trochu přispěl jako kouč. Osobně se mi nápad celé akce velmi líbí a jsem rád, že jsem se toho účastnil. Do Prahy celou akci přivedla Cristina Santamarina, která organizuje RailsGirls Berlin.</p>
+
+<p>Celá organizace nebyla složitá a protože se mě dost lidí ptalo co a jak uvedu zde některá fakta jak příprava celé akce probíhala.</p>
+
+<ul>
+<li>30.8.2012 &ndash; <a href="https://twitter.com/crissantamarina">Cristina Santamarina</a> poslal email do konference rubyonrails.cz, kde <a href="https://twitter.com/karmiq">Karel Minařík</a> a další se ozvali, že to podpoří a rádi se zúčastní.</li>
+<li>11.10.2012 &ndash; Karel se mnou mluvil o RailsGirls na <a href="http://praguejs.cz">PragueJS</a>, a tak jsem se rozhodl se zapojit do organizace</li>
+<li>7.11.2012 &ndash; V rámci tradiční <a href="http://srazy.info/prvni-streda-ruby-on-rails/">&ldquo;První středy&rdquo;</a>, kdy se schází Ruby komunita ve Fraktal baru na Letné jsme získali první kouče.</li>
+<li>17.11.2012 &ndash; Celý organizační tým (Cristina Santamarina, Eliška Hutníková a Ladislav Prskavec) se setkal s několika kouči na <a href="http://rupy.eu">RuPy</a> a doladily jsme detaily, které jsme řešili jen online</li>
+<li>5.12.2012 &ndash; Na další první středě jsme získali další kouče</li>
+<li>11.12.2012 &ndash; Po příjezdu Cristine do Prahy jsme měli koordinační oběd organizátorů, kde se řešili poslední detaily</li>
+<li>14-15.12.2012 &ndash; první RailsGirls v Praze, v Locusu ve Slezské</li>
+</ul>
+
+
+<p>Chci tady poděkovat všem co se akce zúčastnili.</p>
+
+<h3>Organizační tým:</h3>
+
+<p>Cristina Santamarina, Eliška Hutníková a Ladislav Prskavec</p>
+
+<h3>Koučové:</h3>
+
+<p>Karel Minařík, Ladislav Prskavec, Jana Dvořáková, Jiří Kubíček, Adam Kliment, Vojtěch Hýža, Jiří Kratochvíl, Zlatka Šubrová, Filip Zrůst, Patrik Jíra, Pavel Dušánek</p>
+
+<h3>Program</h3>
+
+<h4>Pátek</h4>
+
+<ul>
+<li>18:00-19:00 &ndash; Install party, účastnicím jsme pomohli s instalací Ruby a RubyOnRails</li>
+<li>dorazilo 21 účastníků</li>
+<li>řešili jsme problém s nestabilním internetem</li>
+</ul>
+
+
+<h4>Sobota</h4>
+
+<ul>
+<li>v sobotu nás překvapilo náledí ale přesto dorazilo 27 účastníků</li>
+<li>začalo se <a href="http://data.karmi.cz/railsgirls/railsgirls-introduction-to-programming.html#0">úvodem do programování</a> od Karla Minaříka
+<img class="center" src="http://blog.prskavec.net/images/railsgirls_001.jpg" title="&#34;RailsGirls - úvodní přednáška&#34;" alt="&#34;RailsGirls - úvodní přednáška&#34;"></li>
+<li>po přestávce na skvělé kafe od <a href="http://virtualmaster.com">Virtualmaster</a> si všichni zkoušeli základy Ruby pomocí <a href="http://tryruby.org">TryRuby</a> nebo IRB (Interactive Ruby Shell).</li>
+<li>po obědě jsme se vrhli na <a href="http://guides.railsgirls.com/app/">tutorial</a>, Karel celý tutorial ukázal a potom jsme v jednotlivých týmech projeli tutorial podrobně znovu.
+<img class="center" src="http://blog.prskavec.net/images/railsgirls_002.jpg" title="&#34;RailsGirls - coding&#34;" alt="&#34;RailsGirls - coding&#34;"></li>
+<li>kdo byl dříve hotov tak potom mohl tutorial vylepšovat, obarvovat apod.</li>
+</ul>
+
+
+<h3>RailsGirls v číslech</h3>
+
+<ul>
+<li>11 koučů</li>
+<li>7 partnerů</li>
+<li>52 přihlašených</li>
+<li>21 dorazilo v pátek (install party)</li>
+<li>27 dorazilo v sobotu (vlastní akce)</li>
+<li>10 znalo HTML a CSS</li>
+<li>4 měli nějaké základy programovaní</li>
+</ul>
+
+
+<h3>Napsali o nás</h3>
+
+<ul>
+<li><a href="http://www.lenilumpik.cz/2012/12/ruby-ruby-ruby/">Ruby, Ruby, Ruby!</a></li>
+</ul>
+
+
+<h3>Fotky</h3>
+
+<ul>
+<li><a href="https://www.icloud.com/photostream/#A1GWZuqD82Nj1">Radek Slavičinský</a></li>
+</ul>
+
+
+<h2>Další RailsGirls</h2>
+
+<p>S ostatními co jsme se shodli, že pokračování bude. Dostali jsme pozitivní zpětnou vazbu ode všech kdo se účastnili a za to jsme rádi. Chtěli bychom mít lepší prostor, se spolehlivým internetem. Vylepšit rozdělení do skupin, přidat další věci kolem.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.]]></title>
+    <link href="http://blog.prskavec.net/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/"/>
+    <updated>2012-10-03T17:57:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale</id>
+    <content type="html"><![CDATA[<p>Ve čtvrtek 11.10. proběhne <a href="http://praguejs.cz">javascriptový meetup</a> v <a href="http://node5.cz">Node5</a> s tématem <a href="http://emberjs.com">Ember.js</a>. GoodData přivezou do Prahy hlavní vývojáře tohoto frameworku.</p>
+
+<!--more-->
+
+
+<p>Oba představitelé pracuji pro startup <a href="http://www.tilde.io/">Tilde.io</a>, který společně založili, jehož hlavní náplní je dodávat kompletní řešení pro prostředí moderního webu.</p>
+
+<p><em>Yehuda Katz</em> je hlavní vývojář mnoha projektů, včetně Ruby on Rails, jQuery a Ember.js.</p>
+
+<p><em>Tom Dale</em> je Ember.js maintainer a dříve člen Sproutcore týmu. Je to bývalý zaměstnanec Apple, který pracoval na MobileMe a iCloud aplikacích. Takže o témata k diskuzi by neměla být vůbec nouze.</p>
+
+<p>Začátek v 18h v prostorách Node5 v Praze. Přihlásit se můžete na <a href="http://srazy.info/js-meetup/2731">srazy.info</a> nebo na <a href="https://www.facebook.com/events/460090940679989/">facebooku</a>.</p>
+
+<p>Více infomací na <a href="http://praguejs.cz">praguejs.cz</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Webexpo 2012]]></title>
+    <link href="http://blog.prskavec.net/2012/09/webexpo-2012/"/>
+    <updated>2012-09-24T20:58:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/09/webexpo-2012</id>
+    <content type="html"><![CDATA[<p>Ocenil jsem na webexpu spoustu malých zlepšení, cedulka byla oboustranná. Každý účasník měl vyrobeny vizitky, které jsem využil při networkingu.</p>
+
+<!--more-->
+
+
+<h2>Pátek 21.9.2012</h2>
+
+<p>V pátek jsem začal v Development Hall na přednášce <a href="http://www.slideshare.net/karmi/shells-kitchen-infrastructure-as-code-webexpo-2012">Ano, Chefe!</a> Karel Minařík, Vojtěch Hýža byli úžasní, ale nevím zda to bylo pochopitelné pro všechny, já mám s Chefem zkušenosti a tak jsem si to skvěle užil.</p>
+
+<p>Po pauze kdy jsem si dal něco k obědu, těstoviny s masem nebyly špatné.</p>
+
+<p>Byl jsem na několika přednáškách v bussiness hall, kterým jsem moc nerozumněl a moc mi to nedalo.</p>
+
+<p>Další přednášku Mr. LAW and the Typos od Josefa Pospíšila jsem viděl už na Ruby srazu. Jak dělat agilně pokud jste na to sami. Tohle téma je trochu specifické. Důležitost testování a správně nastavené komunikace s klientem je klíčová. Pepa jel prezentaci z Ipadu a měl jí vytvořenou pomocí aplikace <a href="http://www.haikudeck.com/">Haiku Deck</a>.</p>
+
+<p>Přednáška Jakuba Nešetřila Jak (ne)dělat API mi moc nového neřekla, protože Apiary.io už používám a toto téma se zajímám delší dobu. Každopádně developer co dělá api a nepoužívá Apiary.io by měl začít.</p>
+
+<p>Poslední přednáška Bena Kamense o <a href="http://www.khanacademy.org/">Khan Academy</a> mě zaujala rozborem A/B testování za použití frameworku Abingo (např. implementace v <a href="http://www.bingocardcreator.com/abingo">Ruby</a>, dále je v <a href="https://github.com/kamens/gae_bingo">Pythonu</a> a DotNet).</p>
+
+<p>Kromě výzvy k překládání do <a href="http://josefstepanek.cz/2283/pojdte-spoluutvaret-budoucnost-vzdelavani.html">češtiny</a> bylo asi kolem testování, že nemůžete výsledkům vždy věřit. Na příkladu A/A testování je vidět, že pokud obě skupiny mají různé výsledky je něco špatně.</p>
+
+<p>Večer byl raut, ten byl celkem zajímavý, potkal jsem se s mnoha lidmi. Je byl poněkud hladový.</p>
+
+<h2>Sobota 22.9.2012</h2>
+
+<p>V sobotu jsem začal na přednášce Nepoužívejte Git jako SVN! Vašek představil workflow <a href="http://nvie.com/posts/a-successful-git-branching-model/">Git-flow</a>, <a href="http://scottchacon.com/2011/08/31/github-flow.html">Github flow</a> a Medio workflow.</p>
+
+<p>Trochu mi chybělo v přednášce detailní vysvětlení rebase.</p>
+
+<blockquote><p>Do not rebase commits that you have pushed to a public repository.</p><footer><strong>Scott Chacon</strong> <cite><a href='http://git-scm.com/book/en/Git-Branching-Rebasing'>The Perils of Rebasing</a></cite></footer></blockquote>
+
+
+<p>Vašek to moc stavěl jako rebase vs merge, ale z mých zkušeností to nikdy tak není. Je potřeba kombinovat přístupy oba tam, kde se mají kombinovat.</p>
+
+<p>Takže rebase na privátních větvích, kde není sdílený kód s ostatními. Podle mě bylo by spíše zajímavé představit řešení jak to mají implementované na serveru. Zda používají forky nebo personální větve apod. A to netuším, zda by zajímalo většinu lidí, je to dost specifické pro lidi co do problematiky asi proniknou více.</p>
+
+<p>Přednáška Tomáše Jukina na téma Ekosystém. Jak se tvoří weby! Tomáš představil Railsy a jejich systém. Tomáš je šoumen a zabavná přednáška přinesla i pěkné představení <a href="https://github.com/Juicymo/rails_admin">rails_admin</a> a Ruby Scaffolding Toolboxu.</p>
+
+<p>V rámci minibarcampu jsem byl na pokecu o Bitcoinech.</p>
+
+<p>Další přednáška o Web Performance od Hooman Beheshti mi nepřinesla nic nového, bylo jen shrnuto co znám, ale kdo v této problematice není odborník jistě se dozvěděl mnohé.</p>
+
+<p>Přednáška o Dartu nebyla špatná, ale spíš nudná. Nic nového a inovativního jsem se nedozvěděl.</p>
+
+<p>Lukáš Linhart a jeho přednáška o Node.js byla jako obvykle kritická i zábavná.</p>
+
+<p>Michal Bachman byl vynikající a jeho přednáška o Neo4j byla opravdu pěkně připravená a příklady názorné a zajímavé.</p>
+
+<p>Těšil jsem se na přednášku o PHPUnit od Sebastiana Bergmanna. Podání bylo dost nudné až ke konci bylo něco zajímavého. Pro mě asi nejvíce zklamání od zahraničního hosta, který měl určitě co říct.</p>
+
+<p>Na konec jsem zvolil přednášku od Ash Maurya o Lean Canvasu, ale nepřišla mi nějak zajímavá, celkem jsem viděl co jsem někde viděl na youtube.</p>
+
+<p>Příští ročník má být mezinárodní a v angličtině. Pokud se to Vaškovy a jeho týmu podaří, vylepší drobnosti v organizaci, tak přednášející a třeba konečně budou mít nějaké nosné téma i celky přednášek, které zaujmou.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Grunt.js]]></title>
+    <link href="http://blog.prskavec.net/2012/09/grunt-dot-js/"/>
+    <updated>2012-09-05T19:15:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/09/grunt-dot-js</id>
+    <content type="html"><![CDATA[<p>Grunt.js je nástroj pro tvorbu ukolů. Obdobný nástroj existuje pro každý programovací jazyk a často nejenom jeden.</p>
+
+<!--more-->
+
+
+<p>Osobně mám nejraději asi klasický Makefile pro jeho jednoduchost. Stačí do něj napsat příkazy co pustíte v shellu takže to víceméně může být cokoliv. Makefile má jednoduchou strukturu, obsahuje label a potom vlastní příkaz. Při zadání <code>make</code> se spustí label označený <code>all</code>.</p>
+
+<pre><code>all:
+        make run
+deploy:
+        git push heroku master
+run:
+        coffee app.coffee
+css:
+        compass compile
+logs:
+        heroku addons:open loggly
+</code></pre>
+
+<p>Grunt.js je napsaný v node.js, instaluje se pomocí <code>npm install grunt</code>. Můžete si psát vlastní úkoly a pluginy, spoustu jich najdete hotových pomocí <code>npm search grunt-</code>.</p>
+
+<p>V příkladu, který uvádím se používá pluginy compass, coffeelint a exec, nahrávají se pluginy pomocí <code>loadNpmTasks('name')</code>. Vlastní definované tasky můžete nahrát pomocí <code>loadTasks('dir')</code>. Nakonec po konfiguraci je potřeba zaregistrovat <code>registerTask('default', 'watch')</code>.</p>
+
+<pre><code>module.exports = function(grunt) {
+  // Load tasks
+  grunt.loadNpmTasks('grunt-coffeelint');
+  grunt.loadNpmTasks('grunt-compass');
+  grunt.loadNpmTasks('grunt-exec');
+  // Project configuration.
+  grunt.initConfig({
+    compass: {
+      dev: {
+        src: 'sass',
+        dest: 'public/stylesheets',
+        outputstyle: 'expanded',
+        linecomments: true
+      },
+      prod: {
+        src: 'sass',
+        dest: 'public/stylesheets',
+        outputstyle: 'compressed',
+        linecomments: false,
+        forcecompile: true
+      }
+    },
+    coffee: {
+      app: ['app.coffee','lib/*.coffee']
+    },
+    watch: { // for development run 'grunt watch'
+      app: {
+        files: ['app.coffee', 'lib/*.coffee'],
+        tasks: ['coffee:app', 'coffeelint:dev']
+      },
+      compass: {
+        files: ['sass/**/*.scss'],
+        tasks: ['compass:dev']
+      }
+    },
+    coffeelint: {
+      one: {
+        files: ['app.coffee','lib/*.coffee'],
+        options: {
+          indentation: {
+            value: 2,
+            level: "error"
+          }
+        }
+      }
+    },
+    coffeelintOptions: {
+      max_line_length: {
+        value: 100,
+        level: 'error'
+      }
+    },
+    exec: {
+      deploy: {
+        command: 'git push heroku master',
+        stdout: true,
+        stderr: true
+      },
+      logs: {
+        command: 'heroku addons:open loggly'
+      },
+      run: {
+        command: 'coffee app.coffee',
+        stdout: true,
+        stderr: true
+      }
+    }
+  });
+
+  // Load local tasks.
+  grunt.loadTasks('tasks');
+  // Default task.
+  grunt.registerTask('default', 'watch');
+};
+</code></pre>
+
+<p>Grunt.js umí generovat nějaké konfigurace pomocí <code>grunt init:template</code>. Základní templates jsou: <code>commonjs</code>, <code>gruntfile</code> , <code>gruntplugin</code>, <code>jquery</code>, <code>node</code>. Například vytvořit node.js modul včetně testů uděláte pomocí:</p>
+
+<pre><code>grunt init:node
+</code></pre>
+
+<p>Vlastní grunt.js obsahuje některé základní tasky už v základním balíčku, které můžete velmi dobře použít.</p>
+
+<ul>
+<li>concat (spojování souborů)</li>
+<li>init (vytvoření předefinovaných konfigurací)</li>
+<li>lint (validace JSHint)</li>
+<li>min (UglifyJS)</li>
+<li>qunit</li>
+<li>server</li>
+<li>test</li>
+<li>watch</li>
+</ul>
+
+
+<p>Grunt.js se dá dobře použít na vytvoření buildu, kde spojíte všechny javascriptové soubory. Provést minifikaci a kontrolu například pomocí JSHint. Jako ukázku uvádím <a href="https://github.com/lmc-eu/ngx-library">grunt.js z NGX library</a>.</p>
+
+<pre><code>module.exports = function(grunt) {
+    // tasks
+    grunt.loadTasks('build/tasks');
+    grunt.loadNpmTasks('grunt-recess');
+
+    // configuration
+    grunt.initConfig({
+        pkg: '&lt;json:package.json&gt;',
+        meta: {
+            banner: '/**\n' +
+                ' * &lt;%= pkg.description %&gt;\n' +
+                ' * @version v&lt;%= pkg.version %&gt; - ' + '&lt;%= grunt.template.today("yyyy-mm-dd") %&gt;\n' +
+                ' * @link &lt;%= pkg.homepage %&gt;\n' +
+                ' * @license MIT License, http://www.opensource.org/licenses/MIT\n' +
+                ' */'
+        },
+        concat: {
+            dist: {
+                src: ['&lt;banner:meta.banner&gt;', 'src/ngx.js', 'src/**/*.js'],
+                dest: 'dist/ngx.js'
+            }
+        },
+        clean: {
+            dist: ['dist/']
+        },
+        copy: {
+            dist: {
+                files: {
+                    'dist/templates/ui': ['src/modules/ui/**/*.html'],
+                    'dist/libs': ['libs/**']
+                }
+            }
+        },
+        min: {
+            dist: {
+                src: ['&lt;banner:meta.banner&gt;', '&lt;config:concat.dist.dest&gt;'],
+                dest: 'dist/ngx.min.js'
+            }
+        },
+        recess: {
+            dist_css: {
+                src: 'src/**/*.less',
+                dest: 'dist/styles/ngx.css',
+                options: {
+                    compile: true
+                }
+            },
+            dist_min: {
+                src: '&lt;config:recess.dist_css.dest&gt;',
+                dest: 'dist/styles/ngx.min.css',
+                options: {
+                    compress: true
+                }
+            }
+        },
+        lint: {
+            files: ['grunt.js', 'src/ngx.js', 'src/lang/*.js', 'src/modules/**/*.js']
+        },
+        watch: {
+            scripts: {
+                files: ['grunt.js', 'src/*.js', 'src/**/*.js'],
+                tasks: 'lint concat min'
+            },
+            styles: {
+                files: ['src/**/*.less'],
+                tasks: 'recess'
+            },
+            templates: {
+                files: ['src/modules/**/*.html'],
+                tasks: 'copy'
+            }
+        }
+    });
+
+    // default task
+    grunt.registerTask('default', 'lint clean concat copy min recess');
+
+};
+</code></pre>
+
+<p>Grunt.js využívá například <a href="http://yeoman.io">Yeoman</a>, na tyto úkoly.
+&ndash; kontrolu javascriptu pomocí JSHint
+&ndash; kompilace CoffeeScriptu a SASS souborů pro produkci
+&ndash; používá <a href="https://github.com/jrburke/r.js/">r.js</a> ke kompilaci a optimalizaci
+&ndash; spojení a minifikaci skriptů a stylů
+&ndash; komprese obrázků pomocí OptiPNG pro PNG a JPEGtran-turbo pro JPEG.
+&ndash; spuštění unit testů proti headless WebKit browser (PhantomJS)
+&ndash; vytvoření Application Cache manifest via <a href="https://github.com/jamesgpearce/confess">Confess.js</a></p>
+
+<p>Použití je všestrané a pokryje to celé spektrum práce s aplikacemi v javascriptu.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Šablony v AngularJS]]></title>
+    <link href="http://blog.prskavec.net/2012/08/angualarjs-templates/"/>
+    <updated>2012-08-14T21:40:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/08/angualarjs-templates</id>
+    <content type="html"><![CDATA[<p>Pokud začínáte s <a href="http://www.angularjs.org">AngularJS</a> je dobré pro aplikace použít <a href="https://github.com/angular/angular-seed">angular-seed</a>.</p>
+
+<!--more-->
+
+
+<h2>Jednotlivé šablony v samostatných souborech</h2>
+
+<p>Šablony v angular-seed jsou rozděleny do samostatných souborů.</p>
+
+<pre><code>app/
+    js/
+        app.js
+    partials/
+        partial1.html
+        partial2.html
+</code></pre>
+
+<p>v app.js se potom načítají samostatně</p>
+
+<pre><code>$routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: MyCtrl1});
+$routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: MyCtrl2});
+</code></pre>
+
+<p>Důležité je AngularJS sice používa template cache, ale pro každý soubor si sáhne samostatně a udělá 2 requesty, což nemusí být optimální obzvláště pokud byste měli 20 šablon.</p>
+
+<p>Tento způsob se hodí při vývoji, abyste měli šablony samostatně pro přehlednost.</p>
+
+<h2>Inline šablony</h2>
+
+<p>V manuálu najdete jak vkládat <a href="http://docs.angularjs.org/api/ng.directive:script">šablony</a>, přímo do stránek pomocí script tagu.</p>
+
+<pre><code>&lt;script type="text/ng-template" id="partial1.html"&gt;
+&lt;p&gt;This is the partial for view 1.&lt;/p&gt;
+&lt;/script&gt;
+</code></pre>
+
+<p>Ty se dají použít velmi dobře. Pokud je to menší kód, ale jinak je lepší mít v samostatných souborech. V kódu se na ně odkážete pomocí jména v id parametru.</p>
+
+<pre><code>$routeProvider.when('/view1', {templateUrl: 'partial1.html', controller: MyCtrl1});
+</code></pre>
+
+<h2>Kombinace obou způsobů</h2>
+
+<p>Jak jsem to konzultoval s Vojtou Jínou z AngularJS teamu. Pro development je dobré použít jednotlivé šablony samostatně, ale pro nasazení je dobré spojit šablony do jednoho souboru, abyste ušetřili requesty.</p>
+
+<p>Dá se použít například <a href="http://gruntjs.com/">GruntJS</a> script pro vložení samostaných šablon pro vývoj do inline šablon. Ukázkový script udělal <a href="https://github.com/vojtajina">Vojta Jína</a>.</p>
+
+<div><script src='https://gist.github.com/3347478.js'></script>
+<noscript><pre><code>module.exports = function(grunt) {
+
+  grunt.initConfig({
+    inline: {
+      'index.html': ['tpl/*.html']
+    }
+  });
+
+  grunt.registerMultiTask('inline', 'Inline AngularJS templates into single file.', function() {
+    var SCRIPT = '&lt;script type=&quot;text/ng-template&quot; id=&quot;&lt;%= id %&gt;&quot;&gt;&lt;%= content %&gt;&lt;/script&gt;\n';
+
+    var html = '$1\n\n';
+    grunt.file.expandFiles(this.data).forEach(function(file) {
+      grunt.log.writeln('Inlining ' + file);
+      html += grunt.template.process(SCRIPT, {id: file, content: grunt.file.read(file)});
+    });
+
+    var result = this.target;
+    grunt.file.write(result, grunt.file.read(result).replace(/(&lt;body[^&gt;]*&gt;)/, html));
+  });
+};
+</code></pre></noscript></div>
+
+
+<h2>Další možnosti</h2>
+
+<p>K tomu článku mě přivedl tento tweet.</p>
+
+<blockquote><p>Nevíte někdo jak v #angularjs docílit toho abych měl jeden (externí) soubor se všema šablonama?</p><footer><strong>@PatrikVotocek</strong> <cite><a href='https://twitter.com/PatrikVotocek/statuses/235100756905189376'>twitter.com/PatrikVotocek/&hellip;</a></cite></footer></blockquote>
+
+
+<p>To by předpokládalo řešení, že budeme mít soubor s šablonami a zkusíme ho načíst a zpracovat. Musíte vytvořit falešnou template cache a tu použít, díky Vojtovy za implementaci.</p>
+
+<div><script src='https://gist.github.com/3354046.js'></script>
+<noscript><pre><code>&lt;script type=&quot;text/ng-template&quot; id=&quot;one.html&quot;&gt;
+&lt;div&gt;This is first template&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type=&quot;text/ng-template&quot; id=&quot;two.html&quot;&gt;
+&lt;div&gt;This is second template&lt;/div&gt;
+&lt;/script&gt;
+</code></pre></noscript></div>
+
+
+<p>Rozhodně to, ale není něco co byste měli používat i když to funguje.</p>
+
+<h1>Závěr</h1>
+
+<p>Držte se toho jak je to v AngularJS vymyšlené, zbastlit lze všechno, ale není to ideální a proto používejte samostatné šablony na vývoj a při deploymentu to dejte do stránky to je nejlepší způsob.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Raspberry Pi]]></title>
+    <link href="http://blog.prskavec.net/2012/07/raspberry-pi/"/>
+    <updated>2012-07-28T13:15:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/07/raspberry-pi</id>
+    <content type="html"><![CDATA[<h2>Jak jsem si pořidil</h2>
+
+<p>Rapsberry Pi jsem objednal u <a href="http://export.farnell.com/rp/order/">Farnellu</a> v červnu a na konci července mi přišel dopis ve kterém bylo zařízení.</p>
+
+<!--more-->
+
+
+<h2>Co jsem potřeboval, aby to fungovalo</h2>
+
+<p>Měl jsem zařízení, ale co dál aby to fungovalo.</p>
+
+<p>Potřebujete:</p>
+
+<ul>
+<li>zdroj (700mA, 5V s microUSB) &ndash; použil jsem nabíječku z iphone a dal jiný usb kabel</li>
+<li>SD kartu, kam dáte systém (použil jsem 4GB class 10)</li>
+<li>kabel na připojení monitoru, použil jsem HDMI</li>
+<li>klavesnici a myš (USB)</li>
+</ul>
+
+
+<p><img class="center" src="http://blog.prskavec.net/images/raspberry/raspberry.jpg" title="'Raspberry running'" ></p>
+
+<p>Ze stránek <a href="http://www.raspberrypi.org/downloads">raspberry</a> jsem si stáhnul Raspbian “wheezy” a pomocí dd jsme ho nahrál na sd kartu.</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/raspberry/debian.jpg" title="'Raspbian “wheezy”'" ></p>
+
+<h2>Node.js na Raspberry PI</h2>
+
+<p>Po rozběhnutí systému není problém nainstalovat cokoliv potřebujete. Spustil jsem ssh server na nainstaloval NodeJS.</p>
+
+<pre><code>sudo apt-get install nodejs npm
+</code></pre>
+
+<p>Není potom problém pustit aplikaci.</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/raspberry/nodejs.jpg" title="'Node.js'" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jenkins SCM polling je zlo!]]></title>
+    <link href="http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo/"/>
+    <updated>2012-06-20T18:54:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo</id>
+    <content type="html"><![CDATA[<p>Moc jsem nechápal problémy, které řešil <a href="http://kohsuke.org/2011/12/01/polling-must-die-triggering-jenkins-builds-from-a-git-hook/">Kohsuke Kawaguchi</a> na konci roku. Ale brzo jsem to měl zjistit. Před časem přišel za mnou kolega, že chce zkonfigurovat polling stylem popisovaným v článku.</p>
+
+<!--more-->
+
+
+<p>Polling jsme nastavili na 1x24h a máme git-update hook, který nám polling spustí po kommitu, kdy je potřeba. Ukázka git-update skriptu.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>REPOSITORY_BASENAME=$(basename "$PWD") 
+</span><span class='line'>curl http://jenkins.firma.cz/jenkins/git/notifyCommit?url=ssh://git@git.firma.cz/$REPOSITORY_BASENAME</span></code></pre></td></tr></table></div></figure>
+
+
+<p>V poslední době nám performace jenkins serveru začala klesat a load serveru prudce stoupat. Začali jsme to řešit pomocí dalších volných strojů, které se k jenkins masteru připojovali jako slave node. Úspěšně jsme si vyzkoušeli na to použití pluginu <a href="https://wiki.jenkins-ci.org/display/JENKINS/Swarm+Plugin">swarm</a>, který můžu doporučit. Vytvořili jsme RPM balík, který nainstalujeme na volný stroj a swarm se připojí k masteru a je plně nakonfigurovaný a k dispozici. Důležité je jen mít na slave nodes dost diskového prostoru, protože joby jsou dost často velké, obzvláště pokud jich máte velký počet.</p>
+
+<p>Abych se vrátil k SCM pollingu. Naši systémaci udělali analýzu nejvytíženějších repository v Gitu. A data mám udávají čas spotřebovaný na provedení všech činností po dobu 14 dní. Na grafu je vidět přehled podle repository.</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/scmpolling/graph-01.png" title="'Prehled repository podle casu'" ></p>
+
+<p>V dalším grafu je vidět potom rozložení podle zátěže jednotlivými klienty, jak stroji (převážně jenkins a slave nodes, uživatelé jsou v minoritě).</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/scmpolling/graph-02.png" title="'Prehled repository podle uzivatele'" ></p>
+
+<p>Poslední graf ukazuje počet přístupů do jednotlivých repository. Je potřeba podle toho upravit joby a jejich SCM polling.</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/scmpolling/graph-03.png" title="'Prehled repository podle poctu pristupu'" ></p>
+
+<p>Na hromadné změny SCM pollingu můžete úspěšně použít <a href="https://wiki.jenkins-ci.org/display/JENKINS/Configuration+Slicing+Plugin">Configuration Slicing Plugin</a>, který vám práci usnadní. U nějvíce vytížených repository doporučili použít notifikace pomocí git-update hooku, případně to můžete udělat všude.</p>
+
+<p>Výsledná zátěž stroje potom výrazně klesla potom co jsme upravili nastavení jak je vidět z grafů muninu.</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/scmpolling/graph-04.png" title="'Prehled z munina'" ></p>
+
+<p>Další doporučení a tipy triky z praxe se dozvíte na mém školení <a href="http://bit.ly/k-ci">Jenkins &ndash; jak na Continuous Integration v PHP a Javascriptu</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AngularJS 1.0.0]]></title>
+    <link href="http://blog.prskavec.net/2012/06/angularjs-1-dot-0-0/"/>
+    <updated>2012-06-15T14:08:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/06/angularjs-1-dot-0-0</id>
+    <content type="html"><![CDATA[<h2>Konečně tady!</h2>
+
+<p>Po celkem dlouhém čekání a 12 RC verzí 1.0 je konečně venku finální verze na kterou od jara čekáme. Trochu jsem si říkal zda se nečeká na něco jiné například <a href="http://blog.angularjs.org/2012/06/doubleclick-super-powered-by-angularjs.html">DoubleClick</a> jako stěžení referenci pro AngularJS.</p>
+
+<!--more-->
+
+
+<p>Na blogu Google Developers vyšel pěkný <a href="http://googledevelopers.blogspot.cz/2012/06/better-web-templating-with-angularjs-10.html">článek</a>, který shrnuje hlavní věci, které mě na AngularJS baví, doporučuji přečíst každému.</p>
+
+<p>Pokud se moje přednáška dostane na Webexpo 2012. Budu povídat jak to používáme AngularJS na <a href="http://www.jobs.cz">Jobs.cz</a>.</p>
+
+<p>Jsme kromě DoubleClicku zatím jediná komeční aplikace v produkci, která je uvedena na stránkách <a href="http://builtwith.angularjs.org/">builtwith.angularjs.org</a>. Doufám, že pokud něco máte nebudete se bát poslat a rozšiřte řady těch co ukazují, že v AngularJS je radost pracovat a stojí to za to.</p>
+
+<p>Pokud si chcete přijít o AngularJS popovídat určitě mě zastihnete a nejen mě na pravidelné akci Poslední čtvrtek, pravidelné setkání přátel Javascriptu.</p>
+
+<p>Sledovat nás můžete na <a href="https://www.facebook.com/groups/123334754348651/">Facebooku</a> nebo přes <a href="http://srazy.info/angularjs-meetup/2429">Srazy</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jenkins - jak na Continuous Integration v PHP a Javascriptu 26.6.2012]]></title>
+    <link href="http://blog.prskavec.net/2012/06/jenkins-jak-na-continuous-integration-v-php-a-javascriptu-26-dot-6-2012/"/>
+    <updated>2012-06-14T14:32:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/06/jenkins-jak-na-continuous-integration-v-php-a-javascriptu-26-dot-6-2012</id>
+    <content type="html"><![CDATA[<h2>Aktuání školeni 26.6.2012</h2>
+
+<p>Přijděte si popovídat o integraci vašich aplikací v PHP a Javascriptu na moje školení v úterý 26.6. <a href="bit.ly/k-ci">bit.ly/k-ci</a>.</p>
+
+<p>Pro tento termín jsem připravil aktualnizaci, kde kromě PHP je přidána continous integration pro Javascript.</p>
+
+<p>Přednášku jsem o tom měl na poledním čtvrtku. Slidy jsou k dispozici <a href="http://slidesha.re/MtbUvD">http://slidesha.re/MtbUvD</a>.</p>
+
+<p>Pokud vám na školení o integraci něco chybí co by jste tam chtěli, neváhejte a oslovte mě emailem nebo v komentářích.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Dash - snippet manager a prohlížeč dokumentace]]></title>
+    <link href="http://blog.prskavec.net/2012/05/dash-snippet-manager-a-prohlizec-dokumentace/"/>
+    <updated>2012-05-28T18:55:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/05/dash-snippet-manager-a-prohlizec-dokumentace</id>
+    <content type="html"><![CDATA[<h2>Dash &ndash; další užitečný nástroj pro programátory</h2>
+
+<p>Před nedávnem jsem měl problém s dostupností sítě v nejmenovaném dopravním prostředku na trase Praha Liberec, potřeboval jsem maličkost z dokumentace PHP. Nebyl to problém, protože jsem pár dní předtím objevil nástroj <a href="http://kapeli.com/dash/">Dash</a>, který to elegantně řeší. Kromě dokumentace si v něm můžete uchovávat snippety, ale tam mi chybí integrace s gisty na githubu.</p>
+
+<!--more-->
+
+
+<p><img class="center" src="http://blog.prskavec.net/images/dash/Dash-Add.jpg" title="'Dash - základní okno'" ></p>
+
+<p>Můžete hned začít hledat, například php funkci <strong>ksort()</strong></p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/dash/Dash-Documentation-6.jpg" title="'Dash - ksort() php'" ></p>
+
+<p>Dash automaticku umí pokud jste online najít příslušný výkaz na stackoverflow</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/dash/Dash-Documentation-1-3.jpg" title="'Dash - vyhledávání ksort() stackoverflow'" ></p>
+
+<p>nebo na google.com.</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/dash/Dash-Documentation-2-3.jpg" title="'Dash - vyhledávání ksort() google'" ></p>
+
+<p>Jazyků se podporuje asi 80, ja mám docsety pro CSS, Ruby, PHP, NodeJS, Javascript, Rails, MySQL, Html. Například funkce count() v ruby.</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/dash/Dash-Documentation-3-3.jpg" title="'Dash - count() ruby '" ></p>
+
+<p>Docsety podporované přímo od autorů: iOS, Mac, Man Pages and custom docsets. Included docsets: ActionScript, Android, C++, Cappuccino, Cocos2D, Cocos3D, Corona, CSS, Django, Groovy, HTML, Java, JavaFX, JavaScript, jQuery, Kobold2D, Lua, MySQL, Node.js, Perl, PHP, Python, Ruby, Ruby on Rails, Scala, Sparrow, SQLite, Unity 3D, WordPress, XSLT, XUL.</p>
+
+<p>Nebo si můžete generovat vlastní <a href="http://kapeli.com/docsets/">docset</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Angular Meetup v Praze]]></title>
+    <link href="http://blog.prskavec.net/2012/05/angular-meetup-v-praze/"/>
+    <updated>2012-05-07T09:23:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/05/angular-meetup-v-praze</id>
+    <content type="html"><![CDATA[<h1>AngularJS Meetup proběhl v Praze</h1>
+
+<p>Dne 4.5.2012 16-21h proběhl meetup přiznivců <a href="http://www.angularjs.org">AngularJS</a> v Hub Praha na Smíchově. Po <a href="http://www.meetup.com/AngularJS-NYC/events/63007142/">New Yorku</a> a <a href="http://www.meetup.com/AngularJS-MTV/events/62918252/">Mountain View</a> byla Praha doufám třetí na světě kde se něco takového konalo. Angular tým <a href="https://twitter.com/#!/mhevery">Misko Hevery</a>, <a href="https://twitter.com/#!/IgorMinar/">Igor Minar</a>, <a href="https://twitter.com/#!/vojtajina/">Vojta Jína</a> nám dělali podporu a to Vojta dokonce osobně v Praze. Přes hangout jsme pozdravili i zbytek týmu.</p>
+
+<p>Pár fotek z <a href="https://plus.google.com/photos/113391188023467233438/albums/5738773000511139121">mobilu</a> z akce je k dispozici.</p>
+
+<p>Celá akce byla postavená na dotazech a společné práci nad vlastními projekty nebo nad ukázkovou aplikací <a href="http://docs.angularjs.org/tutorial/">angular-phonecat</a>. K dipozici byl bar s občerstvením a celá doba uběhla velmi rychle. S probíraných věcí mi asi nejvíce utkvěli informace o <a href="http://stackoverflow.com/questions/9682092/databinding-in-angularjs">dirtycheckingu</a> co nám Vojta vyložil.</p>
+
+<p>Každopádně celá akce byla super a doufám, že ji zoopakujeme někdy brzo znovu a nemusíme se zaměřovat jen na AngularJS, ale na programování v Javascriptu obecně.</p>
+
+<p>Napište do komentářů kam by jste chtěli, aby se meetupy ubírali.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AngularJS v Praze]]></title>
+    <link href="http://blog.prskavec.net/2012/03/angularjs-v-praze/"/>
+    <updated>2012-03-27T05:50:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/03/angularjs-v-praze</id>
+    <content type="html"><![CDATA[<p><a href="http://angularjs.org">AngularJS</a> je MVC javascriptový framework, opensource, podporovaný firmou Google. Jeden z hlavních vývojářů je <a href="http://twitter.com/#!/vojtajina">Vojta Jína</a>, který v dubnu/květnu bude v Praze a potřebujeme zjistit zda by byl zájem o něco více než jenom přednášku co bude v rámci.</p>
+
+<p>2.5. Vojta Jina &ndash; Google Mountain View USA. Introduction to Angular. Vojta is a developer in Google actively developing a Javascript architecture Angular. <a href="http://www.eclub.cvutmedialab.cz/">eClubu</a></p>
+
+<p>4.5. hacking party sponzored by Google &ndash; <a href="http://srazy.info/angularjs-meetup/2164">meetup</a></p>
+
+<p>Díky všem za vyplnění a bude vás informovat, sledujte <a href="http://twitter.com/#!/abtris">@abtris</a> a <a href="http://twitter.com/#!/vojtajina">@vojtajina</a> na twitteru a dozvíte se vše.</p>
+]]></content>
+  </entry>
+  
+</feed>

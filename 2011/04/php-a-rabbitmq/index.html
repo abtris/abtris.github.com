@@ -1,0 +1,461 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>PHP a RabbitMQ - Prskavčí blog</title>
+  <meta name="author" content="Ladislav Prskavec">
+
+  
+  <meta name="description" content="V poslední době se objevilo hodně článků o RabbitMQ a připravuje se kniha kde většina příkladů je v PHP. Připravil jsem malou demonstraci jak se &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.prskavec.net/2011/04/php-a-rabbitmq/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+<meta name="google-site-verification" content="mepQHhq6JPqzvIjErdB-A6hp3UKAYIlYHN7xPUL8JUM" />
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/feed/index.html" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.prskavec.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archív</a></li>
+  <li><a href="/prednasky">Přednášky</a></li>  
+  <li><a href="/skoleni">Školení</a></li>
+  <li><a href="/kontakt">Kontakt</a></li>  
+</ul>
+
+</nav> 
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">PHP a RabbitMQ</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-10T00:00:00+02:00" pubdate data-updated="true">10. 04. 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>V poslední době se objevilo hodně článků o <a href="http://www.rabbitmq.com/">RabbitMQ</a> a připravuje se <a href="http://manning.com/videla/">kniha</a> kde většina příkladů je v PHP.  Připravil jsem malou demonstraci jak se message queue dobře využit. RabbitMQ je napsaný v Erlangu podobně jako CouchDB a hodí ke zpracování dávkových úloh. V demonstraci využívám knihovnu <a href="http://code.google.com/p/wkhtmltopdf/">wkhtmltopdf</a> která umí zpracovat html stránku na PDF, používá k tomu webkit jádro.</p>
+
+<h2>Design</h2>
+
+
+<p>Malý design aplikace jsem zvolil takto:  <img class="aligncenter" title="rabbitmq_design" src="https://github.com/abtris/php-rabbitmq-wkhtmltox-demo/raw/master/docs/design.png" alt="" width="600" /></p>
+
+<h2>Kód</h2>
+
+
+<p>Základ aplikace jsou dva úlohy producer a consumer. Nejdříve je potřeba pustit consumer.</p>
+
+<pre class="code">error_reporting(E_ALL);
+/**
+ * Application path
+ */
+define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
+/**
+ * Application enviroment
+ */
+define('APPLICATION_ENV', 'development');
+
+require_once APPLICATION_PATH . '/models/Rabbit.php';
+/**
+ * /Ensure library/ is on include_path
+ */
+set_include_path(implode(PATH_SEPARATOR, array(
+    realpath(APPLICATION_PATH . '/../library'),
+    get_include_path()
+)));
+
+/** Zend_Application */
+require_once 'Zend/Application.php';
+
+// Create application, bootstrap, and run
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    APPLICATION_PATH . '/configs/application.ini'
+);
+$application-&gt;getBootstrap()-&gt;bootstrap();
+
+$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
+
+$r = new Application_Model_Rabbit($config-&gt;rabbitmq);
+$r-&gt;consumer();</pre>
+
+
+<p>Tento script musí běžet na serveru, kde se zpracovává vlastní požadavek. Model potom volá metodu, která se vykoná.</p>
+
+<pre class="code">        $conn = new AMQPConnection($this-&gt;options['host'],
+                                   $this-&gt;options['port'],
+                                   $this-&gt;options['user'],
+                                   $this-&gt;options['pass'],
+                                   $this-&gt;options['vhost']
+        );
+
+        $channel = $conn-&gt;channel();
+        /**
+         * $exchange, $type,$passive=false,$durable=false,$auto_delete=true,
+         */
+        $channel-&gt;exchange_declare(self::EXCHANGE, 'direct', false, true, false);
+        $channel-&gt;queue_declare(self::QUEUE);
+        $channel-&gt;queue_bind(self::QUEUE, self::EXCHANGE);
+
+        $consumer = function($msg) {
+          $msg-&gt;delivery_info['channel']-&gt;basic_cancel($msg-&gt;delivery_info['delivery_tag']);
+          if ($msg-&gt;body == 'quit') {
+              $msg-&gt;delivery_info['channel']-&gt;basic_cancel($msg-&gt;delivery_info['consumer_tag']);
+          } else {
+              if (!empty($msg-&gt;body))  {
+                  // make PDF
+                  Application_Model_Wkhtmltopdf::proceed($msg-&gt;body, APPLICATION_PATH . '/../output/');
+                  // notify user
+                  system("growlnotify -n \"Rabbit demo\" -m \"PDF CREATED\"");
+              }
+          }
+        };
+
+        $channel-&gt;basic_consume(self::QUEUE,
+                                self::CONSUMER_TAG,
+                                false,
+                                false,
+                                false,
+                                false,
+                                $consumer);
+        while (count($channel-&gt;callbacks)) {
+            $channel-&gt;wait();
+        }
+
+        $channel-&gt;close();
+        $conn-&gt;close();</pre>
+
+
+<p>Vlastní aplikace je potom jednoduchá</p>
+
+<pre class="code">    public function indexAction()
+    {
+        $r = new Application_Model_Rabbit($this-&gt;_config-&gt;rabbitmq);
+
+        $this-&gt;view-&gt;form = $form = new Application_Form_AddUrl();
+        // process form
+        if ($this-&gt;getRequest()-&gt;isPost()) {
+            $formData = $this-&gt;getRequest()-&gt;getParams();
+            if ($form-&gt;isValid($formData)) {
+                $r-&gt;setUrl($form-&gt;url-&gt;getValue());
+                $r-&gt;run();
+            } else {
+                $form-&gt;populate($formData);
+            }
+        }
+
+        $this-&gt;view-&gt;url = $r-&gt;getUrl();
+    }</pre>
+
+
+<p>a volá se producer, který invokuje RabbitMQ</p>
+
+<pre class="code">        $conn = new AMQPConnection($this-&gt;options['host'],
+                                   $this-&gt;options['port'],
+                                   $this-&gt;options['user'],
+                                   $this-&gt;options['pass'],
+                                   $this-&gt;options['vhost']
+        );
+        $channel = $conn-&gt;channel();
+        $channel-&gt;exchange_declare(self::EXCHANGE,
+                                   'direct',
+                                   false,
+                                   true,
+                                   false);
+        $msg = new AMQPMessage($string, array('content-type' =&gt; 'text/plain'));
+        $channel-&gt;basic_publish($msg, self::EXCHANGE);
+        $channel-&gt;close();
+        $conn-&gt;close();</pre>
+
+
+<p>Demo u mne funguje velmi dobře, nevím jak na jiných platformách, zkoušel jsem to jen na Macu. Na linuxu by to mělo fungovat obdobně. Jen pro webovou aplikaci by bylo vhodné použít jiný systém notifikace pro webovou aplikaci. Nenašel jsem jak například předávat notifikace přes RabbitMQ, ale pokud někdo víte jak to elegatně udělat přidejte to do komentářů.</p>
+
+<p>Veškerý zdrojový kód je <a href="https://github.com/abtris/php-rabbitmq-wkhtmltox-demo">dostupný na githubu</a>.</p>
+
+<p>Zvolil jsem jednoduché jednosměrné řešení bez implementace RPC, kde by se dala pro notifikaci použít reply fronta. Ale myslím, že to celkem stačí pro vetšinu dávkových aplikací jako jsou logovaní, upload souborů i generovaní PDF. Nic nebrání nahradit moji notifikaci například posláním linku ke stažení výsledného PDF apod. Příklad by šel pomocí RPC vylepšit na notifikaci přímo v aplikaci. Pro implementaci RPC lze například použít <a href="https://github.com/tnc/Thumper">Thumper</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ladislav Prskavec</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-10T00:00:00+02:00" pubdate data-updated="true">10. 04. 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2011/03/phpfog-cloudove-reseni-pro-php/" title="Previous Post: phpfog - cloudové řešení pro PHP?">&laquo; phpfog - cloudové řešení pro PHP?</a>
+      
+      
+        <a class="basic-alignment right" href="/2011/09/webexpo-2011-na-co-pujdu/" title="Next Post: WebExpo 2011 - Na co půjdu">WebExpo 2011 - Na co půjdu &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://blog.prskavec.net" alt="Home"><img class="icons" src="/images/Home.png" ></a>
+      <a href="http://blog.prskavec.net/archives/" alt="Archives"><img  class="icons" src="/images/Calendar.png"></a>
+      <a href="mailto:ladislav@prskavec.net" alt="E-Mail"><img  class="icons" src="/images/Envelope.png"></a>
+      <a href="http://blog.prskavec.net/atom.xml" alt="subscribe feed"><img class="icons" src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Ladislav Prskavec</h1>
+  <p style="margin-top:6px;"><img src="/images/avatar.jpg" style="float:left; margin-right:10px;" width="100" height="115" /><a href="http://github.com/abtris/">Programátor</a>, otec, <a href="http://www.dzogchen.cz">buddhista</a>, milovník dobrého jídla, knih, nových technologí a hraček pro všechny s&nbsp;duší dítěte.
+</p>
+  <br style="clear:left;"/>
+</section>
+<section>
+  <h1>Poslední příspěvky</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/11/docker/">docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subversion</h1>
+  <p style="margin-top:6px; text-align:center"><a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11" onClick="_gaq.push(['_trackEvent', 'link', 'itunes/subversion', 'svn-promo-sidebar-vpravo']);"><img src="http://a2.mzstatic.com/us/r30/Publication/v4/5c/1a/66/5c1a667d-2f78-b9b2-31ec-7c06ab9b74e8/B_SUBVERSION.225x225-75.jpg" style="float:left; margin-right:10px; width:172px; height:225px;" /></a>
+</p>
+  <br style="clear:left;"/>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+LadislavPrskavec?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <h1>GitHub</h1>
+
+<iframe src="http://githubbadge.appspot.com/badge/abtris" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+</section>
+<section>
+  <h1>Twitter</h1>
+  <a class="twitter-timeline" width="250" height="500" href="https://twitter.com/abtris" data-widget-id="345276838232326144">Tweets by @abtris</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ladislav Prskavec -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79221-21']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter21617953 = new Ya.Metrika({id:21617953,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21617953" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'prskavecblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/all.js?v=1412111651"></script>
+
+
+
+</body>
+</html>

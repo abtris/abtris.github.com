@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Kategorie: javascript | Prskavčí blog]]></title>
+  <link href="http://blog.prskavec.net/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://blog.prskavec.net/"/>
+  <updated>2014-12-11T17:20:46+01:00</updated>
+  <id>http://blog.prskavec.net/</id>
+  <author>
+    <name><![CDATA[Ladislav Prskavec]]></name>
+    <email><![CDATA[ladislav@prskavec.net]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Firebase a AngularJS]]></title>
+    <link href="http://blog.prskavec.net/2013/08/firebase-a-angularjs/"/>
+    <updated>2013-08-29T11:31:00+02:00</updated>
+    <id>http://blog.prskavec.net/2013/08/firebase-a-angularjs</id>
+    <content type="html"><![CDATA[<p>Dnešní většina aplikací v javascriptu má architekturu klient server. Pokud nechcete psát nějaký backend pro vaši aplikaci, můžete se tomu vyhnout pokud použijete nějaký druh úložiště (databáze), která vám k tomu přidá i funkce, které má nějaký backend napsaný např. v nodejs nebo php.</p>
+
+<!--more-->
+
+
+<p>Těmto řešením se věnuje web <a href="http://nobackend.org/solutions.html">nobackend.org</a>, kde se dají najít tyto řešení:</p>
+
+<ul>
+<li> <a href="https://backendless.com/">Backendless</a></li>
+<li> <a href="http://deployd.com/">deployd</a> &ndash;  <a href="http://docs.deployd.com/docs/collections/examples/a-simple-todo-app-with-angular.md">example in angularjs</a></li>
+<li> <a href="http://www.firebase.com">Firebase</a></li>
+<li> <a href="http://hood.ie/">Hoodie</a></li>
+<li> <a href="http://www.kinvey.com/">Kinvey</a></li>
+<li> <a href="https://parse.com/">Parse</a></li>
+<li> <a href="http://remotestorage.io/">remoteStorage</a></li>
+<li> <a href="http://sockethub.org/">Sockethub</a></li>
+</ul>
+
+
+<p>Bohužel jsem neměl tolik času, abych podrobně prozkoumal všechny řešení. O Firebase jsem se dozvěděl z přednášky na meetupu:</p>
+
+<iframe width="640" height="360" src="http://blog.prskavec.net//www.youtube.com/embed/C7ZI7z7qnHU?rel=0" frameborder="0" allowfullscreen></iframe>
+
+
+<p>Z této přednášky jsem vycházel pro svoji přednášku na <a href="http://www.praguejs.cz">PragueJS</a>.</p>
+
+<h2>Firebase</h2>
+
+<p>Zajímavé na tomto projektu je, že je to poměrně mladý projekt, ale který vznikl z projektu Envolve (2009), což je skupinový chat pro tisíce websites. Zjistili, že vyvíjený backend je užitečný pro více druhů aplikací než jenom chat a nabídli ho jako produkt Firebase.</p>
+
+<p>Hlavní věci, které dělají Firebase zajímavou jsou:
+&ndash; JSON formát pro data
+&ndash; je to dokumentová databáze v mnoha směrech mi připomíná práci např. s CouchDb
+&ndash; REST každý dokument má HTTP endpoint s kterým se dá pracovat, můžete používát API v přes HTTP, nativní knihovny pro Android (Java) a iOS (Objective-C) a javascript.
+&ndash; přímo od autorů je knihovna pro práci s AngularJS &ndash; <a href="http://angularfire.com/">AngularFire</a> a pro práci s Backbone &ndash; <a href="https://github.com/firebase/backfire">BackFire</a>.
+&ndash; real-time synchronizace dat, pokud přistupujete z více klientů tak se změny projeví v milisekundách
+&ndash; automatic scaling je pěkná věc pokud potřebujete opravdu řešit hodně klientů, autoři slibují, že je jedno pokud máte 1 klienta nebo 1 milion a že nebudete muset nic na aplikaci měnit, což je dost ambiciózní, ale vzhledem ke klientům jako je Atlassian, CodeAcademy, CBS a další řekl bych že už si to více než ověřili
+&ndash; security &ndash; bezpečnost je řešena celkem jednoduše a přitom celkem se dá dobře nastavit přes <a href="https://www.firebase.com/docs/security/security-rules.html">security rules</a>. Vlastní přihlašovnání je podporováno přes jejich <a href="https://www.firebase.com/docs/security/authentication.html">Firebase Simple Login</a> nebo můžete použít nějakou vlastní implementaci.
+&ndash; servery nepotřebujete. Firebase je schopná nahradit aplikaci psanou na serveru, jde jen o to zvážit kdy to ještě stačí a kdy už potřebujete nějaké další části infrastruktury navíc.</p>
+
+<h2>AngularFire</h2>
+
+<p>AngularFire je modul, který řeší vlastní authentikaci pomocí angularFireAuth.</p>
+
+<p>Stačí mít includnuté tyto soubory pro práci s firebase.</p>
+
+<pre><code>&lt;script src="https://cdn.firebase.com/v0/firebase.js"/&gt;
+&lt;script src="https://cdn.firebase.com/v0/firebase-simple-login.js"/&gt;
+&lt;script src="angularFire.js"/&gt;
+</code></pre>
+
+<p>potom v controlleru se předá angularFireAuth přes dependency injection</p>
+
+<pre><code>function MyController($scope, angularFireAuth) {
+    var url = "https://&lt;my-firebase&gt;.firebaseio.com/";
+    angularFireAuth.initialize(url, {scope: $scope, name: "user"});
+}
+</code></pre>
+
+<p>v šabloně potom máte vlastní přihlašování</p>
+
+<pre><code>&lt;span ng-show="user"&gt;
+ | &lt;a ng-click="logout()"&gt;Logout&lt;/a&gt;
+&lt;/span&gt;
+&lt;span ng-hide="user"&gt;&lt;a ng-click="login()"&gt;Login&lt;/a&gt;&lt;/span&gt;
+</code></pre>
+
+<p>metody pro login přes Firebase simple login, které použijí facebook takto jednoduše deklarujete</p>
+
+<pre><code>$scope.login = function() {
+    angularFireAuth.login("facebook");
+};
+$scope.logout = function() {
+    angularFireAuth.logout();
+};
+</code></pre>
+
+<p>AngularFire podporuje <a href="http://angularfire.com/documentation.html#implicit">implicitní</a> a <a href="http://angularfire.com/documentation.html#explicit">explicitní data binding</a>. Příklady najdete v dokumentaci.</p>
+
+<h2>Firebase Open Source</h2>
+
+<p>Na <a href="http://firebase.github.io/">githubu</a> najdete všechny příklady a zdrojové kódy, ke všemu co se vyvíjí kolem Firebase. Postupně to přibývá a většina demo příkladů jsou reálně použitelné za ty nejzajímavější bych zmínil:</p>
+
+<ul>
+<li><a href="http://www.firepad.io/">Firepad</a></li>
+<li><a href="http://firebase.github.io/firechat/">Firechat</a></li>
+<li><a href="http://firefeed.io/">Firefeed</a></li>
+</ul>
+
+
+<h2>Závěr</h2>
+
+<p>Tyto nové databáze jsou velmi zajímavé, ale těžko se asi porovná to nejzajímavější a to jak se vypořádají s konflikty při synchronizaci. Pokud používáte nějako jako je Evernote nebo nějaký todo list a máte ho na počítači, mobilu a tabletu. Sami víte jak je obtížné pokud nejsou všechny zařízení stále online občas udržet konzistenci. Ve Firebase se to dá částečně řešit pomocí security rules, ale stejně si občas myslím, že může být problém.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jaký bude AngularJS 1.2?]]></title>
+    <link href="http://blog.prskavec.net/2013/06/angularjs-1-dot-2/"/>
+    <updated>2013-06-13T22:08:00+02:00</updated>
+    <id>http://blog.prskavec.net/2013/06/angularjs-1-dot-2</id>
+    <content type="html"><![CDATA[<p>Pokud sledujete dění kolem frameworku <a href="http://angularjs.org">AngularJS</a> tak jste jistě zaznamenali, že se pracuje na nové verzi 1.2, která je teď blízko k dokončení. V masteru mají dnes verzi pojmenovanou jako verzi 1.1.8 a brzy se snad dočkáme finální verze. Zkusím zde popsat nejdůležitější věci z <a href="https://docs.google.com/presentation/d/1WHCcp3G3HxoE7b_ut_ERKJF4zQK_P4qFlESjE2E9AUQ/preview?sle=true#slide=id.geaf70e8e_16">prezentace</a> na meetupu 11.6. co prezentovali Igor Minár a Brad Green.</p>
+
+<!--more-->
+
+
+<h2>ng-animate</h2>
+
+<p><a href="http://yearofmoo-articles.github.io/angularjs-2nd-animation-article/app/#/">Deklarativní animace</a> pro aplikace v Angularu. Podpora pro CSS animace a přechody s možností fallbacku pomocí JS. Pro vlastní animace je dobré použít některou s knihoven pro CSS animace (Greensock.js, <a href="http://daneden.me/animate/">Animate.css</a>, Custom CSS3 Keyframes).
+Direktiva se stará o práci s DOMem, nastavuje potřebné třídy a timing, také zabraňuje vnořeným animacím.</p>
+
+<h2>$http</h2>
+
+<p>Měla by být přidána podpora pro blob a authentication (metoda withCredentials). Budete si moci více nastavit XSRF header a názvy cookie. Přidá se podpora pro zrušení requestů a podpora pro around interceptors.</p>
+
+<p>Around interceptors se dají dobře využít například při authentication, asynchronní zpracování request/response a práci s chybami. Například chcete provést request a server vrátí, že vypršela session a pomocí interceptoru vyvoláte přihlášení a potom pokračuje původní request.</p>
+
+<h2>$resource</h2>
+
+<p>Více konfiguračních nastavení (hlavičky, url), api bude vylepšené o podporu promise a měli by být k dispozici i interceptory.</p>
+
+<h2>$route a ngView</h2>
+
+<p>Separátní moduly, rozšíření o možnost zachycení všech parametrů a přidána podpora pro animace.</p>
+
+<pre><code>    when('/users/:userId/params/*params/'
+</code></pre>
+
+<h2>ngRepeat</h2>
+
+<p>V této snad nejpotřebnější direktivě je přidána podpora pro animace, potom je možnost opakovat sadu elementů (multi-element repeater) pomocí ng-repeat-start a ng-repeat-end a v neposlední řadě podpora track by paramteru, kdy se dá kontrolovat asociace mezi modelem a DOMem.</p>
+
+<h2>Controller as</h2>
+
+<p>Tato konstrukce nám umožní jednoduší zápis a není potřeba používat v controlleru $scope (samozřejmě pokud ho nepotřebujete např. při $watch()).</p>
+
+<pre><code>    &lt;body ng-controller="DemoController as demo"&gt;
+    &lt;tr ng-repeat="student in demo.students"&gt;
+        &lt;td&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;/body&gt;
+
+    function DemoController() {
+        this.students = [ ... ]
+    }
+</code></pre>
+
+<h2>ng-if</h2>
+
+<p>Tato direktiva přejatá z projektu AngularUI umožňuje udělat podmínku na kompilaci části šablony a reší některé problémy, které se nadali zvládnout pomocí ngShow a ngHide.</p>
+
+<h2>Expressions</h2>
+
+<p>Podpora pro nové operátory: ===, !==, ?
+Konečně lze napsat:</p>
+
+<pre><code>    ng-class="loggedIn ? 'user': 'anonym'"
+</code></pre>
+
+<h2>ngTouch</h2>
+
+<p>Podpora pro touch eventy v ngClick a ngSwipe.</p>
+
+<h2>Shrnutí</h2>
+
+<p>Přibude jestě několik vylepšení pro bezpečnost (CSP) a vylepší error hlášky, také by se měla zlepšit dokumentace a bude interaktivní tutorial. Dema a detaily najdete také ve videu na <a href="https://www.youtube.com/watch?v=W13qDdJDHp8&amp;feature=c4-overview">youtube</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[NodeJS Hosting]]></title>
+    <link href="http://blog.prskavec.net/2013/03/nodejs-hosting/"/>
+    <updated>2013-03-31T21:20:00+02:00</updated>
+    <id>http://blog.prskavec.net/2013/03/nodejs-hosting</id>
+    <content type="html"><![CDATA[<p>Mám několik webů, které jsou na NodeJS. Spousta lidí zná moje weby o javascriptu <a href="http://praguejs.cz">PragueJS</a>, které běží na NodeJS a je napsaný <a href="http://expressjs.com/">ExpressJS</a>. Web je napsaný v coffee-scriptu. Nic extra, ale řešil jsem kde web hostovat.</p>
+
+<!--more-->
+
+
+<h2>Heroku</h2>
+
+<p>Jako první jsem zvolil <a href="http://heroku.com/">Heroku</a>, kde musíte upravit a lehce nastavení v package.json, aby Heroku vědělo jakou verzi NodeJS a NPM má pro kompilaci použít.</p>
+
+<p>package.json</p>
+
+<pre><code>...
+"main" : "app.coffee",
+"scripts": {
+    "start": "NODE_ENV=production coffee app.coffee"
+},
+"engines": {
+    "node": "0.8.x",
+    "npm":  "1.2.x"
+},
+...
+</code></pre>
+
+<p>Nastavit environment properties na production</p>
+
+<pre><code>heroku config:set NODE_ENV=production
+</code></pre>
+
+<p> a nastavení portu na kterém to na Heroku běží (PORT).</p>
+
+<pre><code>app.set 'port', process.env.PORT or 5000
+app.listen app.settings.port
+</code></pre>
+
+<p>Pro spuštění je potřeba nastavit Procfile, kde je co se má pouštět.</p>
+
+<p>Procfile</p>
+
+<pre><code>web: coffee app.coffee
+</code></pre>
+
+<p>Kompletní dokumentaci najdete přímo na stránkách <a href="https://devcenter.heroku.com/articles/nodejs">Heroku</a>.</p>
+
+<h2>OpenShift</h2>
+
+<p>Pro zálohu jsem využil <a href="https://www.openshift.com/">RedHat PaaS Openshift</a>, kde musíte využít jejich vlastní nástroj na vytvoření základ aplikace.</p>
+
+<p>V .openshift adresáři se nastaví všechno včetně kompilace různé verze NodeJS.</p>
+
+<p>.openshift/action_hooks/pre_start_nodejs-0.6</p>
+
+<pre><code>export NODE_ENV=production
+export PATH=$PATH:~/app-root/repo/node_modules/coffee-script/bin
+</code></pre>
+
+<p>Web běží za proxy a narozdíl od Heroku je potřeba nastavit kromě portu (OPENSHIFT_NODEJS_PORT) i interní IP adresu (OPENSHIFT_INTERNAL_IP).</p>
+
+<pre><code>  app.set 'port', process.env.OPENSHIFT_NODEJS_PORT || 8080;
+  app.set 'ipaddress', process.env.OPENSHIFT_INTERNAL_IP
+</code></pre>
+
+<p>Musel upravit package.json, aby šel přímo pustit coffee-script, protože ho OpenShift ho zatím v době implementace nepodporoval.</p>
+
+<pre><code>...
+"main" : "app.coffee",
+  "scripts": {
+    "start": "~/app-root/repo/node_modules/coffee-script/bin/coffee app.coffee"
+},    
+...
+</code></pre>
+
+<h2>Další hostingy</h2>
+
+<p>Na <a href="http://saewitz.com/node-dot-js-websocket-hosting-roundup/">webu</a> najdete zajímavé srovnání z pohledu podpory WebSockets. V tomhle ohledu je problém hlavně v nejvíce používanému Heroku, kde je podpora velmi špatná.</p>
+
+<p>Další hostingy jako jsou <a href="http://www.nodejitsu.com">Nodejitsu</a>, <a href="http://aws.amazon.com/elasticbeanstalk/">AWS Elastic Beanstalk</a>, <a href="https://modulus.io/">Modulus</a> a <a href="https://www.appfog.com/">AppFog</a> jsou podobné a služby poskytují. Nejlepší podporu pro Websockety má Nodejitsu a Modulus, které jsou placené. Na Openshiftu jsem websockety nezkoušel podpora byt tam měla být.</p>
+
+<p>Všechy moje zdrojáky jsou k dispoci na Githubu, <a href="https://github.com/abtris/cologne-js">Heroku na masteru</a> a <a href="https://github.com/abtris/cologne-js/tree/openshift">Openshift</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

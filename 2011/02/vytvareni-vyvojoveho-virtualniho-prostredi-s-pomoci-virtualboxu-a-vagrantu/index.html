@@ -1,0 +1,514 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Vytváření vývojového Virtuálního prostředí pomocí VirtualBoxu a Vagrantu - Prskavčí blog</title>
+  <meta name="author" content="Ladislav Prskavec">
+
+  
+  <meta name="description" content="Oracle VirtualBox je známé virtualizační prostředí pro platformy linux, mac a windows. Já VirtualBox používám na linux, mám na něm Ubuntu, které &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.prskavec.net/2011/02/vytvareni-vyvojoveho-virtualniho-prostredi-s-pomoci-virtualboxu-a-vagrantu/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+<meta name="google-site-verification" content="mepQHhq6JPqzvIjErdB-A6hp3UKAYIlYHN7xPUL8JUM" />
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/feed/index.html" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.prskavec.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archív</a></li>
+  <li><a href="/prednasky">Přednášky</a></li>  
+  <li><a href="/skoleni">Školení</a></li>
+  <li><a href="/kontakt">Kontakt</a></li>  
+</ul>
+
+</nav> 
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Vytváření vývojového Virtuálního prostředí pomocí VirtualBoxu a Vagrantu</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T00:00:00+01:00" pubdate data-updated="true">02. 02. 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://www.virtualbox.org/">Oracle VirtualBox</a> je známé virtualizační prostředí pro platformy linux, mac a windows. Já VirtualBox používám na linux, mám na něm Ubuntu, které používám na školení Subversion nebo na vývoj webových aplikací jako server. Do nedávna jsem to používal na Macu nebo Linux pro běh Windows apod. O tomto používání nechci dnes mluvit.</p>
+
+<p><a href="http://www.vagrantup.com">Vagrant</a> je nástroj napsaný v Ruby, který nám umožňuje modifikovat virtualní stroj podle našich představ pomocí nějakého předpisu, který nám udělá co chceme. Ukážeme si to na příkladu, že připravím linuxový server pro webový vývoj s Apache, PHP5, MySQL, CouchDB.</p>
+
+<p>Začneme instalací Vagrantu</p>
+
+<pre class="code">sudo gem install vagrant
+vagrant box add base http://files.vagrantup.com/lucid32.box</pre>
+
+
+<p>Vytvoříme si ukázkový projekt.</p>
+
+<pre class="code">mkdir vagrant-lamp
+cd vagrant-lamp
+vagrant init</pre>
+
+
+<p>Musíme upravit Vagrantfile podle následujícího předpisu (pro Vagrant 0.7).</p>
+
+<pre class="code">Vagrant::Config.run do |config|
+  # All Vagrant configuration is done here. For a detailed explanation
+  # and listing of configuration options, please view the documentation
+  # online.
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.box = "base"
+
+  config.vm.forward_port("http", 80, 8080)
+  config.vm.forward_port("mysql", 3306, 3306)
+  config.vm.forward_port("couchdb", 5984, 5984)
+
+  config.vm.provision :chef_solo do |chef|
+     chef.cookbooks_path = "cookbooks"
+     chef.json.merge!({
+        :mysql =&gt; {
+            :server_root_password =&gt; "root"
+        }
+     })
+     chef.add_recipe("vagrant_main")
+  end
+
+end</pre>
+
+
+<p>Vytvoříme si adresáře pro recepty a pro web.</p>
+
+<pre class="code">mkdir cookbooks
+mkdir public</pre>
+
+
+<p>Do cookbooks je potřeba nakopírovat recepty pro Chef. Doporučuji si vzít z Githubu celou cookbooks repository.
+git clone <a href="https://github.com/opscode/cookbooks.git"><a href="https://github.com/opscode/cookbooks.git">https://github.com/opscode/cookbooks.git</a></a></p>
+
+<p>protože receptů je hodně, doporučuji si to dám někam mimo a nakopírovat jen potřebné recepty. Pro nás jsou to ty, které jsou v úvodu default.rb a některé navíc jako je třeba erlang pro couchdb.</p>
+
+<p>do adresáře cookbooks jsem si nakopíroval tyto recepty z cookbooks repository.</p>
+
+<pre>apache2
+apt
+couchdb
+erlang
+git
+mysql
+openssl
+php</pre>
+
+
+<p>Potom si vytvoříme vlastní recept, který celou akci <a href="http://www.opscode.com/chef">Chefa</a> v Vagrantu bude řídit.</p>
+
+<pre>mkdir -p cookbooks/vagrant_main/recipes
+vim default.rb</pre>
+
+
+<p>Přidáme potřebné recepty</p>
+
+<pre>require_recipe "apt"
+require_recipe "apache2"
+require_recipe "mysql::server"
+require_recipe "php::php5"
+require_recipe "git"
+require_recipe "couchdb"</pre>
+
+
+<p>Kromě instalace z receptů provede instalaci některý dalších balíčků v Ubuntu</p>
+
+<pre># Some neat package (subversion is needed for "subversion" chef ressource)
+%w{ debconf php5-xdebug subversion mc htop curl }.each do |a_package|
+  package a_package
+end</pre>
+
+
+<p>Vytvoříme si testovací vývojový web.</p>
+
+<pre>s = "dev-site"
+site = {
+  :name =&gt; s,
+  :host =&gt; "www.#{s}.com",
+  :aliases =&gt; ["#{s}.com", "dev.#{s}-static.com"]
+}</pre>
+
+
+<p>použije se template uložena v vagrant_main/templates/default/sites.conf.erb a příslušné proměnné</p>
+
+<pre># Configure the development site
+web_app site[:name] do
+  template "sites.conf.erb"
+  server_name site[:host]
+  server_aliases site[:aliases]
+  docroot "/vagrant/public/"
+end</pre>
+
+
+<p>modifikujeme si hosty</p>
+
+<pre># Add site info in /etc/hosts
+bash "info_in_etc_hosts" do
+  code "echo 127.0.0.1 #{site[:host]} #{site[:aliases]} &gt;&gt; /etc/hosts"
+end</pre>
+
+
+<p>přidáme některé knihovny přímo z repository Subversion</p>
+
+<pre># Retrieve webgrind for xdebug trace analysis
+subversion "Webgrind" do
+  repository "http://webgrind.googlecode.com/svn/trunk/"
+  revision "HEAD"
+  destination "/var/www/webgrind"
+  action :sync
+end</pre>
+
+
+<p>nebo Git</p>
+
+<pre># Retrieve adminer
+git "Adminer" do
+  repository "https://github.com/vrana/adminer.git"
+  revision "HEAD"
+  destination "/var/www/adminer/"
+  action :sync
+end</pre>
+
+
+<p>a další</p>
+
+<pre># Latest Zend Framework version
+subversion "Zend" do
+  # repository "http://framework.zend.com/svn/framework/standard/trunk/library/"
+  repository "http://framework.zend.com/svn/framework/standard/tags/release-1.11.3/library/"
+  revision "HEAD"
+  destination "/srv/lib/php/"
+  action :sync
+end</pre>
+
+
+<p>Potom je tu script, kterým se dá modifikovat práva pro MySQL, není problém si podobně udělat jakékoliv úpravy.</p>
+
+<pre># Add an admin user to mysql
+execute "add-admin-user" do
+  command "/usr/bin/mysql -u root -p#{node[:mysql][:server_root_password]} -e \"" +
+      "CREATE USER 'myadmin'@'localhost' IDENTIFIED BY 'myadmin';" +
+      "GRANT ALL PRIVILEGES ON *.* TO 'myadmin'@'localhost' WITH GRANT OPTION;" +
+      "CREATE USER 'myadmin'@'%' IDENTIFIED BY 'myadmin';" +
+      "GRANT ALL PRIVILEGES ON *.* TO 'myadmin'@'%' WITH GRANT OPTION;\" " +
+      "mysql"
+  action :run
+  ignore_failure true
+end</pre>
+
+
+<p>pro funkční port forwarding u CouchDb modifikovat konfiguraci a potřeba dát po prvním spuštění dát vargant reload aby se tato poslední změna promítla do nastavení virtuálu.</p>
+
+<pre># Replace 127.0.0.1 bind port with 0.0.0.0 is necessary for port forwarding
+execute "port-forward-couchdb" do
+  command "sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/couchdb/default.ini"
+  action :run
+end</pre>
+
+
+<p>První spuštění pomocí</p>
+
+<pre>vagrant up</pre>
+
+
+<p>potom je potřeba pro CouchDb</p>
+
+<pre>vagrant reload</pre>
+
+
+<p>Kompletní repositář s tímto ukázkovým prostředím jsou dostupné na <a href="https://github.com/abtris/vagrant-lamp">Githubu</a>.</p>
+
+<p>Pokud si rozbijete virtuál tak není problém začít znovu. Dáte <code>vagrant destroy</code> a potom znovu pustíte celý proces pomocí <code>vagrant up</code>.</p>
+
+<p>Pokud se chcete přihlásit na virtuál použijte <code>vagrant ssh</code>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ladislav Prskavec</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T00:00:00+01:00" pubdate data-updated="true">02. 02. 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2011/01/zend-framework-a-nosql-pro-ukladani-logu-ve-webovych-aplikaci-druhy-dil-o-mongodb/" title="Previous Post: Zend Framework a NoSQL pro ukládání logů ve webových aplikací, díl druhý o MongoDb">&laquo; Zend Framework a NoSQL pro ukládání logů ve webových aplikací, díl druhý o MongoDb</a>
+      
+      
+        <a class="basic-alignment right" href="/2011/02/phpstorm-2-0/" title="Next Post: PHPStorm 2.0 - nová verze multiplatformního vývojového prostředí">PHPStorm 2.0 - nová verze multiplatformního vývojového prostředí &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://blog.prskavec.net" alt="Home"><img class="icons" src="/images/Home.png" ></a>
+      <a href="http://blog.prskavec.net/archives/" alt="Archives"><img  class="icons" src="/images/Calendar.png"></a>
+      <a href="mailto:ladislav@prskavec.net" alt="E-Mail"><img  class="icons" src="/images/Envelope.png"></a>
+      <a href="http://blog.prskavec.net/atom.xml" alt="subscribe feed"><img class="icons" src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Ladislav Prskavec</h1>
+  <p style="margin-top:6px;"><img src="/images/avatar.jpg" style="float:left; margin-right:10px;" width="100" height="115" /><a href="http://github.com/abtris/">Programátor</a>, otec, <a href="http://www.dzogchen.cz">buddhista</a>, milovník dobrého jídla, knih, nových technologí a hraček pro všechny s&nbsp;duší dítěte.
+</p>
+  <br style="clear:left;"/>
+</section>
+<section>
+  <h1>Poslední příspěvky</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/11/docker/">docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subversion</h1>
+  <p style="margin-top:6px; text-align:center"><a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11" onClick="_gaq.push(['_trackEvent', 'link', 'itunes/subversion', 'svn-promo-sidebar-vpravo']);"><img src="http://a2.mzstatic.com/us/r30/Publication/v4/5c/1a/66/5c1a667d-2f78-b9b2-31ec-7c06ab9b74e8/B_SUBVERSION.225x225-75.jpg" style="float:left; margin-right:10px; width:172px; height:225px;" /></a>
+</p>
+  <br style="clear:left;"/>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+LadislavPrskavec?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <h1>GitHub</h1>
+
+<iframe src="http://githubbadge.appspot.com/badge/abtris" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+</section>
+<section>
+  <h1>Twitter</h1>
+  <a class="twitter-timeline" width="250" height="500" href="https://twitter.com/abtris" data-widget-id="345276838232326144">Tweets by @abtris</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ladislav Prskavec -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79221-21']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter21617953 = new Ya.Metrika({id:21617953,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21617953" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'prskavecblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/all.js?v=1412111651"></script>
+
+
+
+</body>
+</html>

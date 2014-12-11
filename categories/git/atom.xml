@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Kategorie: git | Prskavčí blog]]></title>
+  <link href="http://blog.prskavec.net/categories/git/atom.xml" rel="self"/>
+  <link href="http://blog.prskavec.net/"/>
+  <updated>2014-12-11T17:20:46+01:00</updated>
+  <id>http://blog.prskavec.net/</id>
+  <author>
+    <name><![CDATA[Ladislav Prskavec]]></name>
+    <email><![CDATA[ladislav@prskavec.net]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Git a pre-commit hook pro kontrolu syntaxe]]></title>
+    <link href="http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/"/>
+    <updated>2014-01-06T19:29:00+01:00</updated>
+    <id>http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich</id>
+    <content type="html"><![CDATA[<p>Pokud pracujete s gitem nebo jiným verzovacím systémem, určitě jste se setkali s hooky. Pro kontrolu než provedete commit, který se jmenuje pre-commit a hodí se zejména pro kontrolu syntaxe. Já mám několik hooků, které kontrolují php, js, xml a ruby. Říkal jsem si, že by to chtělo je refactorovat a udělat z nich použitelný kód.</p>
+
+<h2>Ochtra</h2>
+
+<p>Naštěstí jsem to dělat nemusel, protože vznikl malý projekt <a href="https://github.com/kvz/ochtra">ochtra</a>  (One Commit Hook To Rule All).</p>
+
+<p>Tento projekt teď umí kontrolovat Ruby, JavaScript, Python, Bash, Dash, Go, PHP, XML, JSON, YAML. A co se mi zvláště líbí je, že autor pěkně popsal instalaci, která je potřeba, aby vám hook fungoval automaticky, když použijete git clone.</p>
+
+<h3>Instalace</h3>
+
+<p>Potřebujete git 1.7, kde je podpora pro git templates.</p>
+
+<pre><code>mkdir -p ~/.gittemplate/hooks
+curl https://raw.github.com/kvz/ochtra/master/pre-commit -o ~/.gittemplate/hooks/pre-commit \
+ &amp;&amp; chmod u+x $_
+git config --global init.templatedir '~/.gittemplate'
+</code></pre>
+
+<p>Instalace vytvoří adresář s template pro git, která se použije pokud dáte git clone, případne git init.</p>
+
+<p>Git init potřebujete pokud už máte projekty někde vyclonované.</p>
+
+<pre><code>cd my-project
+rm .git/hooks/pre-commit
+git init
+</code></pre>
+
+<p>Celý projekt má i testy a podpora je pro všechno co mě napadlo. Pokud něco někomu chybí tak se ozvěte nebude to problém přidat.</p>
+]]></content>
+  </entry>
+  
+</feed>

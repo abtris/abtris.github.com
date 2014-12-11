@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Kategorie: raspberry | Prskavčí blog]]></title>
+  <link href="http://blog.prskavec.net/categories/raspberry/atom.xml" rel="self"/>
+  <link href="http://blog.prskavec.net/"/>
+  <updated>2014-12-11T17:20:46+01:00</updated>
+  <id>http://blog.prskavec.net/</id>
+  <author>
+    <name><![CDATA[Ladislav Prskavec]]></name>
+    <email><![CDATA[ladislav@prskavec.net]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Raspberry Pi]]></title>
+    <link href="http://blog.prskavec.net/2012/07/raspberry-pi/"/>
+    <updated>2012-07-28T13:15:00+02:00</updated>
+    <id>http://blog.prskavec.net/2012/07/raspberry-pi</id>
+    <content type="html"><![CDATA[<h2>Jak jsem si pořidil</h2>
+
+<p>Rapsberry Pi jsem objednal u <a href="http://export.farnell.com/rp/order/">Farnellu</a> v červnu a na konci července mi přišel dopis ve kterém bylo zařízení.</p>
+
+<!--more-->
+
+
+<h2>Co jsem potřeboval, aby to fungovalo</h2>
+
+<p>Měl jsem zařízení, ale co dál aby to fungovalo.</p>
+
+<p>Potřebujete:</p>
+
+<ul>
+<li>zdroj (700mA, 5V s microUSB) &ndash; použil jsem nabíječku z iphone a dal jiný usb kabel</li>
+<li>SD kartu, kam dáte systém (použil jsem 4GB class 10)</li>
+<li>kabel na připojení monitoru, použil jsem HDMI</li>
+<li>klavesnici a myš (USB)</li>
+</ul>
+
+
+<p><img class="center" src="/images/raspberry/raspberry.jpg" title="&lsquo;Raspberry running&rsquo;" ></p>
+
+<p>Ze stránek <a href="http://www.raspberrypi.org/downloads">raspberry</a> jsem si stáhnul Raspbian “wheezy” a pomocí dd jsme ho nahrál na sd kartu.</p>
+
+<p><img class="center" src="/images/raspberry/debian.jpg" title="&lsquo;Raspbian “wheezy”&rsquo;" ></p>
+
+<h2>Node.js na Raspberry PI</h2>
+
+<p>Po rozběhnutí systému není problém nainstalovat cokoliv potřebujete. Spustil jsem ssh server na nainstaloval NodeJS.</p>
+
+<pre><code>sudo apt-get install nodejs npm
+</code></pre>
+
+<p>Není potom problém pustit aplikaci.</p>
+
+<p><img class="center" src="/images/raspberry/nodejs.jpg" title="&lsquo;Node.js&rsquo;" ></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,977 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Prskavčí blog</title>
+  <meta name="author" content="Ladislav Prskavec">
+
+  
+  <meta name="description" content="Aktualizace (1.7.2009)
+Dnes jsem zkoušel novy git 1.6.0.4 (svn 1.5.4) na práci s SVN repozitory. Konečně práce s repozitory funguje bez problémů a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.prskavec.net/page//page/9/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+<meta name="google-site-verification" content="mepQHhq6JPqzvIjErdB-A6hp3UKAYIlYHN7xPUL8JUM" />
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/feed/index.html" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.prskavec.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archív</a></li>
+  <li><a href="/prednasky">Přednášky</a></li>  
+  <li><a href="/skoleni">Školení</a></li>
+  <li><a href="/kontakt">Kontakt</a></li>  
+</ul>
+
+</nav> 
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/02/git-svn-vs-bzr-svn/">Git-SVN vs Bzr-SVN</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-23T00:00:00+01:00" pubdate data-updated="true">23. 02. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Aktualizace (1.7.2009)</strong>
+Dnes jsem zkoušel novy git 1.6.0.4 (svn 1.5.4) na práci s SVN repozitory. Konečně práce s repozitory funguje bez problémů a když provádím clone netrvá to 25min, ale pár vteřin jako u bzr. Asi to byla nějaká chyba, kterou vývojáři opravili.</p>
+
+<p>Nedávno se tu vedla debata o tom jak nejlépe pracovat s Subversion když jsme offline. Nejlepší řešení je přejít na distribuovaný verzovací systém. Bavíme se o řešení na straně klienta, server bude stále Subversion.</p>
+
+<p>Vytvořil jsem tento skript pomocí kterého si můžu udělat kolik chci revizi do repozitáře, je to primitivní ale pro základní testování to stačilo. Vytvořil jsem repozitory, které má 150 commitů a chci s ním pracovat pomocí git-svn nebo bzr-svn.</p>
+
+<pre>
+#!/bin/bash
+# Settings
+START=2
+COUNT=50
+WC=/home/prskavecl/websites/svn_tests/test2/test2
+
+cd $WC
+touch $WC/trunk/testfile
+svn add $WC/trunk/testfile
+# cyklus pro vytvoreni revizi
+x=$START;     # inicializuje hodnotu x na 0
+while [ "$x" -le $COUNT ]; do
+  echo "Aktuální hodnota x: $x"
+  # zvýšení hodnoty x o 1
+  echo $x &gt;&gt;$WC/trunk/testfile
+  x=$(expr $x + 1)
+  svn commit --message "Insert value $x"
+done 
+svn up
+</pre>
+
+
+<p>Testování jsem prováděl na Dellu D830 (2,4 GHz,Intel Core 2 Duo, 2GB RAM) v Ubuntu 8.10.</p>
+
+<p>Verze použitých programů:</p>
+
+<ul>
+    <li>git 1.5.6.3,</li>
+    <li>svn 1.5.1,</li>
+    <li>bzr 1.6.1 (bzr-svn 0.4.13-2)</li>
+</ul>
+
+
+<p>Postup testování, šlo mi hlavně porovnat rychlost práce. Proto provedu tyto operace.</p>
+
+<ol>
+    <li>checkout</li>
+    <li>odpojení od centrálního repozitory</li>
+    <li>změnu v souboru</li>
+    <li>lokální commit</li>
+    <li>napojení na centrální repozitory</li>
+    <li>přenesení změn do centrálního repozitory</li>
+</ol>
+
+
+
+
+<h3>bzr-svn</h3>
+
+
+<ol>
+    <li>bzr checkout file:///home/svn/repos/test</li>
+    <li>bzr unbind</li>
+        <li>nano /trunk/testfile</li>
+    <li>bzr commit</li>
+        <li>bzr bind</li>
+    <li>bzr push file:///home/svn/repos/test</li>
+</ol>
+
+
+<p>Tento postup lze zkrátit pomocí <code>bzr commit &mdash;local</code> potom nemusíme použít bind a unbind.</p>
+
+<p>Celá operace trvala vteřiny, ani jsem nepoznal, že pracuji s jiným SCM než je SVN.</p>
+
+<h3>git-svn</h3>
+
+
+<ol>
+    <li>git svn clone file:///home/prskavecl/repos/test</li>
+        <li>není třeba, ale checkout stále jede&#8230;po uplynutí 52 min jsem to málem vzdal</li>
+        <li>nano /trunk/testfile</li>
+        <li>git commit -a (5s)</li>
+        <li>není třeba</li>
+        <li>git svn dcommit (25s)</li>
+</ol>
+
+
+<p>Více o git a subversion najdete v článku <a href="http://www.root.cz/clanky/git-a-subversion/">Dana Horáka</a>.</p>
+
+<h3>Závěr</h3>
+
+
+<p>Vím, že spousta lidí fandí gitu, ale mě vůbec zatím nepřesvědčil, zatím u mne vede <a href="http://bazaar-vcs.org/">Bazzar</a>. Možná je to problém jen git-svn a ne samotného gitu, ale tento druh spolupráce je hrozně pomalý.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/02/subversion-a-spojeni-dvou-repozitory/">Subversion a spojení dvou repozitory</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-18T00:00:00+01:00" pubdate data-updated="true">18. 02. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud se vám někdy stane, že pracujete na projektu a máte vzdálený SVN server dejme tomu např. s 500 revizemi.</p>
+
+<p>Teď ale jedete někam pryč kde nemáte připojení k internetu nebo má server výpadek. Pracovat na projektu musíte, tak např. pomocí TSVN uděláte lokální repozitory a importujete working copy a pracujete dál, uděláte 50 revizí a server zase začne fungovat.</p>
+
+<h3>Co teď? Máte podle mne tyto možnosti.</h3>
+
+
+<br />
+
+
+<ol>
+    <li>Můžete vzít zase svoji WC a tu naimportovat do původního repozitory</li>
+    <li>Nebo zahodit staré SVN a udělat dump nového a to naimportovat místo starého.</li>
+    <li>Nebo mít na serveru obě repozitory.</li>
+    <li>Spojení obou repozitory</li>
+</ol>
+
+
+<h3>SVN Merge</h3>
+
+
+<br />
+
+
+<p>Já jsem pro spojení obou repozitory, to se dá udělat také různě. Napadají mě dvě možnosti jak to provést.</p>
+
+<ol>
+    <li>Vygenerovat diff patche pro jednotlivé revize v nové repozitory a ty aplikovat postupně na WC ze původního repozitory.</li>
+<li>Udělat dump repozitory pomocí <code>svnadmin dump</code> a potom použít příkaz <code>svnadmin load</code>  s nastavením <code class="option">--parent-dir</code> a import provést do jiné branche.</li>
+    <li><del datetime="2009-02-19T08:58:49+00:00">Udělat dump pomocí <code>svnadmin dump</code> s parametrem <code>--incremental</code> a se stejným parametrem jej i importovat. Tento postup uvádějí <a href="http://svnbook.red-bean.com/en/1.5/svn.reposadmin.maint.html#svn.reposadmin.maint.tk.svnadmin" target="_blank">v manuálu</a>, ale nemám ho zatím odzkoušený.</del></li>
+       <li>můžete také použít <a href="http://svn.borg.ch/svndumptool/">svndumptool</a> a udělat merge na úrovni dump souborů, to mi přijde nejlepší řešení pokud požadujete jednu větev vývoje.</li>
+
+</ol>
+
+
+<p>Pokud máte nějaké jiné zkušenosti se spojováním repozitory doufám, že to uvedete v komentářích. Ozvěte se také pokud by byl zájem, můžu uvést nějaký příklad s tím jak se to dělá pomocí příkazového řádku, krok za krokem.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/02/subversion-a-directive-svnindexxslt/">Subversion a directive SVNIndexXSLT</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-09T00:00:00+01:00" pubdate data-updated="true">09. 02. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud jste si někdz hráli s nastavením SVN pod Apachem tak jste narazili na directivu SVNIndexXSLT. Pokud se vám nelíbí obvyklý styl jak to zobrazuje SVN. Pokud použijete XSL ze stránek <a href="http://subversion.tigris.org/tools_contrib.html#xslt">Subversion tools</a> bude výsledek jako je obrázku. Je to lepší ale žádný zázrak.</p>
+
+<p style="text-align: center;"><a href="http://blog.prskavec.net/wp-content/uploads/2009/02/svn-default-xsl.png"><img class="size-full wp-image-299 aligncenter" style="border: 1px solid #000000;" title="svn-default-xsl" src="http://blog.prskavec.net/wp-content/uploads/2009/02/svn-default-xsl.png" alt="svn-default-xsl" width="473" height="435" /></a></p>
+
+
+<p>Pokud chcete aby výsledek byl lepší a nepoužijete <a href="http://www.viewvc.org/">ViewVC</a>, kde styly ujdou až tak od verze 1.1 a ještě by je to chtělo taky vylepšit tak doporučuji navštívit <a href="http://www.reposstyle.com/">ReposStyle</a>, kde autor vytvořil pěkný styl, který se dá hned použít.
+<a href="http://blog.prskavec.net/wp-content/uploads/2009/02/svn-reposstyle.png"><img class="aligncenter size-full wp-image-300" title="svn-reposstyle" src="http://blog.prskavec.net/wp-content/uploads/2009/02/svn-reposstyle.png" alt="svn-reposstyle" width="270" height="250" /></a></p>
+
+<p>Není problém si vytvořit vlastní styl a nebo případně upravit ten co vám vyhovuje. Doporučuji se podívat na <a href="https://labs.repos.se/data/style/trunk/"><a href="https://labs.repos.se/data/style/trunk/">https://labs.repos.se/data/style/trunk/</a></a> kde je vidět ReposStyle v akci.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/02/uplna-lokalizace-wp-theme-inove-123/">Úplná lokalizace WP Theme iNove 1.2.3</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-03T00:00:00+01:00" pubdate data-updated="true">03. 02. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud se někomu líbí vzhled, který používám a stáhl jsi ho od autora, zjistil, že není lokalizováno do češtiny všechno co vidí. Protože jsem autor lokalizace tak to musím uvést na pravou míru. Lokalizoval jsem co je v překladovém souboru, ale autor nehodlá jak mi sdělil některé věci lokalizovat, nepřijde mu to důležité. Opravdu nechápu proč, ale je to jeho právo, týká se to hlavně textů v postraní lište.</p>
+
+
+<p>  <p>Pokud to chcete upravit otevřete si soubor sidebar.php a najděte tyto řádky a udělejte tyto změny (originál zaměňte za počeštěnou verzi):</p>  <pre class="php">65: $posts_widget_title = &lsquo;Recent Posts&rsquo;;
+65: $posts_widget_title = &lsquo;Poslední příspěvky&rsquo;;</p>
+
+<p>67: $posts_widget_title = &lsquo;Random Posts&rsquo;;
+67: $posts_widget_title = &lsquo;Náhodné příspěvky&rsquo;;</p>
+
+<p>92:&lt;h3&gt;Recent Comments&lt;/h3&gt;
+92:&lt;h3&gt;Poslední komentáře&lt;/h3&gt;</p>
+
+<p>102:&lt;h3&gt;Tag Cloud&lt;/h3&gt;
+102:&lt;h3&gt;Oblak štítků&lt;/h3&gt;</p>
+
+<p>119:&lt;h3&gt;Categories&lt;/h3&gt;
+119:&lt;h3&gt;Kategorie&lt;/h3&gt;</p>
+
+<p>135:&lt;h3&gt;Archives&lt;/h3&gt;
+135:&lt;h3&gt;Archív&lt;/h3&gt;</p>
+
+<p>153:&lt;h3&gt;Meta&lt;/h3&gt;
+153:&lt;h3&gt;Meta&lt;/h3&gt;</pre></p>
+
+<p>Pro ty co umějí aplikovat patch je tu diff ze SVN: <a href="http://blog.prskavec.net/wp-content/uploads/2009/02/sidebar.diff">sidebar.diff</a></p>
+
+
+
+
+<p>Ve verzi iNove 1.2.3. je drobný bug (comments.php), díky kterému se nepřeloží některé věci pokud jste přihlášení, opraveno to bude v další verzi.</p>
+
+
+
+
+<p>Nenechte se zmást, že moje verze nevypadá jako vaše po instalaci, udělal jsem další drobné úpravy velikosti písma, změny barvy nadpisů, přidal jsem další položky do sidebar.php.</p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/01/ubuntu-a-konfigurace-xdebug-pro-eclipse-pdt-20/">Ubuntu a konfigurace XDebug pro Eclipse PDT 2.0</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-28T00:00:00+01:00" pubdate data-updated="true">28. 01. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Jeden ze čtenářů mého blogu mě poprosil o radu, tak jsem si řekl co se hodí jednomu, může pomoci více lidem.</p>
+
+
+<p>  <p>Pokud máte Ubuntu (KUbuntu, Linux Mint) nebo jiného příbuzného ubuntu provedu vás instalací Eclipse s PDT a konfiguraci XDebug.</p>  <h3>Instalace</h3>  <p>1. Eclipse můžete nainstalovat z repozitory, ale PDT tam není a proto tento postup nedoporučuji. Lepší je stáhnout si verzi <a href="http://www.eclipse.org/pdt/downloads/">PDT 2.0 All In Ones</a>.    <br />2. Samozřejmě předpokládám, že máte nainstalovaný apache2 a php5 z repozitory. Pro xdebug nezapomeňte nainstalovat <code>php5-xdebug</code> balíček.    <br />3. Jako další krok, než začnu konfigurovat Eclipse, vytvořím kopii php.ini pro XDebug, kam se přidá na konec.    <br /><code>     <br />[xdebug]      <br />zend_extension=/usr/lib/php5/20060613+lfs/xdebug.so      <br /></code></p>  <h3>Konfigurace</h3>  <p>4. Pokud je toto připraveno stačí nakonfigurovat XDebug v Eclipse.   <br />5. otevřeme nastavení: Window &ndash;&gt; Preferences    <br />6. pod PHP si najdeme PHP Servers a nastavíme si ho na workspace Eclipse. Já osobně mám vytvořený v Apache virtual host, který je pojmenovaný workspace a vede jeho document root na /home/user/workspace/ kde pracuji s Eclipse.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/phpserver.png" /></p>  <p>7. v PHP Executables si nastavím cesty k php a k modifikovanému php.ini pro XDebug.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/phpexecutables.png" /></p>  <p>8. V záložce PHP &ndash;&gt; Debug potom musíte mít zapnuté nakonfigurované služby, ale dají se přepínat i přes debug konfiguraci.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/debugsettings.png" /></p>  <p>9. V menu Run &ndash;&gt; Debug Configurations je dobré zkontrolovat, zda pro daný soubor odpovídá nastavení, také pokud se při debugu objeví nějaká chyba je dobré se v první řadě podívat sem a zkontrolovat zda se nepouští třeba jiný debugger, který nemáte nastavený apod.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/debugconfiguration.png" /></p>  <p>10. Můžete začít debugovat, např. Run &ndash;&gt; Debug as &ndash;&gt; PHP Script. Na obrázku je vidět debug jednoduchého skriptu v akci.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/final.png" /></p>  <h3>Závěr</h3>  <p>Rozšíření XDebug umí také <a href="http://www.xdebug.org/docs/profiler">profiling</a>, pomocí KCacheGrind nebo WinCacheGrind a také <a href="http://www.xdebug.org/docs/code_coverage">analýzu pokrytí kódu</a>. Doufám, že někomu návod pomůže, pokud máte jakékoliv připomínky nebo dotazy k tématu neváhejte se v komentářích vyjádřit.</p></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/01/export-posledni-revize-ze-subversion/">Export poslední revize ze Subversion</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-19T00:00:00+01:00" pubdate data-updated="true">19. 01. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dneska za mnou přišel kolega, že mu vadí na SVN, že neumí exportovat poslední revizi s plnou cestou. Potřebuje to na server kde nemá shell aby mohl spustit patch, který si můžeme vygenerovat pomocí <a href="http://svnbook.red-bean.com/en/1.5/svn.ref.svn.c.diff.html"><code>svn diff</code></a>. A nechce všechny soubory jak to standardně dělá <a href="http://svnbook.red-bean.com/en/1.5/svn.ref.svn.c.export.html"><code>svn export</code></a>, ale jen ty které se změnili.</p>
+
+<p>Trochu jsem se na to díval a myslím si, že řešení přímo jen pomocí SVN není, pokud někdo ví jak to udělat elegantně ať mi dá vědět. Já jsem na to napsal jednoduchý shell skript, který to řeší, třeba to bude někomu také ku prospěchu.</p>
+
+<pre name="code" class="bash">
+EXPORTPATH=/tmp/testexport/
+REPOS=file:///home/prskavecl/repos/project/
+REPOSPATH=/home/prskavecl/repos/project/
+REV="$( svnlook youngest $REPOSPATH )"
+
+# function to list and export file by file
+pathexport() # $1
+{
+mkdir -p $EXPORTPATH${2%/*}
+svn export --force $1$2 $EXPORTPATH$2
+}
+
+# make export path
+mkdir -p $EXPORTPATH
+# list all changed files
+for i in $( svnlook changed -r $REV $REPOSPATH ); do
+if [ "${#i}" -gt "2" ]
+then pathexport $REPOS $i
+fi
+done</pre>
+
+
+<p>Na začátku skriptu se nastaví proměnné s cestami. Před svnlook si skript zjistí poslední revizi a projde všechny soubory, které se v revizi změnili. K nim vytvoří příslušné adresáře a vyexportuje jednotlivé soubory. Neměl by být problém napsat obdobný skript i pro windows.</p>
+
+<p>Více o exportu také najdete na <a href="http://svn.prskavec.net/">svn.prskavec.net</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/01/top-ten-2008/">Top Ten 2008</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-12T00:00:00+01:00" pubdate data-updated="true">12. 01. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Jako jiné blogy, jsem udělal žebříček podle toho kolik lidí který příspěvek shlédlo.</p>
+
+<p><a href="http://blog.prskavec.net/2008/04/wordpress-themes/">Wordpress Themes</a>
+<a href="http://blog.prskavec.net/2008/09/zend-framework-16-a-moje-zkuenosti-s-dojo-tabcontainer/">Zend Framework 1.6 a moje zkušenosti s Dojo TabContainer</a>
+<a href="http://blog.prskavec.net/2008/09/zend-framework-16-a-ajax-pomoc-jquery/">Zend Framework 1.6 a ajax pomocí jQuery</a>
+<a href="http://blog.prskavec.net/2008/07/subversion-pro-kazdho/">Subversion pro každého</a>
+<a href="http://blog.prskavec.net/2008/07/gettext-a-php/">Gettext a PHP</a>
+<a href="http://blog.prskavec.net/2008/03/subversion-pod-windows/">Subversion pod Windows</a>
+<a href="http://blog.prskavec.net/2008/11/phpundercontrol-vs-xinc/">phpUnderControl vs Xinc</a>
+<a href="http://blog.prskavec.net/2008/07/netbeans-pdt-a-subversion-15/">NetBeans, PDT a Subversion 1.5</a>
+<a href="http://blog.prskavec.net/2008/06/jednoduch-aplikace-v-php-a-flex/">Jednoduchá aplikace v PHP a Flex</a>
+<a href="http://blog.prskavec.net/2007/11/tvorba-caroveho-kodu-v-php/">Tvorba čárového kódu v PHP</a></p>
+
+<p>Jsem rád, že se některé články líbíli i když většinou žádná extra diskuze neproběhla, za ohlasy ke všem článkům všem přispěvovatelům děkuji a snad to se mnou vydržíte i v novém roce.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/12/pf-2009/">PF 2009</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-12-23T00:00:00+01:00" pubdate data-updated="true">23. 12. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div align="center"><img style="max-width: 800px;" src="http://blog.prskavec.net/wp-content/uploads/2008/12/pf2009.png" /><br />Přejí veselé vánoce a šťasný nový rok také čtenářům mého blogu.<br /></div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/12/sony-vaio-tz31xn-a-ubuntu-810/">SONY VAIO TZ31XN a Ubuntu 8.10</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-12-22T00:00:00+01:00" pubdate data-updated="true">22. 12. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Sony VAIO TZ31XN je malý mobilní notebook, který je trhu asi rok, dnes ho nahradil modernější řada TT, ale krásný notebook je vybaven Windows Vista, které jsou ale k jeho hardware (1,2GHz, 2G RAM) nepřiměřené svými nároky. Notebook není nijak rychlý, pracovat se s ním dá, ale není to nic moc. Zkusil jsem tedy, jak na stejném hardware poběží jiný operační systém a zvolil jsem Ubuntu 8.10.</p>
+
+<p>S touto linuxovou distribuci mám nějaké zkušenosti jako uživatel, jde snadno nainstalovat a přijde mi pro notebooky povedená, většina hardware funguje již při prvním spuštění. Neměl jsem větší problémy, jen mi nefungovala kamera ve Skype, což jsem také po troše hledání vyřešil.</p>
+
+<h3>Přehled hardware</h3>
+
+
+<pre># lspci
+00:00.0 Host bridge: Intel Corporation Mobile 945GM/PM/GMS, 943/940GML and 945GT Express Memory Controller Hub (rev 03)
+00:02.0 VGA compatible controller: Intel Corporation Mobile 945GM/GMS, 943/940GML Express Integrated Graphics Controller (rev 03)
+00:02.1 Display controller: Intel Corporation Mobile 945GM/GMS/GME, 943/940GML Express Integrated Graphics Controller (rev 03)
+00:1b.0 Audio device: Intel Corporation 82801G (ICH7 Family) High Definition Audio Controller (rev 02)
+00:1c.0 PCI bridge: Intel Corporation 82801G (ICH7 family) PCI Express Port 1 (rev 02)
+00:1c.1 PCI bridge: Intel Corporation 82801G (ICH7 Family) PCI Express Port 2 (rev 02)
+00:1c.2 PCI bridge: Intel Corporation 82801G (ICH7 Family) PCI Express Port 3 (rev 02)
+00:1c.3 PCI bridge: Intel Corporation 82801G (ICH7 Family) PCI Express Port 4 (rev 02)
+00:1d.0 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI Controller #1 (rev 02)
+00:1d.1 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI Controller #2 (rev 02)
+00:1d.2 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI Controller #3 (rev 02)
+00:1d.3 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI Controller #4 (rev 02)
+00:1d.7 USB Controller: Intel Corporation 82801G (ICH7 Family) USB2 EHCI Controller (rev 02)
+00:1e.0 PCI bridge: Intel Corporation 82801 Mobile PCI Bridge (rev e2)
+00:1f.0 ISA bridge: Intel Corporation 82801GBM (ICH7-M) LPC Interface Bridge (rev 02)
+00:1f.1 IDE interface: Intel Corporation 82801G (ICH7 Family) IDE Controller (rev 02)
+00:1f.3 SMBus: Intel Corporation 82801G (ICH7 Family) SMBus Controller (rev 02)
+02:00.0 Ethernet controller: Marvell Technology Group Ltd. 88E8055 PCI-E Gigabit Ethernet Controller (rev 13)
+03:00.0 Network controller: Intel Corporation PRO/Wireless 4965 AG or AGN [Kedron] Network Connection (rev 61)
+09:04.0 CardBus bridge: Ricoh Co Ltd RL5c476 II (rev ba)
+09:04.1 FireWire (IEEE 1394): Ricoh Co Ltd R5C832 IEEE 1394 Controller (rev 04)
+09:04.3 System peripheral: Ricoh Co Ltd R5C843 MMC Host Controller (rev ff)
+09:04.4 System peripheral: Ricoh Co Ltd R5C592 Memory Stick Bus Host Adapter (rev 11)
+</pre>
+
+
+<pre>
+# lsusb
+Bus 005 Device 006: ID 044e:3017 Alps Electric Co., Ltd
+Bus 005 Device 005: ID 05ca:183a Ricoh Co., Ltd
+Bus 005 Device 002: ID 054c:02d5 Sony Corp.
+Bus 005 Device 003: ID 0409:005a NEC Corp. HighSpeed Hub
+Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 002: ID 147e:2016
+Bus 004 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 003 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 001 Device 002: ID 046d:c03e Logitech, Inc. Premium Optical Wheel Mouse
+Bus 001 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+</pre>
+
+
+<h3>Webcamera</h3>
+
+
+<p>Pro fungování webcamery je nutné zkompilovat driver.</p>
+
+<p>Pro kompilaci je nutný základní balíček a subversion pokud ho nemáte nainstalovaný tak</p>
+
+<pre>
+apt-get install build-essential
+apt-get install subversion
+</pre>
+
+
+<p>potom je potřeba stáhnout nejnovější verzi ze SVN a tu zkompilovat</p>
+
+<pre>
+svn co http://svn.mediati.org/svn/r5u870/trunk/ webcam
+cd webcam
+make
+make install
+</pre>
+
+
+<p>a potom nainstalovat ovladač.</p>
+
+<pre>
+modprobe r5u870
+</pre>
+
+
+<p>funkčnost ověřit můžete pomocí např. gstreamer-properties nebo ve skype.</p>
+
+<p>Pokud budete mít nějaké dotazy k notebooku a jeho běhu pod linuxem, napište do komentářů.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/12/mozilla-thunderbird-30-beta-1/">Mozilla Thunderbird 3.0 beta 1</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-12-10T00:00:00+01:00" pubdate data-updated="true">10. 12. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.mozillamessaging.com/en-US/thunderbird/3.0b1/">Seznam novinek</a> je najdete v každém příspěvku co jsem četl, ale jak to vypadá když to pustíte a je to změna k lepšímu?</p>
+
+<h3>Novinky</h3>
+
+
+<ul>
+    <li>záložky pro zobrazování e-mailových zpráv</li>
+    <li>vylepšení IMAPu pro rychlejší zobrazování zpráv</li>
+    <li>vylepšené okno pro rychlé čtení</li>
+    <li>nový  správce doplňků</li>
+    <li>vylepšený správce adres</li>
+    <li>vylepšený import mailů z jiných klentů</li>
+    <li>integrace s vyhledáváním ve Windows Vista</li>
+    <li>integrace s Mac OS X Address Book (nevyzkoušeno, nemám Mac X)</li>
+</ul>
+
+
+<h3>První spuštění</h3>
+
+
+<p>Inovovaný průvodce vytvářením účtu. Po startu je klasické vytváření účtu jako novinka přibyla popora pro Gmail IMAP co se mi docela hodí.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2008/12/image.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/12/image-thumb.png" border="0" alt="image" width="495" height="447" /></a></p>
+
+<h3>Záložky pro zobrazování e-mailových zpráv</h3>
+
+
+<p>Vlastní okno poštovního klienta se doznalo několika změn. Jsou vidět záložky</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2008/12/image1.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/12/image-thumb1.png" border="0" alt="image" width="644" height="444" /></a></p>
+
+<h3>Integrace s vyhledáváním ve Windows Vista</h3>
+
+
+<p>Další novinkou je podpora pro Windows Vista, kdy se zařadí maily mezi vyhledávání.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2008/12/image2.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/12/image-thumb2.png" border="0" alt="image" width="546" height="95" /></a></p>
+
+<p>Tady je vidět jak to dobře funguje.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2008/12/image3.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/12/image-thumb3.png" border="0" alt="image" width="396" height="237" /></a></p>
+
+<h3>Nový  správce doplňků</h3>
+
+
+<p>Správce kopíruje správce použitý ve Firefoxu 3.x, což se dalo samozřejmě očekávat.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2008/12/image4.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/12/image-thumb4.png" border="0" alt="image" width="645" height="475" /></a></p>
+
+<h3>Vylepšený správce adres</h3>
+
+
+<p>Lépe funguje propojení s maily. U adresy, kterou máte v Adresáři se zobrazí žlutá hvězdička a jde přímo upravit jméno bez toho abychom museli jít do adresáře.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2008/12/image5.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/12/image-thumb5.png" border="0" alt="image" width="467" height="326" /></a></p>
+
+<p>Nově je podpora pro narozeniny.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2008/12/image6.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/12/image-thumb6.png" border="0" alt="image" width="644" height="284" /></a></p>
+
+<h3>Závěr</h3>
+
+
+<p>Nový Thunderbird přináší několik zlepšení, které usnadní práci a pomůžou všem jeho uživatelům. Znatelné je zrychlení při práci s IMAPem, to oceněju nejvíce a také záložky jsou šikovné, jsme na ně z prohlížečů celkem zvyklí a určitě si najdou místo tady hlavně například pro kalendář apod.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/page//page/10/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/page//page/8/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://blog.prskavec.net" alt="Home"><img class="icons" src="/images/Home.png" ></a>
+      <a href="http://blog.prskavec.net/archives/" alt="Archives"><img  class="icons" src="/images/Calendar.png"></a>
+      <a href="mailto:ladislav@prskavec.net" alt="E-Mail"><img  class="icons" src="/images/Envelope.png"></a>
+      <a href="http://blog.prskavec.net/atom.xml" alt="subscribe feed"><img class="icons" src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Ladislav Prskavec</h1>
+  <p style="margin-top:6px;"><img src="/images/avatar.jpg" style="float:left; margin-right:10px;" width="100" height="115" /><a href="http://github.com/abtris/">Programátor</a>, otec, <a href="http://www.dzogchen.cz">buddhista</a>, milovník dobrého jídla, knih, nových technologí a hraček pro všechny s&nbsp;duší dítěte.
+</p>
+  <br style="clear:left;"/>
+</section>
+<section>
+  <h1>Poslední příspěvky</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/11/docker/">docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subversion</h1>
+  <p style="margin-top:6px; text-align:center"><a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11" onClick="_gaq.push(['_trackEvent', 'link', 'itunes/subversion', 'svn-promo-sidebar-vpravo']);"><img src="http://a2.mzstatic.com/us/r30/Publication/v4/5c/1a/66/5c1a667d-2f78-b9b2-31ec-7c06ab9b74e8/B_SUBVERSION.225x225-75.jpg" style="float:left; margin-right:10px; width:172px; height:225px;" /></a>
+</p>
+  <br style="clear:left;"/>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+LadislavPrskavec?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <h1>GitHub</h1>
+
+<iframe src="http://githubbadge.appspot.com/badge/abtris" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+</section>
+<section>
+  <h1>Twitter</h1>
+  <a class="twitter-timeline" width="250" height="500" href="https://twitter.com/abtris" data-widget-id="345276838232326144">Tweets by @abtris</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ladislav Prskavec -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79221-21']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter21617953 = new Ya.Metrika({id:21617953,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21617953" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'prskavecblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/all.js?v=1412111651"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Kategorie: deployment, | Prskavčí blog]]></title>
+  <link href="http://blog.prskavec.net/categories/deployment/atom.xml" rel="self"/>
+  <link href="http://blog.prskavec.net/"/>
+  <updated>2014-12-11T17:20:46+01:00</updated>
+  <id>http://blog.prskavec.net/</id>
+  <author>
+    <name><![CDATA[Ladislav Prskavec]]></name>
+    <email><![CDATA[ladislav@prskavec.net]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[docker]]></title>
+    <link href="http://blog.prskavec.net/2013/11/docker/"/>
+    <updated>2013-11-28T08:25:00+01:00</updated>
+    <id>http://blog.prskavec.net/2013/11/docker</id>
+    <content type="html"><![CDATA[<p>Pokud se zajímáte o to jak nasazovat aplikace na svoje servery, pronajaté VPS nebo doc cloudu, měli by jste si něco o této poměrně mladé technologii přečíst nebo vidět.</p>
+
+<h2>Co to je docker?</h2>
+
+<p>Pěkně podrobně to najdete na samotném webu <a href="http://www.docker.io/the_whole_story/">docker.io</a> a také jsem to snažil postihnout ve své <a href="http://youtu.be/oZ86BoAUtSQ">přednášce na letošním Devfestu</a>.</p>
+
+<iframe width="640" height="360" src="http://blog.prskavec.net//www.youtube.com/embed/oZ86BoAUtSQ?rel=0" frameborder="0" allowfullscreen></iframe>
+
+
+<!-- more -->
+
+
+<h2>Co se do přednášky nevešlo</h2>
+
+<p>Všechny příklady, které jsem nestihl předvést naživo jsou v <a href="https://github.com/abtris/devfest-2013">repository</a> a jsou pro verzi 0.6.7 a mezi Devfestem a tímto článkem už stačila vyjít verze 0.7, která je revoluční v podpoře více distribucí (Fedora, RHEL, Ubuntu, Debian, Suse, Gentoo, Arch). Přidáný storage drivers o kterých jsem mluvil kromě AuFS je to VFS a DEVICEMAPPER a brzo budou další ZFS, Gluster, Ceph.</p>
+
+<h2>Závěr</h2>
+
+<p>Autoři slibují v další verzi se zaměřit hlavně na kvalitu, doplnění dokumentace a api. Je před nimi mnoho práce, ale čím dál více lidí docker používá i v produkci. O dockeru budu mluvit 13.12. také v rámci <a href="http://webovky.vse.cz/web-inkognito">Web Inkognito</a> a 3-4.12.2013 se koná celosvětový Docker <a href="http://www.meetup.com/Docker-Prague-Czech-Republic/events/152779712/">HackDay</a>, pokud by jste se chtěli zůčastnit nebo pomocí s organizací místa kde se to bude konat dejte vědět mě nebo organizátorům.</p>
+]]></content>
+  </entry>
+  
+</feed>

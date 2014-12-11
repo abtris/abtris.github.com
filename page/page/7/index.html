@@ -1,0 +1,1309 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Prskavčí blog</title>
+  <meta name="author" content="Ladislav Prskavec">
+
+  
+  <meta name="description" content="Proč REST a co to obnáší? V Zend Frameworku 1.9 byla přidána pro používání REST v url a v controlleru. REST je v módě a proto nám ho přidali i do ZF &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.prskavec.net/page//page/7/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+<meta name="google-site-verification" content="mepQHhq6JPqzvIjErdB-A6hp3UKAYIlYHN7xPUL8JUM" />
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/feed/index.html" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.prskavec.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archív</a></li>
+  <li><a href="/prednasky">Přednášky</a></li>  
+  <li><a href="/skoleni">Školení</a></li>
+  <li><a href="/kontakt">Kontakt</a></li>  
+</ul>
+
+</nav> 
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/09/zend_rest_route-a-zend_rest_controller-v-zf-1-9/">Zend_Rest_Route a  Zend_Rest_Controller v ZF 1.9</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-01T00:00:00+02:00" pubdate data-updated="true">01. 09. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Proč REST a co to obnáší?</h3>
+
+
+<p>V Zend Frameworku 1.9 byla přidána pro používání <a href="http://en.wikipedia.org/wiki/Representational_State_Transfer">REST</a> v url a v controlleru.</p>
+
+<p>REST je v módě a proto nám ho přidali i do ZF. Ne vážně samozřejmě každý teď dělá do REST. Implementace RESTu existuje v každém větším frameworku. V ZF už delší dobu je REST klient i server. Klienta můžete využít pro práci s mnohými službami na internetu (twitter, flickr, &hellip;).</p>
+
+<p>V tabulce je dobře vidět jak se využije HTTP protokol. Metody PUT, DELETE se běžně nevyužívají.</p>
+
+<table border="0">
+<tbody>
+<tr>
+<th>Akce</th>
+<th>SQL</th>
+<th>HTTP</th>
+</tr>
+<tr>
+<td>Create</td>
+<td>Insert</td>
+<td>PUT</td>
+</tr>
+<tr>
+<td>Read</td>
+<td>Select</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>Update</td>
+<td>Update</td>
+<td>POST</td>
+</tr>
+<tr>
+<td>Delete</td>
+<td>Delete</td>
+<td>DELETE</td>
+</tr>
+</tbody></table>
+
+
+<p>REST API je součástí mnoha z nich. Pokud máte aplikaci RESTful, není problém potom provozovat i REST api.</p>
+
+<ul>
+    <li>do ZF byli přidány dvě nové třídy Zend_Rest_Route, Zend_Rest_Controller</li>
+    <li>přinese nám to využití HTTP protokolu (GET, POST, PUT, DELETE)</li>
+    <li>pro používání RESTu změníme controller, budeme používat Zend_Rest_Controller místo Zend_Action_Controller</li>
+    <li>v controlleru je potřeba potřeba definovat tyto metody
+<ul>
+    <li> indexAction()</li>
+    <li>getAction()</li>
+    <li>postAction()</li>
+    <li>putAction()</li>
+    <li>deleteAction()</li>
+</ul>
+</li>
+    <li>GET je get a všechny destruktivní akce jsou přes POST</li>
+</ul>
+
+
+<p>Vzal jsem <a href="http://akrabat.com/zend-framework-tutorial/">základní tutorial z akrabatu</a> a modifikoval jsem ho pro použití s REST. Zdrojové kódy jsou k <a href="http://bitbucket.org/abtris/zf-tutorial-rest/">dispozici na bitbucketu</a>.</p>
+
+<p>Do bootstrapu je potřeba přidat definici pro Zend_Rest_Route</p>
+
+<pre name="code" class="php">
+    function _initRestRoute()
+    {
+        $this-&gt;bootstrap('Request');
+        $front = $this-&gt;getResource('FrontController');
+        $restRoute = new Zend_Rest_Route($front, array(), array(
+            'default' =&gt; array('albums')
+                ));
+        $front-&gt;getRouter()-&gt;addRoute('rest', $restRoute);
+    }
+
+    function _initRequest()
+    {
+        $this-&gt;bootstrap('FrontController');
+        $front = $this-&gt;getResource('FrontController');
+        $request = $front-&gt;getRequest();
+        if (null === $front-&gt;getRequest()) {
+            $request = new Zend_Controller_Request_Http();
+            $front-&gt;setRequest($request);
+        }
+        return $request;
+    }
+
+</pre>
+
+
+<p>a je potřeba modifikovat controller, aby využíval celký HTTP protokol.</p>
+
+<pre name="code" class="php">
+class AlbumsController extends Zend_Rest_Controller
+{
+    private $_albums;
+    private $_form;
+
+
+    public function init()
+    {
+        /* Initialize action controller here */
+        $this-&gt;_albums = new Zend_Db_Table('albums');
+        $this-&gt;_form = new Form_Album();
+    }
+
+    public function indexAction()
+    {
+        $this-&gt;view-&gt;title = "My Albums";
+        $this-&gt;view-&gt;headTitle($this-&gt;view-&gt;title, 'PREPEND');
+        $this-&gt;view-&gt;albums = $this-&gt;_albums-&gt;fetchAll();
+    }
+
+    public function listAction()
+    {
+        $this-&gt;_forward('index');
+    }
+
+    public function getAction()
+    {
+        $this-&gt;view-&gt;album = $this-&gt;_albums-&gt;find($this-&gt;_getParam('id'))-&gt;current();
+    }
+
+
+    public function putAction()
+    {
+        $album = $this-&gt;_albums-&gt;find($this-&gt;_getParam('id'))-&gt;current();
+        if ($this-&gt;_form-&gt;isValid($this-&gt;_request-&gt;getParams())) {
+            $album-&gt;setFromArray($this-&gt;_form-&gt;getValues())-&gt;save();
+            $this-&gt;_redirect('albums');
+        } else {
+            $this-&gt;view-&gt;album = $album;
+            $this-&gt;view-&gt;form = $this-&gt;_form;
+            $this-&gt;render('edit');
+        }
+            
+    }
+
+    public function postAction()        
+    { 
+        if ($this-&gt;_form-&gt;isValid($this-&gt;_request-&gt;getParams())) {
+           $this-&gt;_albums-&gt;createRow($this-&gt;_form-&gt;getValues())-&gt;save();
+           $this-&gt;_redirect('albums');
+        } else {
+            $this-&gt;view-&gt;form = $this-&gt;_form;
+            $this-&gt;view-&gt;title = "Add new album";
+           $this-&gt;render('new');
+        }
+
+    }
+
+
+    public function newAction()
+    {
+        $this-&gt;view-&gt;title = "Add new album";
+        $this-&gt;view-&gt;headTitle($this-&gt;view-&gt;title, 'PREPEND');
+
+        $this-&gt;view-&gt;form = $this-&gt;_form;
+        
+    }
+
+    public function editAction()
+    {
+        $this-&gt;view-&gt;title = "Edit album";
+        $this-&gt;view-&gt;headTitle($this-&gt;view-&gt;title, 'PREPEND');
+        $album = $this-&gt;_albums-&gt;find($this-&gt;_getParam('edit'))-&gt;current();
+        if ($album) {
+            $this-&gt;_form-&gt;populate($album-&gt;toArray()); 
+        }   
+        $this-&gt;view-&gt;form = $this-&gt;_form;
+        $this-&gt;view-&gt;album = $album;
+
+    }
+
+    public function deleteAction()
+    {
+        $this-&gt;view-&gt;title = "Delete album";
+        $this-&gt;view-&gt;headTitle($this-&gt;view-&gt;title, 'PREPEND');
+        
+        $album = $this-&gt;_albums-&gt;find($this-&gt;_getParam('id'))-&gt;current();
+        $album-&gt;delete();
+        $this-&gt;_redirect('albums');
+    
+    }
+}
+
+</pre>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/08/jak-na-vypadek-sluzby-twitter-pri-pouziti-zend-service-twitter/">Jak na výpadek služby Twitter při použití Zend_Service_Twitter</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-06T00:00:00+02:00" pubdate data-updated="true">06. 08. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Během dneška (6.8.2009) byl výpadek služby Twitter a koukal jsem, že mi to položilo <a href="http://php-frameworks.net">php-frameworks.net</a> na kolena.</p>
+
+<p>Jak jsem se zjišťovat co s tím a proč mi to hlásí:</p>
+
+<pre>
+Zend_Http_Client_Adapter_Exception: Unable to Connect to tcp://twitter.com:80. Error #110: Connection timed out in /srv/lib/php/Zend/Http/Client/Adapter/Socket.php on line 213
+</pre>
+
+
+<p>Tento kód nějak selhal a výpadek nastal dříve, asi to vypadá na nějakou chybu v Zendu, protože se Zend_Service_Twitter_Exception nevrátí i při výpadku spojení jak jsem očekával.</p>
+
+<pre>
+try {
+    $twitter = new Zend_Service_Twitter($config-&gt;twitter-&gt;username, $config-&gt;twitter-&gt;password);
+} catch (Zend_Service_Twitter_Exception $e) {
+    $this-&gt;logger-&gt;err("Exception caught importing twitter: {$e-&gt;getMessage()}\n");
+}
+</pre>
+
+
+<p>Řešení je otestovat vlastní připojení předem ke kterému jsem se nakonec uchýlil.</p>
+
+<pre>
+        // Testing connect to twitter
+        try {
+        $client = new Zend_Http_Client('http://twitter.com', array(
+            'maxredirects' =&gt; 0,
+            'timeout'      =&gt; 5));
+        $response = $client-&gt;request();
+        } catch (Zend_Http_Client_Adapter_Exception $e) {
+            $this-&gt;logger-&gt;err("Exception caught connect twitter: {$e-&gt;getMessage()}\n");
+        }
+
+        // if have $response try connect twitter
+        if (isset($response)) {
+            try {
+                $twitter = new Zend_Service_Twitter($config-&gt;twitter-&gt;username, $config-&gt;twitter-&gt;password);
+            } catch (Zend_Service_Twitter_Exception $e) {
+                $this-&gt;logger-&gt;err("<a href="http://www.unlocalize.com/">Exception</a> caught importing twitter: {$e-&gt;getMessage()}\n");
+            }
+            if (isset($twitter)) {
+            $response = $twitter-&gt;status-&gt;friendsTimeline(array("count" =&gt; $config-&gt;twitter-&gt;count));
+            $this-&gt;view-&gt;twitter = $response;
+            } else {
+            $this-&gt;view-&gt;twitter = null;
+            }
+        }
+</pre>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/07/pear-a-zend-server-ce-4-0-4/">PEAR a Zend Server CE 4.0.4</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-20T00:00:00+02:00" pubdate data-updated="true">20. 07. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud jste instalovali Zend Server CE ve verzi 4.0.4 a předtím jste neměli provedený upgrade PEARu z 1.8.0 na 1.8.1 možná se setkáte s chybovou hláškou pokud budete chtít něco z PEARu nainstalovat.</p>
+
+<pre>
+pear.php.net is using a unsupported protocal - This should never happen.
+install failed
+</pre>
+
+
+<p>Řešení je následující, instalujte přímo z PEARu (řešení je pro Ubuntu, ale mělo by fungovat i jinde).</p>
+
+<pre>lynx -source http://pear.php.net/go-pear | php</pre>
+
+
+<p>Spustí se installer a tam nastavte cesty podle Zend Serveru a nainstalujete tam kam Zend Server instaluje také, neměl by potom být problém s upgradem.</p>
+
+<pre> 
+ 1. Installation prefix ($prefix) : /usr/local/zend/
+ 2. Temporary files <a href="http://www.directorydomain.org/">directory</a>     : /usr/local/zend/tmp
+ 3. Binaries directory            : /usr/local/zend/bin
+ 4. PHP code directory ($php_dir) : /usr/local/zend/share/pear/PEAR
+ 5. Documentation base directory  : /usr/local/zend/share/pear/doc
+ 6. Data base directory           : /usr/local/zend/share/pear/data
+ 7. Tests base <a href="http://www.directorydomain.org/">directory</a>          : /usr/local/zend/share/pear/test 
+</pre>
+
+
+<p>Potom můžete PEAR normálně používat jak jste zvyklí, myslím, že brzo Zend vydají update balíčku, kde tento problém bude vyřešen, ale zatím tohle docela snadné a přitom elegantní řešení.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/07/tvorba-mirroru-svn-repository-pomoci-svnsync/">Tvorba mirroru SVN repository pomocí svnsync</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-15T00:00:00+02:00" pubdate data-updated="true">15. 07. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Po několika dnech když jsem dával dohromady synchronizaci firemního mirroru s naším dodavatelem, vznikla <a href="http://svn.prskavec.net/ch05s04.html">nová kapitola do knihy Subversion pro každého</a>.
+Nastavit mirror a pustit synchronizaci to najdete i v manuálu, ale přidal jsem tam také řešení možných problémů se kterými se můžete, ale také nemusíte setkat.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/07/php-bytekit/">PHP Bytekit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-01T00:00:00+02:00" pubdate data-updated="true">01. 07. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Bytekit</h3>
+
+
+<p><a href="http://www.bytekit.org/">Bytekit</a> je nová extenze pro PHP, která umožňuje analyzovat PHP kód na úrovni opcodes, které generuje compiler v PHP. Také nám umožňuje pomocí disassembleru sledovat jak probíhá program na úrovni compileru. Je to další z nástrojů, které umožní zlepšit kvalitu kódu a určitě přinese řadu další analytických nástrojů. Autorem je Stefan Esser, kterého jistě každý zná. Jeho <a href="http://www.suspekt.org/">blog</a> a příspěvky k bezpečnosti PHP jsou známy. </p>
+
+
+
+
+<h3>Bytekit-cli</h3>
+
+
+<p>
+Samotná extenze, ale není všechno. Abychom mohli ji dobře využít tak <a href="http://sebastian-bergmann.de/archives/871-bytekit-cli.html">Sebastian Bergmann</a> vytvořil <a href="http://github.com/sebastianbergmann/bytekit-cli/tree/master">bytekit-cli</a>, které nám umožní ho využít.
+V článku od SB jsou pěkné příklady, které doporučuji vyzkoušet. Bytekit zatím není dostupné přes PECL tak ho musíte zkompilovat ze zdrojového kódu, známým postupem (phpize, configure, make, make install) a zkompilovanou extenzi přidat do konfigurace PHP. Potom si z githubu můžete stáhnout aktuální verzi bitekit-cli a můžete si hrát.</p>
+
+
+<p>Například otestuji jak je na tom s přímým výstupem Zend Framework.</p>
+
+<pre>
+abtris@ubuntu# bytekit --rule=DirectOutput ZendFramework/
+
+ - Direct output of variable $message
+    in ZendFramework/demos/Zend/Gdata/YouTubeVideoApp/operations.php:1094
+
+  - Direct output of variable $playlistEntries
+    in ZendFramework/demos/Zend/Gdata/YouTubeVideoApp/operations.php:906
+
+  - Direct output of variable $message
+    in ZendFramework/demos/Zend/Gdata/YouTubeVideoApp/operations.php:270
+
+  - Direct output of variable $message
+    in ZendFramework/demos/Zend/Gdata/YouTubeVideoApp/operations.php:276
+
+  - Direct output of variable $user
+    in ZendFramework/demos/Zend/Gdata/Photos.php:796
+
+  - Direct output of variable $albumId
+    in ZendFramework/demos/Zend/Gdata/Photos.php:797
+
+  - Direct output of variable $photoId
+    in ZendFramework/demos/Zend/Gdata/Photos.php:798
+
+  - Direct output of variable $user
+    in ZendFramework/demos/Zend/Gdata/Photos.php:825
+
+  - Direct output of variable $albumId
+    in ZendFramework/demos/Zend/Gdata/Photos.php:826
+
+  - Direct output of variable $photoId
+    in ZendFramework/demos/Zend/Gdata/Photos.php:827
+
+  - Direct output of variable $user
+    in ZendFramework/demos/Zend/Gdata/Photos.php:741
+
+  - Direct output of variable $albumId
+    in ZendFramework/demos/Zend/Gdata/Photos.php:742
+
+  - Direct output of variable $user
+    in ZendFramework/demos/Zend/Gdata/Photos.php:688
+
+  - Direct output of variable $type
+    in ZendFramework/demos/Zend/WebServices/Amazon/amazon-search.php:153
+
+  - Direct output of variable $type
+    in ZendFramework/demos/Zend/WebServices/Amazon/amazon-search.php:157
+
+  - Direct output of variable $keywords
+    in ZendFramework/demos/Zend/WebServices/Flickr/flickr-composite.php:92
+
+  - Direct output of variable $form
+    in ZendFramework/demos/Zend/ProgressBar/ZendForm.php:209
+
+  - Direct output of variable $ret
+    in ZendFramework/demos/Zend/OpenId/test_server.php:264
+
+  - Direct output of variable $id
+    in ZendFramework/demos/Zend/OpenId/test_consumer.php:115
+
+  - Direct output of variable $response
+    in ZendFramework/library/Zend/Rest/Server.php:277
+
+  - Direct output of variable $output
+    in ZendFramework/library/Zend/Cache/Frontend/Class.php:226
+
+  - Direct output of variable $data
+    in ZendFramework/library/Zend/Cache/Frontend/Page.php:280
+
+  - Direct output of variable $data
+    in ZendFramework/library/Zend/Cache/Frontend/Output.php:101
+
+  - Direct output of variable $data
+    in ZendFramework/library/Zend/Cache/Frontend/Output.php:65
+
+  - Direct output of variable $output
+    in ZendFramework/library/Zend/Cache/Frontend/Function.php:107
+
+  - Direct output of variable $response
+    in ZendFramework/library/Zend/Json/Server.php:198
+
+  - Direct output of variable $data
+    in ZendFramework/library/Zend/ProgressBar/Adapter/JsPull.php:111
+
+  - Direct output of variable $output
+    in ZendFramework/library/Zend/Debug.php:102
+
+  - Direct output of variable $exceptions
+    in ZendFramework/library/Zend/Controller/Response/Abstract.php:734
+
+  - Direct output of variable $content
+    in ZendFramework/library/Zend/Controller/Response/Abstract.php:546
+
+  - Direct output of variable $output
+    in ZendFramework/library/Zend/Tool/Framework/Client/Console.php:194
+</pre>
+
+
+<p>Používá Zend Framework někde EVAL?</p>
+
+<pre>
+abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
+ - Disallowed opcode "EVAL"
+    in ZendFramework/demos/Zend/Gdata/Health.php:92
+
+  - Disallowed opcode "EVAL"
+    in ZendFramework/demos/Zend/Gdata/Health.php:99
+
+  - Disallowed opcode "EVAL"
+    in ZendFramework/demos/Zend/Gdata/Health.php:126
+
+  - Disallowed opcode "EVAL"
+    in ZendFramework/demos/Zend/Gdata/Health.php:129
+
+  - Disallowed opcode "EVAL"
+    in ZendFramework/demos/Zend/Gdata/Health.php:159
+
+  - Disallowed opcode "EVAL"
+    in ZendFramework/demos/Zend/Gdata/Health.php:164
+
+  - Disallowed opcode "EVAL"
+    in ZendFramework/demos/Zend/Gdata/Health.php:195
+
+  - Disallowed opcode "EVAL"
+    in ZendFramework/demos/Zend/Gdata/Health.php:200
+
+  - Disallowed opcode "EVAL"
+    in ZendFramework/demos/Zend/Gdata/Health.php:223
+
+  - Disallowed opcode "EVAL"
+    in ZendFramework/demos/Zend/Gdata/Health.php:230
+
+  - Disallowed opcode "EVAL"
+    in ZendFramework/demos/Zend/Gdata/Health.php:271
+</pre>
+
+
+
+
+<h3>Závěr</h3>
+
+
+<p>Stefan Esser ve své <a href="http://www.suspekt.org/downloads/DPC_Secure_Programming_With_The_Zend_Framework.pdf">přednášce o bezpečnosti Zend Frameworku</a> se zmiňuje o možnosti například kontrolovat EVAL v pre-commitu tasku, obdobně jako například dnes kontroluji syntaxi php.</p>
+
+
+<p></p>
+
+<p>Koncem září se budu věnovat porovnání PHP Frameworků z hlediska nástrojů pro QA, které jsem dělal v článku <a href="http://blog.prskavec.net/2009/03/pdepend-a-php-frameworky/">pDepend a php frameworky</a>, uvidíme jak jednotlivé frameworky za tu dobu pokročili a také si budu všímat frameworků pomocí dalších nástrojů mezi které bytekit jistě zahrnu.</p>
+
+
+<p>Nesmím opomenout připomenout také, že je venku PHP 5.3, na které se čekalo poměrně dlouho a doufám jen, že nebude tolik plné chyb jako jeho přechůdci 5.2 a 5.1. Uvidíme zda na příchod PHP 5.3 jsou připraveny i jiné frameworky než <a href="http://nettephp.com">Nette</a>.</p>
+
+
+<p></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/07/gtd-a-android/">GTD a Android</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-01T00:00:00+02:00" pubdate data-updated="true">01. 07. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>O GTD většina vás asi slyšela, pokud ne doporučuji si tuto knihu o timemanagmentu přečíst, dokáže všem zaměstnaným lidem pomoci zvládat svoji práci lépe a efektivně a vyšetřit čas i na další věci, které nestíháte. České vydání knihy <a href="http://www.mitvsehotovo.cz">David Allen: Mít vše Hotovo</a>, vydal Jan Melvin Publishing a současně spustili webové stránky, které se této problematice věnují, o různých platformách byla řeč a já přidám malé info o Androidu. Na Marketu najdete tyto aplikace, které se dají pro GTD použít, ja jsem ještě přidal aspekt propojení s <a href="http://www.rememberthemilk.com">RTM</a>, které používám.</p>
+
+<h3>Seznam testovaných programů pro Android</h3>
+
+
+<ul>
+    <li>ActionComplete - <a title="http://www.actioncomplete.com/" rel="nofollow" href="http://www.actioncomplete.com/">http://www.actioncomplete.com/</a></li>
+    <li>Shuffle - <a title="http://code.google.com/p/android-shuffle/" rel="nofollow" href="http://code.google.com/p/android-shuffle/">http://code.google.com/p/android-shuffle/</a></li>
+    <li>Next Action - <a title="http://code.google.com/p/nextaction/" rel="nofollow" href="http://code.google.com/p/nextaction/">http://code.google.com/p/nextaction/</a></li>
+    <li>Astrid - <a class="urlextern" title="http://code.google.com/p/android-astrid/" rel="nofollow" href="http://code.google.com/p/android-astrid/">http://code.google.com/p/android-astrid/</a> (RTM synchronizace)</li>
+    <li>RTM tasks - <a title="http://mischost.googlepages.com/androidrtm" rel="nofollow" href="http://mischost.googlepages.com/androidrtm">http://mischost.googlepages.com/androidrtm</a> (RTM synchronizace)</li>
+    <li>TooDo - <a title="http://getsatisfaction.com/e2m/" rel="nofollow" href="http://getsatisfaction.com/e2m/">http://getsatisfaction.com/e2m/</a> (RTM, Toodledo synchronizace, Smart Folders, Lists, Contexts)</li>
+    <li>gTasx (Google Tasks)</li>
+</ul>
+
+
+<p>Screenshoty z aplikací najdete na v <a href="http://www.flickr.com/photos/abtris/sets/72157618227761030/">galerii</a>.</p>
+
+<h3>ActionComplete 1.3.0</h3>
+
+
+<p>Tento program se mi docela líbí, má pěkné ovládání. Dobrá a jednoduchá navigace, nevychází tolik přímo z GTD v pojmenování, ale vše potřebné je tu dostupné. Zálohovat data lze na kartu, bohužel chybí jakákoliv synchronizace s online systémem. Zatím na stránkách je naznačeno, že budou další produkty, které to budou řešit. Ale já nechci mít něco dalšího a dalšího.<a title="Screenshots" href="http://www.slideshare.net/burnayev/actioncomplete-screenshots-1248218">
+</a></p>
+
+<h3>Shuffle 1.1.1</h3>
+
+
+<p>Shuffle mi přijde jako nejlepší GTD aplikace pro Android, má jednoduché příjemné ovládání. Dobře se s ní pracuje, ale zásadní nevýhoda je v absence zálohování a synchronizace dat.</p>
+
+<h3>NextAction 0.8.3</h3>
+
+
+<p>Jednoduchá a dobře nastavitelná aplikace pro GTD, bohužel také bez synchronizace, ale má zálohování aspoň lokální.</p>
+
+<h3>Astrid 2.8.6</h3>
+
+
+<p>Astrid je velmi propracovaná aplikace, která disponuje synchronizací s RTM. Umí úkoly zadávat také do kalendáře což se hodí. V synchronizaci není podpora pro Contexty, SmartFolders a Listy. Vše je maximálně realizováno přes tagy. Dobrý správce úkolů, ale méně se hodí pro GTD, ale stejně asi nejlepší aplikace pro Android.</p>
+
+<h3>RTM tasks (v 2009-02-28)</h3>
+
+
+<p>Tato aplikace je geniálně jednoduchá a sám ji mám jako zálohu, pokud se TooDo nedaří synchronizace nebo chci jen rychle přidat úkol do Inboxu. Jak název napoví je určená k práci s úkoly v RTM. Umí jen vybírat list a přidávat, upravovat jednotlivé úkoly a nejde nastavit kontexty ani SmartFolders. Synchronizace fungovala mi bez problémů, ale má méně funkcí což může být pro mobilní zařízení přínos. Nejvíc mi asi vadí, že nejdou přidat poznámky.</p>
+
+<h3>TooDo 2.4.3</h3>
+
+
+<p>TooDo mi přijde jako nejpropracovanější aplikace, která implementovala s funkčností dostupných na webových portálech RTM a Toodledo zatím pro Android maximum. Bohužel občas mi nefunguje plně dobře synchronizace mezi programem a webem. Občas se zasekne a nevíte zda to proběhlo jak mělo, případně neoznámí, že synchronizaci vůbec dokončil. Další problém vidím, že se description nesynchronizuje s poznámkami v RTM a vyžaduje být online.</p>
+
+<h3>gTasx 1.0.0</h3>
+
+
+<p>gTasx poskytuje jen rozhraní ke službě Google Tasks, kterou lze také použít na GTD. Je to jednoduchý správce úkolů, který nemá moc funkcí.</p>
+
+<h3>Zavěr</h3>
+
+
+<p>Náčrt původního článku jsem měl hotový asi před měsícem, proto mohou být někde zastaralejší verze programů. Zvláště Astrid se z 2.6 přehoupl do 2.8 a jeho vývoj dobře pokračuje a doufám, že se dočkáme <a href="https://translations.launchpad.net/astrid/">české verze</a>, pokud máte čas a chuť přiložte také ruku k dílu. V posledních verzích se vylepšila synchronizace s RTM a jediné co mi chybí je podpora List view a ta je planovaná do verze 3.0, které se doufám do konce roku třeba dočkáme pokud vývoj půjde podobným tempem jako doposud.</p>
+
+<p>Pro mě je teď primární aplikaci pro GTD na mobilu Astrid, využívám hlavně toho, že můžu zadat úkoly i když jsem offline a potom je synchronizovat až když se dostanu někam kde je signál. Pokud máte s zkušenosti na Adroidu s dalšími aplikacemi určitě je uveďte do komentářů.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/06/vi-a-integrace-s-ide/">Vi a integrace s IDE</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-23T00:00:00+02:00" pubdate data-updated="true">23. 06. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Jak jsem přešel na Ubuntu oblíbil jsem si editor Vim, který v terminálu používám primárně a i když ho neumím využít jistě zatím naplno, hodně věcí mi ulehčuje a dobře se v něm pracuje. Hlavně jsem si oblíbil vyhledávání.</p>
+
+
+<p>Pokud  chcete Vim využívat naplno chce to pracovat v něm co nejvíce a proto jsem se podíval zda některé IDE podporují Vim a jak jsou na tom.</p>
+
+
+
+
+<p>Podporu jsem otestoval v těchto IDE:</p>
+
+
+<ul>
+    <li><a href="http://www.activestate.com/komodo_edit/">Komodo Edit</a> 5.1.3 (vestavěná podpora)</li>
+    <li><a href="http://www.netbeans.org/">Netbeans</a> 6.7 RC 3 (plugin)</li>
+    <li><a href="http://www.eclipse.org">Eclipse</a> / Zend Studio 6.1.2 (plugin)</li>
+</ul>
+
+
+<h3>Eclipse pluginy</h3>
+
+
+<p><a href="http://www.viplugin.com/viplugin/">http://www.viplugin.com/viplugin/</a> - placený, licence stojí 15 EUR</p>
+
+
+<p><a href="http://www.vimplugin.org/">http://www.vimplugin.org/</a> - nefunguje moc dobře, je zastaralý a nepodporuje přímo stavovou řádku Vi</p>
+
+
+<h3>Netbeans jvi plugin</h3>
+
+
+<p><a href="http://www.netbeans.org/kb/55/vi-integration.html">http://www.netbeans.org/kb/55/vi-integration.html</a> - popis instalace do Netbeans</p>
+
+
+<h3>Závěr</h3>
+
+
+<p>V těchto IDE je podpora velmi slušná a dá se s tím Vi pěkně pracovat. U Eclipse musíte dokoupit plugin, což je jediná nevýhoda. Pokud víte o dalších pluginech pro IDE tak to prosím napište do komentářů.</p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/06/9-a-pul-tydne-s-androidem-dokonceni/">9 a pů týdne s Androidem dokončení</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-01T00:00:00+02:00" pubdate data-updated="true">01. 06. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>V <a href="http://blog.prskavec.net/2009/05/9-a-pul-tydne-s-androidem/">minulém článku</a> jsem se věnoval praktickému použití telefonu s Androidem, ale nechtěl jsem tam uvádět moc svoje subjektivní hodnocení. Problém je, že hodnotíte G1 jako telefon nebo hodnotíte Android jako platformu?</p>
+
+<p>Řekl bych, že většina záporů, které vůči G1 mám jde na vrub výrobci telefonu HTC a ne Googlu, který vytvořil Android. Ale přece jenom si občas nejsem jistý zda 100% viny lze házet na HTC.</p>
+
+<p><strong>Mezi hlavní zápory vidím:</strong></p>
+
+<ul>
+    <li>Malá výdrž baterie, při provozu (čtu emaily, v MHD RSS a zadávám schůzky, tasky během dne) jsem rád když vydrží půl dne.</li>
+    <li>Občas mám problém s dotykovým displayem, jeho citlivost není nic moc. Už se mi párkrát stalo, že jsem volal někam kam nechci apod.</li>
+    <li>Občasná pomalost telefonu, připadá mi že RAM je velmi málo a bez Task manageru a pravidelného čištění paměti se občas zpomaluje neskutečně.</li>
+    <li>Fotoaparát je sice 3.2 Mpx, ale stačí rychlejší pohyb nebo trochu méně světla a je to celkem nepoužitelné. <a href="http://www.cyrket.com/package/com.ap.SnapPhoto_Free">Snapphoto</a> to může trochu vylepšit, ale blesk nepřidá. Dnes bych čekal trochu lepší kvalitu i v mobilu.</li>
+</ul>
+
+
+<p><strong>Závěr</strong></p>
+
+<p>Celkově ale myslím, že platforma Android má celkem budoucnost. Některé aplikace, které dodává Google by se mohli vylepšit. Chybí mi přímo v systému správce souborů a taskmanager. Mohla by časem přijít podpora pro další Google aplikace.</p>
+
+<p><strong>Něco na konec</strong></p>
+
+<p>Jedna <a href="http://www.cyrket.com/package/au.id.weston.scott.Sketchaetch">vzpomínka na dětství</a></p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/06/sketch1.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/06/sketch1.png" alt="sketch1" title="sketch1" width="480" height="320" class="aligncenter size-full wp-image-606" /></a></p>
+
+<p>a <a href="http://www.cyrket.com/package/com.ammisoftware.Eggs">dobu před revolucí</a>.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/06/nupagagi1.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/06/nupagagi1.png" alt="nupagagi1" title="nupagagi1" width="480" height="320" class="aligncenter size-full wp-image-605" /></a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/05/9-a-pul-tydne-s-androidem/">9 a půl týdne s Androidem</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-29T00:00:00+02:00" pubdate data-updated="true">29. 05. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Hledal jsem delší dobu nový telefon na který jsem měl několik požadavků:</p>
+
+<ol>
+    <li>musí bez problémů fungovat na linuxu</li>
+    <li>musí mít wifi</li>
+    <li>měl by mít GPS</li>
+    <li>musí umět s emaily (Gmail, imaps)</li>
+    <li>podpora pro ical (Gmail)</li>
+    <li>něco na úkoly (RTM)</li>
+</ol>
+
+
+<p>Těch telefonů co splňovali tyto podmínky moc není, poohlížel jsem se po Iphone, ale tam mi vadilo, že pro všechnu činnost potřebuji iTunes, které pod linux nejsou a v dohledné době peníze na Maca nemám. A jako vývojáři se mi moc nelíbí politika Apple na jejich Appstoru.</p>
+
+<p>Pro Android rozhodlo také to, že jsem měl možnost si ho vyzkoušet a také SDK a emulátor založený na Eclipse, přes který jsem si mohl ozkoušet práci se svým Gmail účtem a programy, které jsem našel na internetu.</p>
+
+<p>Telefon, ale kromě samotné platformy dělají hlavně aplikace, až za čas se ukáže jak kvalitní aplikace vznikají. Rozdělil jsem aplikace do několika oblastí a uvedu ty, které jsem si zatím oblíbil a něco mi přinesli.</p>
+
+<p><strong>Telefonování</strong></p>
+
+<ul>
+    <li><a href="http://www.cyrket.com/package/com.starobject.android.starcontact">StarContact</a> - nahradí hledání v kontaktech, pomocí T9 a také umí prohledávat položky jako je Notes, Company apod. což často potřebuji</li>
+    <li><a href="http://www.cyrket.com/package/com.thomaskuenneth.android.birthday">Birthday reminder</a> - aplikace, která přidá připomenutí narozenin, ukládá se to jako poznámka do kontaktů a proto se to synchronizuje s google kontakty</li>
+    <li><a href="http://www.cyrket.com/package/net.eggenstein.android.tech.profiles">Profiles</a> - přepínání profilů Outboor, Normal, Vibrace, Silent jako u běžného mobilu. Bohužel nejdou přesně konfigurovat i notifikace aplikací jako je email v jednotlivých profilech. Asi bych chtěl moc.</li>
+    <li><a href="http://www.cyrket.com/package/com.phonalyzr">Phonalyzr</a> - analyzátor hovorů, kolik komu voláte, jak dlouho apod.</li>
+</ul>
+
+
+<p><strong>Widgets</strong></p>
+
+<ul>
+    <li><a href="http://www.cyrket.com/package/net.jimblackler.quickcalendar">Quick Calendar</a> - kalendář do notification bar doplněný widgetem na plochu, který zabírá 3 icony.</li>
+    <li><a href="http://www.cyrket.com/package/jp.co.taosoftware.android.calendar">tCalendar</a> - widget, který mám hned vedle Quickcalendar, který doplní informaci o datumu a dnu v týdnu</li>
+</ul>
+
+
+<p><strong>SMS a MMS</strong></p>
+
+<ul>
+    <li><a href="http://www.cyrket.com/package/net.everythingandroid.smspopup">SMS Popup</a> - doplní defaultní aplikaci pro SMS, která mi vyhovuje o okno když SMS přijde.</li>
+</ul>
+
+
+<p><strong>Mapy</strong></p>
+
+<ul>
+    <li><a href="http://www.cyrket.com/package/com.google.android.maps.mytracks">My Tracks</a> - aplikace, která dělá záznam cesty, který umožňuje odeslat např. do MyMaps na Google</li>
+    <li><a href="http://www.cyrket.com/package/com.google.android.apps.mymaps">My Maps Editor</a> - editor MyMaps na Googlu</li>
+    <li><a href="http://www.cyrket.com/package/com.eclipsim.gpsstatus2">GPS status 2</a> - ukazuje nastavení GPS, počet satelitů, polohu atd.</li>
+    <li><a href="http://www.cyrket.com/package/com.google.android.stardroid">Sky Map</a> - úžasná aplikace pro amatérské astronomy, ukážete na telefonem na planetu nebo hvězdu v noci a telefon vám řekne jak se jmenuje, ukáže navažující souhvězdí</li>
+</ul>
+
+
+<p><strong>TODO &ndash;</strong> <a href="http://www.rememberthemilk.com/">Remember the milk</a> je slušná aplikace na správu úkolů, v které můžete dobře uplatnit i <a href="http://www.mitvsehotovo.cz/">GTD</a>.</p>
+
+<ul>
+    <li><a href="http://www.cyrket.com/package/com.apppad.androidRTM">RTM tasks</a> - klient pro RTM, jednoduchý, neumí tagy, kontexty ani poznámky, ale funguje celkem spolehlivě, používám ho na rychlé zadání úkolu do Inboxu</li>
+    <li><a href="http://www.cyrket.com/package/com.timsu.astrid">Astrid</a> - pokročilý správce úkolů, RTM synchronizace, umožňuje přidávat tagy, 1 poznámku, opakující se úkoly. Občasné problémy se synchronizací, nezná smart listy.</li>
+</ul>
+
+
+<p>Ještě si tu trochu povzdechnu, mám rád GTD metodiku a snažím se si tím ušetřit čas. Bohužel pro Android zatím neexistuje aplikace, která by se uměla dobře synchronizovat s RTM a přitom také implementovala všechny výborné vlastnosti co RTM umí (lokace, smart listy, kontexty, tagy). Ale vývoj aplikací jde dopředu a doufám, že do konce roku bude slušná aplikace na světě.</p>
+
+<p><strong>IM + Social</strong></p>
+
+<ul>
+    <li><a href="http://www.cyrket.com/package/com.meebo">Meebo IM</a> - IM klient pro všechno (ICQ, MSN, Jabber, Gtalk, vše v jednom)</li>
+    <li><a href="http://www.cyrket.com/package/com.skype.android.lite">Skype</a> - skype client</li>
+    <li><a href="http://www.cyrket.com/package/com.twidroid">Twidroid</a> - Twitter klient</li>
+    <li><a href="http://www.cyrket.com/package/com.fognl.android.greed">Greed</a> - RSS čtečka s napojením na Google Reader</li>
+</ul>
+
+
+<p><strong>Tools</strong></p>
+
+<ul>
+    <li><a href="http://www.cyrket.com/package/com.arron.taskManagerLite">Advanced task manager</a> - správa procesů, možnost ukončení všech běžících procesů</li>
+    <li><a href="http://www.cyrket.com/package/maximyudin.usefulswitchers">Useful Switchers</a> - přepínání nastavení androidu</li>
+    <li><a href="http://www.cyrket.com/package/com.ricket.doug.nightclock">Night clock</a> - budík a noční hodiny</li>
+    <li><a href="http://www.cyrket.com/package/org.connectbot">Connectbot</a> - SSH client</li>
+    <li><a href="http://www.cyrket.com/package/hongbo.wordmate">Wordmate</a> + <a href="http://www.mujandroid.cz/2009/03/wordmate-slovnik-do-kapsy/">české slovníky</a> - česko-anglické slovníky</li>
+    <li><a href="http://www.cyrket.com/package/com.aws.android">Weatherbug</a> - počasí</li>
+    <li><a href="http://www.cyrket.com/package/com.android.keepass">KeePassDroid</a> - klient pro <a href="http://keepass.info/">Keepass</a></li>
+    <li><a href="http://www.cyrket.com/package/com.google.zxing.client.android">Barcode Scanner</a> - čtečka čárových kódů, možnost sdílení kontaktů přes QR code</li>
+    <li><a href="http://www.cyrket.com/package/com.metago.astro">ASTRO</a> - filemanager</li>
+</ul>
+
+
+<p><strong>Hry</strong> &ndash; pár těch co teď mám v telefonu, jsou další dobré jako <a href="http://www.cyrket.com/package/com.glu.android.bonsai">Bonsai Blast</a>, <a href="http://www.cyrket.com/package/com.NamcoNetworks.PacMan">Pacman</a>, atd.</p>
+
+<ul>
+    <li><a href="http://www.cyrket.com/package/com.kmagic.solitaire">Solitaire</a> - klasické karty</li>
+    <li><a href="http://www.cyrket.com/package/com.magicwach.rdefense_free">Robot Defense</a> - klasické defense tower, asi nejzábavnější hra zatím na Androidu</li>
+    <li><a href="http://www.cyrket.com/package/au.com.phil">Abduction</a> - pro neúnavné milovníky skákajících zvířat</li>
+</ul>
+
+
+<p>Pokud máte nějakou aplikaci bez které se neobejdete dejte mi vědět v komentářích, třeba se mi bude hodit také.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/05/zend-server-ce-a-xdebug/">Zend Server CE a Xdebug</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-18T00:00:00+02:00" pubdate data-updated="true">18. 05. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>O práci s Zend Serverem jsem už tu psal. Normálně je nainstalovaný Zend Debugger, který má tu nevýhodu, že neumí spolupracovat s PHPUnit. Proto, když píšu testy a mám v Hudsonu automatické zpracování reportů potřebuji <a href="http://www.xdebug.org">Xdebug</a>. Teď si ukážeme jak to na Ubuntu přidat do Zend Serveru podporu pro Xdebug. Pro windows by to mělo fungovat obdobně jen se vyhnete kompilaci Xdebugu ze zdrojového kódu a máte si možnost stáhnout zkompilovanou knihovnu.</p>
+
+<p>Nechápu moc Zend proč se trochu nesnaží, aby se dal Zend Debugger používat stejným způsobem jako Xdebug. Obzvláště když vím, že v Zend Studiu je code coverage a profiling dostupný.</p>
+
+<p>Teď už jak na to v Ubuntu:</p>
+
+<ol>
+    <li>Zend Server CE nainstalovaný dle <a href="http://blog.prskavec.net/2009/04/ubuntu-centos-5-a-php-529-v-zend-server-ce/">postupu</a></li>
+    <li>Musíte mít nainstalovaný balíček pro kompilaci
+<pre>sudo apt-get install build-essential
+sudo apt-get install autoconf</pre>
+</li>
+    <li>Stáhnout zdrojové kódy xdebugu, rozbalit a dat kompilovat.
+<pre>wget http://www.xdebug.org/files/xdebug-2.0.4.tgz
+tar -xzf xdebug-2.0.4.tgz
+cd xdebug-2.0.4/
+/usr/local/zend/bin/phpize
+./configure --enable-xdebug --with-php-config=/usr/local/zend/bin/php-config
+make</pre>
+</li>
+    <li>Knihovnu najdete v <code>xdebug-2.0.4/modules/xdebug.so</code></li>
+    <li>Knihovnu nakopirujte do <code>/usr/local/zend/lib/debugger/xdebug.so</code></li>
+<pre>sudo cp modules/xdebug.so /usr/local/zend/lib/debugger/xdebug.so</pre>
+    <li>Upravte soubor <code>/usr/local/zend/etc/ext.d/debugger.ini</code> a zakomentujte řádek
+<pre>;zend_extension_manager.dir.debugger=/usr/local/zend/lib/debugger</pre>
+</li>
+    <li>Přidejte nakonec do <code>/usr/local/zend/etc/php.ini</code> řádek
+<pre>zend_extension=/usr/local/zend/lib/debugger/xdebug.so</pre>
+</li>
+    <li>Nezapomeňte restartovat server <code>sudo /etc/init.d/zend-server restart</code></li>
+</ol>
+
+
+<p>Po instalaci by jste neměli mít problém spustit Ant s kompletním phpunit taskem i na Zend Serveru CE.</p>
+
+<pre>
+
+
+
+</pre>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/page//page/8/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/page//page/6/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://blog.prskavec.net" alt="Home"><img class="icons" src="/images/Home.png" ></a>
+      <a href="http://blog.prskavec.net/archives/" alt="Archives"><img  class="icons" src="/images/Calendar.png"></a>
+      <a href="mailto:ladislav@prskavec.net" alt="E-Mail"><img  class="icons" src="/images/Envelope.png"></a>
+      <a href="http://blog.prskavec.net/atom.xml" alt="subscribe feed"><img class="icons" src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Ladislav Prskavec</h1>
+  <p style="margin-top:6px;"><img src="/images/avatar.jpg" style="float:left; margin-right:10px;" width="100" height="115" /><a href="http://github.com/abtris/">Programátor</a>, otec, <a href="http://www.dzogchen.cz">buddhista</a>, milovník dobrého jídla, knih, nových technologí a hraček pro všechny s&nbsp;duší dítěte.
+</p>
+  <br style="clear:left;"/>
+</section>
+<section>
+  <h1>Poslední příspěvky</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/11/docker/">docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subversion</h1>
+  <p style="margin-top:6px; text-align:center"><a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11" onClick="_gaq.push(['_trackEvent', 'link', 'itunes/subversion', 'svn-promo-sidebar-vpravo']);"><img src="http://a2.mzstatic.com/us/r30/Publication/v4/5c/1a/66/5c1a667d-2f78-b9b2-31ec-7c06ab9b74e8/B_SUBVERSION.225x225-75.jpg" style="float:left; margin-right:10px; width:172px; height:225px;" /></a>
+</p>
+  <br style="clear:left;"/>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+LadislavPrskavec?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <h1>GitHub</h1>
+
+<iframe src="http://githubbadge.appspot.com/badge/abtris" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+</section>
+<section>
+  <h1>Twitter</h1>
+  <a class="twitter-timeline" width="250" height="500" href="https://twitter.com/abtris" data-widget-id="345276838232326144">Tweets by @abtris</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ladislav Prskavec -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79221-21']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter21617953 = new Ya.Metrika({id:21617953,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21617953" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'prskavecblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/all.js?v=1412111651"></script>
+
+
+
+</body>
+</html>

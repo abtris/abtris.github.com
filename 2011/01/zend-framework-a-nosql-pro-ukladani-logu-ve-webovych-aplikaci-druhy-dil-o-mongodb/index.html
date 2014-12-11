@@ -1,0 +1,412 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Zend Framework a NoSQL pro ukládání logů ve webových aplikací, díl druhý o MongoDb - Prskavčí blog</title>
+  <meta name="author" content="Ladislav Prskavec">
+
+  
+  <meta name="description" content="Jak už jsem psal v minulém díle o CouchDb není žádný problém v použití dokumentových databází na logy. Výhodou je že se nemusíte starat o schema, což &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.prskavec.net/2011/01/zend-framework-a-nosql-pro-ukladani-logu-ve-webovych-aplikaci-druhy-dil-o-mongodb/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+<meta name="google-site-verification" content="mepQHhq6JPqzvIjErdB-A6hp3UKAYIlYHN7xPUL8JUM" />
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/feed/index.html" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.prskavec.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archív</a></li>
+  <li><a href="/prednasky">Přednášky</a></li>  
+  <li><a href="/skoleni">Školení</a></li>
+  <li><a href="/kontakt">Kontakt</a></li>  
+</ul>
+
+</nav> 
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Zend Framework a NoSQL pro ukládání logů ve webových aplikací, díl druhý o MongoDb</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-28T00:00:00+01:00" pubdate data-updated="true">28. 01. 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Jak už jsem psal v <a href="http://blog.prskavec.net/2010/08/zend-framework-a-nosql-pro-ukladani-logu-ve-webovych-aplikaci-dil-1-couchdb/">minulém díle o CouchDb</a> není žádný problém v použití dokumentových databází na logy. Výhodou je že se nemusíte starat o schema, což se u aplikace tohoto druhu opravdu hodí.</p>
+
+<p>Pro napojení Zend Frameworku na logování do MongoDb musíte mít nainstalovanou MongoDb extenzi do PHP. Bez ní se bohužel neobejdete. Log writer si vytvoříte snadno pomocí extenze Zend_Log_Writer_Abstract a provedete drobné úpravy pro práci s MongoDb jak obsahuje ukázka.</p>
+
+<pre class="code php">
+/** Zend_Log_Writer_Abstract */
+require_once 'Zend/Log/Writer/Abstract.php'; 
+/**
+ * ZendLogWriterCouchDb
+ * @throws Zend_Log_Exception
+ */
+class App_Log_Writer_MongoDb extends Zend_Log_Writer_Abstract
+{
+    /**
+     * Db
+     * @var Mongo
+     */
+    private $_db;
+    /**
+     * Db name
+     * @var string
+     */
+    private $_dbname;
+    /**
+     * Collection
+     * @var string
+     */
+    private $_collection;
+    /**
+     *
+     * @param array $params
+     * @return void
+     */
+    public function __construct($options)
+    {
+        if (!extension_loaded('mongo')) {
+            throw new Exception('The MongoDB extension must be loaded for using this logger !');
+        }
+
+        $options = $options->toArray();
+        if (is_null($options)) {
+            $options['host'] = "localhost";
+            $options['port'] = "27017";
+            $options['db'] = $dbname;
+        }
+        if (isset($options['user']) && isset($options['pass'])) {
+            $conn = "{$options['user']}:{$options['pass']}@";
+        } else {
+            $conn = "";
+        }
+        $this->_db = new Mongo("mongodb://$conn{$options['host']}:{$options['port']}/{$options['db']}");
+        $this->_dbname = $options['db'];
+        $this->_collection = $options['collection'];
+    }
+    /**
+     * @static
+     * @param  $config
+     * @return
+     */
+    static public function factory($config)                                                                                                                 
+    {
+        $config = self::_parseConfig($config);
+        return $config;
+    }
+    /**
+     * @param array $event
+     * @return void
+     */
+    protected function _write($event)
+    {
+        $m = $this->_db;
+        $m->connect();
+        $c = $m->selectCollection($this->_dbname, $this->_collection);
+        $c->insert($event);
+    }
+
+    
+}
+</pre>
+
+
+<p>a tímto jste vlastně hotovy. Celý kód najdete na <a href='https://github.com/abtris/phplogger-mongodb'>githubu</a>. V ukázce je ještě samozřejmě upravený controller pro zobrazování a obsahuje možnost vytvářet testovací data.</p>
+
+<p>MongoDb můžete nainstalovat lokálně nebo použít hosting <a href='http://mongohq.com'>mongohq.com</a>, kde základní databáze, která k testování stačí je zdarma. Potom se mi docela hodila utilita na Macu <a href="http://mongohub.todayclose.com/">Mongohub</a>, která poskytuje trochu konfortnější konzoli než webová konzole obsahující lokální instalaci. Na hostingu MongoHQ mají pěknou webovou administrační konzoli.</p>
+
+<p>V PHP se kromě vlastní extenze dá ještě dobře použít pro Zend Framework knihovna <a href="https://github.com/coen-hyde/Shanty-Mongo">Shanty Mongo</a>, která zjednodušuje práci s Mongo Db na maximum.</p>
+
+<p>Pokud budete chtít dělat složitější dotazy do MongoDb hodí se
+<a href="http://www.mongodb.org/display/DOCS/SQL+to+Mongo+Mapping+Chart">SQL to Mongo Mapping Chart</a>.</p>
+
+<p>Případné další tipy se nebojte napsat do komentářů.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ladislav Prskavec</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-28T00:00:00+01:00" pubdate data-updated="true">28. 01. 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/12/krest-knihy-1001-tipu-a-triku-pro-php/" title="Previous Post: Křest knihy 1001 tipů a triků pro PHP">&laquo; Křest knihy 1001 tipů a triků pro PHP</a>
+      
+      
+        <a class="basic-alignment right" href="/2011/02/vytvareni-vyvojoveho-virtualniho-prostredi-s-pomoci-virtualboxu-a-vagrantu/" title="Next Post: Vytváření vývojového Virtuálního prostředí pomocí VirtualBoxu a Vagrantu">Vytváření vývojového Virtuálního prostředí pomocí VirtualBoxu a Vagrantu &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://blog.prskavec.net" alt="Home"><img class="icons" src="/images/Home.png" ></a>
+      <a href="http://blog.prskavec.net/archives/" alt="Archives"><img  class="icons" src="/images/Calendar.png"></a>
+      <a href="mailto:ladislav@prskavec.net" alt="E-Mail"><img  class="icons" src="/images/Envelope.png"></a>
+      <a href="http://blog.prskavec.net/atom.xml" alt="subscribe feed"><img class="icons" src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Ladislav Prskavec</h1>
+  <p style="margin-top:6px;"><img src="/images/avatar.jpg" style="float:left; margin-right:10px;" width="100" height="115" /><a href="http://github.com/abtris/">Programátor</a>, otec, <a href="http://www.dzogchen.cz">buddhista</a>, milovník dobrého jídla, knih, nových technologí a hraček pro všechny s&nbsp;duší dítěte.
+</p>
+  <br style="clear:left;"/>
+</section>
+<section>
+  <h1>Poslední příspěvky</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/11/docker/">docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subversion</h1>
+  <p style="margin-top:6px; text-align:center"><a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11" onClick="_gaq.push(['_trackEvent', 'link', 'itunes/subversion', 'svn-promo-sidebar-vpravo']);"><img src="http://a2.mzstatic.com/us/r30/Publication/v4/5c/1a/66/5c1a667d-2f78-b9b2-31ec-7c06ab9b74e8/B_SUBVERSION.225x225-75.jpg" style="float:left; margin-right:10px; width:172px; height:225px;" /></a>
+</p>
+  <br style="clear:left;"/>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+LadislavPrskavec?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <h1>GitHub</h1>
+
+<iframe src="http://githubbadge.appspot.com/badge/abtris" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+</section>
+<section>
+  <h1>Twitter</h1>
+  <a class="twitter-timeline" width="250" height="500" href="https://twitter.com/abtris" data-widget-id="345276838232326144">Tweets by @abtris</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ladislav Prskavec -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79221-21']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter21617953 = new Ya.Metrika({id:21617953,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21617953" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'prskavecblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/all.js?v=1412111651"></script>
+
+
+
+</body>
+</html>

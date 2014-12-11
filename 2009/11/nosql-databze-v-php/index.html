@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>NoSQL Databáze v PHP - Prskavčí blog</title>
+  <meta name="author" content="Ladislav Prskavec">
+
+  
+  <meta name="description" content="V&#269;era jsem byl na p&#345;edn&aacute;&scaron;ce Honzy Kr&aacute;le na t&eacute;ma Necho&#271;te s kan&oacute;nem na data aneb key value datab& &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.prskavec.net/2009/11/nosql-databze-v-php/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+<meta name="google-site-verification" content="mepQHhq6JPqzvIjErdB-A6hp3UKAYIlYHN7xPUL8JUM" />
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/feed/index.html" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.prskavec.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archív</a></li>
+  <li><a href="/prednasky">Přednášky</a></li>  
+  <li><a href="/skoleni">Školení</a></li>
+  <li><a href="/kontakt">Kontakt</a></li>  
+</ul>
+
+</nav> 
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">NoSQL Databáze v PHP</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-05T00:00:00+01:00" pubdate data-updated="true">05. 11. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>V&#269;era jsem byl na p&#345;edn&aacute;&scaron;ce <a href="http://twitter.com/honzakral">Honzy Kr&aacute;le</a> na t&eacute;ma <em>Necho&#271;te s kan&oacute;nem na data aneb key value datab&aacute;ze</em>. P&#345;edn&aacute;&scaron;ka nebyla jen o key value datab&aacute;z&iacute;ch, ale obecn&#283; o <a href="http://nosql-databases.org/" target="_blank">NO SQL</a>.</p>
+
+<p>Honza shrnul probl&eacute;my <a href="http://en.wikipedia.org/wiki/RDBMS">RDBMS</a> datab&aacute;z&iacute; s ohledem na <a href="http://en.wikipedia.org/wiki/ACID">ACID</a> a co m&#367;&#382;ou p&#345;in&eacute;st jin&eacute; typy datab&aacute;z&iacute; ne&#382; sql. Nap&#345;&iacute;klad <em>key value</em> a <em>dokumentov&eacute;</em> pro nasazen&iacute; ve webov&yacute;ch slu&#382;b&aacute;ch, kde mnoh&eacute; tak&eacute; vznikly pou&#382;&iacute;v&aacute;j&iacute; je Google, Amazon, Facebook a jin&iacute;.</p>
+
+<p>P&#345;ehled <a href="http://en.wikipedia.org/wiki/NoSQL">NoSQL</a> najdete tak&eacute; ve wikipedii.</p>
+
+<p>Key value datab&aacute;ze nebo &uacute;lo&#382;i&scaron;t&#283;</p>
+
+<ul>
+    <li><a href="http://www.danga.com/memcached/">Memcached</a> - v <a href="http://cz2.php.net/memcache">php</a> velmi dob&#345;e pou&#382;iteln&aacute; pro cachov&aacute;n&iacute;</li>
+    <li><a href="http://code.google.com/p/redis/">Redis</a> - <a href="http://code.google.com/p/php-redis/">php-redis</a></li>
+    <li><a href="http://riak.basho.com/">Riak</a> - <a href="http://hg.basho.com/riak/src/tip/client_lib/jiak.php">jiak.php</a></li>
+    <li><a href="http://1978th.net/tokyocabinet/">Tokyo Cabinet</a> - <a href="http://mamasam.indefero.net/p/tyrant/">PHP Tyrant</a>, <a href="http://code.google.com/p/phptyrant/">phptyrant</a>, <a href="http://pecl.php.net/package/tokyo_tyrant">PECL</a> a <a href="http://www.php.net/manual/en/book.tokyo-tyrant.php">p&#345;&iacute;slu&scaron;n&aacute; &#269;&aacute;st v manu&aacute;lu</a></li>
+    <li><a href="http://incubator.apache.org/cassandra/">Cassandra</a> - uk&aacute;zka pro <a href="http://wiki.apache.org/cassandra/ClientExamples">php klienta</a></li>
+</ul>
+
+
+<p>Dokumentov&eacute; datab&aacute;ze</p>
+
+<ul>
+    <li><a href="couchdb.apache.org/">CouchDb</a> - <a href="http://arbitracker.org/phpillow.html">PHPillow</a>, <a href="http://github.com/dready92/PHP-on-Couch">PHP On Couch</a>, <a href="http://www.topdog.za.net/php_couchdb_extension">PHP CouchDB Extension</a>, <a href="http://github.com/weierophinney/phly/tree/master/Phly_Couch">Phly_Couch</a>, <a href="http://github.com/shevron/sopha/tree/master">sopha</a></li>
+    <li><a href="www.mongodb.org/">MongoDb</a> - k mongu je <a href="http://pecl.php.net/package/mongo">PECL extenze</a> a popis najdete v <a href="http://php.net/manual/en/class.mongodb.php">manu&aacute;lu php</a></li>
+</ul>
+
+
+<p>Toto t&eacute;ma je &scaron;irok&eacute; a hodn&#283; se o tom diskutovalo a Honza p&#345;edvedl implementaci Twitter serveru v Pythonu a ukl&aacute;d&aacute;n&iacute; dat do Redisu. Lekce &scaron;lo k&oacute;d &scaron;k&aacute;lovat a z jedn&eacute; datab&aacute;ze za&#269;&iacute;t ukl&aacute;dat do deseti r&#367;zn&yacute;ch.</p>
+
+<p>CouchDb datab&aacute;ze je nap&#345;&iacute;klad nasazena v nov&eacute;m <a href="http://www.linux-magazine.com/Online/News/Relaxed-Ubuntu-9.10-CouchDB-to-be-Integrated">Ubuntu 9.10 </a>a bude se jej&iacute; podpora pro Ubuntu One a synchronizaci dat ur&#269;it&#283; roz&scaron;i&#345;ovat. Pokud pou&#382;&iacute;v&aacute;te Ubuntu, bal&iacute;&#269;ek s aktu&aacute;ln&iacute; verz&iacute; najdete v repository. Za v&yacute;hodu jednoduch&eacute;ho nasazen&iacute; CouchDb je jeho REST api a p&#283;kn&yacute; webov&yacute; klient pro administraci. Nev&yacute;hodou bude v&yacute;kon ve srovn&aacute;n&iacute; s MongoDb, kde je nativn&iacute; klient a dobr&yacute; jazyk pro dotazy. V CouchDb mus&iacute;te pro psan&iacute; materializovan&yacute;ch pohled&#367; pou&#382;&iacute;vat javascript. MongoDb podporuje index a celkov&#283; je v mnoha v&#283;cech vysp&#283;lej&scaron;&iacute;. Ale chyb&iacute; nap&#345;&iacute;klad podpora v ubuntu, bal&iacute;&#269;ek nenajdete, mus&iacute;te si ji zkompilovat sami.</p>
+
+<p>Pro Zend Framework pokud v&iacute;m se p&#345;ipravuje implementace <a href="http://framework.zend.com/wiki/display/ZFPROP/Zend_Couch+-+Matthew+Weier+O%27Phinney">CouchDb</a>. Jak pou&#382;&iacute;t v Zend Frameworku <a href="http://raphaelstolt.blogspot.com/2009/09/logging-to-mongodb-and-accessing-log.html">MongoDb pro ukl&aacute;d&aacute;n&iacute; log&#367;</a> v kombinaci s Zend Tool ukazuje Raphael Stolt.</p>
+
+<p>Pokud v&iacute;te o v&#283;t&scaron;&iacute;m nasazen&iacute; t&#283;chto datab&aacute;z&iacute; nebojte se to uv&eacute;st v koment&aacute;&#345;&iacute;ch. Nap&#345;&iacute;klad port&aacute;ly <a href="http://www.jobs.cz" target="_blank">jobs.cz</a> a <a href="http://www.prace.cz">prace.cz</a> pou&#382;&iacute;vaj&iacute; memcache, ale takov&yacute;ch nasazen&iacute; budou stovky. M&aacute; n&#283;kdo v &#268;ech&aacute;ch nasazen&eacute; ve velk&eacute;m CouchDb nebo MongoDb?</p>
+
+<div id="_mcePaste" style="overflow: hidden; position: absolute; left: -10000px; top: 61px; width: 1px; height: 1px;">http://arbitracker.org/phpillow.html</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ladislav Prskavec</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-05T00:00:00+01:00" pubdate data-updated="true">05. 11. 2009</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2009/11/proc-jsem-presel-z-mercurial-na-git/" title="Previous Post: Proč jsem přešel z Mercurial na Git">&laquo; Proč jsem přešel z Mercurial na Git</a>
+      
+      
+        <a class="basic-alignment right" href="/2009/11/linux-mint-8-helena/" title="Next Post: Linux Mint 8 Helena">Linux Mint 8 Helena &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://blog.prskavec.net" alt="Home"><img class="icons" src="/images/Home.png" ></a>
+      <a href="http://blog.prskavec.net/archives/" alt="Archives"><img  class="icons" src="/images/Calendar.png"></a>
+      <a href="mailto:ladislav@prskavec.net" alt="E-Mail"><img  class="icons" src="/images/Envelope.png"></a>
+      <a href="http://blog.prskavec.net/atom.xml" alt="subscribe feed"><img class="icons" src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Ladislav Prskavec</h1>
+  <p style="margin-top:6px;"><img src="/images/avatar.jpg" style="float:left; margin-right:10px;" width="100" height="115" /><a href="http://github.com/abtris/">Programátor</a>, otec, <a href="http://www.dzogchen.cz">buddhista</a>, milovník dobrého jídla, knih, nových technologí a hraček pro všechny s&nbsp;duší dítěte.
+</p>
+  <br style="clear:left;"/>
+</section>
+<section>
+  <h1>Poslední příspěvky</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/11/docker/">docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subversion</h1>
+  <p style="margin-top:6px; text-align:center"><a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11" onClick="_gaq.push(['_trackEvent', 'link', 'itunes/subversion', 'svn-promo-sidebar-vpravo']);"><img src="http://a2.mzstatic.com/us/r30/Publication/v4/5c/1a/66/5c1a667d-2f78-b9b2-31ec-7c06ab9b74e8/B_SUBVERSION.225x225-75.jpg" style="float:left; margin-right:10px; width:172px; height:225px;" /></a>
+</p>
+  <br style="clear:left;"/>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+LadislavPrskavec?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <h1>GitHub</h1>
+
+<iframe src="http://githubbadge.appspot.com/badge/abtris" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+</section>
+<section>
+  <h1>Twitter</h1>
+  <a class="twitter-timeline" width="250" height="500" href="https://twitter.com/abtris" data-widget-id="345276838232326144">Tweets by @abtris</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ladislav Prskavec -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79221-21']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter21617953 = new Ya.Metrika({id:21617953,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21617953" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'prskavecblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/all.js?v=1412111651"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,1036 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Prskavčí blog</title>
+  <meta name="author" content="Ladislav Prskavec">
+
+  
+  <meta name="description" content="Pokud používáte pro vývoj v PHP nějaké IDE, je to většinou PDT based (Eclipse, Zend Studio) nebo Netbeans. Samozřejmě jsou tu i další a vznikají nové &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.prskavec.net/page//page/6/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+<meta name="google-site-verification" content="mepQHhq6JPqzvIjErdB-A6hp3UKAYIlYHN7xPUL8JUM" />
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/feed/index.html" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.prskavec.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archív</a></li>
+  <li><a href="/prednasky">Přednášky</a></li>  
+  <li><a href="/skoleni">Školení</a></li>
+  <li><a href="/kontakt">Kontakt</a></li>  
+</ul>
+
+</nav> 
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/12/netbeans-6-8-a-phpunit/">NetBeans 6.8 a PHPUnit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-28T00:00:00+01:00" pubdate data-updated="true">28. 12. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud používáte pro vývoj v PHP nějaké IDE, je to většinou PDT based (Eclipse, Zend Studio) nebo Netbeans. Samozřejmě jsou tu i další a vznikají nové, které stojí za zmínku. Mě oslovilo WebIDE od autorů IDEA firmy JetBrains, kde si myslím roste velká konkurence Zend Studiu.</p>
+
+<p>V práci používám primárně Zend Studio a pro sebe většinou Netbeans. V Netbeans nejvíce oceňují propojení s PHPUnit a pokud rád vyvíjíte metodikou TDD. V verzi 6.7 bylo propojení s PHPUnit již vytvořeno, ale mělo některé chyby, které mi vadili a díky také doufám mému reportování a spolupráci s vývojáři Netbeans odstraněny.</p>
+
+<p>Nejvíce mi vadilo, že se nečetl konfigurační soubor phpunit.xml a nesprávně byla nastavená cesta při spuštění unit testů. Vývojáři to nakonec udělali tak, že cesta se odvozuje právě od konfiguračního souboru, pokud existuje, případně od spouštěných testů. Přibyla také záložka v nastavení projektu, kde se dají detaily nastavit.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/12/Netbeans68-Project-Properties.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/12/Netbeans68-Project-Properties-300x210.png" alt="" width="300" height="210" class="aligncenter size-medium wp-image-802" /></a></p>
+
+<p>Poslední detail, který se dostal do Netbeans bylo ještě zobrazování nekompletních a přeskočených testů v GUI, které nefugovalo. GUI vychází z parsování xml výstupu PHPUnit a umí zobrazit víceméně vše co xml soubor poskytne.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/12/NetBeans68-Testresults.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/12/NetBeans68-Testresults.png" alt="" width="540" height="289" class="aligncenter size-full wp-image-803" /></a></p>
+
+<p>Myslím, že vývoj Netbeans pro PHP jde správným směrem, v další verzi přibyde jistě podpora pro Zend Framework, který používám já i když to nepovažuji za nijak nutné. Spíše bych ocenil doladědí editoru v detailech. Například pokud máte již funkci končící závorkami a provedete doplnění názvu pomocí autocomplete Netbeans nepozná zda závorky tam jsou či nejsou a nechová se podle toho. Jsou to detaily, ale mnohe tyto detaily v editaci mi pijou krev. Obdobně problémy s automatickým doplňováním závorek, apostrofů, často se chová divně.</p>
+
+<p>Pokud porovnáte WebIDE a Netbeans tak v práci s PHP je to srovnatelné, ale pro to ostatní HTML, editace, JS, XSLT, XML tak WebIDE vede protože vychází z geniálního IDE IDEA, které považuji za nejlepší pro JAVU a nejen ji. WebIDE má také podporu pro Git co ocením.</p>
+
+<p>Myslím, že ve IDE, které jsou zdarma Netbeans začíná podle mne už porážet PDT hlavně rychlejším vývojem a menšími nároky na hardware. Také jsem ocenil nativní podporu pro Mercurial, trochu mi chybí podpora pro Git.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/12/php-codebrowser/">PHP CodeBrowser a Hudson</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-11T00:00:00+01:00" pubdate data-updated="true">11. 12. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Před časem se <a href="http://blog.thinkphp.de/archives/464-PHP_CodeBrowser-Release-version-0.1.0.html">objevil</a> nový reportovací nástroj, který vezme logy z <a href="http://www.phpunit.de/">PHPUnit</a>, <a href="http://pear.php.net/package/PHP_CodeSniffer/">PHP_Codesniffer</a> a umí je pěkně zobrazit.</p>
+
+
+<p><strong>Instalace</strong> je z PEAR (<a href="http://pear.phpunit.de/get/">http://pear.phpunit.de/get/</a>)<br />
+<code><br />
+pear config-set preferred_state alpha<br />
+pear channel-discover pear.phpunit.de<br />
+pear install --alldeps phpunit/PHP_CodeBrowser<br />
+</code></p>
+
+
+<p>nebo z SVN</p>
+
+
+<p><code>svn co svn://phpunit.de/phpunit/phpcb/trunk PHP_CodeBrowser</code></p>
+
+
+<p><strong>Integrace</strong><br />
+Tento tool jde integrovat do CIE</p>
+
+
+<ul>
+<li>phpundercontrol (<a href="http://phpundercontrol.org/download.html">dostupné od verze 0.5</a>)</li>
+<li>atlassion bamboo (<a href="http://twitter.com/s_bergmann/status/6499094572">zatím asi není oficiálně dostupně ale, jde to</a>)</li>
+<li>hudson</li>
+</ul>
+
+
+<p>Postup integrace do Hudsonu si ukážeme</p>
+
+
+<ol>
+<li>Potřebujete do Hudsonu doinstalovat plugin <a href="http%3A%2F%2Fwiki.hudson-ci.org%2Fdisplay%2FHUDSON%2FHTML%2BPublisher%2BPlugin">HTML Publisher Plugin</a></li>
+<li>Nastavíte build script by používal phpcb<br />
+<code><br />
+<br />
+<br />
+&lt;arg line=&quot;--log reports/logs/<br />
+--source source/<br />
+--output reports/phpcb/" /&gt;<br />
+<br />
+</code></li>
+<li>Nastavíte HTML Publisher plugin, aby četl html, které vyrobí phpcb<a href="http://blog.prskavec.net/wp-content/uploads/2009/12/hudson_phpcb.png"><img class="aligncenter size-medium wp-image-781" src="http://blog.prskavec.net/wp-content/uploads/2009/12/hudson_phpcb-300x37.png" alt="hudson_phpcb" width="300" height="37" /></a>
+<ul>
+<li><em>HTML Directory to archive</em><br />
+Cesta k reportům podle toho jak jste si to nastavili v build skriptu, u mne <code><strong>reports/phpcb/</strong></code></li>
+<li><em>Index page[s]</em><br />
+Defaultně je <strong>index.html</strong>, ponechejte.</li>
+<li><em>Report title</em><br />
+Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
+</li>
+</ol>
+
+
+<p>Výsledek bude vypadat nějak takto:</p>
+
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/12/hudson-phpcb-3.png"><img class="aligncenter size-medium wp-image-783" src="http://blog.prskavec.net/wp-content/uploads/2009/12/hudson-phpcb-3-300x117.png" alt="hudson-phpcb-3" width="300" height="117" /></a></p>
+
+
+<p>PHP_CodeBrowser sám o sobě nepřidává žádnou funkcionality, ale umožňuje získané výsledky pěkně a přehledně zobrazit. To se hodí a pokud jste příznivci použítí jednoduchého Hudsonu jako já, doufám že vám to bude k užitku.</p>
+
+
+<p>PHP_CodeBrowser můžete samozřejmě použít i bez jakékoliv integrace, protože je to běžné HTML. Pokud používáte verzi z SVN jako já pozor na to, že verze pokud jí pouštíte symlinkem nefunguje úplně správně musíte být v adresáři kde máte PHP_CodeBrowser a je lepší zadat plné cesty k logům phpunit i zdrojovým kódům.</p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/11/linux-mint-8-helena/">Linux Mint 8 Helena</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-30T00:00:00+01:00" pubdate data-updated="true">30. 11. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.linuxmint.com/blog/?p=1155" target="_blank">Linux Mint &ldquo;Helena&rdquo;</a> je konečně venku. Tato distribuce je založená na Ubuntu 9.10, ale má několik vlastností proč jí na desktopu rád preferuji oproti klasickému Ubuntu.</p>
+
+<ul>
+    <li>neobsahuje standardně v Ubuntu instalovaný Evolution, ale Thunderbird</li>
+    <li>má stále Pidgin jako IM</li>
+    <li>vypadá dobře a má dostupné kodeky (mediaubuntu.org)</li>
+    <li>vlastní vylepšení (mintInstaller, mintUploader, mintUpdater)</li>
+</ul>
+
+
+<pre><code>&lt;a href="http://blog.prskavec.net/wp-content/uploads/2009/11/mint8.png"&gt;&lt;img class="aligncenter size-medium wp-image-772" src="http://blog.prskavec.net/wp-content/uploads/2009/11/mint8-300x206.png" alt="mint8" width="300" height="206" /&gt;&lt;/a&gt;&lt;/li&gt;
+</code></pre>
+
+<p>Je to prostě dotažené a např. ve Ubuntu 9.04 mi nefungovalo v MC klávesa CTRL+\ pro hotlist a v Linux Mint 7 bez problémů. Jsou to detaily, ale je příjemné, že to funguje jak má. Pokud jste o <a href="http://www.darkcode.cc">Linux</a> Mint neslyšeli, tak doporučuji za vyzkoušení.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/11/nosql-databze-v-php/">NoSQL Databáze v PHP</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-05T00:00:00+01:00" pubdate data-updated="true">05. 11. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>V&#269;era jsem byl na p&#345;edn&aacute;&scaron;ce <a href="http://twitter.com/honzakral">Honzy Kr&aacute;le</a> na t&eacute;ma <em>Necho&#271;te s kan&oacute;nem na data aneb key value datab&aacute;ze</em>. P&#345;edn&aacute;&scaron;ka nebyla jen o key value datab&aacute;z&iacute;ch, ale obecn&#283; o <a href="http://nosql-databases.org/" target="_blank">NO SQL</a>.</p>
+
+<p>Honza shrnul probl&eacute;my <a href="http://en.wikipedia.org/wiki/RDBMS">RDBMS</a> datab&aacute;z&iacute; s ohledem na <a href="http://en.wikipedia.org/wiki/ACID">ACID</a> a co m&#367;&#382;ou p&#345;in&eacute;st jin&eacute; typy datab&aacute;z&iacute; ne&#382; sql. Nap&#345;&iacute;klad <em>key value</em> a <em>dokumentov&eacute;</em> pro nasazen&iacute; ve webov&yacute;ch slu&#382;b&aacute;ch, kde mnoh&eacute; tak&eacute; vznikly pou&#382;&iacute;v&aacute;j&iacute; je Google, Amazon, Facebook a jin&iacute;.</p>
+
+<p>P&#345;ehled <a href="http://en.wikipedia.org/wiki/NoSQL">NoSQL</a> najdete tak&eacute; ve wikipedii.</p>
+
+<p>Key value datab&aacute;ze nebo &uacute;lo&#382;i&scaron;t&#283;</p>
+
+<ul>
+    <li><a href="http://www.danga.com/memcached/">Memcached</a> - v <a href="http://cz2.php.net/memcache">php</a> velmi dob&#345;e pou&#382;iteln&aacute; pro cachov&aacute;n&iacute;</li>
+    <li><a href="http://code.google.com/p/redis/">Redis</a> - <a href="http://code.google.com/p/php-redis/">php-redis</a></li>
+    <li><a href="http://riak.basho.com/">Riak</a> - <a href="http://hg.basho.com/riak/src/tip/client_lib/jiak.php">jiak.php</a></li>
+    <li><a href="http://1978th.net/tokyocabinet/">Tokyo Cabinet</a> - <a href="http://mamasam.indefero.net/p/tyrant/">PHP Tyrant</a>, <a href="http://code.google.com/p/phptyrant/">phptyrant</a>, <a href="http://pecl.php.net/package/tokyo_tyrant">PECL</a> a <a href="http://www.php.net/manual/en/book.tokyo-tyrant.php">p&#345;&iacute;slu&scaron;n&aacute; &#269;&aacute;st v manu&aacute;lu</a></li>
+    <li><a href="http://incubator.apache.org/cassandra/">Cassandra</a> - uk&aacute;zka pro <a href="http://wiki.apache.org/cassandra/ClientExamples">php klienta</a></li>
+</ul>
+
+
+<p>Dokumentov&eacute; datab&aacute;ze</p>
+
+<ul>
+    <li><a href="couchdb.apache.org/">CouchDb</a> - <a href="http://arbitracker.org/phpillow.html">PHPillow</a>, <a href="http://github.com/dready92/PHP-on-Couch">PHP On Couch</a>, <a href="http://www.topdog.za.net/php_couchdb_extension">PHP CouchDB Extension</a>, <a href="http://github.com/weierophinney/phly/tree/master/Phly_Couch">Phly_Couch</a>, <a href="http://github.com/shevron/sopha/tree/master">sopha</a></li>
+    <li><a href="www.mongodb.org/">MongoDb</a> - k mongu je <a href="http://pecl.php.net/package/mongo">PECL extenze</a> a popis najdete v <a href="http://php.net/manual/en/class.mongodb.php">manu&aacute;lu php</a></li>
+</ul>
+
+
+<p>Toto t&eacute;ma je &scaron;irok&eacute; a hodn&#283; se o tom diskutovalo a Honza p&#345;edvedl implementaci Twitter serveru v Pythonu a ukl&aacute;d&aacute;n&iacute; dat do Redisu. Lekce &scaron;lo k&oacute;d &scaron;k&aacute;lovat a z jedn&eacute; datab&aacute;ze za&#269;&iacute;t ukl&aacute;dat do deseti r&#367;zn&yacute;ch.</p>
+
+<p>CouchDb datab&aacute;ze je nap&#345;&iacute;klad nasazena v nov&eacute;m <a href="http://www.linux-magazine.com/Online/News/Relaxed-Ubuntu-9.10-CouchDB-to-be-Integrated">Ubuntu 9.10 </a>a bude se jej&iacute; podpora pro Ubuntu One a synchronizaci dat ur&#269;it&#283; roz&scaron;i&#345;ovat. Pokud pou&#382;&iacute;v&aacute;te Ubuntu, bal&iacute;&#269;ek s aktu&aacute;ln&iacute; verz&iacute; najdete v repository. Za v&yacute;hodu jednoduch&eacute;ho nasazen&iacute; CouchDb je jeho REST api a p&#283;kn&yacute; webov&yacute; klient pro administraci. Nev&yacute;hodou bude v&yacute;kon ve srovn&aacute;n&iacute; s MongoDb, kde je nativn&iacute; klient a dobr&yacute; jazyk pro dotazy. V CouchDb mus&iacute;te pro psan&iacute; materializovan&yacute;ch pohled&#367; pou&#382;&iacute;vat javascript. MongoDb podporuje index a celkov&#283; je v mnoha v&#283;cech vysp&#283;lej&scaron;&iacute;. Ale chyb&iacute; nap&#345;&iacute;klad podpora v ubuntu, bal&iacute;&#269;ek nenajdete, mus&iacute;te si ji zkompilovat sami.</p>
+
+<p>Pro Zend Framework pokud v&iacute;m se p&#345;ipravuje implementace <a href="http://framework.zend.com/wiki/display/ZFPROP/Zend_Couch+-+Matthew+Weier+O%27Phinney">CouchDb</a>. Jak pou&#382;&iacute;t v Zend Frameworku <a href="http://raphaelstolt.blogspot.com/2009/09/logging-to-mongodb-and-accessing-log.html">MongoDb pro ukl&aacute;d&aacute;n&iacute; log&#367;</a> v kombinaci s Zend Tool ukazuje Raphael Stolt.</p>
+
+<p>Pokud v&iacute;te o v&#283;t&scaron;&iacute;m nasazen&iacute; t&#283;chto datab&aacute;z&iacute; nebojte se to uv&eacute;st v koment&aacute;&#345;&iacute;ch. Nap&#345;&iacute;klad port&aacute;ly <a href="http://www.jobs.cz" target="_blank">jobs.cz</a> a <a href="http://www.prace.cz">prace.cz</a> pou&#382;&iacute;vaj&iacute; memcache, ale takov&yacute;ch nasazen&iacute; budou stovky. M&aacute; n&#283;kdo v &#268;ech&aacute;ch nasazen&eacute; ve velk&eacute;m CouchDb nebo MongoDb?</p>
+
+<div id="_mcePaste" style="overflow: hidden; position: absolute; left: -10000px; top: 61px; width: 1px; height: 1px;">http://arbitracker.org/phpillow.html</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/11/proc-jsem-presel-z-mercurial-na-git/">Proč jsem přešel z Mercurial na Git</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-03T00:00:00+01:00" pubdate data-updated="true">03. 11. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Verzovací systémy už používám asi 5 let, vystřídal jsem CVS, Subversion, Mercurial, Bazaar a Git. V nedávné době v souvislosti také s tím, že Nette přešlo na Git a vůbec se spousta open source projektů přesunula na Github.com jsem také přešel na distribuovaný systém.</p>
+
+<p>V práci používám Subversion a také přispívám do několika projektů, které pracují na Subversion. Dělal jsem migrace z CVS na SVN ve firmě, kde pracuji apod. Subversion má jednu velkou výhodu, kterou nemají distribuované systémy a to velmi dobré a detailní ACL a různé metody autentizace (LDAP, Active Directory). To si myslím udrží ve spoustě firem Subversion ještě po dlouhou dobu.</p>
+
+<p>Ale protože pracuju na linuxu, pro verzování lokálních projektů a pracovních skriptů apod. používám Git, dříve Mercurial.</p>
+
+<p>Proč jsem nejdříve zvolil Mercurial?</p>
+
+<ol>
+    <li>Bitbucket, jednoduchý, přehledný, rychlý a privatní repository v free variantě (proti Github.com)</li>
+    <li>Jednoduší přechod z SVN (viz <a href="http://svn.prskavec.net/ch07.html#id3029856">Přechod od Subversion k Mercurial</a>)</li>
+</ol>
+
+
+<p>Proč jsem přešel na Git ?</p>
+
+<ol>
+    <li><a href="http://www.karmi.cz/">Karel Minařík</a> mě přesvědčil o výhodách Gitu a odpovídal mě na dotazy, které jsem měl a předvedl mi killer feature (git-filter-branch).</li>
+    <li>Mercurial mi při práci na projektu vyhodil tuto zprávu &#8220;files over 10MB may cause memory and performance problems&#8221;.</li>
+    <li>Zvykl jsem si na syntax Gitu, udělal jsem si hromadu aliasů a to chce prostě trochu čas.</li>
+</ol>
+
+
+<p>Proč mi vadí to upozornění na přidání souboru většího než 10MB? Protože, pokud to tam mají určitě vědí proč. Performance je Gitu velká výhoda a já od verzovacího systému chci hlavně jednu věc a to verzovat cokoliv.</p>
+
+<p>V současnosti používám Subversion, Mercurial i Git současně a nijak mi to nevadí. Git, ale preferuju pro nové projekty. Stávající ponechám tam kde jsou případně pořeším co udělám s těmi nepodporovanými keywords v Gitu, ale stejně mi nepřijdou v poslední době důležité, protože stejně jsou v každém souboru jiné a nenese to tu informaci, kterou většina chce a to je verze revize z SVN. Tohle spíše je lepší přesunout do build scriptu nebo na deployment.</p>
+
+<p>Doufám, že jsem Borkovi Bernardovi odpověděl na co chtěl, případné dotazy do komenářů.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/10/co-me-zaujalo-na-zendconu-2009/">Co mě zaujalo na ZendConu 2009</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-10-23T00:00:00+02:00" pubdate data-updated="true">23. 10. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Ve dnech 19-22 října se v San Jose v Kalifornii konal 5. ročník konference ZendCon (<a href="http://www.zendcon.com" target="_blank">Zend PHP Conference for Developers</a>). Na této konferenci je skvělé to, že je opravdu pro vývojáře a i když jsem se tam letos nedostal tak si ze slidů z konference a probíraných témat něco odnesu. To se tolik nedá říci o lokálním <a href="http://www.webexpo.cz">Webexpu</a>, kde jsou přednášky cíleny spíše na začátečníky a na ty co s danou problematikou většinou nepřišli do styku.</p>
+
+
+
+
+<p>Nejvíce mě zaujaly přednášky od těchto přednášejících:</p>
+
+
+<p><strong>Ilia Alshanetsky</strong></p>
+
+
+<ul>
+    <li><a href="http://ilia.ws/files/ZendCon2009_Optimization_Mistakes.pdf">Premature Optimization Mistakes</a></li>
+    <li><a href="http://ilia.ws/files/ZendCon2009_PHP53_Intro.pdf">PHP 5.3 = Awesome!</a></li>
+    <li><a href="http://ilia.ws/files/ZendCon2009_APC_Memcache.pdf">APC &amp; Memcache the High Performance Duo</a></li>
+</ul>
+
+
+<p><strong>Fabien Potencier</strong></p>
+
+
+<ul>
+    <li><a href="http://www.slideshare.net/fabpot/symfony-and-zend-framework-together-2009">Using Zend Framework and Symfony Together</a></li>
+<li><a href="http://www.slideshare.net/fabpot/twig-the-flexible-fast-and-securetemplate-language-for-php">Twig, the flexible, fast, and secure template language for PHP</a></li>
+</ul>
+
+
+<p><strong>Stefan Priebsch</strong></p>
+
+
+<ul>
+    <li><a href="http://www.slideshare.net/spriebsch/seven-steps-to-better-oop-code-updated-for-zendcon09">Seven Steps to Better OOP Code</a></li>
+</ul>
+
+
+<p><strong>Derick Rethans</strong></p>
+
+
+<ul>
+    <li><a href="http://derickrethans.nl/files/time-zendcon9.pdf">Time = Money</a></li>
+    <li><a href="http://derickrethans.nl/files/xdebug-zendcon9.pdf">Xdebug — PHP developer&#8217;s swiss-army knife</a></li>
+</ul>
+
+
+<p><strong>Ralph Schindler</strong></p>
+
+
+<ul>
+    <li><a href="http://ralphschindler.com/dropbox/Zend_Tool-ZendCon.ppt?phpMyAdmin=a6829262f2ed2f7ad31d20c3a7dd8382">Zend_Tool: Practical use and Extending</a></li>
+    <li>Extending Zend Framework &amp; Extending with Zend Framework</li>
+</ul>
+
+
+<p><strong>Matthew Weier O&#8217;Phinney</strong></p>
+
+
+<ul>
+    <li><a href="http://www.slideshare.net/weierophinney/architecting-ajax-applications-with-zend-framework">Architecting Ajax Applications with Zend Framework</a></li>
+    <li><a href="http://www.slideshare.net/weierophinney/architecting-your-models">Architecting Your Models</a></li>
+    <li><a href="http://www.slideshare.net/weierophinney/zend-framework-tutorial-zendcon-2009">Introduction to Zend Framework</a> (pro ty co neznají)</li>
+</ul>
+
+
+
+
+<p>Tyto přednášky jistě stojí za to se na ně podívat a poučit se co se na nejznámější konferenci probíralo, <a href="http://www.slideshare.net/tag/zendcon09">samozřejmě to jistě nebylo všechno</a>. Žádný účastník také jistě nestihl všechno co chtěl, protože program byl hodně plný. Mluvilo se také o uvedení <a href="http://www.zend.com/en/products/server/zend-server-5-new">Zend Server 5.0 beta</a> a <a href="http://www.zend.com/en/products/studio/studio-71-whats-new">Zend Studia 7.1 beta</a>, které si můžete již vyzkoušet.</p>
+
+
+
+
+<p>Pokud někoho zaujalo něco dalšího tak to napište do komentářů.</p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/10/ma-dnes-cenu-psat-knihu-o-verzovacich-systemech/">Má dnes cenu psát knihu o verzovacích systémech?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-10-05T00:00:00+02:00" pubdate data-updated="true">05. 10. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Řeším dilema o tom, zda napsat knihu o verzovacích systémech, ale potřebují uživatelé českou knihu o verzování. Na internetu najdete skvělé online knihy o většině používaných systémů.</p>
+
+<p><strong>Subversion</strong></p>
+
+<ul>
+    <li><a href="http://svnbook.red-bean.com/">Version Control with Subversion</a></li>
+</ul>
+
+
+<p><strong>Mercurial</strong></p>
+
+<ul>
+    <li><a href="http://hgbook.red-bean.com/">Mercurial: The Definitive Guide</a></li>
+</ul>
+
+
+<p><strong>Git</strong></p>
+
+<ul>
+    <li><a href="http://progit.org/">Pro Git</a></li>
+    <li><a href="http://book.git-scm.com/">The Git Community Book</a></li>
+    <li><a href="http://www-cs-students.stanford.edu/~blynn/gitmagic/">Git Magic</a></li>
+</ul>
+
+
+<p>S těmi vcelku vystačíte pokud se systémem začínáte, v případě Subversion je to kniha do detailů přesná a obsahuje skoro všechny. Ostatní knihy jsou také velmi obsáhlé, ale samozřejmě v nich není všechno.</p>
+
+<p>Pro ty co neumějí anglicky je to sice horší, ale většina verzovacích programů také není přeložena a asi nebude.</p>
+
+<p>V češtině je dostupný částečný překlad <a href="http://programujte.com/?akce=clanek&amp;cl=2009061600-gitmagic-1-%2596-uvod">GitMagic od Jakuba Kulhana</a>, <a href="http://whygitisbetterthanx.karmi.cz/">Proč je lepší Git než X? od Karla Minaříka</a>. Pro Git se také <a href="http://github.com/progit/progit/tree/master/cs/">začal překládat</a> do češtiny, uvidíme zda se k překladu přidají další, aby se to pohnulo kupředu. Ve svojí <a href="http://svn.prskavec.net/">knize</a> o Subversion ke konci jsem stejně dospěl, že je dobré migrovat k nějakému distribuovanému systému, ale přece jenom bude trvat než se ve firmách stane Git nějakým standardem a nikdo neví zda to nebude třeba jiný systém.</p>
+
+<p>Prosím věnujete trochu času a odpovězte na otázku <a href="http://twtpoll.com/qqgnva">Má smysl psát českou knihu o verzovacích systémech?</a></p>
+
+<p>Díky za váš čas</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/09/openmeeting-24-9-na-tema-testovani-webovych-aplikaci/">OpenMeeting 24.9. na téma Testování webových aplikací</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-24T00:00:00+02:00" pubdate data-updated="true">24. 09. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dnes se konal <a href="http://www.openmeeting.biz">OpenMeeting</a> na téma <em>Testování webových aplikací</em>.</p>
+
+<p>První přednášku měl Michal Špaček ze Skypu o systému <a href="http://seleniumhq.org/">Selenium</a>. Pokud jste viděli jeho přednášku na webExpu 2008 tak to bylo totéž v kratší variantě.</p>
+
+<p>Druhá přednáška byla na téma opět Selenium a měl ji Filip Braun z Benety, ukazoval testování jak je dělají oni.</p>
+
+<p>Do třetice také Selenium a to ukazoval <a href="http://php.vrana.cz">Jakub Vrána</a> na Adminerovi. <a href="http://www.adminer.org">Adminer</a> je z velké části pokryt testy z hlediska funkčnosti. Jakub si měří pokrytí napříč aplikací (coverage) na co má vlastní skript, který mu to přehledně vyhodnocuje. Zazněla tady dobrá rada, pokud používáte Selenium RC v Internet Exploreru, vyvarujte se xpath výrazům a používejte CSS selektory, ušetříte tím hromadu času.</p>
+
+<p>Čtvrtá přednáška od <a href="http://www.karmi.cz">Karla Minaříka</a> na téma <a href="http://cukes.info">Cucumber</a> a testování v Ruby světe. Cucumber má velmi pěkný styl <a href="http://www.test147.com/">testů</a>, které se dají psát například i česky a jazykem blízkým normálnímu člověku. Není omezeny jen na Ruby a měl by jít využít i pro další platformy. Určitě to brzo <a href="http://wiki.github.com/aslakhellesoy/cucumber/php">vyzkouším na php</a>. Cucumber používá HTTP adaptér <a href="http://wiki.github.com/brynary/webrat">webrat</a> pomocí, kterého se připojíte na Selenium nebo další nástroje (např. pro <a href="http://www.test147.com/testovaci">testování</a> Flexu).</p>
+
+<p>Pátá přednáška byla od Štěpána Bechyňského z Microsoftu. Ukazoval nám jak můžete testovat v prostředí Visual Studia 2008. Pokud chcete nějak testovat dobře aplikace v Internet Exploreru, přijde mi to jako jediná spolehlivá cesta. V novém Visual Studiu 2010 by to mělo být značně ještě vylepšeno.</p>
+
+<p>Poslední přednáška od Vratislava Sejka z Unicornu se věnovala Bezpečnostnímu testování. Unicorn kromě funkčních a výkonových testů také dělá bezpečnostní testy na které se dá dobře využít nástroj <a href="http://www-01.ibm.com/software/awdtools/appscan/">IBM Rational AppScaner</a>. Komplexní komerční nástroj, pokud někdo znáte nějaký dobrý podobný open source nástroj, prosím zmiňte ho do komentářů.</p>
+
+<p>To je v souhrnu všechno co bylo obsahem formální části a potom samozřejmě probíhala už neformální diskuse jak to pravidelně bývá.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/09/ie-8-bug-s-cookie-a-domenou-jobs-cz/">IE 8 bug s cookie a doménou jobs.cz</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-14T00:00:00+02:00" pubdate data-updated="true">14. 09. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>V práci jsme se setkali se zajímavým problémem, který se vyskytuje ojediněle, ale zato postihuje jen určitou doménu. Máme problém s Microsoft Internet Explorerem 8 a doménou jobs.cz.</p>
+
+<p>IE8 odmítá nastavit cookies na doménu druhé úrovně. Nefunguje to pouze a jen pro jobs.cz, pro všechny jiné domény je to v pořádku. Je to záhada, kterou nebude jednoduché vyřešit.</p>
+
+<p>Fungují všechny starší verze MS IE i všechny ostatní prohlížeče i všechny jiné domény druhé úrovně, které jsme zkusili. Nefunguje zápis serverový ani klientský. Cookies na domény třetí úrovně (www.jobs.cz apod.) rovněž bez problémů.</p>
+
+<p>Zkušební skript může vypadat takto:</p>
+
+<pre>
+
+
+<title>cookie test</title>
+
+
+
+
+
+YAHOO.util.Cookie.set("jobsClientFull", "client", { path: "/"});
+YAHOO.util.Cookie.set("jobsClient2ndA", "client", { path: "/", domain: ".jobs.cz" });
+YAHOO.util.Cookie.set("jobsClient2ndB", "client", { path: "/", domain: "jobs.cz" });
+YAHOO.util.Cookie.set("jopsClientFull", "client", { path: "/"});
+YAHOO.util.Cookie.set("jopsClient2ndA", "client", { path: "/", domain: ".jops.cz" });
+YAHOO.util.Cookie.set("jopsClient2ndB", "client", { path: "/", domain: "jops.cz" });
+
+
+<h2>Cookies obtained</h2>
+
+
+
+
+</pre>
+
+
+<p>nebo v jednodušší podobě</p>
+
+<pre>&lt;?php
+setcookie(&quot;serverTestCookie&quot;, &quot;server&quot;, 0, &quot;/&quot;, &quot;.<a href="http://jobs.cz/">jobs.cz</a>");
+?&gt;
+
+
+<title>cookie test</title>
+&lt;script type=&quot;text/javascript&quot; src=&quot;<a href="http://yui.yahooapis.com/2.7.0/build/yahoo/yahoo-min.js">http://yui.yahooapis.com/2.7.0/build/yahoo/yahoo-min.js</a>"&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;<a href="http://yui.yahooapis.com/2.7.0/build/cookie/cookie-min.js">http://yui.yahooapis.com/2.7.0/build/cookie/cookie-min.js</a>"&gt;
+
+
+
+YAHOO.util.Cookie.set("clientTestCookie", "client", { path: "/", domain: ".<a href="http://jobs.cz/">jobs.cz</a>" });
+
+
+<h2>Cookies obtained</h2>
+
+
+
+
+</pre>
+
+
+<p>příslušní virtualní host si na lokálním počítači nastavím třeba takto</p>
+
+<pre>
+DocumentRoot /srv/cookie
+ServerName <a href="http://jobs.cz/">jobs.cz</a>
+ServerAlias <a href="http://www.jobs.cz/">www.jobs.cz</a> <a href="http://jobs.cz/">jobs.cz</a> <a href="http://jops.cz/">jops.cz</a> <a href="http://www.jops.cz/">www.jops.cz</a>
+</pre>
+
+
+<p>a k tomu nějakého hosta</p>
+
+<pre>127.0.0.1    wwww.jobs.cz jobs.cz www.jops.cz jops.cz</pre>
+
+
+<p>Po prvním načtení bude kolekce cookies samozřejmě prázdná, ale už po tom druhem jsou v IE8 nastaveny pouze cookies na doménu třetí úrovně, druhé nic.</p>
+
+<p><strong>Závěr</strong></p>
+
+<p>Problém zřejmě souvisí s implementaci prohlížečích viz (<a href="http://docs.google.com/gview?a=v&amp;q=cache%3AtwPPceC8eq4J%3Awww.ietf.org%2Fproceedings%2F66%2Fslides%2Fdnsop-1.pdf+opera+cookie+domain+problem&amp;hl=cs&amp;pli=1">1</a>, <a href="http://tools.ietf.org/html/draft-pettersen-dns-cookie-validate-00">2</a>). V <a href="http://en.wikipedia.org/wiki/List_of_Internet_top-level_domains">TLD</a> existuje .jobs a proto se dá usuzovat, že k ní IE8 chová nějak jinak. Ale proč to nepostihuje např. travel.cz, museum.cz info.cz je záhadou. Zatím to vypadá na chybu v IE8, která nám opravdu hodně znepříjemňuje život.</p>
+
+<p>Všichni si to můžete vyzkoušet na <a href="http://lmc.jobs.cz/cookie.php"><a href="http://lmc.jobs.cz/cookie.php">http://lmc.jobs.cz/cookie.php</a></a>.</p>
+
+<p>Udělejte refresh stránky a dostanete tento výsledek kromě MS IE8, proboha proč?</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/09/cookie_test_ok.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/09/cookie_test_ok.png" alt="cookie_test_ok" width="205" height="161" class="aligncenter size-full wp-image-709" /></a></p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/09/cookie_test_fail.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/09/cookie_test_fail-300x182.png" alt="cookie_test_fail" width="300" height="182" class="aligncenter size-medium wp-image-712" /></a></p>
+
+<p>Pokud by byl někdo schopný pomoci s nápravou této chyby budeme vděční za pomoc.</p>
+
+<p><strong>Aktualizace:</strong>
+Pokud si dáte v Internet Exploreru <a href="//urlmon.dll/ietldlist.xml">res://urlmon.dll/ietldlist.xml</a> dostanete se k blokovaným TLD doménám. Bohužel na něm je z ČR i jobs.cz.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/09/ceska-verze-pluginu-pro-wordpress/">Česká verze pluginů pro Wordpress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-12T00:00:00+02:00" pubdate data-updated="true">12. 09. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Co k tomu potřebujete?</strong></p>
+
+
+<ul>
+<li>plugin (<a href="http://wordpress.org/extend/plugins/wp-recentcomments/">WP-RecentComments</a>)</li>
+<li><a href="http://www.neoease.com/">prográmátora</a>, který s překladem počítá</li>
+<li><a href="http://www.poedit.net/">poEdit</a></li>
+<li>znalost nějakého jazyka</li>
+<li>ochota něco takového vůbec dělat</li>
+</ul>
+
+
+<p><strong>Jak se to dělá</strong></p>
+
+
+<p>Pokud nejste zběhlý s programováním, tak asi to může být pro vás problém a proto jsem také napsal tento článek, třeba vám to pomůže pokud budete chtít něco takového dělat.</p>
+
+
+<p>Když si stáhnete plugin WP-RecentComments na disk, rozbalíte ho někam do adresáře uvidíte tuto strukturu:</p>
+
+
+<pre>drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:14 avatars
+-rw-r--r-- 1 abtris  18K 2009-09-12 21:14 core.php(
+drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:14 css
+drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:14 js
+drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:28 languages
+-rw-r--r-- 1 abtris  12K 2009-09-12 21:14 README.txt
+-rw-r--r-- 1 abtris 8.6K 2009-09-12 21:14 screenshot-1.png
+-rw-r--r-- 1 abtris 8.0K 2009-09-12 21:14 screenshot-2.png
+-rw-r--r-- 1 abtris  16K 2009-09-12 21:14 screenshot-3.png
+-rw-r--r-- 1 abtris  18K 2009-09-12 21:14 wp-recentcomments.php</pre>
+
+
+<p>V adresáři languages najde to co potřebujete, je tam hromada souborů s příponou po a mo. To jsou soubory ve formátu pro <a href="http://en.wikipedia.org/wiki/GNU_gettext">gettext</a> a mo jsou zkompilované soubory (ty vás nezajímají) a v po souborech najdete zdrojový kód, který je potřeba otevřít pomocí editoru (doporučuji poEdit).</p>
+
+
+<p>Potom stačí jen přeložit potřebný text, z angličtiny do češtiny a po uložení  se vytvoří soubor (wp-recentcomments-cs_CZ.po) s příponou mo. Pojmenování s koncovkou cs_CZ je potřeba dodržet, aby fungovalo dobře rozpozání jazyka ve Wordpressu.</p>
+
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/09/Screenshot-Poedit-home-abtris-Desktop-wp-recentcomments-languages-wp-recentcomments-cs_CZ.po.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/09/Screenshot-Poedit-home-abtris-Desktop-wp-recentcomments-languages-wp-recentcomments-cs_CZ.po-300x253.png" alt="Screenshot-Poedit : -home-abtris-Desktop-wp-recentcomments-languages-wp-recentcomments-cs_CZ.po" width="300" height="253" class="aligncenter size-medium wp-image-670" /></a></p>
+
+<p>Potom si nahrajte upravený plugin na server a máte ho v provozu česky jak vidíte u mne na stránkách.</p>
+
+
+<p>Dobré je vaši verzi poslat také autorovi ke zveřejnění. Česká verze WP-RecentComments se tam časem až programátor uzná objeví také.</p>
+
+
+<p>Ukázka přeloženého widgetu dále, pokud máte nějaké připomínky k překladu neváhejte je také uvést v komentářích.</p>
+
+
+<p><strong>Moje nastavení widgetu pro WP-RecentComments</strong></p>
+
+
+<p>Nastavení najdete v administraci, Vzhled -&gt; Widgety. Přidáte widget do sidebaru a potom po kliknutí na pravou ikonku rozbalí se vám menu, kterou vidíte na obrázku.</p>
+
+
+<p></p>
+
+<p><img class="aligncenter size-full wp-image-666" src="http://blog.prskavec.net/wp-content/uploads/2009/09/Widgety-‹-Prskavci-blog-—-WordPress_1252784358148.png" alt="Widgety ‹ Prskavčí blog — WordPress_1252784358148" width="268" height="672" /></p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/page//page/7/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/page//page/5/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://blog.prskavec.net" alt="Home"><img class="icons" src="/images/Home.png" ></a>
+      <a href="http://blog.prskavec.net/archives/" alt="Archives"><img  class="icons" src="/images/Calendar.png"></a>
+      <a href="mailto:ladislav@prskavec.net" alt="E-Mail"><img  class="icons" src="/images/Envelope.png"></a>
+      <a href="http://blog.prskavec.net/atom.xml" alt="subscribe feed"><img class="icons" src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Ladislav Prskavec</h1>
+  <p style="margin-top:6px;"><img src="/images/avatar.jpg" style="float:left; margin-right:10px;" width="100" height="115" /><a href="http://github.com/abtris/">Programátor</a>, otec, <a href="http://www.dzogchen.cz">buddhista</a>, milovník dobrého jídla, knih, nových technologí a hraček pro všechny s&nbsp;duší dítěte.
+</p>
+  <br style="clear:left;"/>
+</section>
+<section>
+  <h1>Poslední příspěvky</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/11/docker/">docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subversion</h1>
+  <p style="margin-top:6px; text-align:center"><a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11" onClick="_gaq.push(['_trackEvent', 'link', 'itunes/subversion', 'svn-promo-sidebar-vpravo']);"><img src="http://a2.mzstatic.com/us/r30/Publication/v4/5c/1a/66/5c1a667d-2f78-b9b2-31ec-7c06ab9b74e8/B_SUBVERSION.225x225-75.jpg" style="float:left; margin-right:10px; width:172px; height:225px;" /></a>
+</p>
+  <br style="clear:left;"/>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+LadislavPrskavec?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <h1>GitHub</h1>
+
+<iframe src="http://githubbadge.appspot.com/badge/abtris" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+</section>
+<section>
+  <h1>Twitter</h1>
+  <a class="twitter-timeline" width="250" height="500" href="https://twitter.com/abtris" data-widget-id="345276838232326144">Tweets by @abtris</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ladislav Prskavec -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79221-21']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter21617953 = new Ya.Metrika({id:21617953,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21617953" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'prskavecblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/all.js?v=1412111651"></script>
+
+
+
+</body>
+</html>

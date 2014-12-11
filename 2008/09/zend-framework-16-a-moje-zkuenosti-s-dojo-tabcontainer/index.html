@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Zend Framework 1.6 a moje zkušenosti s Dojo TabContainer - Prskavčí blog</title>
+  <meta name="author" content="Ladislav Prskavec">
+
+  
+  <meta name="description" content="Zrovna dělám na jednom malém projektu, který jsem hned začal psát zrovna jak vyšel ZF 1.6, celkem standardní věci až na to, že jsem potřeboval &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.prskavec.net/2008/09/zend-framework-16-a-moje-zkuenosti-s-dojo-tabcontainer/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+<meta name="google-site-verification" content="mepQHhq6JPqzvIjErdB-A6hp3UKAYIlYHN7xPUL8JUM" />
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/feed/index.html" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.prskavec.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archív</a></li>
+  <li><a href="/prednasky">Přednášky</a></li>  
+  <li><a href="/skoleni">Školení</a></li>
+  <li><a href="/kontakt">Kontakt</a></li>  
+</ul>
+
+</nav> 
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Zend Framework 1.6 a moje zkušenosti s Dojo TabContainer</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-11T00:00:00+02:00" pubdate data-updated="true">11. 09. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Zrovna dělám na jednom malém projektu, který jsem hned začal psát zrovna jak vyšel ZF 1.6, celkem standardní věci až na to, že jsem potřeboval rozdělit formulář na více stránek a udělat záložky.</p>
+
+<p>Postupoval jsem <a href="http://framework.zend.com/manual/en/zend.dojo.form.html#zend.dojo.form.decorators.dijitContainer">podle manulálu</a>, vyvořil jsem si formulář se subformy a celkem to dobře funguje. Potom když jsem potřeboval rozbrazit záložky narazil jsem na několik problémů se kterými jsem si různě poradil.</p>
+
+<p>Takto vypadají <a href="http://dojotoolkit.org/book/dojo-book-0-9/part-2-dijit/layout/tab-container">záložky pomocí Dojo frameworku</a>.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2008/09/image.png"></a></p>
+
+<p>Nejdříve byl problém přidat záložku kde byl jen text. Tak jsem vytvořil vlastní element a ten potom vracel jen co jsem do něj napsal za text. Dalším problémem byl konec fomuláře jak je vidět na obrázku tak špatně uzavíral a číst ho mizela.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2008/09/image1.png"></a></p>
+
+<p>To jsem opravil tak, že jsem celou strukturu záložek přesunul do View.</p>
+
+<pre name='code' class='php'>
+&lt;?php echo $this-&gt;form; ?&gt;
+</pre>
+
+
+<p>jsem musel udělat</p>
+
+<pre name='code' class='php'>
+&lt;?php
+$this-&gt;dojo()-&gt;enable();
+
+echo "&lt;form method='".$this-&gt;form-&gt;getMethod()."' enctype='application/x-www-form-urlencoded' &gt;";
+
+// Container with tabs
+$this-&gt;tabContainer()-&gt;captureStart('tab1', array(), array('style' =&gt; 'width:950px;height:800px;'));
+
+    // First tab "Dates"
+    $this-&gt;contentPane()-&gt;captureStart('pane1', array(), array('title' =&gt; 'Vstupní evidence'));
+        echo $this-&gt;form-&gt;getSubform('page1');
+    echo $this-&gt;contentPane()-&gt;captureEnd('pane1');
+
+    // Second tab "FAQ"
+    $this-&gt;contentPane()-&gt;captureStart('pane2', array(), array('title' =&gt; 'Příprava rozpočtu'));
+      echo $this-&gt;form-&gt;getSubform('page4');     
+    echo $this-&gt;contentPane()-&gt;captureEnd('pane2');
+
+    // Third tab "Closable"
+    $this-&gt;contentPane()-&gt;captureStart('pane3', array(), array('title' =&gt; 'Podání projektu'));
+        echo $this-&gt;form-&gt;getSubform('page2');
+    echo $this-&gt;contentPane()-&gt;captureEnd('pane3');
+
+    // Fourth tab "Splitted"
+    $this-&gt;contentPane()-&gt;captureStart('pane4', array(), array('title' =&gt; 'Realizace projektu'));
+      echo $this-&gt;form-&gt;getSubform('page3');
+    echo $this-&gt;contentPane()-&gt;captureEnd('pane4');
+
+echo $this-&gt;tabContainer()-&gt;captureEnd('tab1');
+
+echo $this-&gt;form-&gt;submit;
+
+echo "&lt;/form&gt;"
+?&gt;
+</pre>
+
+
+<p> </p>
+
+<p>Je to složitější ale všechno vypadalo jak mělo, jen byl problém s poslední stranou formuláře. Je tam málo položek a tabContainer se neumí přizpůsobit výšce vloženého obsahu. To se mi nepodařilo vyřešit jinak než nahradit Dojo <a href="http://docs.jquery.com/UI/Tabs">jQuery UI</a>, který jsem byl zvyklý používat doteď.</p>
+
+<pre name='code' class='php'>
+  &lt;script&gt;
+  $(document).ready(function(){
+    $("#example &gt; ul").tabs();
+  });
+  &lt;/script&gt;
+&lt;?php
+foreach ($this-&gt;notice as $n) {
+    echo '&lt;div class="error"&gt;'.$n . '&lt;/div&gt;';
+}
+echo "&lt;form method='".$this-&gt;form-&gt;getMethod()."' enctype='application/x-www-form-urlencoded' &gt;";
+
+// Container with tabs
+?&gt;
+  &lt;div id="example" class="flora"&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="#page-1"&gt;&lt;span&gt;Vstupní evidence&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#page-2"&gt;&lt;span&gt;Příprava rozpočtu&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#page-3"&gt;&lt;span&gt;Podání projektu&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#page-4"&gt;&lt;span&gt;Realizace projektu&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;div id="page-1"&gt;
+            &lt;?php echo $this-&gt;form-&gt;getSubform('page1'); ?&gt;
+            &lt;/div&gt;
+            &lt;div id="page-2"&gt;
+            &lt;?php
+                  echo "&lt;div style='padding:1em;'&gt;";
+                  include("../application/views/scripts/index/rozpocet.phtml");
+                  echo "&lt;/div&gt;";
+            ?&gt;
+            &lt;/div&gt;
+            &lt;div id="page-3"&gt;
+            &lt;?php echo $this-&gt;form-&gt;getSubform('page2'); ?&gt;
+            &lt;/div&gt;
+            &lt;div id="page-4"&gt;
+            &lt;?php echo $this-&gt;form-&gt;getSubform('page3'); ?&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+&lt;?php
+echo $this-&gt;form-&gt;submit;
+echo "&lt;/form&gt;";
+
+?&gt;
+</pre>
+
+
+<p> </p>
+
+<p>Po úpravě stylu to vypadá jinak, ale je to funkční jak chci a přesně kopíruje rozměry formuláře. </p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2008/09/image2.png"></a></p>
+
+<p>Přijde mi, že v Dojo je spousta jednoduchých věcí jako jsou třeba ty taby zatím celkem nedotažené. Co si myslíte o té integraci ZF s Dojo?</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ladislav Prskavec</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-11T00:00:00+02:00" pubdate data-updated="true">11. 09. 2008</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2008/07/subversion-pro-kazdho/" title="Previous Post: Subversion pro každého">&laquo; Subversion pro každého</a>
+      
+      
+        <a class="basic-alignment right" href="/2008/09/zend-framework-16-a-ajax-pomoc-jquery/" title="Next Post: Zend Framework 1.6 a ajax pomocí jQuery">Zend Framework 1.6 a ajax pomocí jQuery &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://blog.prskavec.net" alt="Home"><img class="icons" src="/images/Home.png" ></a>
+      <a href="http://blog.prskavec.net/archives/" alt="Archives"><img  class="icons" src="/images/Calendar.png"></a>
+      <a href="mailto:ladislav@prskavec.net" alt="E-Mail"><img  class="icons" src="/images/Envelope.png"></a>
+      <a href="http://blog.prskavec.net/atom.xml" alt="subscribe feed"><img class="icons" src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Ladislav Prskavec</h1>
+  <p style="margin-top:6px;"><img src="/images/avatar.jpg" style="float:left; margin-right:10px;" width="100" height="115" /><a href="http://github.com/abtris/">Programátor</a>, otec, <a href="http://www.dzogchen.cz">buddhista</a>, milovník dobrého jídla, knih, nových technologí a hraček pro všechny s&nbsp;duší dítěte.
+</p>
+  <br style="clear:left;"/>
+</section>
+<section>
+  <h1>Poslední příspěvky</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/11/docker/">docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subversion</h1>
+  <p style="margin-top:6px; text-align:center"><a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11" onClick="_gaq.push(['_trackEvent', 'link', 'itunes/subversion', 'svn-promo-sidebar-vpravo']);"><img src="http://a2.mzstatic.com/us/r30/Publication/v4/5c/1a/66/5c1a667d-2f78-b9b2-31ec-7c06ab9b74e8/B_SUBVERSION.225x225-75.jpg" style="float:left; margin-right:10px; width:172px; height:225px;" /></a>
+</p>
+  <br style="clear:left;"/>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+LadislavPrskavec?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <h1>GitHub</h1>
+
+<iframe src="http://githubbadge.appspot.com/badge/abtris" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+</section>
+<section>
+  <h1>Twitter</h1>
+  <a class="twitter-timeline" width="250" height="500" href="https://twitter.com/abtris" data-widget-id="345276838232326144">Tweets by @abtris</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ladislav Prskavec -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79221-21']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter21617953 = new Ya.Metrika({id:21617953,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21617953" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'prskavecblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/all.js?v=1412111651"></script>
+
+
+
+</body>
+</html>

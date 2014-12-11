@@ -1,0 +1,592 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Phing - SvnLogTask - Prskavčí blog</title>
+  <meta name="author" content="Ladislav Prskavec">
+
+  
+  <meta name="description" content="Phing obsahuje ve verzi 2.3 tyto Tasky pro práci se Subversion. SvnCheckoutTask SvnExportTask SvnLastRevisionTask SvnUpdateTask To se hodí a také ve &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.prskavec.net/2008/06/phing-svnlogtask/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+<meta name="google-site-verification" content="mepQHhq6JPqzvIjErdB-A6hp3UKAYIlYHN7xPUL8JUM" />
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/feed/index.html" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.prskavec.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archív</a></li>
+  <li><a href="/prednasky">Přednášky</a></li>  
+  <li><a href="/skoleni">Školení</a></li>
+  <li><a href="/kontakt">Kontakt</a></li>  
+</ul>
+
+</nav> 
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Phing - SvnLogTask</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-29T00:00:00+02:00" pubdate data-updated="true">29. 06. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://phing.info/trac/">Phing</a> obsahuje ve verzi 2.3 tyto Tasky pro práci se Subversion.</p>
+
+<ul>
+    <li>SvnCheckoutTask</li>
+    <li>SvnExportTask</li>
+    <li>SvnLastRevisionTask</li>
+    <li>SvnUpdateTask</li>
+</ul>
+
+
+<p>To se hodí a také ve svém buildu používám tento postup:</p>
+
+<ol>
+    <li>udělám export HEAD revision (SvnExportTask)</li>
+    <li>načtu si číslo HEAD revision (SvnLastRevisionTask)</li>
+    <li>potom vygeneruju SVN Log (<strong>SvnLogTask</strong>)</li>
+    <li>vygeneruju API dokumentaci pro build (PhpDocumentorTask)</li>
+    <li>všechno zakomprimuji do souboru s dokumentací a se zdrojáky a uložím kam potřebuju (ZipTask)</li>
+</ol>
+
+
+<p>V postupu je něco co není standardní součástí <a href="http://phing.info/docs/guide/current/">Phingu</a> i když si myslím, že se to tam objeví. Phing pro práci se SVN používá <a href="http://pear.php.net/package/VersionControl_SVN/">VersionControl_SVN</a> 0.3.1 alpha. Bohužel neexistuje zatím stable verze této PEAR knihovny což je škoda, protože funguje celkem dobře a má implementováno vše co potřebuji. Když používáte VersionControl_SVN dá se pracovat s několika návratovými typy:</p>
+
+<ul>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_ASSOC,</li>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_OBJECT,</li>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_XML,</li>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_RAW,</li>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_ALL,</li>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_ARRAY</li>
+</ul>
+
+
+<p>V Phingu se používá, ale výhradně VERSIONCONTROL_SVN_FETCHMODE_ASSOC což není někdy úplně vhodné. V případě, že máte totiž zapnutý přepínač pro výpis v XML je lepší návratový typ VERSIONCONTROL_SVN_FETCHMODE_XML. Proto jsem musel upravit <code>phing\tasks\ext\svn\SvnBaseTask.php</code>.</p>
+
+<p>Tuto část</p>
+
+<pre name='code' class="php">
+$options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ASSOC, 'svn_path' => $this->getSvnPath());
+</pre>
+
+
+<p>jsem nahradil tímto kódem</p>
+
+<pre name='code' class="php">
+        // Set up runtime options. Will be passed to all
+        // subclasses.
+        if ($mode=="log")
+        {
+        $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_XML, 'svn_path' => $this->getSvnPath());       
+        }
+        else
+        {
+        $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ASSOC, 'svn_path' => $this->getSvnPath());
+        }
+</pre>
+
+
+<p>Po této úpravě, která jistě by šla udělat lépe. Jsem se dal do psaní vlastního tasku SvnLogTask.php. Task vrátí log z repozitory v XML formátu. Pokud chceme plain text, tak to prožene XSLT transformací a potom ještě vymaže whitespaces z celého dokumentu.</p>
+
+<pre name='code' class="php">
+require_once 'phing/Task.php';
+require_once 'phing/tasks/ext/svn/SvnBaseTask.php';
+
+class SvnLogTask extends SvnBaseTask
+{
+    private $name = 'log.xml';
+    private $xml = true;
+    private $verbose = false;
+    /**
+     * The setter for the attribute "name"
+     */
+    public function setName($str) {
+        $this->name = $str;
+    }
+    /**
+     * The setter for the attribute "xml"
+     */
+    public function setXML($str) {
+        $this->xml = $str;
+    }   
+    /**
+     * The setter for the attribute "verbose"
+     */
+    public function setVerbose($str) {
+        $this->verbose = $str;
+    }       
+    /**
+     * The main entry point
+     *
+     * @throws BuildException
+     */
+    function main()
+    {
+        $this->setup('log');
+        $this->log("Log SVN"); 
+       
+         $switches = array('verbose' => $this->verbose);
+         $output=$this->run(array(), $switches);
+
+        $doc = new DOMDocument();
+        $doc->formatOutput = true;        
+        $doc->loadXML($output);             
+        // output format 
+        
+        if ($this->xml=="true")
+        {        
+          $doc->save($this->getToDir()."/".$this->name);
+        }
+        else
+        {                 
+         // print in plain
+         $xsl = new DOMDocument;
+         $xsl->load(dirname(__FILE__).'\LogTxt.xsl');
+         $proc = new XSLTProcessor;
+         $proc->importStyleSheet($xsl); // attach the xsl rules
+         $output=$proc->transformToDoc($doc)->firstChild->wholeText;
+
+         $pat[0] = "/^\s+/";
+         $pat[1] = "/\s{2,}/";
+         $pat[2] = "/\s+\$/";
+         $rep[0] = "";
+         $rep[1] = " ";
+         $rep[2] = "";
+         $after=preg_replace($pat, $rep, $output);
+         $str=str_replace("\\n ","\n", $after);         
+         file_put_contents($this->getToDir()."/".$this->name,$str);
+        }
+    }
+}
+</pre>
+
+
+<p>Potom se to dá už použít v <code>build.xml</code>.</p>
+
+<pre name='code' class="xml">
+        &lt;taskdef name="svnlog" classname="phing.tasks.ext.svn.SvnLogTask" /&gt;
+        &lt;svnlog
+           svnpath="${svnpath}"
+           repositoryurl="${rep}"
+           name="CHANGELOG"
+           xml="true"
+           verbose="true"
+           todir="${tmp}\log"/&gt;
+</pre>
+
+
+<p>Moje vlastní XSLT transformace (<code>phing\tasks\ext\svn\LogTxt.xsl</code>) na plain text není přiliš vhodná pro nějaké systémové řešení. Lepší je parametr nechat zapnutý. Vzít XML a pomocí XsltFilter aplikovat vlastní transformaci.</p>
+
+<pre name='code' class="xml">
+&lt;?xml version="1.0"?&gt;
+&lt;xsl:stylesheet version="1.0" 
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+ 
+&lt;xsl:template match="log"&gt;                
+            CHANGELOG\n
+            &lt;xsl:apply-templates select='logentry'/&gt;
+&lt;/xsl:template&gt;
+ 
+ 
+&lt;xsl:template match="logentry"&gt;       
+            \n R&lt;xsl:apply-templates select='@revision'/&gt;\n
+            &lt;xsl:apply-templates select='date' /&gt; - &lt;xsl:apply-templates select='author'/&gt;\n
+            &lt;xsl:apply-templates select='msg'/&gt;\n         
+&lt;/xsl:template&gt;
+ 
+&lt;/xsl:stylesheet&gt;
+</pre>
+
+
+<p>Nakonec přidám ještě moje build.propeties a buid.xml jednoho moje projektu pro ilustraci.</p>
+
+<pre name='code' class="bash">
+# Property files contain key/value pairs
+# key=value
+tmp = c:\tmp
+svnpath = c:\apps\svn\bin\svn.exe
+rep = file:///rootwww/rep_cvut/akce/trunk
+wc =  c:\rootwww\wc_cvut\akce
+</pre>
+
+
+<p>Tady v build.propeties si všimněte jen jediného detailu, ale ten vás může stát hodně času. Cesty k svn a k repozitory neobsahují mezery, pokud máte Subversion např. v Program Files může to nadělat více problémů než užitku a chyby se projevují různě a ne zcela systémově. Doporučuji se tomu předem vyhnout, ušetříte si čas a nervy.</p>
+
+<pre name='code' class="xml">
+&lt;?xml version="1.0" ?&gt;
+&lt;project name="akce2" basedir="." default="main"&gt;
+
+    &lt;!-- Sets the DSTAMP, TSTAMP and TODAY properties --&gt;  
+    &lt;tstamp/&gt;  
+  
+    &lt;!-- Load our configuration --&gt;  
+    &lt;property file="./build.properties" /&gt;
+    &lt;taskdef name="svnlog" classname="phing.tasks.ext.svn.SvnLogTask" /&gt;
+    
+    &lt;property name="package"  value="${phing.project.name}" override="true" /&gt;
+    &lt;property name="builddir" value="${tmp}/build/${phing.project.name}" override="true" /&gt;
+    &lt;property name="srcdir"   value="${project.basedir}" override="true" /&gt;
+
+
+    &lt;target name="svn" description="SVN executes"&gt;
+         &lt;!-- Export HEAD copy do /tmp/ --&gt;       
+       &lt;svnexport
+       svnpath="${svnpath}"
+       repositoryurl="${rep}"
+       force="yes"
+       todir="${tmp}\export\${phing.project.name}"/&gt;
+        &lt;!-- Získání čísla HEAD --&gt;
+        &lt;svnlastrevision
+           svnpath="${svnpath}"
+           workingcopy="${wc}"
+           propertyname="svn.lastrevision"/&gt;       
+        &lt;!-- Vygenerování aktuálního logu --&gt;           
+        &lt;svnlog
+           svnpath="${svnpath}"
+           repositoryurl="${rep}"
+           name="CHANGELOG"
+           xml="false"
+           verbose="true"
+           todir="${tmp}\export\${phing.project.name}"/&gt;    
+    &lt;/target&gt;
+
+    &lt;target name="phpdoc" description="API Documentation" depends="svn"&gt;
+        &lt;!-- Generování phpdoc dokumentace --&gt;
+        &lt;phpdoc title="Akce2008 API Documentation"
+          destdir="${builddir}/apidocs"
+          sourcecode="yes"
+          defaultpackagename="Akce2008"
+          output="HTML:default:default"&gt;
+           &lt;fileset dir="${tmp}/export/${phing.project.name}"&gt;
+              &lt;include name="*/*.php" /&gt;      
+              &lt;exclude name="inc/phpmailer/**" /&gt;
+              &lt;exclude name="build/**" /&gt;
+           &lt;/fileset&gt;
+            &lt;projdocfileset dir="."&gt;
+                  &lt;include name="CHANGELOG" /&gt;
+             &lt;/projdocfileset&gt;           
+        &lt;/phpdoc&gt;
+      &lt;/target&gt;
+
+        &lt;!-- Fileset for all files --&gt;
+        &lt;fileset dir="${tmp}/export/${phing.project.name}" id="allfiles"&gt;
+            &lt;include name="**" /&gt;
+            &lt;exclude name="build.xml" /&gt;
+            &lt;exclude name="build.properties" /&gt;
+        &lt;/fileset&gt;
+
+    &lt;!-- Main Target --&gt;
+    &lt;target name="main" description="main target" depends="phpdoc"&gt;
+        &lt;!-- Zdrojové kódy pro příslušnou revizi --&gt;
+        &lt;zip destfile="${builddir}/${phing.project.name}-R${svn.lastrevision}-${DSTAMP}${TSTAMP}.zip" basedir="${tmp}/export/${phing.project.name}" /&gt;                    
+        &lt;!-- Vygenerovanou dokumentaci přesunu do ZIP s číslem příslušné revize --&gt;
+        &lt;zip destfile="${builddir}/${phing.project.name}-apidocs-R${svn.lastrevision}-${DSTAMP}${TSTAMP}.zip" basedir="${builddir}/apidocs" /&gt;        
+        &lt;!-- Smazaní temp adresáře --&gt;
+        &lt;delete dir="${builddir}/apidocs" includeemptydirs="true" verbose="true" failonerror="true" /&gt;
+
+    &lt;/target&gt;
+&lt;/project&gt;
+</pre>
+
+
+<p>Vlastní build se pustí pomocí <code>phing</code> z příkazové řádky tam kde máte <code>build.xml</code> uložený. Pokud se nedaří Phing nainstalovat a nakonfigurovat pro chod např. s PHPDoc, tak doporučuji postup ze stránek Phingu.</p>
+
+<pre name='code' class="bash">
+pear channel-discover pear.phing.info
+pear install -a phing/phing
+pear install channel://pear.php.net/VersionControl_SVN-0.3.1
+</pre>
+
+
+<p>Doufám, že někomu rady budou k užitku, Phing je skvělý produkt i když většina asi dá za přednost <a href="http://ant.apache.org/">Antu</a> pokud nedělají čistě PHP.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ladislav Prskavec</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-29T00:00:00+02:00" pubdate data-updated="true">29. 06. 2008</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2008/06/subversion-15-vydn/" title="Previous Post: Subversion 1.5 vydán!">&laquo; Subversion 1.5 vydán!</a>
+      
+      
+        <a class="basic-alignment right" href="/2008/07/netbeans-pdt-a-subversion-15/" title="Next Post: NetBeans, PDT a Subversion 1.5">NetBeans, PDT a Subversion 1.5 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://blog.prskavec.net" alt="Home"><img class="icons" src="/images/Home.png" ></a>
+      <a href="http://blog.prskavec.net/archives/" alt="Archives"><img  class="icons" src="/images/Calendar.png"></a>
+      <a href="mailto:ladislav@prskavec.net" alt="E-Mail"><img  class="icons" src="/images/Envelope.png"></a>
+      <a href="http://blog.prskavec.net/atom.xml" alt="subscribe feed"><img class="icons" src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Ladislav Prskavec</h1>
+  <p style="margin-top:6px;"><img src="/images/avatar.jpg" style="float:left; margin-right:10px;" width="100" height="115" /><a href="http://github.com/abtris/">Programátor</a>, otec, <a href="http://www.dzogchen.cz">buddhista</a>, milovník dobrého jídla, knih, nových technologí a hraček pro všechny s&nbsp;duší dítěte.
+</p>
+  <br style="clear:left;"/>
+</section>
+<section>
+  <h1>Poslední příspěvky</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/11/docker/">docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subversion</h1>
+  <p style="margin-top:6px; text-align:center"><a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11" onClick="_gaq.push(['_trackEvent', 'link', 'itunes/subversion', 'svn-promo-sidebar-vpravo']);"><img src="http://a2.mzstatic.com/us/r30/Publication/v4/5c/1a/66/5c1a667d-2f78-b9b2-31ec-7c06ab9b74e8/B_SUBVERSION.225x225-75.jpg" style="float:left; margin-right:10px; width:172px; height:225px;" /></a>
+</p>
+  <br style="clear:left;"/>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+LadislavPrskavec?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <h1>GitHub</h1>
+
+<iframe src="http://githubbadge.appspot.com/badge/abtris" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+</section>
+<section>
+  <h1>Twitter</h1>
+  <a class="twitter-timeline" width="250" height="500" href="https://twitter.com/abtris" data-widget-id="345276838232326144">Tweets by @abtris</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ladislav Prskavec -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79221-21']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter21617953 = new Ya.Metrika({id:21617953,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21617953" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'prskavecblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/all.js?v=1412111651"></script>
+
+
+
+</body>
+</html>

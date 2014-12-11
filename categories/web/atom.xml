@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Kategorie: web | Prskavčí blog]]></title>
+  <link href="http://blog.prskavec.net/categories/web/atom.xml" rel="self"/>
+  <link href="http://blog.prskavec.net/"/>
+  <updated>2014-12-11T17:20:46+01:00</updated>
+  <id>http://blog.prskavec.net/</id>
+  <author>
+    <name><![CDATA[Ladislav Prskavec]]></name>
+    <email><![CDATA[ladislav@prskavec.net]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Zapier a zasílání zůstatku z banky zdarma na mobil]]></title>
+    <link href="http://blog.prskavec.net/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/"/>
+    <updated>2014-12-11T16:29:00+01:00</updated>
+    <id>http://blog.prskavec.net/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil</id>
+    <content type="html"><![CDATA[<h2>Motivace</h2>
+
+<p>Banky posílají změnu zůstatku emailem a SMS. Za SMS začínájí účtovat třeba i 2Kč což mi přijde fakt hrůza. Tak jsem si řekl jak dostat ten email do telefonu pomocí push notifikace, aby mě to nestálo moc peněz a dalo se případně používat univerzálně.</p>
+
+<h2>Pushover</h2>
+
+<p>Služba <a href="https://pushover.net/">Pushover</a> není zcela zdarma, ale zaplatíte jen jednorázově při nákupu aplikace nebo při aktivaci desktop notifkací. A získáte tím možnost zasílat notifikace skoro z čehokoliv a kam potřebujete. Můžete konfigurovat kdy nechcete být rušeni (noc, víkendy apod.).</p>
+
+<h2>Parse emails by Zapier</h2>
+
+<p>Služba <a href="https://zapier.com/">Zapier</a> má zajímavou <a href="http://parser.zapier.com/">službu na parsování dat z emailu</a>, která se zatím zdarma a nenašel jsem jinou, který by byla dobrá pro tento můj problém. Existují sice služby na parsování emailů, ale ty jsou spíše děláný na zpracování velkého množství emailů a nejsou zdarma.</p>
+
+<p>Na službě si zřídíte emailovou schránku na kterou si přepošlete email z banky, označíte si v něm část co chcete posílat na mobil. Služba potom toto políčko poskytne jako placeholder pro zpracování a poslání dále.</p>
+
+<h2>Zapier</h2>
+
+<p>V Zapieru potom nakonfigurujete zpracování emailů z vaší schránky na parseru a poslání na mobil pomocí pushover. Zkoušel jsem třeba i hangouts, ale nedošlo mi to všechna zařízení a není to tak komfortní jako pushover.</p>
+
+<h2>Závěr</h2>
+
+<p>I bez programování můžete vyzrát na chytráky co si snaží za služby s minimálními nároky účtovat hromady peněz a <a href="https://zapier.com/">Zapier</a> nebo <a href="https://ifttt.com">IFTTT</a> jsou na  to super pomocníci.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Google Developer Day 2011]]></title>
+    <link href="http://blog.prskavec.net/2011/10/google-developer-day-2011/"/>
+    <updated>2011-10-18T09:01:00+02:00</updated>
+    <id>http://blog.prskavec.net/2011/10/google-developer-day-2011</id>
+    <content type="html"><![CDATA[<p>GDD již tradičně v Clarionu, registrace se dneska pěkně protáhla pokud jste nepřišli včas a nevyužili některé jiné fronty než té první.</p>
+
+<!--more-->
+
+
+<p>Reportáž online:</p>
+
+<h2>Keynote</h2>
+
+<p>9:09 Sedíme na keynote a uvidíme co se chystá ….</p>
+
+<p><a href="https://developers.google.com/go/stories">Video na začátku</a> a potom Filip pokračuje v Keynote.</p>
+
+<p>9:19 Brad Abrams &ndash; Google Plus Platform
+Zatím se probíráme od roku 1990 do součastnosti naší minulostí a přesouváme se k mobile a cloud.
+Aktivace telefonů s Androidem mezi únorem 2010 (60k) až k 550k v červenci 2011. 300k aplikací v Android Marketu.</p>
+
+<p>9:35 Petr Nálevka &ndash; <a href="https://market.android.com/details?id=com.urbandroid.sleep&amp;hl=cs">Sleep as anDroid</a>, ukázka aplikace.
+Budík &ndash; umí měřit spánkové cykly. Umí nahrávat spánkovou aktivitu i zvuky, chrápání apod. Statistiky o spaní a návyky. Captcha pro budík, aby jste to snad nezamáčkli. Celé snímání je přes akcelerometr. Aplikace se dá snadno rozšiřovat. 330k aktivních uživatelů a 60k prodaných kusů.</p>
+
+<p>9:43 AdMob &ndash; 910 miliard reklam už bylo zobrazeno.</p>
+
+<p>9:45 Chrome a HTML5, Chrome Webstore</p>
+
+<p>9:51 Ilmari Heikkinen &ndash; WebGL demo, <a href="http://mrdoob.github.com/three.js/">tree.js</a>, flux slider <a href="http://joelambert.co.uk/flux/transgallery.html">transgallery</a>, asteroids. Pěkné demo na Developers tools v Chrome, zvláště pretty print funkce pro javascript je hodně pěkná.</p>
+
+<p>10:00 WebM Video, Web Audio Api, HTML5 s WebIntents, Native Client (C, CPP v sandboxu), JS a DOM. HTML5 aplikace lehce najdete přes Chrome Web Store a zítra HTML5 Hackathon zítra a jedou na Google IO.</p>
+
+<p>10:05 Video, YouTube 3D &ndash; trailer na novou Dobu ledovou ve 3D</p>
+
+<p>10:10 Mano Marks a Jarda Bengl &ndash; Google Maps
+První Google Maps Mashup &ndash; <a href="http://housingmaps.com">http://housingmaps.com</a>. Google Fusion Tables &ndash; <a href="http://mano-demos.googlecode.com/svn/trunk/demos/europepopsliders.html">demo s populací evropy</a>. WebGL v mapách, klikněte vlevo dole vyzkoušet něco nového a mapy se přepnou do WebGL. Úžasné celé vektorové mapy místo obrázků a 3D budovy v normálních mapách provázání s satelitní mapou (ukázky New York, Rome, Venice).</p>
+
+<p><img class="center" src="/assets/googlemaps_webgl_1.png" title="&lsquo;Venice&rsquo;" ></p>
+
+<center>Ukázka Venice, kde je vidět vektory a 3D domy.</center>
+
+
+<p><img class="center" src="/assets/googlemaps_webgl_2.png" title="&lsquo;Rome&rsquo;" ></p>
+
+<center>Při zoomu jsou některé budovy vidět v náhledu 45 stupňů.</center>
+
+
+<p><img class="center" src="/assets/googlemaps_webgl_3.png" title="&lsquo;Rome&rsquo;" ></p>
+
+<center>A dá se s nimi i otáčet.</center>
+
+
+<p>10:24 Cloud, webová verze Angry Birds používá (GWT, HTML5, Google Plus, App Engine). Mobilní hry často App Engine používání na backendu (např. TapZoo). App Engine pro Google Doodles (<a href="http://www.google.com/logos/2011/lespaul.html">ukázka</a>, záznamy za 2 dny nahráli uživatelé několik let záznamů.</p>
+
+<p><a href="http://code.google.com/apis/storage/">Google Cloud Storage</a>, <a href="http://code.google.com/apis/predict/">Google Prediction API</a> jdou do provozu z Labs.</p>
+
+<p><a href="http://code.google.com/apis/sql/">Google Cloud SQL</a> uvádějí jako novinku. Iein Valdez uvedl demo. Použije se JDBC driver pro Google Cloud SQL (GCSQL). Ukázka na App Engine byla v Javě a PHP.</p>
+
+<p>10:40 Google Plus s Circles, Hangouts, Mobile. Novinky přidávájí stále a během 90 dnů od spuštění přidali přes 100 novinek. Teď mají kolem 40M uživatelů a 3,4 mld. fotek. Plugins (+1 button), anotace pro vaše výsledky hledání. APIs (RESTful, JSON, OAuth2) a knihovny pro všechny běžné jazyky (<a href="https://code.google.com/apis/explorer">Google Apis Explorer</a>.</p>
+
+<p>10:50 Jonathan Beri &ndash; Hangouts demo, přijde mi to jako Google Wave v nové verzi zaměřené více na to co lidé chtějí. Více o Google platform na <a href="https://developers.google.com/+/">https://developers.google.com/+/</a>.</p>
+
+<p>Keynote končí.</p>
+
+<h2>Ilmari Heikkinen &ndash; Tohle nejsou weby, které hledáte: Moderní webové aplikace v HTML5</h2>
+
+<p>Definuje moderní webovou aplikaci jako desktop UI s cloud backendem (příklad DJBreakPoint aplikace).</p>
+
+<p>MVC Frameworks (Sproutcore, BackboneJS, ExtJS 4). Css Frameworks (Less, Sass). Divné, že nezmínil AngularJS, který Google přímo podporuje a vyvíjí. Responsive layout pro notebooky, mobily a tablety.</p>
+
+<ul>
+<li><a href="http://formfactorjs.com">formfactorjs.com</a></li>
+<li><a href="http://www.leviroutes.com">www.leviroutes.com</a> (pushState, řeší MVC JS Frameworky)</li>
+</ul>
+
+
+<p>Ukázka webkitdirectory a drag and drop pro práci se soubory v Chrome. Ukázka ukládání na filesystem. Application cache pro ukládání.</p>
+
+<pre><code>&lt;html manifest='cache.appcache'&gt;
+</code></pre>
+
+<ul>
+<li><a href="http://westcoastlogic.com/lawnchair/">LawnChair</a> &ndash; simple json storage</li>
+<li>x-webkit-speech attribute například pro input.</li>
+<li>desktop notifikace &ndash; webkitNotifications</li>
+<li>performance tips &ndash; <a href="http://bit.ly/rizNVE">http://bit.ly/rizNVE</a></li>
+</ul>
+
+
+<h3>Old browsers</h3>
+
+<ul>
+<li>Chrome Frame</li>
+<li>HTML5 Boiler Plate</li>
+<li>Modernizr</li>
+<li>jQuery</li>
+</ul>
+
+
+<h3>Chrome Web store</h3>
+
+<ul>
+<li>$5 poplatek za registraci</li>
+<li>možnost monetizace HTML5 aplikací</li>
+<li><a href="http://appmator.appspot.com/">AppMator</a> umí udělat manifest file</li>
+</ul>
+
+
+<p>Slidy <a href="http://bit.ly/nrjLs7">http://bit.ly/nrjLs7</a>.</p>
+
+<p>Reportáž skončila.</p>
+
+<h2>Shodnocení GDD 2011</h2>
+
+<p>Později jsem se vrátil na GDD bohužel až na Ignite, ale ty rozhodně stály za to. Přišlo mi to jako skvělý závěr GDD2011 a co bych chtěl ocenit je i přes menší rozpočet spousta věcí zaujala. Ocenil bych více advanced přednášek, kde přednášející mi řekne něco co nevím, ale to je hodně individuální.</p>
+
+<p>Jinak celkem dobrá organizace, trochu registrace vázla, když člověk přišel později. Celkově jsem potkal spoustu lidí, které vidím jen tady.</p>
+
+<p>Za mě jediné přání do dalšího roku, líbil by se mi například <a href="https://github.com/vojtajina">Vojta Jína</a> nebo někdo s týmu <a href="http://angularjs.org/">AngularJS</a> a nějaký workshop s nimi ať na GDD nebo mimo.</p>
+
+<h2>Update 24.10.2011</h2>
+
+<p>K dispozici jsou <a href="http://www.youtube.com/watch?v=1Xn6CfJ713g&amp;feature=list_related&amp;playnext=1&amp;list=SP64D87C03BA3B2A88">všechny videa</a>. Úžasné!</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Kategorie: vcs | Prskavčí blog]]></title>
+  <link href="http://blog.prskavec.net/categories/vcs/atom.xml" rel="self"/>
+  <link href="http://blog.prskavec.net/"/>
+  <updated>2014-12-11T17:20:46+01:00</updated>
+  <id>http://blog.prskavec.net/</id>
+  <author>
+    <name><![CDATA[Ladislav Prskavec]]></name>
+    <email><![CDATA[ladislav@prskavec.net]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Motivace a Verzovací systémy]]></title>
+    <link href="http://blog.prskavec.net/2011/10/motivace-a-vcs/"/>
+    <updated>2011-10-26T20:12:00+02:00</updated>
+    <id>http://blog.prskavec.net/2011/10/motivace-a-vcs</id>
+    <content type="html"><![CDATA[<h2>Proč bychom potřebovali verzovací systém?</h2>
+
+<p>Toto je častá otázka, kterou slyším. Spousta lidí používá sdílené adresáře pro práci s dokumenty. Přejmenovávají soubory a adresáře. Pokud znáte dokumenty typu Projekt-Final-Update!!.doc apod. tak víte o čem mluvím.</p>
+
+<h2>Každý programátor pracuje v jiné podadresáři?</h2>
+
+<p>Tak to trochu může lidem připadat, ale programátoři používají verzovací systém, který dokumentovou databází, která sleduje změny a pomůže v mnoha věcech.</p>
+
+<!--more-->
+
+
+<h3>Záloha a Obnova</h3>
+
+<p>Soubory, které ukládáme do verzovacího systému si nesou infomaci o času uložení a není problém skočit v čase co existuje repozitář kam chcete třeba co jste dělali 29.7.2009? Není problém.</p>
+
+<h3>Synchronizace</h3>
+
+<p>Pokud si verzujete například konfiguraci nastavení linuxu. Příklady najdete na githubu v repositářích nazvaných <a href="https://github.com/search?type=Repositories&amp;language=&amp;q=dotfiles&amp;repo=&amp;langOverride=&amp;x=16&amp;y=29&amp;start_value=1">dotfiles</a>. Tak si pomocí verzovacího systému lehce udržujete konfiguraci na všech počítačích, které používáte. Obdobně není problém to dělat s jakýmikoliv dokumenty.</p>
+
+<h3>Jednoduché Undo</h3>
+
+<p>Modifikujete soubor a nefunguje to a potřebujete vrátit změny zpět. Není problém obnovit poslední dobrou verzi. Maličkost.</p>
+
+<h3>Undo</h3>
+
+<p>Kdykoliv máte k dispozici undo, pokud například najdete chybu, kterou jste udělali před rokem není problém se vrátit zpět a podívat se jaké změny jste dělali a proč.</p>
+
+<h3>Sledování změn</h3>
+
+<p>Soubory jsem změněny, ale verzovací systém uchovává také zprávu, kde se často vysvětluje proč změna byla udělaná, dost často obsahuje například odkaz do bug trackeru apod. To jsou věci, které se často ze samotných souborů vyčíst nedají.</p>
+
+<h3>Sledování vlastníka</h3>
+
+<p>Každá změna je podepsaná a můžete kdykoliv zjistit, kdo který řádek modifikoval. To se hodí pokud potřebujete zjistit kdo změnu udělal.</p>
+
+<h3>Pískoviště (sandbox)</h3>
+
+<p>Výhoda verzovacích systémů je právě, že můžete pracovat na velkých změnách v izolované oblasti bez toho aby jste se báli, že ovlivníte celek.</p>
+
+<h3>Větve a merge</h3>
+
+<p>Větve slouží jako velké pískoviště, můžete mít desítky větví, které mohou po dlouhou dobu fungovat izolovaně a později pokud budete chtít spojíte (merge) je kam potřebujete.</p>
+
+<h3>Závěr</h3>
+
+<p>Sdílené adresáře jsou rychlé a jednoduché, ale rozhodně tyto vlastnosti verzovacích systémů jsou něco co je o dost lepší.</p>
+
+<p>Verzovacích systémů jsou desítky, od SCCS (1972), přes CVS (1990), Subversion (2000) k distribuovaným jako je Darcs (2002), Git (2005) nebo Mercurial (2005). K nejnovějším přírůstkům patří Verocity (2011), které přidává například přímo podporu SCRUMu.</p>
+
+<p>Volbu nechám na vás u mě od roku 2009 <a href="http://blog.prskavec.net/2009/11/proc-jsem-presel-z-mercurial-na-git/">vítězí Git</a> a ani za 2 roky se v tom nic nezměnilo.</p>
+]]></content>
+  </entry>
+  
+</feed>

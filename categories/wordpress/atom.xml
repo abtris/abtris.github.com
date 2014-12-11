@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Kategorie: wordpress | Prskavčí blog]]></title>
+  <link href="http://blog.prskavec.net/categories/wordpress/atom.xml" rel="self"/>
+  <link href="http://blog.prskavec.net/"/>
+  <updated>2014-12-11T17:20:46+01:00</updated>
+  <id>http://blog.prskavec.net/</id>
+  <author>
+    <name><![CDATA[Ladislav Prskavec]]></name>
+    <email><![CDATA[ladislav@prskavec.net]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Migrace z Wordpressu na Jekyll]]></title>
+    <link href="http://blog.prskavec.net/2011/09/Migrace-z-Wordpressu-na-Jekyll/"/>
+    <updated>2011-09-30T00:00:00+02:00</updated>
+    <id>http://blog.prskavec.net/2011/09/Migrace-z-Wordpressu-na-Jekyll</id>
+    <content type="html"><![CDATA[<h2>Co jsem řešil</h2>
+
+<p>V poslední době jsem neměl moc času na psaní a když jsem chtěl psát, chtěl jsem se tomu věnovat, mít na to jednoduchý prostředek jako je Textmate (ByWord, iA Writer, WriteRoom, OmmWriter) a přitom se nemuset handrkovat s HTML a s tím jak mi občas nevhodné styly ničí text nebo kusy kódu.</p>
+
+<p>Wordpress u mě na hostingu ještě narazil na limit starého MySQL a mě se také nechtělo migrovat na nový databázový server, potom mi také chybělo verzování v Gitu na který jsem zvykl.</p>
+
+<p>Protože jsem před časem viděl, že <a href="http://pages.github.com">Github pages</a> se dají dobře použít pro vlastní blog, rozhodl jsem se na to přejít se svými blogy <a href="http://blog.prskavec.eu">TopTopic?</a> a <a href="http://blog.prskavec.net">Prskavčí blog</a>.</p>
+
+<!--more-->
+
+
+<h2>Jak jsem postupoval</h2>
+
+<ol>
+<li>Migrace starého obsahu z Wordpressu</li>
+<li>CNAME a DNS</li>
+<li>Nastavení stylů a práce s <a href="https://github.com/mojombo/jekyll/wiki/">Jekyll</a>
+
+<ul>
+<li>komentáře</li>
+<li>twitter</li>
+<li>atom feed</li>
+</ul>
+</li>
+<li>Publikace na github.com</li>
+</ol>
+
+
+<h2>Jekyll &ndash; statický generátor stránek v Ruby</h2>
+
+<p>Podporuje publikování v textile a markdown, případně html.</p>
+
+<p>Instalace pomocí rubygems
+<div>
+  <pre><code class='sh'>sudo gem install jekyll</code></pre>
+</div>
+</p>
+
+<p>Pro ladění na lokálním počítači jde pustit lokální instanci, která běží <a href="http://localhost:4000">http://localhost:4000</a>.</p>
+
+<p><div>
+  <pre><code class='sh'>jekyll &amp;mdash;server &amp;mdash;auto</code></pre>
+</div>
+</p>
+
+<p>Jekyll funguje tak, že na základě předpisu generuje statické stránky do adresáře <code>_site</code>. Parametr <code>auto</code> umí po editaci automaticky přegenerovat změněný soubor.</p>
+
+<h2>Migrace z Wordpressu</h2>
+
+<ol>
+<li>Založte si adresář a začněte verzovat gitem.</li>
+</ol>
+
+
+<p><div>
+  <pre><code class='sh'>mkdir blog.prskavec.net
+cd blog.prskavec.net
+git init</code></pre>
+</div>
+</p>
+
+<ol>
+<li><p>Je potřeba udělat export z Wordpressu, pomocí <code>export.php</code>.</p></li>
+<li><p>Například u mě to bylo <code>http://blog.prskavec.net/wp-admin/export.php</code>.</p></li>
+<li>Na výsledné xml je potřeba použít <a href="https://github.com/mojombo/jekyll/tree/master/lib/jekyll/migrators">importní script</a>.</li>
+<li>K dispozici jsou importní scripty pro Wordpress, CSV, Drupal, Posterous, Tumblr, Typo, Textpattern, Wordpress.com a další</li>
+<li><p>Já jsem si zkopíroval do adresáře <code>_import</code> zkopíroval scripty pro wordpress. Potom jsem provedl import.</p>
+
+<p> ruby -r &lsquo;./_import/wordpressdotcom.rb&rsquo; -e &lsquo;Jekyll::WordpressDotCom.process(&ldquo;prskavblog.wordpress.2011-09-28.xml&rdquo;)&rsquo;</p></li>
+<li><p>Všechny posty se uloží automaticky do <code>_post</code>.</p></li>
+</ol>
+
+
+<h2>CNAME a DNS</h2>
+
+<ol>
+<li>Do repository přidáte soubor CNAME který musí obsahovat doménu na které chcete Github pages provozovat, samozřejmě pokud vám nestačí stávající co dostanete od Githubu.</li>
+<li>DNS &ndash; musíte si zřídít CNAME záznam, který bude ukazovat na váš záznam na githubu. U mě <code>abtris.github.com</code> pro doménu 3 řádu. Pokud by jste chtěli doménu 2 řádu musíte zřídit A záznam na 207.97.227.245.</li>
+</ol>
+
+
+<h2>Nastavení stylů a práce s Jekyll</h2>
+
+<p>Základní struktura</p>
+
+<pre><code>|-- _config.yml
+|-- _layouts
+|   |-- default.html
+|   `-- post.html
+|-- _posts
+|   |-- 2007-10-29-why-every-programmer-should-play-nethack.textile
+|   `-- 2009-04-26-barcamp-boston-4-roundup.textile
+|-- _site
+`-- index.html
+</code></pre>
+
+<p><code>_config.yml</code></p>
+
+<pre><code>sitename: Prskavčí blog        
+tagline: Jen další blog o všem možné, teď od Prskavců.
+url: http://blog.prskavec.net   
+ga: UA-XXXXX-XX                 
+pygments:    true
+markdown:    maruku
+permalink:   pretty
+exclude: LICENSE, README.markdown, Rakefile
+disqus:
+   id: prskavecblog
+feedburner:
+   id: prskavec
+</code></pre>
+
+<p>Nejdůležitější odkazy:</p>
+
+<ul>
+<li><a href="https://github.com/mojombo/jekyll/wiki/Usage">Použití</a></li>
+<li><a href="https://github.com/mojombo/jekyll/wiki/Configuration">Konfigurace</a></li>
+<li><a href="https://github.com/mojombo/jekyll/wiki/Configuration">Ukázkové stránky</a></li>
+<li><a href="https://github.com/mojombo/jekyll/wiki/Template-Data">Důležité proměnné</a></li>
+<li><a href="https://github.com/shopify/liquid/wiki/liquid-for-designers">Značkovací jazyk Liquid, který se používá v Jekyll šablonách</a></li>
+<li><a href="https://github.com/mojombo/jekyll/wiki/Plugins">Pluginy</a></li>
+<li><a href="http://pygments.org/docs/lexers/">Lexers for Pygments</a> &ndash; syntax hightlighting, příslušné <a href="https://github.com/mojombo/tpw/blob/master/css/syntax.css">syntax.css</a> třeba tady.
+Samozřejmě pro svůj blog potřebujete nějak přispůsobit vzhled, pro Jekyll to není tak snadné jako Wordpress, který má spoustu pluginů a vzhledů. Ale není problém, některý z Wordpressu převést.</li>
+</ul>
+
+
+<p>Pluginy některé existují, ale musíte si vystačit s tím co jde vygenrovat, případně z Javascriptem, ale to není málo.</p>
+
+<p>Pomocí javascriptu jsem přidat <a href="http://tweet.seaofclouds.com/">twitter</a> a komentáře přes <a href="http://disqus.com">Disqus</a>.</p>
+
+<p>Pro ATOM je k dispozici šablona, obdobně si můžete vygenerovat RSS, archív apod.</p>
+
+<h2>Publikace na Github</h2>
+
+<ol>
+<li>Založte si repositář na Githubu.</li>
+<li>V adminu zapnout github pages.</li>
+<li>Podle návodu přidejte do repositáře soubory a pushnete obsah na server.</li>
+</ol>
+
+
+<h2>Shrnutí</h2>
+
+<p>Jekyll není pro každého, ale pro mě jako pro programátora je to vyhovující systém. Článek jako tento napíšu ve stejném editoru jako programuju ať je to <a href="http://macromates.com/">Textmate</a> nebo <a href="http://www.jetbrains.com/phpstorm/">PHPStorm</a>. A stránky jsou jen další repository na <a href="http://github.com">githubu</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

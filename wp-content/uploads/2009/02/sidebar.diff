@@ -1,0 +1,52 @@
+Index: sidebar.php
+===================================================================
+--- sidebar.php	(revision 1)
++++ sidebar.php	(working copy)
+@@ -62,9 +62,9 @@
+ 	<!-- posts -->
+ 	<?php
+ 		if (is_single()) {
+-			$posts_widget_title = 'Recent Posts';
++			$posts_widget_title = 'Poslední příspěvky';
+ 		} else {
+-			$posts_widget_title = 'Random Posts';
++			$posts_widget_title = 'Náhodné příspěvky';
+ 		}
+ 	?>
+ 
+@@ -89,7 +89,7 @@
+ 	<!-- recent comments -->
+ 	<?php if( function_exists('wp_recentcomments') ) : ?>
+ 		<div class="widget">
+-			<h3>Recent Comments</h3>
++			<h3>Poslední komentáře</h3>
+ 			<ul>
+ 				<?php wp_recentcomments('limit=5&length=16&post=false&smilies=true'); ?>
+ 			</ul>
+@@ -99,7 +99,7 @@
+ 	<!-- tag cloud -->
+ 	<?php if (!is_single()) : ?>
+ 		<div id="tag_cloud" class="widget">
+-			<h3>Tag Cloud</h3>
++			<h3>Oblak šťítků</h3>
+ 			<?php wp_tag_cloud('smallest=8&largest=16'); ?>
+ 		</div>
+ 	<?php endif; ?>
+@@ -116,7 +116,7 @@
+ 
+ 		<!-- categories -->
+ 		<div class="widget widget_categories">
+-			<h3>Categories</h3>
++			<h3>Kategorie</h3>
+ 			<ul>
+ 				<?php wp_list_cats('sort_column=name&optioncount=0&depth=1'); ?>
+ 			</ul>
+@@ -132,7 +132,7 @@
+ 
+ 		<!-- archives -->
+ 		<div class="widget widget_archive">
+-			<h3>Archives</h3>
++			<h3>Archív</h3>
+ 			<ul>
+ 				<?php wp_get_archives('type=monthly'); ?>
+ 			</ul>

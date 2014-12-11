@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Kategorie: zdrojak | Prskavčí blog]]></title>
+  <link href="http://blog.prskavec.net/categories/zdrojak/atom.xml" rel="self"/>
+  <link href="http://blog.prskavec.net/"/>
+  <updated>2014-12-11T17:20:46+01:00</updated>
+  <id>http://blog.prskavec.net/</id>
+  <author>
+    <name><![CDATA[Ladislav Prskavec]]></name>
+    <email><![CDATA[ladislav@prskavec.net]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)]]></title>
+    <link href="http://blog.prskavec.net/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/"/>
+    <updated>2013-06-01T11:23:00+02:00</updated>
+    <id>http://blog.prskavec.net/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs</id>
+    <content type="html"><![CDATA[<p>Javascriptový framework AngularJS se stává čím dám tím populárnější. Letos vyjde několik prvních knih na něj zaměřených. Recenzi té úplně první z nich vám dnes nabízíme.</p>
+
+<p>Více na <a href="http://www.zdrojak.cz/clanky/menard-instant-angularjs-starter-recenze/">zdrojak.cz</a></p>
+]]></content>
+  </entry>
+  
+</feed>
