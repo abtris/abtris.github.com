@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-02-07T18:11:09+01:00</updated>
+  <updated>2015-02-07T18:15:11+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -53,9 +53,9 @@
 
 <p>Docker Swarm je nástroj pro řízení clusterů konteinerů přímo od Dockeru, ale kromě základních příkladů není k dispozici nic většího, poporuje několik discovery service (etcs, consul, zookeeper). Nevím o nikom, kdo by to používal ve větším měřítku.</p>
 
-<p>CoreOS Fleet je <a href="https://coreos.com/using-coreos/systemd/">systemd</a> a <a href="https://coreos.com/using-coreos/etcd/">etcd</a> a nemám s ním zkušenosti vůbec žádné. Projekty kolem <a href="https://coreos.com/">CoreOS</a>.</p>
+<p>CoreOS Fleet je <a href="https://coreos.com/using-coreos/systemd/">systemd</a> a <a href="https://coreos.com/using-coreos/etcd/">etcd</a> a nemám s ním zkušenosti vůbec žádné. Projekty kolem <a href="https://coreos.com/">CoreOS</a> jsou zajímavé. Mají vlastní technologii konteinerů <a href="https://coreos.com/blog/rocket/">Rocket</a>.</p>
 
-<p>Stejně jako CoreOS snaží se o podobnou věc i <a href="http://www.projectatomic.io/">Project Atomic</a> od RedHatu. Vytvořit základní systém pro práci s kontainery.</p>
+<p>Stejně jako CoreOS snaží se o podobnou věc i <a href="http://www.projectatomic.io/">Project Atomic</a> od RedHatu. Vytvořit základní systém pro práci s konteinery.</p>
 
 <p>Závěr je asi takový, že pokud budete chtít řídít vlastní cluster asi zvolíte buď Messos nebo Kubernetes. Osobně asi budu volit Kubernetes, co vy?</p>
 ]]></content>
