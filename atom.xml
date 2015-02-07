@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2014-12-15T08:47:00+01:00</updated>
+  <updated>2015-02-07T18:11:09+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Docker cluster management]]></title>
+    <link href="http://blog.prskavec.net/2015/02/docker-cluster-management/"/>
+    <updated>2015-02-07T18:09:00+01:00</updated>
+    <id>http://blog.prskavec.net/2015/02/docker-cluster-management</id>
+    <content type="html"><![CDATA[<p>V poslední době se zabývám technologiemi pro řízení clusterů s docker konteinery.</p>
+
+<p>Pokud by to někoho zajímalo, zkusím jsem shrnout s čím jsem se potkal a kde vidím možné využití.</p>
+
+<p>Nástroje, které můžete použít cluster management:</p>
+
+<ul>
+<li><a href="http://mesos.apache.org/">Apache Messos</a> (java)</li>
+<li><a href="https://github.com/docker/swarm/">Docker Swarm</a> (golang)</li>
+<li><a href="https://coreos.com/using-coreos/clustering/">CoreOS Fleet</a> (golang)</li>
+<li><a href="http://kubernetes.io/">Google Kubernetes</a> (golang)</li>
+</ul>
+
+
+<p>potom k tomu ješte patří některé frameworky pro Messos a to <a href="https://mesosphere.github.io/marathon/">Marathon</a> a <a href="http://airbnb.github.io/chronos/">Chronos</a>.</p>
+
+<p>Ještě potřebujete nástroj pro service discovery:</p>
+
+<ul>
+<li><a href="https://coreos.com/using-coreos/etcd/">CoreOS Etcd</a> (golang)</li>
+<li><a href="https://consul.io/">Hashicorp Consul</a> (golang)</li>
+<li><a href="http://zookeeper.apache.org/">Apache Zookeeper</a> (java)</li>
+</ul>
+
+
+<p>Etcd používá Kubernetes a další projekty. Service discovery je potřeba pro management clusteru. Můžete použít stejně jednoduše i ostatní projekty.</p>
+
+<p>Apache Messos umí pracovat s různorodým prostředím včetně Amazon ECS service. Framework Marathon vám potom slouží k pouštění dlouho běžících konteinerů pro aplikace a Chronos typicky pro batch processing například pro zpracování velkých dat. S Messosem musíte provozovat ZooKeeeper pro discovery service.</p>
+
+<p>Protože se snažím Javě vyhnout a raději volím nástroje v jiných jazycích, kde mám větší znalosti. Pro discovery service clusteru bych raději použil Consul nebo Etcd.</p>
+
+<p>Google Kubernetes je poměrně vyspělý nástroj používaný pro Google Cloud a adaptovaný například RedHatem pro OpenShift V3. Tam mám trochu výhradu, že to nemá podporu pro více uživatelů a neumí pracovat s externím filesystémy co vím. Ale dá se používat na tvorbu dokonce hybridních clusterů mezi více poskytovateli (AWS, Google Cloud, OpenShift, fyzické stroje).</p>
+
+<p>Docker Swarm je nástroj pro řízení clusterů konteinerů přímo od Dockeru, ale kromě základních příkladů není k dispozici nic většího, poporuje několik discovery service (etcs, consul, zookeeper). Nevím o nikom, kdo by to používal ve větším měřítku.</p>
+
+<p>CoreOS Fleet je <a href="https://coreos.com/using-coreos/systemd/">systemd</a> a <a href="https://coreos.com/using-coreos/etcd/">etcd</a> a nemám s ním zkušenosti vůbec žádné. Projekty kolem <a href="https://coreos.com/">CoreOS</a>.</p>
+
+<p>Stejně jako CoreOS snaží se o podobnou věc i <a href="http://www.projectatomic.io/">Project Atomic</a> od RedHatu. Vytvořit základní systém pro práci s kontainery.</p>
+
+<p>Závěr je asi takový, že pokud budete chtít řídít vlastní cluster asi zvolíte buď Messos nebo Kubernetes. Osobně asi budu volit Kubernetes, co vy?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Zapier a zasílání zůstatku z banky zdarma na mobil]]></title>
@@ -1221,21 +1269,6 @@ $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller
 <p>Každopádně celá akce byla super a doufám, že ji zoopakujeme někdy brzo znovu a nemusíme se zaměřovat jen na AngularJS, ale na programování v Javascriptu obecně.</p>
 
 <p>Napište do komentářů kam by jste chtěli, aby se meetupy ubírali.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[AngularJS v Praze]]></title>
-    <link href="http://blog.prskavec.net/2012/03/angularjs-v-praze/"/>
-    <updated>2012-03-27T05:50:00+02:00</updated>
-    <id>http://blog.prskavec.net/2012/03/angularjs-v-praze</id>
-    <content type="html"><![CDATA[<p><a href="http://angularjs.org">AngularJS</a> je MVC javascriptový framework, opensource, podporovaný firmou Google. Jeden z hlavních vývojářů je <a href="http://twitter.com/#!/vojtajina">Vojta Jína</a>, který v dubnu/květnu bude v Praze a potřebujeme zjistit zda by byl zájem o něco více než jenom přednášku co bude v rámci.</p>
-
-<p>2.5. Vojta Jina &ndash; Google Mountain View USA. Introduction to Angular. Vojta is a developer in Google actively developing a Javascript architecture Angular. <a href="http://www.eclub.cvutmedialab.cz/">eClubu</a></p>
-
-<p>4.5. hacking party sponzored by Google &ndash; <a href="http://srazy.info/angularjs-meetup/2164">meetup</a></p>
-
-<p>Díky všem za vyplnění a bude vás informovat, sledujte <a href="http://twitter.com/#!/abtris">@abtris</a> a <a href="http://twitter.com/#!/vojtajina">@vojtajina</a> na twitteru a dozvíte se vše.</p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Pokud používáte pro vývoj v PHP nějaké IDE, je to většinou PDT based (Eclipse, Zend Studio) nebo Netbeans. Samozřejmě jsou tu i další a vznikají nové &hellip;">
+  <meta name="description" content="Vývojových prostředí pro PHP je docela hojnost. Sám používám v práci Zend Studio 7.1 a doma Netbeans 6.8. Minulý rok přišla firma JetBrains, která je &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,83 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/02/jetbrains-phpstorm/">JetBrains PhpStorm</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-25T00:00:00+01:00" pubdate data-updated="true">25. 02. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Vývojových prostředí pro PHP je docela hojnost. Sám používám v práci Zend Studio 7.1 a doma Netbeans 6.8. Minulý rok přišla firma JetBrains, která je známá svým IDE pro Javu IDEA, s vývojovým prostředím pro PHP, které se jmenuje <a href="http://www.jetbrains.com/webide/features/index.html#PHP_IDE">PhpStorm (dříve WebIDE)</a>. V současné době je nové IDE stále ve vývoji. Brzo se dočkáme beta verze a myslím do léta snad i finální verze.</p>
+
+<p><a href="http://blogs.jetbrains.com/webide/">PhpStorm</a> (dále PS) je na platformě IDEA, což považuji za velkou výhodu. Dají se použít pluginy pro Ideu v PhpStorm. Kvalita pluginů v Idea mi přijde o poznání lepší než pro Eclipse.</p>
+
+<p>[caption id=&ldquo;attachment_818&rdquo; align=&ldquo;aligncenter&rdquo; width=&ldquo;300&rdquo; caption=&ldquo;JetBrains PhpStorm (WebIDE)&rdquo;]<a href="http://blog.prskavec.net/wp-content/uploads/2010/02/PhpStormWI-94.335-1.png"><img src="http://blog.prskavec.net/wp-content/uploads/2010/02/PhpStormWI-94.335-1-300x266.png" alt="" width="300" height="266" class="size-medium wp-image-818" /></a>[/caption]</p>
+
+<p><strong>Hlavní přednosti vidím v těchto bodech:</strong></p>
+
+<ul>
+    <li>Podpora pro Git, je to jediné IDE s opravdu slušným pluginem. Podpora pro SVN je samozřejmě také. Zkoušel jsem plugin pro Git v Netbeansech i Eclipse a nikde mi to moc dobře nefungovalo, nebo mi tam chyběli potřebné příkazy.</li>
+    <li>Vynikající editor, který je o poznání chytřejší než například v Netbeans. Je to vidět zvláště pokud něco refaktorujete. Pozná zda funkce již závorky má či nemá, nedoplňuje dvojité uvozovky nesmyslně jak se mi to stává často v Netbeans.</li>
+    <li>Podpora XSLT, XML. Pokud používáte jako šablonovací systém XSL tak to velmi ulehčuje práci. Podpora pro XSLT je i v Zend Studiu, ale tady to mají vyladěné do detailů. Mě to funguje spolehlivěji než v Zendu.</li>
+    <li>Multiplatformost je daná tím, že aplikace je napsaná v Javě a proto není problém ani Windows, Linux nebo Mac.</li>
+    <li>Podpora pro Smarty (pokud používáte)</li>
+    <li>Podpora pro PhpUnit</li>
+    <li>Podpora pro Debuggery (xdebug už funguje, zend debugger slibují)</li>
+    <li>Podpora pro Phpdoc (doplňování) </li>
+    <li>Editor s dopňovaním pro JS a HTML</li>
+</ul>
+
+
+<p>Pěkná věc je třeba produktivity guide, radí co a jak dělat lépe:
+[caption id=&ldquo;attachment_828&rdquo; align=&ldquo;aligncenter&rdquo; width=&ldquo;300&rdquo; caption=&ldquo;JetBrains PhpStorm Productivity Guide&rdquo;]<a href="http://blog.prskavec.net/wp-content/uploads/2010/02/Screenshot-Productivity-Guide.png"><img src="http://blog.prskavec.net/wp-content/uploads/2010/02/Screenshot-Productivity-Guide-300x262.png" alt="JetBrains-PhpStorm-Productivity-Guide" width="300" height="262" class="size-medium wp-image-828" /></a>[/caption]</p>
+
+<p><strong>Nevýhody a nejasnosti v současnosti</strong></p>
+
+<ul>
+    <li>Horší podpora formátovaní, chybí podpora checkstyle. Formátování lze celkem detailně sice nastavit, ale zatím nefungoval náhled a chtělo by to podporu pro PEAR, Zend checkstyle.</li>
+    <li>Zatím neznámá licenční politika a cena, ale předpokládám ze to bude podobné jako Zend studio, kterému chtějí konkurovat jak uvedli minulý rok na konferenci ZendCon&#8217;09</li>
+    <li>Zatím na linuxu chybí installler, na windows jsem to nezkoušel.</li>
+    <li>Chybí globální nastavení pro include path pro doplňovaní syntaxe, musíte do projektu přidat zatím ručně, líbilo by se mi to v globálním nastavení pro PHP.</li>
+    <li>Nepodporuje worksety. V Eclipse jsem si oblíbil worksety pro různé typy projektů (Zend, Nette, Examples,&#8230;), to mi přijde užitečné, ale není to nutné.</li>
+    <li>Chybí UI pro Phpunit, který je moc pěkně udělaný v Netbeans. Pokud programujete podle TDD je to dost užitečné.</li>
+</ul>
+
+
+<p><strong>Závěr</strong>
+Myslím, že mezi IDE, které jsou zdarma mi přijde v současné době nejlepší asi Netbeans. Vývoj postupuje celkem pěkně dopředu, vylepšené automatické formátování v 6.9 bude jistě přínosem. Jedinou nevýhodu vidím v editoru, který se občas chová divně, ale dá se to přežít.</p>
+
+<p>Z komerčních znám jen PhpStorm a ZendStudio a přijde mi práce v obou podobná. Jen v PhpStrormu jsou trochu dál. Je to tím, že IDEA jako prostředí je daleko před ostatními a spousta funkcí v něm obsažená pro Javu se do ostatním Java IDE pomalu dostává. Pro PHP je IDE od JetBrains sice nové, ale oni mají velké zkušenosti s vývojem IDE a myslí to s konkurencí pro Zend Studio vážně a na té práci je to vidět.</p>
+
+<p>Pokud máte zkušenosti s PhpStorm na jiných platformách podělte se s ostatními v komentářích.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -744,101 +821,6 @@ Pokud si dáte v Internet Exploreru <a href="//urlmon.dll/ietldlist.xml">res://u
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/09/ceska-verze-pluginu-pro-wordpress/">Česká verze pluginů pro Wordpress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-09-12T00:00:00+02:00" pubdate data-updated="true">12. 09. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Co k tomu potřebujete?</strong></p>
-
-
-<ul>
-<li>plugin (<a href="http://wordpress.org/extend/plugins/wp-recentcomments/">WP-RecentComments</a>)</li>
-<li><a href="http://www.neoease.com/">prográmátora</a>, který s překladem počítá</li>
-<li><a href="http://www.poedit.net/">poEdit</a></li>
-<li>znalost nějakého jazyka</li>
-<li>ochota něco takového vůbec dělat</li>
-</ul>
-
-
-<p><strong>Jak se to dělá</strong></p>
-
-
-<p>Pokud nejste zběhlý s programováním, tak asi to může být pro vás problém a proto jsem také napsal tento článek, třeba vám to pomůže pokud budete chtít něco takového dělat.</p>
-
-
-<p>Když si stáhnete plugin WP-RecentComments na disk, rozbalíte ho někam do adresáře uvidíte tuto strukturu:</p>
-
-
-<pre>drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:14 avatars
--rw-r--r-- 1 abtris  18K 2009-09-12 21:14 core.php(
-drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:14 css
-drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:14 js
-drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:28 languages
--rw-r--r-- 1 abtris  12K 2009-09-12 21:14 README.txt
--rw-r--r-- 1 abtris 8.6K 2009-09-12 21:14 screenshot-1.png
--rw-r--r-- 1 abtris 8.0K 2009-09-12 21:14 screenshot-2.png
--rw-r--r-- 1 abtris  16K 2009-09-12 21:14 screenshot-3.png
--rw-r--r-- 1 abtris  18K 2009-09-12 21:14 wp-recentcomments.php</pre>
-
-
-<p>V adresáři languages najde to co potřebujete, je tam hromada souborů s příponou po a mo. To jsou soubory ve formátu pro <a href="http://en.wikipedia.org/wiki/GNU_gettext">gettext</a> a mo jsou zkompilované soubory (ty vás nezajímají) a v po souborech najdete zdrojový kód, který je potřeba otevřít pomocí editoru (doporučuji poEdit).</p>
-
-
-<p>Potom stačí jen přeložit potřebný text, z angličtiny do češtiny a po uložení  se vytvoří soubor (wp-recentcomments-cs_CZ.po) s příponou mo. Pojmenování s koncovkou cs_CZ je potřeba dodržet, aby fungovalo dobře rozpozání jazyka ve Wordpressu.</p>
-
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/09/Screenshot-Poedit-home-abtris-Desktop-wp-recentcomments-languages-wp-recentcomments-cs_CZ.po.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/09/Screenshot-Poedit-home-abtris-Desktop-wp-recentcomments-languages-wp-recentcomments-cs_CZ.po-300x253.png" alt="Screenshot-Poedit : -home-abtris-Desktop-wp-recentcomments-languages-wp-recentcomments-cs_CZ.po" width="300" height="253" class="aligncenter size-medium wp-image-670" /></a></p>
-
-<p>Potom si nahrajte upravený plugin na server a máte ho v provozu česky jak vidíte u mne na stránkách.</p>
-
-
-<p>Dobré je vaši verzi poslat také autorovi ke zveřejnění. Česká verze WP-RecentComments se tam časem až programátor uzná objeví také.</p>
-
-
-<p>Ukázka přeloženého widgetu dále, pokud máte nějaké připomínky k překladu neváhejte je také uvést v komentářích.</p>
-
-
-<p><strong>Moje nastavení widgetu pro WP-RecentComments</strong></p>
-
-
-<p>Nastavení najdete v administraci, Vzhled -&gt; Widgety. Přidáte widget do sidebaru a potom po kliknutí na pravou ikonku rozbalí se vám menu, kterou vidíte na obrázku.</p>
-
-
-<p></p>
-
-<p><img class="aligncenter size-full wp-image-666" src="http://blog.prskavec.net/wp-content/uploads/2009/09/Widgety-‹-Prskavci-blog-—-WordPress_1252784358148.png" alt="Widgety ‹ Prskavčí blog — WordPress_1252784358148" width="268" height="672" /></p>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/7/">&larr; Older</a>
@@ -870,6 +852,10 @@ drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:28 languages
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/02/docker-cluster-management/">Docker cluster management</a>
+      </li>
     
       <li class="post">
         <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
@@ -905,10 +891,6 @@ drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:28 languages
     
       <li class="post">
         <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
       </li>
     
   </ul>
@@ -951,7 +933,7 @@ drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:28 languages
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Ladislav Prskavec -
+  Copyright &copy; 2015 - Ladislav Prskavec -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

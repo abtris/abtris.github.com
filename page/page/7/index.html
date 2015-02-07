@@ -9,7 +9,11 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Proč REST a co to obnáší? V Zend Frameworku 1.9 byla přidána pro používání REST v url a v controlleru. REST je v módě a proto nám ho přidali i do ZF &hellip;">
+  <meta name="description" content="Co k tomu potřebujete? plugin (WP-RecentComments)
+prográmátora, který s překladem počítá
+poEdit
+znalost nějakého jazyka
+ochota něco takového vůbec &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +63,101 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/09/ceska-verze-pluginu-pro-wordpress/">Česká verze pluginů pro Wordpress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-12T00:00:00+02:00" pubdate data-updated="true">12. 09. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Co k tomu potřebujete?</strong></p>
+
+
+<ul>
+<li>plugin (<a href="http://wordpress.org/extend/plugins/wp-recentcomments/">WP-RecentComments</a>)</li>
+<li><a href="http://www.neoease.com/">prográmátora</a>, který s překladem počítá</li>
+<li><a href="http://www.poedit.net/">poEdit</a></li>
+<li>znalost nějakého jazyka</li>
+<li>ochota něco takového vůbec dělat</li>
+</ul>
+
+
+<p><strong>Jak se to dělá</strong></p>
+
+
+<p>Pokud nejste zběhlý s programováním, tak asi to může být pro vás problém a proto jsem také napsal tento článek, třeba vám to pomůže pokud budete chtít něco takového dělat.</p>
+
+
+<p>Když si stáhnete plugin WP-RecentComments na disk, rozbalíte ho někam do adresáře uvidíte tuto strukturu:</p>
+
+
+<pre>drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:14 avatars
+-rw-r--r-- 1 abtris  18K 2009-09-12 21:14 core.php(
+drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:14 css
+drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:14 js
+drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:28 languages
+-rw-r--r-- 1 abtris  12K 2009-09-12 21:14 README.txt
+-rw-r--r-- 1 abtris 8.6K 2009-09-12 21:14 screenshot-1.png
+-rw-r--r-- 1 abtris 8.0K 2009-09-12 21:14 screenshot-2.png
+-rw-r--r-- 1 abtris  16K 2009-09-12 21:14 screenshot-3.png
+-rw-r--r-- 1 abtris  18K 2009-09-12 21:14 wp-recentcomments.php</pre>
+
+
+<p>V adresáři languages najde to co potřebujete, je tam hromada souborů s příponou po a mo. To jsou soubory ve formátu pro <a href="http://en.wikipedia.org/wiki/GNU_gettext">gettext</a> a mo jsou zkompilované soubory (ty vás nezajímají) a v po souborech najdete zdrojový kód, který je potřeba otevřít pomocí editoru (doporučuji poEdit).</p>
+
+
+<p>Potom stačí jen přeložit potřebný text, z angličtiny do češtiny a po uložení  se vytvoří soubor (wp-recentcomments-cs_CZ.po) s příponou mo. Pojmenování s koncovkou cs_CZ je potřeba dodržet, aby fungovalo dobře rozpozání jazyka ve Wordpressu.</p>
+
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/09/Screenshot-Poedit-home-abtris-Desktop-wp-recentcomments-languages-wp-recentcomments-cs_CZ.po.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/09/Screenshot-Poedit-home-abtris-Desktop-wp-recentcomments-languages-wp-recentcomments-cs_CZ.po-300x253.png" alt="Screenshot-Poedit : -home-abtris-Desktop-wp-recentcomments-languages-wp-recentcomments-cs_CZ.po" width="300" height="253" class="aligncenter size-medium wp-image-670" /></a></p>
+
+<p>Potom si nahrajte upravený plugin na server a máte ho v provozu česky jak vidíte u mne na stránkách.</p>
+
+
+<p>Dobré je vaši verzi poslat také autorovi ke zveřejnění. Česká verze WP-RecentComments se tam časem až programátor uzná objeví také.</p>
+
+
+<p>Ukázka přeloženého widgetu dále, pokud máte nějaké připomínky k překladu neváhejte je také uvést v komentářích.</p>
+
+
+<p><strong>Moje nastavení widgetu pro WP-RecentComments</strong></p>
+
+
+<p>Nastavení najdete v administraci, Vzhled -&gt; Widgety. Přidáte widget do sidebaru a potom po kliknutí na pravou ikonku rozbalí se vám menu, kterou vidíte na obrázku.</p>
+
+
+<p></p>
+
+<p><img class="aligncenter size-full wp-image-666" src="http://blog.prskavec.net/wp-content/uploads/2009/09/Widgety-‹-Prskavci-blog-—-WordPress_1252784358148.png" alt="Widgety ‹ Prskavčí blog — WordPress_1252784358148" width="268" height="672" /></p>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1036,82 +1135,6 @@ abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/05/zend-server-ce-a-xdebug/">Zend Server CE a Xdebug</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-18T00:00:00+02:00" pubdate data-updated="true">18. 05. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>O práci s Zend Serverem jsem už tu psal. Normálně je nainstalovaný Zend Debugger, který má tu nevýhodu, že neumí spolupracovat s PHPUnit. Proto, když píšu testy a mám v Hudsonu automatické zpracování reportů potřebuji <a href="http://www.xdebug.org">Xdebug</a>. Teď si ukážeme jak to na Ubuntu přidat do Zend Serveru podporu pro Xdebug. Pro windows by to mělo fungovat obdobně jen se vyhnete kompilaci Xdebugu ze zdrojového kódu a máte si možnost stáhnout zkompilovanou knihovnu.</p>
-
-<p>Nechápu moc Zend proč se trochu nesnaží, aby se dal Zend Debugger používat stejným způsobem jako Xdebug. Obzvláště když vím, že v Zend Studiu je code coverage a profiling dostupný.</p>
-
-<p>Teď už jak na to v Ubuntu:</p>
-
-<ol>
-    <li>Zend Server CE nainstalovaný dle <a href="http://blog.prskavec.net/2009/04/ubuntu-centos-5-a-php-529-v-zend-server-ce/">postupu</a></li>
-    <li>Musíte mít nainstalovaný balíček pro kompilaci
-<pre>sudo apt-get install build-essential
-sudo apt-get install autoconf</pre>
-</li>
-    <li>Stáhnout zdrojové kódy xdebugu, rozbalit a dat kompilovat.
-<pre>wget http://www.xdebug.org/files/xdebug-2.0.4.tgz
-tar -xzf xdebug-2.0.4.tgz
-cd xdebug-2.0.4/
-/usr/local/zend/bin/phpize
-./configure --enable-xdebug --with-php-config=/usr/local/zend/bin/php-config
-make</pre>
-</li>
-    <li>Knihovnu najdete v <code>xdebug-2.0.4/modules/xdebug.so</code></li>
-    <li>Knihovnu nakopirujte do <code>/usr/local/zend/lib/debugger/xdebug.so</code></li>
-<pre>sudo cp modules/xdebug.so /usr/local/zend/lib/debugger/xdebug.so</pre>
-    <li>Upravte soubor <code>/usr/local/zend/etc/ext.d/debugger.ini</code> a zakomentujte řádek
-<pre>;zend_extension_manager.dir.debugger=/usr/local/zend/lib/debugger</pre>
-</li>
-    <li>Přidejte nakonec do <code>/usr/local/zend/etc/php.ini</code> řádek
-<pre>zend_extension=/usr/local/zend/lib/debugger/xdebug.so</pre>
-</li>
-    <li>Nezapomeňte restartovat server <code>sudo /etc/init.d/zend-server restart</code></li>
-</ol>
-
-
-<p>Po instalaci by jste neměli mít problém spustit Ant s kompletním phpunit taskem i na Zend Serveru CE.</p>
-
-<pre>
-
-
-
-</pre>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/8/">&larr; Older</a>
@@ -1143,6 +1166,10 @@ make</pre>
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/02/docker-cluster-management/">Docker cluster management</a>
+      </li>
     
       <li class="post">
         <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
@@ -1178,10 +1205,6 @@ make</pre>
     
       <li class="post">
         <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/">PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.</a>
       </li>
     
   </ul>
@@ -1224,7 +1247,7 @@ make</pre>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Ladislav Prskavec -
+  Copyright &copy; 2015 - Ladislav Prskavec -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

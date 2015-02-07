@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Kategorie: vcs - Prskavčí blog</title>
+  <title>Docker cluster management - Prskavčí blog</title>
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Category: vcs">
+  <meta name="description" content="V poslední době se zabývám technologiemi pro řízení clusterů s docker konteinery. Pokud by to někoho zajímalo, zkusím jsem shrnout s čím jsem se &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.prskavec.netcategories/vcs/">
+  <link rel="canonical" href="http://blog.prskavec.net/2015/02/docker-cluster-management/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
@@ -58,36 +58,128 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Kategorie: vcs</h1>
+    
+      <h1 class="entry-title">Docker cluster management</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-07T18:09:00+01:00" pubdate data-updated="true">07. 02. 2015</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>V poslední době se zabývám technologiemi pro řízení clusterů s docker konteinery.</p>
 
-  
-  <h2>2011</h2>
+<p>Pokud by to někoho zajímalo, zkusím jsem shrnout s čím jsem se potkal a kde vidím možné využití.</p>
 
-<article>
-  
-<h1><a href="/2011/10/motivace-a-vcs/">Motivace a Verzovací systémy</a></h1>
-<time datetime="2011-10-26T20:12:00+02:00" pubdate><span class='month'>Oct</span> <span class='day'>26</span> <span class='year'>2011</span></time>
+<p>Nástroje, které můžete použít cluster management:</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/categories/vcs/'>vcs</a></span>
-</footer>
+<ul>
+<li><a href="http://mesos.apache.org/">Apache Messos</a> (java)</li>
+<li><a href="https://github.com/docker/swarm/">Docker Swarm</a> (golang)</li>
+<li><a href="https://coreos.com/using-coreos/clustering/">CoreOS Fleet</a> (golang)</li>
+<li><a href="http://kubernetes.io/">Google Kubernetes</a> (golang)</li>
+</ul>
 
 
-</article>
+<p>potom k tomu ješte patří některé frameworky pro Messos a to <a href="https://mesosphere.github.io/marathon/">Marathon</a> a <a href="http://airbnb.github.io/chronos/">Chronos</a>.</p>
 
+<p>Ještě potřebujete nástroj pro service discovery:</p>
+
+<ul>
+<li><a href="https://coreos.com/using-coreos/etcd/">CoreOS Etcd</a> (golang)</li>
+<li><a href="https://consul.io/">Hashicorp Consul</a> (golang)</li>
+<li><a href="http://zookeeper.apache.org/">Apache Zookeeper</a> (java)</li>
+</ul>
+
+
+<p>Etcd používá Kubernetes a další projekty. Service discovery je potřeba pro management clusteru. Můžete použít stejně jednoduše i ostatní projekty.</p>
+
+<p>Apache Messos umí pracovat s různorodým prostředím včetně Amazon ECS service. Framework Marathon vám potom slouží k pouštění dlouho běžících konteinerů pro aplikace a Chronos typicky pro batch processing například pro zpracování velkých dat. S Messosem musíte provozovat ZooKeeeper pro discovery service.</p>
+
+<p>Protože se snažím Javě vyhnout a raději volím nástroje v jiných jazycích, kde mám větší znalosti. Pro discovery service clusteru bych raději použil Consul nebo Etcd.</p>
+
+<p>Google Kubernetes je poměrně vyspělý nástroj používaný pro Google Cloud a adaptovaný například RedHatem pro OpenShift V3. Tam mám trochu výhradu, že to nemá podporu pro více uživatelů a neumí pracovat s externím filesystémy co vím. Ale dá se používat na tvorbu dokonce hybridních clusterů mezi více poskytovateli (AWS, Google Cloud, OpenShift, fyzické stroje).</p>
+
+<p>Docker Swarm je nástroj pro řízení clusterů konteinerů přímo od Dockeru, ale kromě základních příkladů není k dispozici nic většího, poporuje několik discovery service (etcs, consul, zookeeper). Nevím o nikom, kdo by to používal ve větším měřítku.</p>
+
+<p>CoreOS Fleet je <a href="https://coreos.com/using-coreos/systemd/">systemd</a> a <a href="https://coreos.com/using-coreos/etcd/">etcd</a> a nemám s ním zkušenosti vůbec žádné. Projekty kolem <a href="https://coreos.com/">CoreOS</a>.</p>
+
+<p>Stejně jako CoreOS snaží se o podobnou věc i <a href="http://www.projectatomic.io/">Project Atomic</a> od RedHatu. Vytvořit základní systém pro práci s kontainery.</p>
+
+<p>Závěr je asi takový, že pokud budete chtít řídít vlastní cluster asi zvolíte buď Messos nebo Kubernetes. Osobně asi budu volit Kubernetes, co vy?</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Ladislav Prskavec</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-07T18:09:00+01:00" pubdate data-updated="true">07. 02. 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/docker/'>docker</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/" title="Previous Post: Zapier a zasílání zůstatku z banky zdarma na mobil">&laquo; Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -245,7 +337,10 @@
       var disqus_shortname = 'prskavecblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.prskavec.net/2015/02/docker-cluster-management/';
+        var disqus_url = 'http://blog.prskavec.net/2015/02/docker-cluster-management/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
