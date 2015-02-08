@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-02-07T18:15:11+01:00</updated>
+  <updated>2015-02-08T08:29:51+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -25,14 +25,14 @@
 <p>Nástroje, které můžete použít cluster management:</p>
 
 <ul>
-<li><a href="http://mesos.apache.org/">Apache Messos</a> (java)</li>
+<li><a href="http://mesos.apache.org/">Apache Mesos</a> (cpp, api for java, python, c++)</li>
 <li><a href="https://github.com/docker/swarm/">Docker Swarm</a> (golang)</li>
 <li><a href="https://coreos.com/using-coreos/clustering/">CoreOS Fleet</a> (golang)</li>
 <li><a href="http://kubernetes.io/">Google Kubernetes</a> (golang)</li>
 </ul>
 
 
-<p>potom k tomu ješte patří některé frameworky pro Messos a to <a href="https://mesosphere.github.io/marathon/">Marathon</a> a <a href="http://airbnb.github.io/chronos/">Chronos</a>.</p>
+<p>potom k tomu ješte patří některé frameworky pro Mesos a to <a href="https://mesosphere.github.io/marathon/">Marathon</a> a <a href="http://airbnb.github.io/chronos/">Chronos</a>.</p>
 
 <p>Ještě potřebujete nástroj pro service discovery:</p>
 
@@ -45,7 +45,7 @@
 
 <p>Etcd používá Kubernetes a další projekty. Service discovery je potřeba pro management clusteru. Můžete použít stejně jednoduše i ostatní projekty.</p>
 
-<p>Apache Messos umí pracovat s různorodým prostředím včetně Amazon ECS service. Framework Marathon vám potom slouží k pouštění dlouho běžících konteinerů pro aplikace a Chronos typicky pro batch processing například pro zpracování velkých dat. S Messosem musíte provozovat ZooKeeeper pro discovery service.</p>
+<p>Apache Mesos umí pracovat s různorodým prostředím včetně Amazon ECS service. Framework Marathon vám potom slouží k pouštění dlouho běžících konteinerů pro aplikace a Chronos typicky pro batch processing například pro zpracování velkých dat. S Mesosem musíte provozovat ZooKeeeper pro discovery service.</p>
 
 <p>Protože se snažím Javě vyhnout a raději volím nástroje v jiných jazycích, kde mám větší znalosti. Pro discovery service clusteru bych raději použil Consul nebo Etcd.</p>
 
@@ -57,7 +57,7 @@
 
 <p>Stejně jako CoreOS snaží se o podobnou věc i <a href="http://www.projectatomic.io/">Project Atomic</a> od RedHatu. Vytvořit základní systém pro práci s konteinery.</p>
 
-<p>Závěr je asi takový, že pokud budete chtít řídít vlastní cluster asi zvolíte buď Messos nebo Kubernetes. Osobně asi budu volit Kubernetes, co vy?</p>
+<p>Závěr je asi takový, že pokud budete chtít řídít vlastní cluster asi zvolíte buď Mesos nebo Kubernetes. Osobně asi budu volit Kubernetes, co vy?</p>
 ]]></content>
   </entry>
   
