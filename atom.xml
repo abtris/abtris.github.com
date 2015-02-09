@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-02-08T08:29:51+01:00</updated>
+  <updated>2015-02-09T08:27:50+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -18,7 +18,9 @@
     <link href="http://blog.prskavec.net/2015/02/docker-cluster-management/"/>
     <updated>2015-02-07T18:09:00+01:00</updated>
     <id>http://blog.prskavec.net/2015/02/docker-cluster-management</id>
-    <content type="html"><![CDATA[<p>V poslední době se zabývám technologiemi pro řízení clusterů s docker konteinery.</p>
+    <content type="html"><![CDATA[<p>Update: přidal jsem do článku další věci zmíněné v komentářích, všem děkuji za příspěvky.</p>
+
+<p>V poslední době se zabývám technologiemi pro řízení clusterů s docker konteinery.</p>
 
 <p>Pokud by to někoho zajímalo, zkusím jsem shrnout s čím jsem se potkal a kde vidím možné využití.</p>
 
@@ -29,10 +31,11 @@
 <li><a href="https://github.com/docker/swarm/">Docker Swarm</a> (golang)</li>
 <li><a href="https://coreos.com/using-coreos/clustering/">CoreOS Fleet</a> (golang)</li>
 <li><a href="http://kubernetes.io/">Google Kubernetes</a> (golang)</li>
+<li><a href="https://github.com/spotify/helios">Spotify Helios</a> (java)</li>
 </ul>
 
 
-<p>potom k tomu ješte patří některé frameworky pro Mesos a to <a href="https://mesosphere.github.io/marathon/">Marathon</a> a <a href="http://airbnb.github.io/chronos/">Chronos</a>.</p>
+<p>potom k tomu ješte patří některé frameworky pro Mesos a to <a href="https://mesosphere.github.io/marathon/">Marathon</a> a <a href="http://airbnb.github.io/chronos/">Chronos</a>. <a href="https://github.com/mesosphere/kubernetes-mesos">A Kubernetes Framework for Apache Mesos</a>.</p>
 
 <p>Ještě potřebujete nástroj pro service discovery:</p>
 
