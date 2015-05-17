@@ -1,0 +1,556 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Amazon Elastic Beanstalk a docker - Prskavčí blog</title>
+  <meta name="author" content="Ladislav Prskavec">
+
+  
+  <meta name="description" content="Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+<meta name="google-site-verification" content="mepQHhq6JPqzvIjErdB-A6hp3UKAYIlYHN7xPUL8JUM" />
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/feed/index.html" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.prskavec.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archív</a></li>
+  <li><a href="/prednasky">Přednášky</a></li>  
+  <li><a href="/skoleni-a-kurzy">Školení a kurzy</a></li>
+  <li><a href="/kontakt">Kontakt</a></li>  
+</ul>
+
+</nav> 
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Amazon Elastic Beanstalk a docker</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-14T11:36:00+02:00" pubdate data-updated="true">14. 05. 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době přidal podporu <a href="http://www.docker.io">Dockeru</a>. Díky podpoře docker kontejnerů je možné pustit víceméně cokoliv.</p>
+
+<!-- more -->
+
+
+<p>Amazon web services operují v několika regionech. Dnes je jich 10 a z toho máte dva i v evropě. Pokud chcete zkoušet novinky, které AWS poskytuje doporučuji použít region <code>us-east-1</code>.</p>
+
+<p>Amazon kromě regionů, které vám umožňují poskytovat služby z geograficky nejbližšího místa vašim zákazníkům, také podporuje Availability Zones (AZ), které vám umožňují zvýšit spolehlivost v jednom regionu. V každém regionu je k dispozici několik zón. Pokud máte skupinu serverů ve škálovacím režimu je dobré je rozprostřít přes několik AZ a tím máte jistotu pokud dojde k výpadku jedné zóny, že vaše služba poběží.</p>
+
+<p>Elastic Beanstalk podporuje PHP, NodeJS, Python, Ruby, Java, Go a Docker.</p>
+
+<p>Teď k Elastic Beanstalku (EB). Služba využívá zdroje AWS. Na vstupu je Elastic Load Balancer, který vám směřuje provoz na vaši aplikaci.</p>
+
+<h2>Docker</h2>
+
+<p>Pro funkci dockeru potřebujete buď <code>Dockerrun.aws.json</code> nebo <code>Dockerfile</code>. Já pro svůj příklad používám json file.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    "AWSEBDockerrunVersion": "1",
+</span><span class='line'>    "Image": {
+</span><span class='line'>        "Name": "registry:0.9.1"
+</span><span class='line'>    },
+</span><span class='line'>    "Volumes": [
+</span><span class='line'>    ],
+</span><span class='line'>    "Ports": [
+</span><span class='line'>        {
+</span><span class='line'>            "ContainerPort": "5000"
+</span><span class='line'>        }
+</span><span class='line'>    ]
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>tady je příslušný dockerfile, ale ten nemusíte použít. Buď json file nebo dockerfile.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>FROM registry:0.9.1
+</span><span class='line'>
+</span><span class='line'>ENV DEPS loose
+</span><span class='line'>RUN pip uninstall -y docker-registry-core && pip uninstall -y boto && pip install boto==2.34.0 && pip install docker-registry-core
+</span><span class='line'>
+</span><span class='line'>RUN env
+</span><span class='line'>
+</span><span class='line'>ENV SETTINGS_FLAVOR s3
+</span><span class='line'>ENV AWS_BUCKET $AWS_S3_BUCKET
+</span><span class='line'>ENV STORAGE_PATH /registry
+</span><span class='line'>ENV AWS_KEY $AWS_S3_ACCESS_KEY
+</span><span class='line'>ENV AWS_SECRET $AWS_S3_SECRET_KEY
+</span><span class='line'>ENV AWS_REGION $AWS_S3_REGION
+</span><span class='line'>ENV AWS_HOST s3.amazonaws.com
+</span><span class='line'>ENV AWS_PORT 443
+</span><span class='line'>ENV AWS_CALLING_FORMAT REGULAR
+</span><span class='line'>ENV DEBUG True
+</span><span class='line'>ENV LOGLEVEL debug
+</span><span class='line'>
+</span><span class='line'>EXPOSE 5000
+</span><span class='line'>
+</span><span class='line'>CMD ["docker-registry"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Možná vás překvapí, že kontainer nemá definovaný port na který má být směřovám. EB ve verzi 1 směřuje všechno na port 80, kde nginx proxy. Pokud definujete více portů použije se jen ten poslední.</p>
+
+<p>Není to moc užitečné a pokud potřebujete použít více portů nenašel jsem vhodné řešení. Konfigurční předpis, ale již existuje ve verzi 2, kde jsou možnosti mnohem širší a tyto problémy se dají dobře řešit. Ale zatím to není v oficiální dokumentaci a našel jsem to jen AWS labs.</p>
+
+<h2>Nginx Proxy</h2>
+
+<p>Jak jsem říkal v předchozím odstavci, máte defaultní nginx proxy a veškeré nastavení se dá změnit, ale musíte to udělat pomocí adresáře <code>.ebextensions</code>.</p>
+
+<p>Například konfigurace nginxu:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>files:
+</span><span class='line'>  "/etc/nginx/docker-registry.conf":
+</span><span class='line'>    mode: "000644"
+</span><span class='line'>    owner: root
+</span><span class='line'>    owner: root
+</span><span class='line'>    content: |
+</span><span class='line'>      proxy_pass                        http://docker;
+</span><span class='line'>      proxy_http_version                1.1;
+</span><span class='line'>      proxy_set_header  Host            $http_host;
+</span><span class='line'>      proxy_set_header  X-Real-IP       $remote_addr;
+</span><span class='line'>      proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+</span><span class='line'>      proxy_set_header  Authorization  "";
+</span><span class='line'>      proxy_read_timeout               900;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>a tady konfigurace vlastní website, kde jsem přidal autorizaci.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>files:
+</span><span class='line'>  "/etc/nginx/sites-available/elasticbeanstalk-nginx-docker-proxy.conf":
+</span><span class='line'>    mode: "000644"
+</span><span class='line'>    owner: root
+</span><span class='line'>    owner: root
+</span><span class='line'>    content: |
+</span><span class='line'>      server {
+</span><span class='line'>        listen 80;
+</span><span class='line'>
+</span><span class='line'>        client_max_body_size 0;
+</span><span class='line'>        chunked_transfer_encoding on;
+</span><span class='line'>
+</span><span class='line'>        location / {
+</span><span class='line'>          auth_basic            "Restricted";
+</span><span class='line'>          auth_basic_user_file  docker-registry.htpasswd;
+</span><span class='line'>          include               docker-registry.conf;
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        location /_ping {
+</span><span class='line'>          auth_basic off;
+</span><span class='line'>          include               docker-registry.conf;
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        location /v1/_ping {
+</span><span class='line'>          auth_basic off;
+</span><span class='line'>          include               docker-registry.conf;
+</span><span class='line'>        }
+</span><span class='line'>      }</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Závěr</h2>
+
+<p>Je potřeba definovat několik proměnných prostředí, které jsou vidět na skriptu pro spuštění.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>docker run \
+</span><span class='line'>         -e SETTINGS_FLAVOR=s3 \
+</span><span class='line'>         -e AWS_BUCKET=$AWS_S3_BUCKET \
+</span><span class='line'>         -e STORAGE_PATH=/registry \
+</span><span class='line'>         -e AWS_KEY=$AWS_S3_ACCESS_KEY \
+</span><span class='line'>         -e AWS_SECRET=$AWS_S3_SECRET_KEY \
+</span><span class='line'>         -e SEARCH_BACKEND=sqlalchemy \
+</span><span class='line'>         -e DEBUG=True \
+</span><span class='line'>         -e LOGLEVEL=debug \
+</span><span class='line'>         -e AWS_REGION="us-east-1" \
+</span><span class='line'>         -p 5000:5000 \
+</span><span class='line'>         registry</span></code></pre></td></tr></table></div></figure>
+
+
+<p>PaaS jako Elastic Beanstalk je celkem použitelný, má CLI clienta, funguje s gitem. Má to některé věci, které mi chybí například na Heroku (VPC, auto scaling). Ale přesto mi například práce s heroku přijde příjemnější i když to teď <a href="https://www.heroku.com/beta-pricing">zabili změnou plánů</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ladislav Prskavec</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-14T11:36:00+02:00" pubdate data-updated="true">14. 05. 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/docker/'>docker</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2015/02/docker-cluster-management/" title="Previous Post: Docker cluster management">&laquo; Docker cluster management</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://blog.prskavec.net" alt="Home"><img class="icons" src="/images/Home.png" ></a>
+      <a href="http://blog.prskavec.net/archives/" alt="Archives"><img  class="icons" src="/images/Calendar.png"></a>
+      <a href="mailto:ladislav@prskavec.net" alt="E-Mail"><img  class="icons" src="/images/Envelope.png"></a>
+      <a href="http://blog.prskavec.net/atom.xml" alt="subscribe feed"><img class="icons" src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Ladislav Prskavec</h1>
+  <p style="margin-top:6px;"><img src="/images/avatar.jpg" style="float:left; margin-right:10px;" width="100" height="115" /><a href="http://github.com/abtris/">Programátor</a>, otec, <a href="http://www.dzogchen.cz">buddhista</a>, milovník dobrého jídla, knih, nových technologí a hraček pro všechny s&nbsp;duší dítěte.
+</p>
+  <br style="clear:left;"/>
+</section>
+<section>
+  <h1>Poslední příspěvky</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2015/02/docker-cluster-management/">Docker cluster management</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/11/docker/">docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subversion</h1>
+  <p style="margin-top:6px; text-align:center"><a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11" onClick="_gaq.push(['_trackEvent', 'link', 'itunes/subversion', 'svn-promo-sidebar-vpravo']);"><img src="http://a2.mzstatic.com/us/r30/Publication/v4/5c/1a/66/5c1a667d-2f78-b9b2-31ec-7c06ab9b74e8/B_SUBVERSION.225x225-75.jpg" style="float:left; margin-right:10px; width:172px; height:225px;" /></a>
+</p>
+  <br style="clear:left;"/>
+</section>
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+LadislavPrskavec?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <h1>GitHub</h1>
+
+<iframe src="http://githubbadge.appspot.com/badge/abtris" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder=0></iframe>
+
+</section>
+<section>
+  <h1>Twitter</h1>
+  <a class="twitter-timeline" width="250" height="500" href="https://twitter.com/abtris" data-widget-id="345276838232326144">Tweets by @abtris</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Ladislav Prskavec -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79221-21']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter21617953 = new Ya.Metrika({id:21617953,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21617953" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'prskavecblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker/';
+        var disqus_url = 'http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/all.js?v=1412111651"></script>
+
+
+
+</body>
+</html>

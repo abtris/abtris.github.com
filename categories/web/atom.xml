@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: web | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/web/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-05-12T20:58:51+02:00</updated>
+  <updated>2015-05-17T20:05:14+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<h2>Motivace</h2>
 
 <p>Banky posílají změnu zůstatku emailem a SMS. Za SMS začínájí účtovat třeba i 2Kč což mi přijde fakt hrůza. Tak jsem si řekl jak dostat ten email do telefonu pomocí push notifikace, aby mě to nestálo moc peněz a dalo se případně používat univerzálně.</p>
+
+<!-- more -->
+
 
 <h2>Pushover</h2>
 

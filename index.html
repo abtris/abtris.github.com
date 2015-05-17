@@ -9,8 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Update: přidal jsem do článku další věci zmíněné v komentářích, všem děkuji za příspěvky.
-Update 23.2.2015: Přidán odkaz na Centurion od New Relic V &hellip;">
+  <meta name="description" content="Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +65,47 @@ Update 23.2.2015: Přidán odkaz na Centurion od New Relic V &hellip;">
       
   <header>
     
+      <h1 class="entry-title"><a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-14T11:36:00+02:00" pubdate data-updated="true">14. 05. 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době přidal podporu <a href="http://www.docker.io">Dockeru</a>. Díky podpoře docker kontejnerů je možné pustit víceméně cokoliv.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2015/05/amazon-elastic-beanstalk-a-docker/">Dále &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2015/02/docker-cluster-management/">Docker cluster management</a></h1>
     
     
@@ -113,32 +153,12 @@ Update 23.2.2015: Přidán odkaz na Centurion od New Relic V &hellip;">
 
 <p>potom k tomu ješte patří některé frameworky pro Mesos a to <a href="https://mesosphere.github.io/marathon/">Marathon</a> a <a href="http://airbnb.github.io/chronos/">Chronos</a>. <a href="https://github.com/mesosphere/kubernetes-mesos">A Kubernetes Framework for Apache Mesos</a>.</p>
 
-<p>Ještě potřebujete nástroj pro service discovery:</p>
-
-<ul>
-<li><a href="https://coreos.com/using-coreos/etcd/">CoreOS Etcd</a> (golang)</li>
-<li><a href="https://consul.io/">Hashicorp Consul</a> (golang)</li>
-<li><a href="http://zookeeper.apache.org/">Apache Zookeeper</a> (java)</li>
-</ul>
-
-
-<p>Etcd používá Kubernetes a další projekty. Service discovery je potřeba pro management clusteru. Můžete použít stejně jednoduše i ostatní projekty.</p>
-
-<p>Apache Mesos umí pracovat s různorodým prostředím včetně Amazon ECS service. Framework Marathon vám potom slouží k pouštění dlouho běžících konteinerů pro aplikace a Chronos typicky pro batch processing například pro zpracování velkých dat. S Mesosem musíte provozovat ZooKeeeper pro discovery service.</p>
-
-<p>Protože se snažím Javě vyhnout a raději volím nástroje v jiných jazycích, kde mám větší znalosti. Pro discovery service clusteru bych raději použil Consul nebo Etcd.</p>
-
-<p>Google Kubernetes je poměrně vyspělý nástroj používaný pro Google Cloud a adaptovaný například RedHatem pro OpenShift V3. Tam mám trochu výhradu, že to nemá podporu pro více uživatelů a neumí pracovat s externím filesystémy co vím. Ale dá se používat na tvorbu dokonce hybridních clusterů mezi více poskytovateli (AWS, Google Cloud, OpenShift, fyzické stroje).</p>
-
-<p>Docker Swarm je nástroj pro řízení clusterů konteinerů přímo od Dockeru, ale kromě základních příkladů není k dispozici nic většího, poporuje několik discovery service (etcs, consul, zookeeper). Nevím o nikom, kdo by to používal ve větším měřítku.</p>
-
-<p>CoreOS Fleet je <a href="https://coreos.com/using-coreos/systemd/">systemd</a> a <a href="https://coreos.com/using-coreos/etcd/">etcd</a> a nemám s ním zkušenosti vůbec žádné. Projekty kolem <a href="https://coreos.com/">CoreOS</a> jsou zajímavé. Mají vlastní technologii konteinerů <a href="https://coreos.com/blog/rocket/">Rocket</a>.</p>
-
-<p>Stejně jako CoreOS snaží se o podobnou věc i <a href="http://www.projectatomic.io/">Project Atomic</a> od RedHatu. Vytvořit základní systém pro práci s konteinery.</p>
-
-<p>Závěr je asi takový, že pokud budete chtít řídít vlastní cluster asi zvolíte buď Mesos nebo Kubernetes. Osobně asi budu volit Kubernetes, co vy?</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/2015/02/docker-cluster-management/">Dále &rarr;</a>
+    </footer>
   
 
 
@@ -176,25 +196,12 @@ Update 23.2.2015: Přidán odkaz na Centurion od New Relic V &hellip;">
 
 <p>Banky posílají změnu zůstatku emailem a SMS. Za SMS začínájí účtovat třeba i 2Kč což mi přijde fakt hrůza. Tak jsem si řekl jak dostat ten email do telefonu pomocí push notifikace, aby mě to nestálo moc peněz a dalo se případně používat univerzálně.</p>
 
-<h2>Pushover</h2>
-
-<p>Služba <a href="https://pushover.net/">Pushover</a> není zcela zdarma, ale zaplatíte jen jednorázově při nákupu aplikace nebo při aktivaci desktop notifkací. A získáte tím možnost zasílat notifikace skoro z čehokoliv a kam potřebujete. Můžete konfigurovat kdy nechcete být rušeni (noc, víkendy apod.).</p>
-
-<h2>Parse emails by Zapier</h2>
-
-<p>Služba <a href="https://zapier.com/">Zapier</a> má zajímavou <a href="http://parser.zapier.com/">službu na parsování dat z emailu</a>, která se zatím zdarma a nenašel jsem jinou, který by byla dobrá pro tento můj problém. Existují sice služby na parsování emailů, ale ty jsou spíše děláný na zpracování velkého množství emailů a nejsou zdarma.</p>
-
-<p>Na službě si zřídíte emailovou schránku na kterou si přepošlete email z banky, označíte si v něm část co chcete posílat na mobil. Služba potom toto políčko poskytne jako placeholder pro zpracování a poslání dále.</p>
-
-<h2>Zapier</h2>
-
-<p>V Zapieru potom nakonfigurujete zpracování emailů z vaší schránky na parseru a poslání na mobil pomocí pushover. Zkoušel jsem třeba i hangouts, ale nedošlo mi to všechna zařízení a není to tak komfortní jako pushover.</p>
-
-<h2>Závěr</h2>
-
-<p>I bez programování můžete vyzrát na chytráky co si snaží za služby s minimálními nároky účtovat hromady peněz a <a href="https://zapier.com/">Zapier</a> nebo <a href="https://ifttt.com">IFTTT</a> jsou na  to super pomocníci.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Dále &rarr;</a>
+    </footer>
   
 
 
@@ -513,47 +520,6 @@ git init
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-19T06:53:00+01:00" pubdate data-updated="true">19. 12. 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>V Praze 14-15. 12. 2012 se uskutečnil jedinečný projekt v rámci mezinárodní komunity, která se zaměřuje na to dostat do technice ženy a dívky.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2012/12/railsgirls-v-praze/">Dále &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/2/">&larr; Older</a>
@@ -583,6 +549,10 @@ git init
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a>
+      </li>
     
       <li class="post">
         <a href="/2015/02/docker-cluster-management/">Docker cluster management</a>
@@ -618,10 +588,6 @@ git init
     
       <li class="post">
         <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
       </li>
     
   </ul>

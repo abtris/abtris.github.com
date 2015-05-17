@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-05-12T20:58:51+02:00</updated>
+  <updated>2015-05-17T20:05:14+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -12,6 +12,236 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Amazon Elastic Beanstalk a docker]]></title>
+    <link href="http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker/"/>
+    <updated>2015-05-14T11:36:00+02:00</updated>
+    <id>http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker</id>
+    <content type="html"><![CDATA[<p>Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době přidal podporu <a href="http://www.docker.io">Dockeru</a>. Díky podpoře docker kontejnerů je možné pustit víceméně cokoliv.</p>
+
+<!-- more -->
+
+
+<p>Amazon web services operují v několika regionech. Dnes je jich 10 a z toho máte dva i v evropě. Pokud chcete zkoušet novinky, které AWS poskytuje doporučuji použít region <code>us-east-1</code>.</p>
+
+<p>Amazon kromě regionů, které vám umožňují poskytovat služby z geograficky nejbližšího místa vašim zákazníkům, také podporuje Availability Zones (AZ), které vám umožňují zvýšit spolehlivost v jednom regionu. V každém regionu je k dispozici několik zón. Pokud máte skupinu serverů ve škálovacím režimu je dobré je rozprostřít přes několik AZ a tím máte jistotu pokud dojde k výpadku jedné zóny, že vaše služba poběží.</p>
+
+<p>Elastic Beanstalk podporuje PHP, NodeJS, Python, Ruby, Java, Go a Docker.</p>
+
+<p>Teď k Elastic Beanstalku (EB). Služba využívá zdroje AWS. Na vstupu je Elastic Load Balancer, který vám směřuje provoz na vaši aplikaci.</p>
+
+<h2>Docker</h2>
+
+<p>Pro funkci dockeru potřebujete buď <code>Dockerrun.aws.json</code> nebo <code>Dockerfile</code>. Já pro svůj příklad používám json file.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    "AWSEBDockerrunVersion": "1",
+</span><span class='line'>    "Image": {
+</span><span class='line'>        "Name": "registry:0.9.1"
+</span><span class='line'>    },
+</span><span class='line'>    "Volumes": [
+</span><span class='line'>    ],
+</span><span class='line'>    "Ports": [
+</span><span class='line'>        {
+</span><span class='line'>            "ContainerPort": "5000"
+</span><span class='line'>        }
+</span><span class='line'>    ]
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>tady je příslušný dockerfile, ale ten nemusíte použít. Buď json file nebo dockerfile.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>FROM registry:0.9.1
+</span><span class='line'>
+</span><span class='line'>ENV DEPS loose
+</span><span class='line'>RUN pip uninstall -y docker-registry-core && pip uninstall -y boto && pip install boto==2.34.0 && pip install docker-registry-core
+</span><span class='line'>
+</span><span class='line'>RUN env
+</span><span class='line'>
+</span><span class='line'>ENV SETTINGS_FLAVOR s3
+</span><span class='line'>ENV AWS_BUCKET $AWS_S3_BUCKET
+</span><span class='line'>ENV STORAGE_PATH /registry
+</span><span class='line'>ENV AWS_KEY $AWS_S3_ACCESS_KEY
+</span><span class='line'>ENV AWS_SECRET $AWS_S3_SECRET_KEY
+</span><span class='line'>ENV AWS_REGION $AWS_S3_REGION
+</span><span class='line'>ENV AWS_HOST s3.amazonaws.com
+</span><span class='line'>ENV AWS_PORT 443
+</span><span class='line'>ENV AWS_CALLING_FORMAT REGULAR
+</span><span class='line'>ENV DEBUG True
+</span><span class='line'>ENV LOGLEVEL debug
+</span><span class='line'>
+</span><span class='line'>EXPOSE 5000
+</span><span class='line'>
+</span><span class='line'>CMD ["docker-registry"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Možná vás překvapí, že kontainer nemá definovaný port na který má být směřovám. EB ve verzi 1 směřuje všechno na port 80, kde nginx proxy. Pokud definujete více portů použije se jen ten poslední.</p>
+
+<p>Není to moc užitečné a pokud potřebujete použít více portů nenašel jsem vhodné řešení. Konfigurční předpis, ale již existuje ve verzi 2, kde jsou možnosti mnohem širší a tyto problémy se dají dobře řešit. Ale zatím to není v oficiální dokumentaci a našel jsem to jen AWS labs.</p>
+
+<h2>Nginx Proxy</h2>
+
+<p>Jak jsem říkal v předchozím odstavci, máte defaultní nginx proxy a veškeré nastavení se dá změnit, ale musíte to udělat pomocí adresáře <code>.ebextensions</code>.</p>
+
+<p>Například konfigurace nginxu:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>files:
+</span><span class='line'>  "/etc/nginx/docker-registry.conf":
+</span><span class='line'>    mode: "000644"
+</span><span class='line'>    owner: root
+</span><span class='line'>    owner: root
+</span><span class='line'>    content: |
+</span><span class='line'>      proxy_pass                        http://docker;
+</span><span class='line'>      proxy_http_version                1.1;
+</span><span class='line'>      proxy_set_header  Host            $http_host;
+</span><span class='line'>      proxy_set_header  X-Real-IP       $remote_addr;
+</span><span class='line'>      proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+</span><span class='line'>      proxy_set_header  Authorization  "";
+</span><span class='line'>      proxy_read_timeout               900;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>a tady konfigurace vlastní website, kde jsem přidal autorizaci.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>files:
+</span><span class='line'>  "/etc/nginx/sites-available/elasticbeanstalk-nginx-docker-proxy.conf":
+</span><span class='line'>    mode: "000644"
+</span><span class='line'>    owner: root
+</span><span class='line'>    owner: root
+</span><span class='line'>    content: |
+</span><span class='line'>      server {
+</span><span class='line'>        listen 80;
+</span><span class='line'>
+</span><span class='line'>        client_max_body_size 0;
+</span><span class='line'>        chunked_transfer_encoding on;
+</span><span class='line'>
+</span><span class='line'>        location / {
+</span><span class='line'>          auth_basic            "Restricted";
+</span><span class='line'>          auth_basic_user_file  docker-registry.htpasswd;
+</span><span class='line'>          include               docker-registry.conf;
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        location /_ping {
+</span><span class='line'>          auth_basic off;
+</span><span class='line'>          include               docker-registry.conf;
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        location /v1/_ping {
+</span><span class='line'>          auth_basic off;
+</span><span class='line'>          include               docker-registry.conf;
+</span><span class='line'>        }
+</span><span class='line'>      }</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Závěr</h2>
+
+<p>Je potřeba definovat několik proměnných prostředí, které jsou vidět na skriptu pro spuštění.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>docker run \
+</span><span class='line'>         -e SETTINGS_FLAVOR=s3 \
+</span><span class='line'>         -e AWS_BUCKET=$AWS_S3_BUCKET \
+</span><span class='line'>         -e STORAGE_PATH=/registry \
+</span><span class='line'>         -e AWS_KEY=$AWS_S3_ACCESS_KEY \
+</span><span class='line'>         -e AWS_SECRET=$AWS_S3_SECRET_KEY \
+</span><span class='line'>         -e SEARCH_BACKEND=sqlalchemy \
+</span><span class='line'>         -e DEBUG=True \
+</span><span class='line'>         -e LOGLEVEL=debug \
+</span><span class='line'>         -e AWS_REGION="us-east-1" \
+</span><span class='line'>         -p 5000:5000 \
+</span><span class='line'>         registry</span></code></pre></td></tr></table></div></figure>
+
+
+<p>PaaS jako Elastic Beanstalk je celkem použitelný, má CLI clienta, funguje s gitem. Má to některé věci, které mi chybí například na Heroku (VPC, auto scaling). Ale přesto mi například práce s heroku přijde příjemnější i když to teď <a href="https://www.heroku.com/beta-pricing">zabili změnou plánů</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Docker cluster management]]></title>
@@ -41,6 +271,9 @@
 
 
 <p>potom k tomu ješte patří některé frameworky pro Mesos a to <a href="https://mesosphere.github.io/marathon/">Marathon</a> a <a href="http://airbnb.github.io/chronos/">Chronos</a>. <a href="https://github.com/mesosphere/kubernetes-mesos">A Kubernetes Framework for Apache Mesos</a>.</p>
+
+<!-- more -->
+
 
 <p>Ještě potřebujete nástroj pro service discovery:</p>
 
@@ -77,6 +310,9 @@
     <content type="html"><![CDATA[<h2>Motivace</h2>
 
 <p>Banky posílají změnu zůstatku emailem a SMS. Za SMS začínájí účtovat třeba i 2Kč což mi přijde fakt hrůza. Tak jsem si řekl jak dostat ten email do telefonu pomocí push notifikace, aby mě to nestálo moc peněz a dalo se případně používat univerzálně.</p>
+
+<!-- more -->
+
 
 <h2>Pushover</h2>
 
@@ -1258,25 +1494,6 @@ $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller
 <p>Docsety podporované přímo od autorů: iOS, Mac, Man Pages and custom docsets. Included docsets: ActionScript, Android, C++, Cappuccino, Cocos2D, Cocos3D, Corona, CSS, Django, Groovy, HTML, Java, JavaFX, JavaScript, jQuery, Kobold2D, Lua, MySQL, Node.js, Perl, PHP, Python, Ruby, Ruby on Rails, Scala, Sparrow, SQLite, Unity 3D, WordPress, XSLT, XUL.</p>
 
 <p>Nebo si můžete generovat vlastní <a href="http://kapeli.com/docsets/">docset</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Angular Meetup v Praze]]></title>
-    <link href="http://blog.prskavec.net/2012/05/angular-meetup-v-praze/"/>
-    <updated>2012-05-07T09:23:00+02:00</updated>
-    <id>http://blog.prskavec.net/2012/05/angular-meetup-v-praze</id>
-    <content type="html"><![CDATA[<h1>AngularJS Meetup proběhl v Praze</h1>
-
-<p>Dne 4.5.2012 16-21h proběhl meetup přiznivců <a href="http://www.angularjs.org">AngularJS</a> v Hub Praha na Smíchově. Po <a href="http://www.meetup.com/AngularJS-NYC/events/63007142/">New Yorku</a> a <a href="http://www.meetup.com/AngularJS-MTV/events/62918252/">Mountain View</a> byla Praha doufám třetí na světě kde se něco takového konalo. Angular tým <a href="https://twitter.com/#!/mhevery">Misko Hevery</a>, <a href="https://twitter.com/#!/IgorMinar/">Igor Minar</a>, <a href="https://twitter.com/#!/vojtajina/">Vojta Jína</a> nám dělali podporu a to Vojta dokonce osobně v Praze. Přes hangout jsme pozdravili i zbytek týmu.</p>
-
-<p>Pár fotek z <a href="https://plus.google.com/photos/113391188023467233438/albums/5738773000511139121">mobilu</a> z akce je k dispozici.</p>
-
-<p>Celá akce byla postavená na dotazech a společné práci nad vlastními projekty nebo nad ukázkovou aplikací <a href="http://docs.angularjs.org/tutorial/">angular-phonecat</a>. K dipozici byl bar s občerstvením a celá doba uběhla velmi rychle. S probíraných věcí mi asi nejvíce utkvěli informace o <a href="http://stackoverflow.com/questions/9682092/databinding-in-angularjs">dirtycheckingu</a> co nám Vojta vyložil.</p>
-
-<p>Každopádně celá akce byla super a doufám, že ji zoopakujeme někdy brzo znovu a nemusíme se zaměřovat jen na AngularJS, ale na programování v Javascriptu obecně.</p>
-
-<p>Napište do komentářů kam by jste chtěli, aby se meetupy ubírali.</p>
 ]]></content>
   </entry>
   

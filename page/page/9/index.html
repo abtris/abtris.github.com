@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Hudson, extensible continuous integration engine Hudson je obdoba CruiseControl a Xinc, ale oproti těm má jednu zásadní výhodu a to, že jeho vývoj &hellip;">
+  <meta name="description" content="pDepend http://www.pdepend.org Php Depend (pDepend) patří do skupiny nástrojů QA (Quality assurance) pro kód a je odvozen od JDepend, kde je také &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,119 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/03/pdepend-a-php-frameworky/">pDepend a php frameworky</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-03-16T00:00:00+01:00" pubdate data-updated="true">16. 03. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>pDepend</h3>
+
+
+<p><a href="http://www.pdepend.org"><a href="http://www.pdepend.org">http://www.pdepend.org</a></a></p>
+
+<p>Php Depend (pDepend) patří do skupiny nástrojů QA (Quality assurance) pro kód a je odvozen od <a href="http://clarkware.com/software/JDepend.html">JDepend</a>, kde je také popis části metrik, které pDepend používá. V nedávné době byla spuštěny nové stránky projektu a verzí 0.9.4 se mi zdá již velmi použitelný. Abych vyzkoušel jak to funguje vzal jsem si z SVN repozitářů několik frameworků a pustil nad nimi pDepend.</p>
+
+<h3>CodeIgniter</h3>
+
+
+<p><a href="http://codeigniter.com"><a href="http://codeigniter.com">http://codeigniter.com</a></a></p>
+
+<p><img src="http://blog.prskavec.net/wp-content/uploads/2009/03/ci171-jdepend.png" alt="" /></p>
+
+<p><img src="http://blog.prskavec.net/wp-content/uploads/2009/03/ci171-pyramid.png" alt="" /></p>
+
+<h3>Nette</h3>
+
+
+<p><a href="http://nettephp.com/"><a href="http://nettephp.com/">http://nettephp.com/</a></a></p>
+
+<p><img style="max-width: 800px;" src="http://blog.prskavec.net/wp-content/uploads/2009/03/nette-jdepend.png" alt="" /></p>
+
+<p><img style="max-width: 800px;" src="http://blog.prskavec.net/wp-content/uploads/2009/03/nette-pyramid.png" alt="" /></p>
+
+<h3>Zend Framework</h3>
+
+
+<p><a href="http://framework.zend.com/"><a href="http://framework.zend.com/">http://framework.zend.com/</a></a></p>
+
+<p><img src="http://blog.prskavec.net/wp-content/uploads/2009/03/zend-jdepend.png" alt="" /></p>
+
+<p><img src="http://blog.prskavec.net/wp-content/uploads/2009/03/zend-pyramid.png" alt="" /></p>
+
+<h3>Symfony 1.2</h3>
+
+
+<p><a href="http://www.symfony-project.org/"><a href="http://www.symfony-project.org/">http://www.symfony-project.org/</a></a></p>
+
+<p><img src="http://blog.prskavec.net/wp-content/uploads/2009/03/sf12-jdepend.png" alt="" /></p>
+
+<p><img src="http://blog.prskavec.net/wp-content/uploads/2009/03/sf12-pyramid.png" alt="" /></p>
+
+<h3>Solar</h3>
+
+
+<p><a href="http://solarphp.com/"><a href="http://solarphp.com/">http://solarphp.com/</a></a></p>
+
+<p><img src="http://blog.prskavec.net/wp-content/uploads/2009/03/solar-jdepend.png" alt="" />
+<img src="http://blog.prskavec.net/wp-content/uploads/2009/03/solar-pyramid.png" alt="" /></p>
+
+<h3>CakePHP</h3>
+
+
+<p> <a href="http://cakephp.org/"><a href="http://cakephp.org/">http://cakephp.org/</a></a></p>
+
+<p><img src="http://blog.prskavec.net/wp-content/uploads/2009/03/cake-jdepend.png" alt="cake-jdepend" title="cake-jdepend"  />
+<img src="http://blog.prskavec.net/wp-content/uploads/2009/03/cake-pyramid.png" alt="cake-pyramid" title="cake-pyramid"  /></p>
+
+<h3>Prado</h3>
+
+
+<p> <a href="http://www.pradosoft.com/"><a href="http://www.pradosoft.com/">http://www.pradosoft.com/</a></a></p>
+
+<p><img src="http://blog.prskavec.net/wp-content/uploads/2009/03/prado3-jdepend.png" alt="prado3-jdepend" title="prado3-jdepend"  />
+<img src="http://blog.prskavec.net/wp-content/uploads/2009/03/prado3-pyramid.png" alt="prado3-pyramid" title="prado3-pyramid"  /></p>
+
+<h3>Závěr</h3>
+
+
+<p>Nejsem expert na QA abych mohl fundovaně hovořit na základě těchto dat o kvalitě frameworků, jen mě zaujalo několik věcí. Z grafů je vidět nakolik je mezi frameworky používaná abtrakce a nakolik jsou si v konstrukci podobné Symfony a Zend a jak se liší Nette a CodeIgniter.
+Z pyramid mě zaujali čísla kolem LOC (počet řádků kódu) v porodnání s počtem metod (NOM) a tříd (NOC). ANDC (průměrná hodnota odvozených tříd) nám řekne jak to framework s dědičností. AHH (průměrná výška hiarchie) je metrika která udá průměr hloubku v dědičnosti.
+<a href="http://www.manuel-pichler.de/archives/31-Using-the-Overview-Pyramid.html">Podrobný popis pyramid</a> vám odpoví na otázky co znamená, která značka a hlavně je tam tabulka referenčních hodnot jednotlivých metrik.</p>
+
+<p>Bohužel jakákoliv metrika vám nikdy neřekne nic o tom, jak je který framework dobrý nebo zda vám bude vyhovovat.</p>
+
+<div class="zemanta-pixie"><img class="zemanta-pixie-img" src="http://img.zemanta.com/pixy.gif?x-id=0edc62c8-1f17-4faa-a8c9-fa5ade65fd27" alt="" /></div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -727,124 +840,6 @@ done</pre>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/12/sony-vaio-tz31xn-a-ubuntu-810/">SONY VAIO TZ31XN a Ubuntu 8.10</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-12-22T00:00:00+01:00" pubdate data-updated="true">22. 12. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Sony VAIO TZ31XN je malý mobilní notebook, který je trhu asi rok, dnes ho nahradil modernější řada TT, ale krásný notebook je vybaven Windows Vista, které jsou ale k jeho hardware (1,2GHz, 2G RAM) nepřiměřené svými nároky. Notebook není nijak rychlý, pracovat se s ním dá, ale není to nic moc. Zkusil jsem tedy, jak na stejném hardware poběží jiný operační systém a zvolil jsem Ubuntu 8.10.</p>
-
-<p>S touto linuxovou distribuci mám nějaké zkušenosti jako uživatel, jde snadno nainstalovat a přijde mi pro notebooky povedená, většina hardware funguje již při prvním spuštění. Neměl jsem větší problémy, jen mi nefungovala kamera ve Skype, což jsem také po troše hledání vyřešil.</p>
-
-<h3>Přehled hardware</h3>
-
-
-<pre># lspci
-00:00.0 Host bridge: Intel Corporation Mobile 945GM/PM/GMS, 943/940GML and 945GT Express Memory Controller Hub (rev 03)
-00:02.0 VGA compatible controller: Intel Corporation Mobile 945GM/GMS, 943/940GML Express Integrated Graphics Controller (rev 03)
-00:02.1 Display controller: Intel Corporation Mobile 945GM/GMS/GME, 943/940GML Express Integrated Graphics Controller (rev 03)
-00:1b.0 Audio device: Intel Corporation 82801G (ICH7 Family) High Definition Audio Controller (rev 02)
-00:1c.0 PCI bridge: Intel Corporation 82801G (ICH7 family) PCI Express Port 1 (rev 02)
-00:1c.1 PCI bridge: Intel Corporation 82801G (ICH7 Family) PCI Express Port 2 (rev 02)
-00:1c.2 PCI bridge: Intel Corporation 82801G (ICH7 Family) PCI Express Port 3 (rev 02)
-00:1c.3 PCI bridge: Intel Corporation 82801G (ICH7 Family) PCI Express Port 4 (rev 02)
-00:1d.0 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI Controller #1 (rev 02)
-00:1d.1 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI Controller #2 (rev 02)
-00:1d.2 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI Controller #3 (rev 02)
-00:1d.3 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI Controller #4 (rev 02)
-00:1d.7 USB Controller: Intel Corporation 82801G (ICH7 Family) USB2 EHCI Controller (rev 02)
-00:1e.0 PCI bridge: Intel Corporation 82801 Mobile PCI Bridge (rev e2)
-00:1f.0 ISA bridge: Intel Corporation 82801GBM (ICH7-M) LPC Interface Bridge (rev 02)
-00:1f.1 IDE interface: Intel Corporation 82801G (ICH7 Family) IDE Controller (rev 02)
-00:1f.3 SMBus: Intel Corporation 82801G (ICH7 Family) SMBus Controller (rev 02)
-02:00.0 Ethernet controller: Marvell Technology Group Ltd. 88E8055 PCI-E Gigabit Ethernet Controller (rev 13)
-03:00.0 Network controller: Intel Corporation PRO/Wireless 4965 AG or AGN [Kedron] Network Connection (rev 61)
-09:04.0 CardBus bridge: Ricoh Co Ltd RL5c476 II (rev ba)
-09:04.1 FireWire (IEEE 1394): Ricoh Co Ltd R5C832 IEEE 1394 Controller (rev 04)
-09:04.3 System peripheral: Ricoh Co Ltd R5C843 MMC Host Controller (rev ff)
-09:04.4 System peripheral: Ricoh Co Ltd R5C592 Memory Stick Bus Host Adapter (rev 11)
-</pre>
-
-
-<pre>
-# lsusb
-Bus 005 Device 006: ID 044e:3017 Alps Electric Co., Ltd
-Bus 005 Device 005: ID 05ca:183a Ricoh Co., Ltd
-Bus 005 Device 002: ID 054c:02d5 Sony Corp.
-Bus 005 Device 003: ID 0409:005a NEC Corp. HighSpeed Hub
-Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 004 Device 002: ID 147e:2016
-Bus 004 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 003 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 001 Device 002: ID 046d:c03e Logitech, Inc. Premium Optical Wheel Mouse
-Bus 001 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-</pre>
-
-
-<h3>Webcamera</h3>
-
-
-<p>Pro fungování webcamery je nutné zkompilovat driver.</p>
-
-<p>Pro kompilaci je nutný základní balíček a subversion pokud ho nemáte nainstalovaný tak</p>
-
-<pre>
-apt-get install build-essential
-apt-get install subversion
-</pre>
-
-
-<p>potom je potřeba stáhnout nejnovější verzi ze SVN a tu zkompilovat</p>
-
-<pre>
-svn co http://svn.mediati.org/svn/r5u870/trunk/ webcam
-cd webcam
-make
-make install
-</pre>
-
-
-<p>a potom nainstalovat ovladač.</p>
-
-<pre>
-modprobe r5u870
-</pre>
-
-
-<p>funkčnost ověřit můžete pomocí např. gstreamer-properties nebo ve skype.</p>
-
-<p>Pokud budete mít nějaké dotazy k notebooku a jeho běhu pod linuxem, napište do komentářů.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/10/">&larr; Older</a>
@@ -876,6 +871,10 @@ modprobe r5u870
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a>
+      </li>
     
       <li class="post">
         <a href="/2015/02/docker-cluster-management/">Docker cluster management</a>
@@ -911,10 +910,6 @@ modprobe r5u870
     
       <li class="post">
         <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2012/12/railsgirls-v-praze/">RailsGirls v Praze</a>
       </li>
     
   </ul>

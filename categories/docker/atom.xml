@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: docker | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/docker/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-05-12T20:58:51+02:00</updated>
+  <updated>2015-05-17T20:05:14+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -12,6 +12,165 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Amazon Elastic Beanstalk a docker]]></title>
+    <link href="http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker/"/>
+    <updated>2015-05-14T11:36:00+02:00</updated>
+    <id>http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker</id>
+    <content type="html"><![CDATA[<p>Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době přidal podporu <a href="http://www.docker.io">Dockeru</a>. Díky podpoře docker kontejnerů je možné pustit víceméně cokoliv.</p>
+
+<!-- more -->
+
+
+<p>Amazon web services operují v několika regionech. Dnes je jich 10 a z toho máte dva i v evropě. Pokud chcete zkoušet novinky, které AWS poskytuje doporučuji použít region <code>us-east-1</code>.</p>
+
+<p>Amazon kromě regionů, které vám umožňují poskytovat služby z geograficky nejbližšího místa vašim zákazníkům, také podporuje Availability Zones (AZ), které vám umožňují zvýšit spolehlivost v jednom regionu. V každém regionu je k dispozici několik zón. Pokud máte skupinu serverů ve škálovacím režimu je dobré je rozprostřít přes několik AZ a tím máte jistotu pokud dojde k výpadku jedné zóny, že vaše služba poběží.</p>
+
+<p>Elastic Beanstalk podporuje PHP, NodeJS, Python, Ruby, Java, Go a Docker.</p>
+
+<p>Teď k Elastic Beanstalku (EB). Služba využívá zdroje AWS. Na vstupu je Elastic Load Balancer, který vám směřuje provoz na vaši aplikaci.</p>
+
+<h2>Docker</h2>
+
+<p>Pro funkci dockeru potřebujete buď <code>Dockerrun.aws.json</code> nebo <code>Dockerfile</code>. Já pro svůj příklad používám json file.</p>
+
+<p>```
+{</p>
+
+<pre><code>"AWSEBDockerrunVersion": "1",
+"Image": {
+    "Name": "registry:0.9.1"
+},
+"Volumes": [
+],
+"Ports": [
+    {
+        "ContainerPort": "5000"
+    }
+]
+</code></pre>
+
+<p>}
+```</p>
+
+<p>tady je příslušný dockerfile, ale ten nemusíte použít. Buď json file nebo dockerfile.</p>
+
+<p>```
+FROM registry:0.9.1</p>
+
+<p>ENV DEPS loose
+RUN pip uninstall -y docker-registry-core &amp;&amp; pip uninstall -y boto &amp;&amp; pip install boto==2.34.0 &amp;&amp; pip install docker-registry-core</p>
+
+<p>RUN env</p>
+
+<p>ENV SETTINGS_FLAVOR s3
+ENV AWS_BUCKET $AWS_S3_BUCKET
+ENV STORAGE_PATH /registry
+ENV AWS_KEY $AWS_S3_ACCESS_KEY
+ENV AWS_SECRET $AWS_S3_SECRET_KEY
+ENV AWS_REGION $AWS_S3_REGION
+ENV AWS_HOST s3.amazonaws.com
+ENV AWS_PORT 443
+ENV AWS_CALLING_FORMAT REGULAR
+ENV DEBUG True
+ENV LOGLEVEL debug</p>
+
+<p>EXPOSE 5000</p>
+
+<p>CMD [&ldquo;docker-registry&rdquo;]
+```</p>
+
+<p>Možná vás překvapí, že kontainer nemá definovaný port na který má být směřovám. EB ve verzi 1 směřuje všechno na port 80, kde nginx proxy. Pokud definujete více portů použije se jen ten poslední.</p>
+
+<p>Není to moc užitečné a pokud potřebujete použít více portů nenašel jsem vhodné řešení. Konfigurční předpis, ale již existuje ve verzi 2, kde jsou možnosti mnohem širší a tyto problémy se dají dobře řešit. Ale zatím to není v oficiální dokumentaci a našel jsem to jen AWS labs.</p>
+
+<h2>Nginx Proxy</h2>
+
+<p>Jak jsem říkal v předchozím odstavci, máte defaultní nginx proxy a veškeré nastavení se dá změnit, ale musíte to udělat pomocí adresáře <code>.ebextensions</code>.</p>
+
+<p>Například konfigurace nginxu:</p>
+
+<p>```
+files:
+  &ldquo;/etc/nginx/docker-registry.conf&rdquo;:</p>
+
+<pre><code>mode: "000644"
+owner: root
+owner: root
+content: |
+  proxy_pass                        http://docker;
+  proxy_http_version                1.1;
+  proxy_set_header  Host            $http_host;
+  proxy_set_header  X-Real-IP       $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  Authorization  "";
+  proxy_read_timeout               900;
+</code></pre>
+
+<p>```</p>
+
+<p>a tady konfigurace vlastní website, kde jsem přidal autorizaci.</p>
+
+<p>```
+files:
+  &ldquo;/etc/nginx/sites-available/elasticbeanstalk-nginx-docker-proxy.conf&rdquo;:</p>
+
+<pre><code>mode: "000644"
+owner: root
+owner: root
+content: |
+  server {
+    listen 80;
+
+    client_max_body_size 0;
+    chunked_transfer_encoding on;
+
+    location / {
+      auth_basic            "Restricted";
+      auth_basic_user_file  docker-registry.htpasswd;
+      include               docker-registry.conf;
+    }
+
+    location /_ping {
+      auth_basic off;
+      include               docker-registry.conf;
+    }
+
+    location /v1/_ping {
+      auth_basic off;
+      include               docker-registry.conf;
+    }
+  }
+</code></pre>
+
+<p>```</p>
+
+<h2>Závěr</h2>
+
+<p>Je potřeba definovat několik proměnných prostředí, které jsou vidět na skriptu pro spuštění.</p>
+
+<p>```
+docker run \</p>
+
+<pre><code>     -e SETTINGS_FLAVOR=s3 \
+     -e AWS_BUCKET=$AWS_S3_BUCKET \
+     -e STORAGE_PATH=/registry \
+     -e AWS_KEY=$AWS_S3_ACCESS_KEY \
+     -e AWS_SECRET=$AWS_S3_SECRET_KEY \
+     -e SEARCH_BACKEND=sqlalchemy \
+     -e DEBUG=True \
+     -e LOGLEVEL=debug \
+     -e AWS_REGION="us-east-1" \
+     -p 5000:5000 \
+     registry
+</code></pre>
+
+<p>```</p>
+
+<p>PaaS jako Elastic Beanstalk je celkem použitelný, má CLI clienta, funguje s gitem. Má to některé věci, které mi chybí například na Heroku (VPC, auto scaling). Ale přesto mi například práce s heroku přijde příjemnější i když to teď <a href="https://www.heroku.com/beta-pricing">zabili změnou plánů</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Docker cluster management]]></title>
@@ -41,6 +200,9 @@
 
 
 <p>potom k tomu ješte patří některé frameworky pro Mesos a to <a href="https://mesosphere.github.io/marathon/">Marathon</a> a <a href="http://airbnb.github.io/chronos/">Chronos</a>. <a href="https://github.com/mesosphere/kubernetes-mesos">A Kubernetes Framework for Apache Mesos</a>.</p>
+
+<!-- more -->
+
 
 <p>Ještě potřebujete nástroj pro service discovery:</p>
 
