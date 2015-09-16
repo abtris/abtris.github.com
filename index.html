@@ -96,31 +96,12 @@ Za prvé, pro datadog agenta potřebujete <a href="https://github.com/miketheman
 Pokud chcete do Datadogu zapisovat deploy na Heroku použijte <a href="https://devcenter.heroku.com/articles/deploy-hooks#email">emailový post deploy hook</a>.
 Aplikaci a její metriky můžete posílat přes Datadog API.</p>
 
-<h2>Začátek</h2>
-
-<p>Jako první jsem použil výchozí aplikaci od tvůrců a pustil tam jednu malou aplikaci, kde počet req/min dosahoval několika desítek a vše bylo bez problémů.</p>
-
-<p>Tak jsem zapojil produkční aplikace. Počet requestů stoupl na 3000 req/min a aplikace začala mít značné problémy i když běžela na Performace-M dynu.</p>
-
-<p><img class="center" src="/images/drain/01.png" title="Heroku monitoring - NodeJS before optimalization" alt="images"></p>
-
-<h2>Řešení</h2>
-
-<p>Po diagnostikování těchto problémů jsme se dali do <a href="https://github.com/apiaryio/heroku-datadog-drain">hledání memory leaks v NodeJS aplikaci</a> a současně jsme zkusili tuto malou service přepsat do <a href="https://github.com/apiaryio/heroku-datadog-drain-golang">Go</a>.</p>
-
-<p>Obě řešení zafungovala a za pár hodin práce jsme měli už přijatelné výsledky v NodeJS. Mohli jsme snížit používaná dyna na běžné <code>1X</code> a tam provádět další srovnání.</p>
-
-<p><img class="center" src="/images/drain/02.png" title="Heroku monitoring - NodeJS" alt="images"></p>
-
-<p>Verze v go langu je na tom ještě trochu lépe hlavně s ohledem na stabilitu a pamět. Tuto verzi jsme nechali potom trvale v běhu na nejmenším dynu k dispozici s monitoringem.</p>
-
-<p><img class="center" src="/images/drain/03.png" title="Heroku monitoring - Go lang" alt="images"></p>
-
-<h2>Závěr</h2>
-
-<p>Pokud vás toto zaujalo pojďte si popovídat o Go langu na první <a href="http://srazy.info/golang-meetup/5676">Go lang meetup v Praze</a>. Budeme mít lighting talk o tomto příkladu s dalšími detaily a zúčastní se i další firmy, které řeknou o svých zkušenostech. Pokud vás zajímají nějaké detaily o používaní Datadogu na Heroku tak se ozvěte v komentářích.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Dále &rarr;</a>
+    </footer>
   
 
 

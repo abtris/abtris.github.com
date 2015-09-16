@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-09-16T11:31:36+02:00</updated>
+  <updated>2015-09-16T11:32:56+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -24,6 +24,9 @@
 Za prvé, pro datadog agenta potřebujete <a href="https://github.com/miketheman/heroku-buildpack-datadog.git">custom buildpack</a>, který v kombinaci s vaším buildpackem vám umožní mít vše pohromadě. Pokud to nechcete můžete udělat samostatnou service přes kterou se dají parsovat logy pomocí této <a href="https://github.com/ozinc/heroku-datadog-drain">knihovny v NodeJS</a>.
 Pokud chcete do Datadogu zapisovat deploy na Heroku použijte <a href="https://devcenter.heroku.com/articles/deploy-hooks#email">emailový post deploy hook</a>.
 Aplikaci a její metriky můžete posílat přes Datadog API.</p>
+
+<!-- more -->
+
 
 <h2>Začátek</h2>
 
