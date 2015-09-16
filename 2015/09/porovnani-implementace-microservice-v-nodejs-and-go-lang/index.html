@@ -102,7 +102,7 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
 
 <p>Tak jsem zapojil produkční aplikace. Počet requestů stoupl na 3000 req/min a aplikace začala mít značné problémy i když běžela na Performace-M dynu.</p>
 
-<p><img class="center" src="/images/drain/01.png" title="Heroku monitoring - NodeJS before optimalization" alt="images"></p>
+<p><a href="/images/drain/01.png"><img class="center" src="/images/drain/01.png" alt="Heroku monitoring - NodeJS before optimalization" /></a></p>
 
 <h2>Řešení</h2>
 
@@ -110,11 +110,11 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
 
 <p>Obě řešení zafungovala a za pár hodin práce jsme měli už přijatelné výsledky v NodeJS. Mohli jsme snížit používaná dyna na běžné <code>1X</code> a tam provádět další srovnání.</p>
 
-<p><img class="center" src="/images/drain/02.png" title="Heroku monitoring - NodeJS" alt="images"></p>
+<p><a href="/images/drain/02.png"><img class="center" src="/images/drain/02.png" alt="Heroku monitoring - NodeJS" /></a></p>
 
 <p>Verze v go langu je na tom ještě trochu lépe hlavně s ohledem na stabilitu a pamět. Tuto verzi jsme nechali potom trvale v běhu na nejmenším dynu k dispozici s monitoringem.</p>
 
-<p><img class="center" src="/images/drain/03.png" title="Heroku monitoring - Go lang" alt="images"></p>
+<p><a href="/images/drain/03.png"><img class="center" src="/images/drain/03.png" alt="Heroku monitoring - Go lang" /></a></p>
 
 <h2>Závěr</h2>
 
