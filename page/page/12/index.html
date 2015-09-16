@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="V nové verzi Zend Framework 1.5 byla do Zend_Auth přidána podpora pro LDAP. Protože u mě v práci se bez toho neobejde ani ta nejjednoduší aplikace, &hellip;">
+  <meta name="description" content="Dělám na PHP aplikaci, která kromě RSS generuje také iCalendar pro Lighting a iCal na Mac OS X. Někomu stačí asi RFC 2445 a hravě si s tím poradí, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,84 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/05/pr-tipu-pro-prci-s-formtem-icalendar/">Pár tipů pro práci s formátem iCalendar</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-05-13T00:00:00+02:00" pubdate data-updated="true">13. 05. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dělám na PHP aplikaci, která kromě RSS generuje také <a href="http://cs.wikipedia.org/wiki/ICalendar">iCalendar</a> pro Lighting a iCal na Mac OS X. Někomu stačí asi <a href="http://tools.ietf.org/html/rfc2445">RFC 2445</a> a hravě si s tím poradí, ale pro ty ostatní pár tipů, které mi pomohli a které mě trochu mátli. Ještě může bý napomocný <a href="http://www.kanzaki.com/docs/ical/">iCalendar Specification Excerpts</a>.  Data mám v mysql kde je datum a čas odděleně a pokud událost nemá čas (je <code>NULL</code>) tak je to celodenní událost. Pokud má jen čas od tak končí za nějakou stanovenou dobu třeba 90 min jako ve škole. Pokud má jen datum od tak je to jednodenní akce.  Pár zásad při tvorbě iCalendar exportu</p>
+
+<ul>
+    <li>jednotlivé tagy jsou velkými písmeny a na samostatných řádcích</li>
+    <li>tagy jsou volitelné a je jich mnoho vyberte si ty které opravdu potřebujete</li>
+    <li>datum se dá udávat několika způsoby:
+<ul>
+    <li><code>DTSTART;VALUE=DATE:YYYYMMDD</code> - jen datum asi nejednoduší forma</li>
+    <li><code>DTSTART:YYYYMMDDTHHMMSS</code> - formát s časem v lokálním formátu</li>
+    <li><code>DTSTART:YYYYMMDDTHHMMSSZ</code> - tady pozor Z na konci udává, že máte hodnoty v UTC (pokud ne vzniká čas posun)</li>
+    <li><code>DTEND</code> je obdobně</li>
+    <li><code>RRULE:FREQ=DAILY;UNTIL=YYYYMMDDTHHMMSS</code> - pro opakované události</li>
+</ul>
+</li>
+    <li><code>URL</code> - nesmí obsahovat entity (nepodporuje Google Calendar)</li>
+    <li><code>DESCRIPTION</code> - dlouhý popis</li>
+    <li><code>SUMMARY</code> - nadpis</li>
+    <li><code>LOCATION</code> - místo konání akce</li>
+</ul>
+
+
+<p>Formát si zkontrolujte <a href="http://severinghaus.org/projects/icv/">validátorem</a>, to nikdy neškodí.  Já potom zkouším genrovaný iCalendar v Lightingu, Windows Calendar a Google Calendar. iCal pro Mac OS X nemám snad to v něm bude fungovat také.  Pro správné zobrazení češtiny v Google calendar nezapomeňte hlavičku, ostatní si poradí i bez ní, nevím proč Google ne. <code>header(&ldquo;Content-Type: text/<a href="http://www.dadsplan.com/">calendar</a>; charset=utf-8&rdquo;); header(&ldquo;Content-Disposition: attachment; filename=calendar.ics&rdquo;);</code> Základní objekt iCalendar, který popisuje &ldquo;Den oslav dobytí Bastily&rdquo; jako událost konající se od 14. července 1997 17:00 (UTC) do 15. července 1997 03:59:59 (UTC)</p>
+
+<pre>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+BEGIN:VEVENT
+DTSTART:19970714T170000Z
+DTEND:19970715T035959Z
+SUMMARY:Bastille Day Party
+END:VEVENT
+END:VCALENDAR</pre>
+
+
+<h3>Update</h3>
+
+
+<ul>
+    <li>v SQL se hodí použít <code>SELECT DATE_FORMAT(datum,'%Y%m%d') as datum, TIME_FORMAT(cas,'%H%i%s') as cas, ...</code></li>
+    <li>jako konce řádek je dobré napsat přímo <code>chr(13).chr(10)</code></li>
+    <li>u <code>DESCRIPTION</code> nezapoměňte <code>htmlspecialchars_decode(str_replace(chr(13).chr(10),"\\n"))</code></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -618,45 +696,6 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/04/print_r-a-var_dump-ve-verzi-20/">print_r() a var_dump() ve verzi 2.0</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-04-11T00:00:00+02:00" pubdate data-updated="true">11. 04. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Nevím zda jste už viděli <a href="http://krumo.sourceforge.net/">projekt Krumo</a>, ale je to náhrada na dva často používané příkazy print_r() a var_dump(). Já sám jsem si udělal vlastní variantu print_d(), která je velmi jednoduchá a jen rozeznává zda je argumentem pole, objekt nebo proměná a podle toho automaticky zobrazí něco jiného. Krumo, jde dál a vylepšené zobrazení do detailů a má podporu skinů, aby jste si mohli vzhled sami upravit. </p>
-
-
-<p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/04/image2.png"><img style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" border="0" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/04/image-thumb.png" width="423" height="639"/></a></p></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/13/">&larr; Older</a>
@@ -688,6 +727,10 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
+      </li>
     
       <li class="post">
         <a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a>
@@ -723,10 +766,6 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
     
       <li class="post">
         <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
       </li>
     
   </ul>

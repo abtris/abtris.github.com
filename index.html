@@ -9,7 +9,8 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době &hellip;">
+  <meta name="description" content="Datadog a log parsing service Pro používání Datadog na Heroku je potřeba několik věcí.
+Za prvé, pro datadog agenta potřebujete custom buildpack, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +60,71 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-16T10:54:00+02:00" pubdate data-updated="true">16. 09. 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>Datadog a log parsing service</h1>
+
+<p>Pro používání <a href="https://www.datadoghq.com/">Datadog</a> na <a href="https://heroku.com">Heroku</a> je potřeba několik věcí.
+Za prvé, pro datadog agenta potřebujete <a href="https://github.com/miketheman/heroku-buildpack-datadog.git">custom buildpack</a>, který v kombinaci s vaším buildpackem vám umožní mít vše pohromadě. Pokud to nechcete můžete udělat samostatnou service přes kterou se dají parsovat logy pomocí této <a href="https://github.com/ozinc/heroku-datadog-drain">knihovny v NodeJS</a>.
+Pokud chcete do Datadogu zapisovat deploy na Heroku použijte <a href="https://devcenter.heroku.com/articles/deploy-hooks#email">emailový post deploy hook</a>.
+Aplikaci a její metriky můžete posílat přes Datadog API.</p>
+
+<h2>Začátek</h2>
+
+<p>Jako první jsem použil výchozí aplikaci od tvůrců a pustil tam jednu malou aplikaci, kde počet req/min dosahoval několika desítek a vše bylo bez problémů.</p>
+
+<p>Tak jsem zapojil produkční aplikace. Počet requestů stoupl na 3000 req/min a aplikace začala mít značné problémy i když běžela na Performace-M dynu.</p>
+
+<p><img class="center" src="/images/drain/01.png" title="Heroku monitoring - NodeJS before optimalization" alt="images"></p>
+
+<h2>Řešení</h2>
+
+<p>Po diagnostikování těchto problémů jsme se dali do <a href="https://github.com/apiaryio/heroku-datadog-drain">hledání memory leaks v NodeJS aplikaci</a> a současně jsme zkusili tuto malou service přepsat do <a href="https://github.com/apiaryio/heroku-datadog-drain-golang">Go</a>.</p>
+
+<p>Obě řešení zafungovala a za pár hodin práce jsme měli už přijatelné výsledky v NodeJS. Mohli jsme snížit používaná dyna na běžné <code>1X</code> a tam provádět další srovnání.</p>
+
+<p><img class="center" src="/images/drain/02.png" title="Heroku monitoring - NodeJS" alt="images"></p>
+
+<p>Verze v go langu je na tom ještě trochu lépe hlavně s ohledem na stabilitu a pamět. Tuto verzi jsme nechali potom trvale v běhu na nejmenším dynu k dispozici s monitoringem.</p>
+
+<p><img class="center" src="/images/drain/03.png" title="Heroku monitoring - Go lang" alt="images"></p>
+
+<h2>Závěr</h2>
+
+<p>Pokud vás toto zaujalo pojďte si popovídat o Go langu na první <a href="http://srazy.info/golang-meetup/5676">Go lang meetup v Praze</a>. Budeme mít lighting talk o tomto příkladu s dalšími detaily a zúčastní se i další firmy, které řeknou o svých zkušenostech. Pokud vás zajímají nějaké detaily o používaní Datadogu na Heroku tak se ozvěte v komentářích.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -479,47 +545,6 @@ git init
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-31T21:20:00+02:00" pubdate data-updated="true">31. 03. 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Mám několik webů, které jsou na NodeJS. Spousta lidí zná moje weby o javascriptu <a href="http://praguejs.cz">PragueJS</a>, které běží na NodeJS a je napsaný <a href="http://expressjs.com/">ExpressJS</a>. Web je napsaný v coffee-scriptu. Nic extra, ale řešil jsem kde web hostovat.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2013/03/nodejs-hosting/">Dále &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/2/">&larr; Older</a>
@@ -549,6 +574,10 @@ git init
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
+      </li>
     
       <li class="post">
         <a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a>
@@ -584,10 +613,6 @@ git init
     
       <li class="post">
         <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
       </li>
     
   </ul>

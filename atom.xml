@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-08-17T23:35:38+02:00</updated>
+  <updated>2015-09-16T11:31:36+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Porovnání implementace service v NodeJS a Go lang]]></title>
+    <link href="http://blog.prskavec.net/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/"/>
+    <updated>2015-09-16T10:54:00+02:00</updated>
+    <id>http://blog.prskavec.net/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang</id>
+    <content type="html"><![CDATA[<h1>Datadog a log parsing service</h1>
+
+<p>Pro používání <a href="https://www.datadoghq.com/">Datadog</a> na <a href="https://heroku.com">Heroku</a> je potřeba několik věcí.
+Za prvé, pro datadog agenta potřebujete <a href="https://github.com/miketheman/heroku-buildpack-datadog.git">custom buildpack</a>, který v kombinaci s vaším buildpackem vám umožní mít vše pohromadě. Pokud to nechcete můžete udělat samostatnou service přes kterou se dají parsovat logy pomocí této <a href="https://github.com/ozinc/heroku-datadog-drain">knihovny v NodeJS</a>.
+Pokud chcete do Datadogu zapisovat deploy na Heroku použijte <a href="https://devcenter.heroku.com/articles/deploy-hooks#email">emailový post deploy hook</a>.
+Aplikaci a její metriky můžete posílat přes Datadog API.</p>
+
+<h2>Začátek</h2>
+
+<p>Jako první jsem použil výchozí aplikaci od tvůrců a pustil tam jednu malou aplikaci, kde počet req/min dosahoval několika desítek a vše bylo bez problémů.</p>
+
+<p>Tak jsem zapojil produkční aplikace. Počet requestů stoupl na 3000 req/min a aplikace začala mít značné problémy i když běžela na Performace-M dynu.</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/drain/01.png" title="Heroku monitoring - NodeJS before optimalization" alt="images"></p>
+
+<h2>Řešení</h2>
+
+<p>Po diagnostikování těchto problémů jsme se dali do <a href="https://github.com/apiaryio/heroku-datadog-drain">hledání memory leaks v NodeJS aplikaci</a> a současně jsme zkusili tuto malou service přepsat do <a href="https://github.com/apiaryio/heroku-datadog-drain-golang">Go</a>.</p>
+
+<p>Obě řešení zafungovala a za pár hodin práce jsme měli už přijatelné výsledky v NodeJS. Mohli jsme snížit používaná dyna na běžné <code>1X</code> a tam provádět další srovnání.</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/drain/02.png" title="Heroku monitoring - NodeJS" alt="images"></p>
+
+<p>Verze v go langu je na tom ještě trochu lépe hlavně s ohledem na stabilitu a pamět. Tuto verzi jsme nechali potom trvale v běhu na nejmenším dynu k dispozici s monitoringem.</p>
+
+<p><img class="center" src="http://blog.prskavec.net/images/drain/03.png" title="Heroku monitoring - Go lang" alt="images"></p>
+
+<h2>Závěr</h2>
+
+<p>Pokud vás toto zaujalo pojďte si popovídat o Go langu na první <a href="http://srazy.info/golang-meetup/5676">Go lang meetup v Praze</a>. Budeme mít lighting talk o tomto příkladu s dalšími detaily a zúčastní se i další firmy, které řeknou o svých zkušenostech. Pokud vás zajímají nějaké detaily o používaní Datadogu na Heroku tak se ozvěte v komentářích.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Amazon Elastic Beanstalk a docker]]></title>
@@ -1458,42 +1496,6 @@ $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller
 <p>Přednášku jsem o tom měl na poledním čtvrtku. Slidy jsou k dispozici <a href="http://slidesha.re/MtbUvD">http://slidesha.re/MtbUvD</a>.</p>
 
 <p>Pokud vám na školení o integraci něco chybí co by jste tam chtěli, neváhejte a oslovte mě emailem nebo v komentářích.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Dash - snippet manager a prohlížeč dokumentace]]></title>
-    <link href="http://blog.prskavec.net/2012/05/dash-snippet-manager-a-prohlizec-dokumentace/"/>
-    <updated>2012-05-28T18:55:00+02:00</updated>
-    <id>http://blog.prskavec.net/2012/05/dash-snippet-manager-a-prohlizec-dokumentace</id>
-    <content type="html"><![CDATA[<h2>Dash &ndash; další užitečný nástroj pro programátory</h2>
-
-<p>Před nedávnem jsem měl problém s dostupností sítě v nejmenovaném dopravním prostředku na trase Praha Liberec, potřeboval jsem maličkost z dokumentace PHP. Nebyl to problém, protože jsem pár dní předtím objevil nástroj <a href="http://kapeli.com/dash/">Dash</a>, který to elegantně řeší. Kromě dokumentace si v něm můžete uchovávat snippety, ale tam mi chybí integrace s gisty na githubu.</p>
-
-<!--more-->
-
-
-<p><img class="center" src="http://blog.prskavec.net/images/dash/Dash-Add.jpg" title="'Dash - základní okno'" ></p>
-
-<p>Můžete hned začít hledat, například php funkci <strong>ksort()</strong></p>
-
-<p><img class="center" src="http://blog.prskavec.net/images/dash/Dash-Documentation-6.jpg" title="'Dash - ksort() php'" ></p>
-
-<p>Dash automaticku umí pokud jste online najít příslušný výkaz na stackoverflow</p>
-
-<p><img class="center" src="http://blog.prskavec.net/images/dash/Dash-Documentation-1-3.jpg" title="'Dash - vyhledávání ksort() stackoverflow'" ></p>
-
-<p>nebo na google.com.</p>
-
-<p><img class="center" src="http://blog.prskavec.net/images/dash/Dash-Documentation-2-3.jpg" title="'Dash - vyhledávání ksort() google'" ></p>
-
-<p>Jazyků se podporuje asi 80, ja mám docsety pro CSS, Ruby, PHP, NodeJS, Javascript, Rails, MySQL, Html. Například funkce count() v ruby.</p>
-
-<p><img class="center" src="http://blog.prskavec.net/images/dash/Dash-Documentation-3-3.jpg" title="'Dash - count() ruby '" ></p>
-
-<p>Docsety podporované přímo od autorů: iOS, Mac, Man Pages and custom docsets. Included docsets: ActionScript, Android, C++, Cappuccino, Cocos2D, Cocos3D, Corona, CSS, Django, Groovy, HTML, Java, JavaFX, JavaScript, jQuery, Kobold2D, Lua, MySQL, Node.js, Perl, PHP, Python, Ruby, Ruby on Rails, Scala, Sparrow, SQLite, Unity 3D, WordPress, XSLT, XUL.</p>
-
-<p>Nebo si můžete generovat vlastní <a href="http://kapeli.com/docsets/">docset</a>.</p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="V práci jsme se setkali se zajímavým problémem, který se vyskytuje ojediněle, ale zato postihuje jen určitou doménu. Máme problém s Microsoft &hellip;">
+  <meta name="description" content="Dnes se konal OpenMeeting na téma Testování webových aplikací. První přednášku měl Michal Špaček ze Skypu o systému Selenium. Pokud jste viděli jeho &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/09/openmeeting-24-9-na-tema-testovani-webovych-aplikaci/">OpenMeeting 24.9. na téma Testování webových aplikací</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-24T00:00:00+02:00" pubdate data-updated="true">24. 09. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dnes se konal <a href="http://www.openmeeting.biz">OpenMeeting</a> na téma <em>Testování webových aplikací</em>.</p>
+
+<p>První přednášku měl Michal Špaček ze Skypu o systému <a href="http://seleniumhq.org/">Selenium</a>. Pokud jste viděli jeho přednášku na webExpu 2008 tak to bylo totéž v kratší variantě.</p>
+
+<p>Druhá přednáška byla na téma opět Selenium a měl ji Filip Braun z Benety, ukazoval testování jak je dělají oni.</p>
+
+<p>Do třetice také Selenium a to ukazoval <a href="http://php.vrana.cz">Jakub Vrána</a> na Adminerovi. <a href="http://www.adminer.org">Adminer</a> je z velké části pokryt testy z hlediska funkčnosti. Jakub si měří pokrytí napříč aplikací (coverage) na co má vlastní skript, který mu to přehledně vyhodnocuje. Zazněla tady dobrá rada, pokud používáte Selenium RC v Internet Exploreru, vyvarujte se xpath výrazům a používejte CSS selektory, ušetříte tím hromadu času.</p>
+
+<p>Čtvrtá přednáška od <a href="http://www.karmi.cz">Karla Minaříka</a> na téma <a href="http://cukes.info">Cucumber</a> a testování v Ruby světe. Cucumber má velmi pěkný styl <a href="http://www.test147.com/">testů</a>, které se dají psát například i česky a jazykem blízkým normálnímu člověku. Není omezeny jen na Ruby a měl by jít využít i pro další platformy. Určitě to brzo <a href="http://wiki.github.com/aslakhellesoy/cucumber/php">vyzkouším na php</a>. Cucumber používá HTTP adaptér <a href="http://wiki.github.com/brynary/webrat">webrat</a> pomocí, kterého se připojíte na Selenium nebo další nástroje (např. pro <a href="http://www.test147.com/testovaci">testování</a> Flexu).</p>
+
+<p>Pátá přednáška byla od Štěpána Bechyňského z Microsoftu. Ukazoval nám jak můžete testovat v prostředí Visual Studia 2008. Pokud chcete nějak testovat dobře aplikace v Internet Exploreru, přijde mi to jako jediná spolehlivá cesta. V novém Visual Studiu 2010 by to mělo být značně ještě vylepšeno.</p>
+
+<p>Poslední přednáška od Vratislava Sejka z Unicornu se věnovala Bezpečnostnímu testování. Unicorn kromě funkčních a výkonových testů také dělá bezpečnostní testy na které se dá dobře využít nástroj <a href="http://www-01.ibm.com/software/awdtools/appscan/">IBM Rational AppScaner</a>. Komplexní komerční nástroj, pokud někdo znáte nějaký dobrý podobný open source nástroj, prosím zmiňte ho do komentářů.</p>
+
+<p>To je v souhrnu všechno co bylo obsahem formální části a potom samozřejmě probíhala už neformální diskuse jak to pravidelně bývá.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1060,68 +1110,6 @@ abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/06/9-a-pul-tydne-s-androidem-dokonceni/">9 a pů týdne s Androidem dokončení</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-06-01T00:00:00+02:00" pubdate data-updated="true">01. 06. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>V <a href="http://blog.prskavec.net/2009/05/9-a-pul-tydne-s-androidem/">minulém článku</a> jsem se věnoval praktickému použití telefonu s Androidem, ale nechtěl jsem tam uvádět moc svoje subjektivní hodnocení. Problém je, že hodnotíte G1 jako telefon nebo hodnotíte Android jako platformu?</p>
-
-<p>Řekl bych, že většina záporů, které vůči G1 mám jde na vrub výrobci telefonu HTC a ne Googlu, který vytvořil Android. Ale přece jenom si občas nejsem jistý zda 100% viny lze házet na HTC.</p>
-
-<p><strong>Mezi hlavní zápory vidím:</strong></p>
-
-<ul>
-    <li>Malá výdrž baterie, při provozu (čtu emaily, v MHD RSS a zadávám schůzky, tasky během dne) jsem rád když vydrží půl dne.</li>
-    <li>Občas mám problém s dotykovým displayem, jeho citlivost není nic moc. Už se mi párkrát stalo, že jsem volal někam kam nechci apod.</li>
-    <li>Občasná pomalost telefonu, připadá mi že RAM je velmi málo a bez Task manageru a pravidelného čištění paměti se občas zpomaluje neskutečně.</li>
-    <li>Fotoaparát je sice 3.2 Mpx, ale stačí rychlejší pohyb nebo trochu méně světla a je to celkem nepoužitelné. <a href="http://www.cyrket.com/package/com.ap.SnapPhoto_Free">Snapphoto</a> to může trochu vylepšit, ale blesk nepřidá. Dnes bych čekal trochu lepší kvalitu i v mobilu.</li>
-</ul>
-
-
-<p><strong>Závěr</strong></p>
-
-<p>Celkově ale myslím, že platforma Android má celkem budoucnost. Některé aplikace, které dodává Google by se mohli vylepšit. Chybí mi přímo v systému správce souborů a taskmanager. Mohla by časem přijít podpora pro další Google aplikace.</p>
-
-<p><strong>Něco na konec</strong></p>
-
-<p>Jedna <a href="http://www.cyrket.com/package/au.id.weston.scott.Sketchaetch">vzpomínka na dětství</a></p>
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/06/sketch1.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/06/sketch1.png" alt="sketch1" title="sketch1" width="480" height="320" class="aligncenter size-full wp-image-606" /></a></p>
-
-<p>a <a href="http://www.cyrket.com/package/com.ammisoftware.Eggs">dobu před revolucí</a>.</p>
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/06/nupagagi1.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/06/nupagagi1.png" alt="nupagagi1" title="nupagagi1" width="480" height="320" class="aligncenter size-full wp-image-605" /></a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/8/">&larr; Older</a>
@@ -1153,6 +1141,10 @@ abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
+      </li>
     
       <li class="post">
         <a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a>
@@ -1188,10 +1180,6 @@ abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
     
       <li class="post">
         <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a>
       </li>
     
   </ul>
