@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Dnes 7.4.2010 se koná v NTK v Praze, Dejvicích konference pro vývojáře webových aplikaci, kterou pořádá Iinfo.cz V průběhu dne tu na blogu budu &hellip;">
+  <meta name="description" content="Pokud občas nebo více přednášíte, určitě jste zkusili nějaký tento program na tvorbu slidů. Já žádný z nich nepovažuji za ideální, hlavně pokud &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,383 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/5-alternativnich-systemu-jak-tvorit-slidy/">5 alternativních systémů jak tvořit slidy</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-26T00:00:00+02:00" pubdate data-updated="true">26. 04. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><!--:en-->
+
+
+<p>Pokud občas nebo více přednášíte, určitě jste zkusili nějaký tento program na tvorbu slidů. Já žádný z nich nepovažuji za ideální, hlavně pokud potřebujete mít ve slidech zdrojové kódy. Pokud máte slidy v html nebo xml můžete je verzovat pomocí například Gitu nebo SVN, to vám půjde s binárními formáty také, ale neuvidíte ty diffy, které jsou užitečné.</p>
+
+<ul>
+    <li><a href="http://office.microsoft.com/en-us/powerpoint/">Microsoft PowerPoint</a></li>
+    <li><a href="http://www.openoffice.org/product/impress.html">OpenOffice Impress</a></li>
+    <li><a href="http://www.apple.com/iwork/keynote/">Apple Keynote</a></li>
+    <li><a href="http://prezi.com/">Prezi </a>- více v článku Martina Hassmana <a href="http://met.blog.root.cz/2010/04/11/umi-tohle-i-vas-prezentacni-system-aneb-jak-jsem-zkousel-prezi/">Umí tohle i váš prezentační systém? Aneb jak jsem zkoušel Prezi</a></li>
+</ul>
+
+
+<p>Určitě jich bude ještě více. Pokud pracujete s HTML a XML máte další možnosti, ať jsou to <a href="http://www.miwie.org/presentations/html/dbslides.html">Docbook slides</a> nebo některá varianta založená na HTML nebo markupu (<a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>, <a href="http://en.wikipedia.org/wiki/Textile_%28markup_language%29">Textile</a>, <a href="http://texy.info/cs/syntax">Texy</a>).</p>
+
+<p>Dnes tu představím 5 systémů, které generují HTML nebo se slidy v HTML přímo píšou.</p>
+
+<ol>
+    <li>S5</li>
+    <li>Swinger</li>
+    <li>Slidedown</li>
+    <li>W3C (Slidy, B5, slidemaker)</li>
+    <li>JUSH slides</li>
+</ol>
+
+
+<p><strong>1. <a href="http://meyerweb.com/eric/tools/s5/">S5</a></strong>
+Klasické slidy v HTML dole je vidět jak vypadá jednoduchý předpis.</p>
+
+<pre>
+
+
+<title><em>[slide show title]</em></title>
+
+
+
+
+
+
+
+
+<div>
+
+<div></div>
+<div></div>
+<div>
+<div></div>
+</div>
+
+</div>
+<div>
+
+<div>
+<h1><em>[slide title]</em></h1>
+</div>
+
+</div>
+
+
+</pre>
+
+
+<p>Demo je k dispozici na <a href="http://meyerweb.com/eric/tools/s5/s5-intro.html"><a href="http://meyerweb.com/eric/tools/s5/s5-intro.html">http://meyerweb.com/eric/tools/s5/s5-intro.html</a></a></p>
+
+<p><strong>2. <a href="http://github.com/quirkey/swinger">Swinger</a></strong></p>
+
+<p>Toto řešení je zajímavé, že máte k dispozici celý editor markupu a všechny data jsou uloženy v CouchDb. Aplikace i prohlížení slidů je jen HTML a Javascript.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot.png"><img class="aligncenter size-medium wp-image-901" src="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot-300x177.png" alt="" width="300" height="177" /></a></p>
+
+<p>Online verze <a href="http://swinger.quirkey.com/"><a href="http://swinger.quirkey.com/">http://swinger.quirkey.com/</a></a></p>
+
+<p><strong>3. <a href="http://github.com/nakajima/slidedown">Slidedown</a></strong>
+Řešení založené na Ruby, které podle předpisu v markdownu vygeneruje html prezentaci včetně zvýraznění ruby syntaxe i šablon.</p>
+
+<pre>!SLIDE
+
+# This is my talk
+
+!SLIDE
+
+## I hope you enjoy it
+
+!SLIDE code
+
+    def foo
+      :bar
+    end
+
+!SLIDE
+
+Google is [here](http://google.com)
+
+!SLIDE
+
+# Questions?</pre>
+
+
+<p>Zvýraznění syntaxe se dělá takto, například pro javascript.</p>
+
+<pre>@@@ js
+    function foo() {
+      return 'bar';
+    }
+@@@</pre>
+
+
+<p>Demo je dostupné zde <a href="http://nakajima.github.com/slidedown/"><a href="http://nakajima.github.com/slidedown/">http://nakajima.github.com/slidedown/</a></a></p>
+
+<p><strong>4. W3C Talks Tools (<a href="http://www.w3.org/Talks/Tools/">Slidy, B5, Slidemaker/slideme</a>)</strong></p>
+
+<p>Struktura je velmi jednoduchá, základní část je tvořena tagem <div class="slide"></div></p>
+
+<p>a jsou přidané třídy pro speciální chování.</p>
+
+<pre><div>
+  <h1>Analysts - "Open standards programming will become
+  mainstream, focused around VoiceXML"</h1>
+  <!-- use CSS positioning and scaling for adaptive layout -->
+  <img src="trends.png" width="50%" style="float:left" alt="projected growth of VoiceXML" /> 
+
+  <blockquote>
+    VoiceXML will dominate the voice environment, due to its
+    flexibility and eventual multimodal capabilities
+  </blockquote><br /> 
+
+  <p style="text-align:center">Source Data Monitor, March
+  2004</p>
+</div></pre>
+
+
+<p><a href="http://www.w3.org/Talks/Tools/Slidy/#%281%29">Slidy demo</a></p>
+
+<p><strong>5. <a href="http://abtris.github.com/slides/">JUSH Slides</a></strong></p>
+
+<p>Poslední je moje vlastní řešení je založené na W3C Slidy a je doplněné o <a href="http://jush.sourceforge.net/">JUSH zvýrazňovač</a>, který pomůže v tom co já nejvíce potřebuji.</p>
+
+<p>Kromě zvýraznění přidá JUSH linky na dokumentaci u klíčových slov pro html, javascript, php a další. To udělá ze slidů dobrý studijní materiál.</p>
+
+<p>Za další výhodu vidím jednoduchý předpis v html, jen používání xmp tagu není ideální.</p>
+
+<pre><div class="slide">
+    <h1>Filter Input</h1>
+
+<pre><form method="post">
+   <label for="username">Username:</label>
+   <label for="password">Password:</label>
+   <label for="color">Select:</label>
+                                            Red
+                                            Blue
+                                     
+   
+</form></pre>
+
+<pre>// c_type extension
+$clean = array();
+if (c_type_aplha($_POST['username']) {
+    $clean['username'] = $_POST['username'];
+}
+// filter
+$args = array('username' =&gt; FILTER_SANITIZE_STRING, ...);
+$myinputs = filter_input_array(INPUT_POST, $args);
+</pre>
+    <ul>
+
+        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.validate.php">http://cz.php.net/manual/en/filter.filters.validate.php</a>&#8220;&gt;Validate filters</a></li>
+        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.sanitize.php">http://cz.php.net/manual/en/filter.filters.sanitize.php</a>&#8220;&gt;Sanitize filters</a></li>
+    </ul>
+</div></pre>
+
+
+<p>Pokud máte nějaké další zajímavé řešení podělte se s námi v komentářích.<!--:--><!--:cs-->Pokud občas nebo více přednášíte, určitě jste zkusili nějaký tento program na tvorbu slidů. Já žádný z nich nepovažuji za ideální, hlavně pokud potřebujete mít ve slidech zdrojové kódy. Pokud máte slidy v html nebo xml můžete je verzovat pomocí například Gitu nebo SVN, to vám půjde s binárními formáty také, ale neuvidíte ty diffy, které jsou užitečné.</p>
+
+<ul>
+    <li><a href="http://office.microsoft.com/en-us/powerpoint/">Microsoft PowerPoint</a></li>
+    <li><a href="http://www.openoffice.org/product/impress.html">OpenOffice Impress</a></li>
+    <li><a href="http://www.apple.com/iwork/keynote/">Apple Keynote</a></li>
+    <li><a href="http://prezi.com/">Prezi </a>- více v článku Martina Hassmana <a href="http://met.blog.root.cz/2010/04/11/umi-tohle-i-vas-prezentacni-system-aneb-jak-jsem-zkousel-prezi/">Umí tohle i váš prezentační systém? Aneb jak jsem zkoušel Prezi</a></li>
+</ul>
+
+
+<p>Určitě jich bude ještě více. Pokud pracujete s HTML a XML máte další možnosti, ať jsou to <a href="http://www.miwie.org/presentations/html/dbslides.html">Docbook slides</a> nebo některá varianta založená na HTML nebo markupu (<a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>, <a href="http://en.wikipedia.org/wiki/Textile_%28markup_language%29">Textile</a>, <a href="http://texy.info/cs/syntax">Texy</a>).</p>
+
+<p>Dnes tu představím 5 systémů, které generují HTML nebo se slidy v HTML přímo píšou.</p>
+
+<ol>
+    <li>S5</li>
+    <li>Swinger</li>
+    <li>Slidedown</li>
+    <li>W3C (Slidy, B5, slidemaker)</li>
+    <li>JUSH slides</li>
+</ol>
+
+
+<p><strong>1. <a href="http://meyerweb.com/eric/tools/s5/">S5</a></strong></p>
+
+<p>Klasické slidy v HTML dole je vidět jak vypadá jednoduchý předpis.</p>
+
+<pre>
+
+
+<title><em>[slide show title]</em></title>
+
+
+
+
+
+
+
+
+<div>
+
+<div></div>
+<div></div>
+<div>
+<div></div>
+</div>
+
+</div>
+<div>
+
+<div>
+<h1><em>[slide title]</em></h1>
+</div>
+
+</div>
+
+
+</pre>
+
+
+<p>Demo je k dispozici na <a href="http://meyerweb.com/eric/tools/s5/s5-intro.html"><a href="http://meyerweb.com/eric/tools/s5/s5-intro.html">http://meyerweb.com/eric/tools/s5/s5-intro.html</a></a></p>
+
+<p><strong>2. <a href="http://github.com/quirkey/swinger">Swinger</a></strong></p>
+
+<p>Toto řešení je zajímavé, že máte k dispozici celý editor markupu a všechny data jsou uloženy v CouchDb. Aplikace i prohlížení slidů je jen HTML a Javascript.</p>
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot.png"><img class="aligncenter size-medium wp-image-901" src="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot-300x177.png" alt="" width="300" height="177" /></a></p>
+
+<p>Online verze <a href="http://swinger.quirkey.com/"><a href="http://swinger.quirkey.com/">http://swinger.quirkey.com/</a></a></p>
+
+<p><strong>3. <a href="http://github.com/nakajima/slidedown">Slidedown</a></strong></p>
+
+<p>Řešení založené na Ruby, které podle předpisu v markdownu vygeneruje html prezentaci včetně zvýraznění ruby syntaxe i šablon.</p>
+
+<pre>!SLIDE
+
+# This is my talk
+
+!SLIDE
+
+## I hope you enjoy it
+
+!SLIDE code
+
+    def foo
+      :bar
+    end
+
+!SLIDE
+
+Google is [here](http://google.com)
+
+!SLIDE
+
+# Questions?</pre>
+
+
+<p>Zvýraznění syntaxe se dělá takto, například pro javascript.</p>
+
+<pre>@@@ js
+    function foo() {
+      return 'bar';
+    }
+@@@</pre>
+
+
+<p>Demo je dostupné zde <a href="http://nakajima.github.com/slidedown/"><a href="http://nakajima.github.com/slidedown/">http://nakajima.github.com/slidedown/</a></a></p>
+
+<p><strong>4. W3C Talks Tools (<a href="http://www.w3.org/Talks/Tools/">Slidy, B5, Slidemaker/slideme</a>)</strong></p>
+
+<p>Struktura je velmi jednoduchá, základní část je tvořena tagem <div class="slide"></div></p>
+
+<p>a jsou přidané třídy pro speciální chování.</p>
+
+<pre><div>
+  <h1>Analysts - "Open standards programming will become
+  mainstream, focused around VoiceXML"</h1>
+  <!-- use CSS positioning and scaling for adaptive layout -->
+  <img src="trends.png" width="50%" style="float:left" alt="projected growth of VoiceXML" /> 
+
+  <blockquote>
+    VoiceXML will dominate the voice environment, due to its
+    flexibility and eventual multimodal capabilities
+  </blockquote><br /> 
+
+  <p style="text-align:center">Source Data Monitor, March
+  2004</p>
+</div></pre>
+
+
+<p><a href="http://www.w3.org/Talks/Tools/Slidy/#%281%29">Slidy demo</a></p>
+
+<p><strong>5. <a href="http://abtris.github.com/slides/">JUSH Slides</a></strong></p>
+
+<p>Poslední je moje vlastní řešení je založené na W3C Slidy a je doplněné o <a href="http://jush.sourceforge.net/">JUSH zvýrazňovač</a>, který pomůže v tom co já nejvíce potřebuji.</p>
+
+<p>Kromě zvýraznění přidá JUSH linky na dokumentaci u klíčových slov pro html, javascript, php a další. To udělá ze slidů dobrý studijní materiál.</p>
+
+<p>Za další výhodu vidím jednoduchý předpis v html, jen používání xmp tagu není ideální.</p>
+
+<pre><div class="slide">
+    <h1>Filter Input</h1>
+
+<pre><form method="post">
+   <label for="username">Username:</label>
+   <label for="password">Password:</label>
+   <label for="color">Select:</label>
+                                            Red
+                                            Blue
+                                     
+   
+</form></pre>
+
+<pre>// c_type extension
+$clean = array();
+if (c_type_aplha($_POST['username']) {
+    $clean['username'] = $_POST['username'];
+}
+// filter
+$args = array('username' =&gt; FILTER_SANITIZE_STRING, ...);
+$myinputs = filter_input_array(INPUT_POST, $args);
+</pre>
+    <ul>
+
+        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.validate.php">http://cz.php.net/manual/en/filter.filters.validate.php</a>&#8220;&gt;Validate filters</a></li>
+        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.sanitize.php">http://cz.php.net/manual/en/filter.filters.sanitize.php</a>&#8220;&gt;Sanitize filters</a></li>
+    </ul>
+</div></pre>
+
+
+<p>Pokud máte nějaké další zajímavé řešení podělte se s námi v komentářích.<!--:--></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -768,75 +1145,6 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/10/ma-dnes-cenu-psat-knihu-o-verzovacich-systemech/">Má dnes cenu psát knihu o verzovacích systémech?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-10-05T00:00:00+02:00" pubdate data-updated="true">05. 10. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Řeším dilema o tom, zda napsat knihu o verzovacích systémech, ale potřebují uživatelé českou knihu o verzování. Na internetu najdete skvělé online knihy o většině používaných systémů.</p>
-
-<p><strong>Subversion</strong></p>
-
-<ul>
-    <li><a href="http://svnbook.red-bean.com/">Version Control with Subversion</a></li>
-</ul>
-
-
-<p><strong>Mercurial</strong></p>
-
-<ul>
-    <li><a href="http://hgbook.red-bean.com/">Mercurial: The Definitive Guide</a></li>
-</ul>
-
-
-<p><strong>Git</strong></p>
-
-<ul>
-    <li><a href="http://progit.org/">Pro Git</a></li>
-    <li><a href="http://book.git-scm.com/">The Git Community Book</a></li>
-    <li><a href="http://www-cs-students.stanford.edu/~blynn/gitmagic/">Git Magic</a></li>
-</ul>
-
-
-<p>S těmi vcelku vystačíte pokud se systémem začínáte, v případě Subversion je to kniha do detailů přesná a obsahuje skoro všechny. Ostatní knihy jsou také velmi obsáhlé, ale samozřejmě v nich není všechno.</p>
-
-<p>Pro ty co neumějí anglicky je to sice horší, ale většina verzovacích programů také není přeložena a asi nebude.</p>
-
-<p>V češtině je dostupný částečný překlad <a href="http://programujte.com/?akce=clanek&amp;cl=2009061600-gitmagic-1-%2596-uvod">GitMagic od Jakuba Kulhana</a>, <a href="http://whygitisbetterthanx.karmi.cz/">Proč je lepší Git než X? od Karla Minaříka</a>. Pro Git se také <a href="http://github.com/progit/progit/tree/master/cs/">začal překládat</a> do češtiny, uvidíme zda se k překladu přidají další, aby se to pohnulo kupředu. Ve svojí <a href="http://svn.prskavec.net/">knize</a> o Subversion ke konci jsem stejně dospěl, že je dobré migrovat k nějakému distribuovanému systému, ale přece jenom bude trvat než se ve firmách stane Git nějakým standardem a nikdo neví zda to nebude třeba jiný systém.</p>
-
-<p>Prosím věnujete trochu času a odpovězte na otázku <a href="http://twtpoll.com/qqgnva">Má smysl psát českou knihu o verzovacích systémech?</a></p>
-
-<p>Díky za váš čas</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/7/">&larr; Older</a>
@@ -868,6 +1176,10 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
+      </li>
     
       <li class="post">
         <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
@@ -903,10 +1215,6 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
     
       <li class="post">
         <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
       </li>
     
   </ul>

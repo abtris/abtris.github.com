@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Phing obsahuje ve verzi 2.3 tyto Tasky pro práci se Subversion. SvnCheckoutTask SvnExportTask SvnLastRevisionTask SvnUpdateTask To se hodí a také ve &hellip;">
+  <meta name="description" content="Před časem, jsem přešel z Eclipse PDT na NetBeans IDE Early Access for PHP a to hlavně z důvodu, že projektový adresář je umístněný libovolně mimo &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,45 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/07/netbeans-pdt-a-subversion-15/">NetBeans, PDT a Subversion 1.5</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-01T00:00:00+02:00" pubdate data-updated="true">01. 07. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Před časem, jsem přešel z <a href="http://www.eclipse.org/pdt/">Eclipse PDT</a> na <a href="http://php.netbeans.org/">NetBeans IDE Early Access for PHP</a> a to hlavně z důvodu, že projektový adresář je umístněný libovolně mimo zdrojové kódy a také pro lepší práci se subversion než mi poskytoval <a href="http://subclipse.tigris.org/">Subclipse</a>. Když vyšel nový Subversion 1.5 měl jsem obavy, že budu muset čekat na novou verzi pluginu pro Subversion jako je to u PDT. </p>
+
+
+<p>  <p>Subclipse 1.4.x pro Eclipse je už venku, tak to naštěstí u PDT není problém. Ale jak to je u NetBeans, čekám na říjen kdy má být verze 6.5 s podporou PHP, ale dosavadní funkčnost mi celkem vyhovuje, asi je to tím, že stejně edituji nejvíce v <a href="http://www.pspad.com/cz/">PsPadu</a> a <a href="http://php.vrana.cz/editor-scite.php">SciTE</a>.</p>  <p>NetBeans, ale s Subversion 1.5 fungují bez problémů a to proto, že potřebují ke svému běhu jen binární soubory Subversion,&#160; používají totiž běžného řádkového klienta. Tak pokud odinstalujete starou verzi Subversion a nainstalujete novou, stačí potom nastavit cestu do $PATH, případně se vás NetBeans zeptají kde Subversion najdou. Jednoduché a geniální. </p>  <p>Samozřejmě to má i svoje nevýhody, podporují se základní funkčnosti a až v dalších verzích budou, doufám, k dispozici funkce, které jsou v klientu nové (changelisty, merge tracking atd.). Klient v NetBeansech nemá implementovány i další vlastnosti jako nemožnost propojení s Issue trackerem jak je možné v Subclipsu nebo TSVN. Já primárně používám TSVN a proto mi tyto necnosti příliš nevadí s spíše se mi líbí diff přímo při editaci, ukázání anotací apod. Náhled na používání Subversion v NetBeans je na obrázku. </p>  <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/07/image.png"></a> </p>  <p>Jak jsou na tom ostatní prostředí Komodo IDE, Zend? Těším se na komentáře.</p></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -811,45 +850,6 @@ print "";</pre>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/05/problmy-s-internationalized-domain-names/">Problémy s Internationalized domain names</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-05-21T00:00:00+02:00" pubdate data-updated="true">21. 05. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>CZ NIC spustil <a href="http://www.exohosting.sk/webhosting/">doménu</a> <a title="http://www.háčkyčárky.cz" href="http://www.háčkyčárky.cz">http://www.háčkyčárky.cz</a>, jal jsem se to hned vyzkoušet a narazil jsem na několik problémů. </p>
-
-
-<p> <p>Nejprve prohlížeče. Kromě malých problémů s Firefoxem jak vidíte na obrázcích to všechny prohlížeče zvládají.</p> <h3>Firefox 2.0.0.14 &ndash; výchozí prohlížeč u mne</h3> <p>Tato chyba se stala po kliknutí na odkaz v RSS v Thunderbirdu.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="400" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb.png" width="644" border="0" /></a></p> <p>Tak jsem se jak to napsat tam ručně. A tohle z toho FF udělal, ale aspoň to funguje.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image1.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="232" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb1.png" width="562" border="0" /></a> </p> <h3>Opera 9.5 beta </h3> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image2.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="183" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb2.png" width="466" border="0" /></a> </p> <h3>IE 7</h3> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image3.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="217" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb3.png" width="404" border="0" /></a> </p> <h3>Safari 3.1.1</h3> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image4.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="196" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb4.png" width="362" border="0" /></a> </p> <p>S mailem to bylo horší náš SMTP server mi odeslání mailu na <a href="mailto:testmail@háčkyčárky.cz">testmail@háčkyčárky.cz</a> nedovolil s tím, že jde o nesprávnou adresu.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image5.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="122" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb5.png" width="566" border="0" /></a> </p> <p>GMail hlásí podobné varování, co teď? email prostě asi neodešlu.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image6.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="176" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb6.png" width="446" border="0" /></a> </p> <p>Tak zatím bych si doménu s háčky a čárky nepořizoval, přineslo by to více problémů než výhod, snad jedině jako alias k přesměrování na tu normální.</p></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/12/">&larr; Older</a>
@@ -881,6 +881,10 @@ print "";</pre>
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
+      </li>
     
       <li class="post">
         <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
@@ -916,10 +920,6 @@ print "";</pre>
     
       <li class="post">
         <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
       </li>
     
   </ul>

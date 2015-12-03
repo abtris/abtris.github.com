@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Dlouhé čekání na nový Subversion Myslím, že vetšina lidí si shlédnutí roadmapy Subversion a čekaní 2 roky na změny, které potřebují migrovala na jiný &hellip;">
+  <meta name="description" content="V předchozím příspěvku jsem psal jak jsem migroval na Jekyll. Základní verze Jekyllu je hodně omezená a dá dost práce vylepšit ho podle představ. Mě &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,63 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/10/update-blog-na-octopress/">Update blog na Octopress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-17T21:18:00+02:00" pubdate data-updated="true">17. 10. 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>V <a href="http://blog.prskavec.net/2011/09/Migrace-z-Wordpressu-na-Jekyll/">předchozím příspěvku</a> jsem psal jak jsem migroval na Jekyll. Základní verze Jekyllu je hodně omezená a dá dost práce vylepšit ho podle představ. Mě šlo hlavně o čitelnost nějaké drobnosti, které jsem si na tom udělal, ale nebyl jsem zcela spokojený. Když jsem hledal dále ve svět Jekyllu a stránek pro pages na githubu narazil jsem na <a href="http://octopress.org/">Octopress</a>, který je dokonalý blogovací framework. <a href="http://brandonmathis.com/">Brandon Mathis</a> vytvořil krasný a funkční template, který má tyto vlastnosti:</p>
+
+<ul>
+<li>má HTML5 template</li>
+<li>mobile friendly</li>
+<li>podpora pro Twitter, Google Plus One, Disqus Comments, Pinboard, Delicious, and Google Analytics</li>
+<li>jednoduchý deployment (rake deploy)</li>
+<li>zvýrazňování zdrojové kódu (Solarized)</li>
+<li>jednoduchá změna vzhledu pomocí Compass a Sass</li>
+</ul>
+
+
+<p>a další <a href="http://octopress.org/docs/plugins/">pluginy</a>, které jsou přesně co vývojář potřebuje. Pro mě jsou nejdůležitější</p>
+
+<ul>
+<li>Gist</li>
+<li>jsFiddle</li>
+<li>Include Code</li>
+</ul>
+
+
+<p>Doufám, že pokud se vám líbí Jekyll tak Octopress je ještě trochu lepší a na stejném základě.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1261,132 +1318,6 @@ end</pre>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/01/zend-framework-a-nosql-pro-ukladani-logu-ve-webovych-aplikaci-druhy-dil-o-mongodb/">Zend Framework a NoSQL pro ukládání logů ve webových aplikací, díl druhý o MongoDb</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-01-28T00:00:00+01:00" pubdate data-updated="true">28. 01. 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Jak už jsem psal v <a href="http://blog.prskavec.net/2010/08/zend-framework-a-nosql-pro-ukladani-logu-ve-webovych-aplikaci-dil-1-couchdb/">minulém díle o CouchDb</a> není žádný problém v použití dokumentových databází na logy. Výhodou je že se nemusíte starat o schema, což se u aplikace tohoto druhu opravdu hodí.</p>
-
-<p>Pro napojení Zend Frameworku na logování do MongoDb musíte mít nainstalovanou MongoDb extenzi do PHP. Bez ní se bohužel neobejdete. Log writer si vytvoříte snadno pomocí extenze Zend_Log_Writer_Abstract a provedete drobné úpravy pro práci s MongoDb jak obsahuje ukázka.</p>
-
-<pre class="code php">
-/** Zend_Log_Writer_Abstract */
-require_once 'Zend/Log/Writer/Abstract.php'; 
-/**
- * ZendLogWriterCouchDb
- * @throws Zend_Log_Exception
- */
-class App_Log_Writer_MongoDb extends Zend_Log_Writer_Abstract
-{
-    /**
-     * Db
-     * @var Mongo
-     */
-    private $_db;
-    /**
-     * Db name
-     * @var string
-     */
-    private $_dbname;
-    /**
-     * Collection
-     * @var string
-     */
-    private $_collection;
-    /**
-     *
-     * @param array $params
-     * @return void
-     */
-    public function __construct($options)
-    {
-        if (!extension_loaded('mongo')) {
-            throw new Exception('The MongoDB extension must be loaded for using this logger !');
-        }
-
-        $options = $options->toArray();
-        if (is_null($options)) {
-            $options['host'] = "localhost";
-            $options['port'] = "27017";
-            $options['db'] = $dbname;
-        }
-        if (isset($options['user']) && isset($options['pass'])) {
-            $conn = "{$options['user']}:{$options['pass']}@";
-        } else {
-            $conn = "";
-        }
-        $this->_db = new Mongo("mongodb://$conn{$options['host']}:{$options['port']}/{$options['db']}");
-        $this->_dbname = $options['db'];
-        $this->_collection = $options['collection'];
-    }
-    /**
-     * @static
-     * @param  $config
-     * @return
-     */
-    static public function factory($config)                                                                                                                 
-    {
-        $config = self::_parseConfig($config);
-        return $config;
-    }
-    /**
-     * @param array $event
-     * @return void
-     */
-    protected function _write($event)
-    {
-        $m = $this->_db;
-        $m->connect();
-        $c = $m->selectCollection($this->_dbname, $this->_collection);
-        $c->insert($event);
-    }
-
-    
-}
-</pre>
-
-
-<p>a tímto jste vlastně hotovy. Celý kód najdete na <a href='https://github.com/abtris/phplogger-mongodb'>githubu</a>. V ukázce je ještě samozřejmě upravený controller pro zobrazování a obsahuje možnost vytvářet testovací data.</p>
-
-<p>MongoDb můžete nainstalovat lokálně nebo použít hosting <a href='http://mongohq.com'>mongohq.com</a>, kde základní databáze, která k testování stačí je zdarma. Potom se mi docela hodila utilita na Macu <a href="http://mongohub.todayclose.com/">Mongohub</a>, která poskytuje trochu konfortnější konzoli než webová konzole obsahující lokální instalaci. Na hostingu MongoHQ mají pěknou webovou administrační konzoli.</p>
-
-<p>V PHP se kromě vlastní extenze dá ještě dobře použít pro Zend Framework knihovna <a href="https://github.com/coen-hyde/Shanty-Mongo">Shanty Mongo</a>, která zjednodušuje práci s Mongo Db na maximum.</p>
-
-<p>Pokud budete chtít dělat složitější dotazy do MongoDb hodí se
-<a href="http://www.mongodb.org/display/DOCS/SQL+to+Mongo+Mapping+Chart">SQL to Mongo Mapping Chart</a>.</p>
-
-<p>Případné další tipy se nebojte napsat do komentářů.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/5/">&larr; Older</a>
@@ -1418,6 +1349,10 @@ class App_Log_Writer_MongoDb extends Zend_Log_Writer_Abstract
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
+      </li>
     
       <li class="post">
         <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
@@ -1453,10 +1388,6 @@ class App_Log_Writer_MongoDb extends Zend_Log_Writer_Abstract
     
       <li class="post">
         <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
       </li>
     
   </ul>

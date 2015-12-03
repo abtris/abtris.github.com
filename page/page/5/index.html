@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Včera se konal křest knihy 1001 tipů a triků pro PHP Jakuba Vrány, prostředí Lokády v Praze Holešovicích bylo pekně vybráno. Jako ostatní jsem přišel &hellip;">
+  <meta name="description" content="Jak už jsem psal v minulém díle o CouchDb není žádný problém v použití dokumentových databází na logy. Výhodou je že se nemusíte starat o schema, což &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,132 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/01/zend-framework-a-nosql-pro-ukladani-logu-ve-webovych-aplikaci-druhy-dil-o-mongodb/">Zend Framework a NoSQL pro ukládání logů ve webových aplikací, díl druhý o MongoDb</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-28T00:00:00+01:00" pubdate data-updated="true">28. 01. 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Jak už jsem psal v <a href="http://blog.prskavec.net/2010/08/zend-framework-a-nosql-pro-ukladani-logu-ve-webovych-aplikaci-dil-1-couchdb/">minulém díle o CouchDb</a> není žádný problém v použití dokumentových databází na logy. Výhodou je že se nemusíte starat o schema, což se u aplikace tohoto druhu opravdu hodí.</p>
+
+<p>Pro napojení Zend Frameworku na logování do MongoDb musíte mít nainstalovanou MongoDb extenzi do PHP. Bez ní se bohužel neobejdete. Log writer si vytvoříte snadno pomocí extenze Zend_Log_Writer_Abstract a provedete drobné úpravy pro práci s MongoDb jak obsahuje ukázka.</p>
+
+<pre class="code php">
+/** Zend_Log_Writer_Abstract */
+require_once 'Zend/Log/Writer/Abstract.php'; 
+/**
+ * ZendLogWriterCouchDb
+ * @throws Zend_Log_Exception
+ */
+class App_Log_Writer_MongoDb extends Zend_Log_Writer_Abstract
+{
+    /**
+     * Db
+     * @var Mongo
+     */
+    private $_db;
+    /**
+     * Db name
+     * @var string
+     */
+    private $_dbname;
+    /**
+     * Collection
+     * @var string
+     */
+    private $_collection;
+    /**
+     *
+     * @param array $params
+     * @return void
+     */
+    public function __construct($options)
+    {
+        if (!extension_loaded('mongo')) {
+            throw new Exception('The MongoDB extension must be loaded for using this logger !');
+        }
+
+        $options = $options->toArray();
+        if (is_null($options)) {
+            $options['host'] = "localhost";
+            $options['port'] = "27017";
+            $options['db'] = $dbname;
+        }
+        if (isset($options['user']) && isset($options['pass'])) {
+            $conn = "{$options['user']}:{$options['pass']}@";
+        } else {
+            $conn = "";
+        }
+        $this->_db = new Mongo("mongodb://$conn{$options['host']}:{$options['port']}/{$options['db']}");
+        $this->_dbname = $options['db'];
+        $this->_collection = $options['collection'];
+    }
+    /**
+     * @static
+     * @param  $config
+     * @return
+     */
+    static public function factory($config)                                                                                                                 
+    {
+        $config = self::_parseConfig($config);
+        return $config;
+    }
+    /**
+     * @param array $event
+     * @return void
+     */
+    protected function _write($event)
+    {
+        $m = $this->_db;
+        $m->connect();
+        $c = $m->selectCollection($this->_dbname, $this->_collection);
+        $c->insert($event);
+    }
+
+    
+}
+</pre>
+
+
+<p>a tímto jste vlastně hotovy. Celý kód najdete na <a href='https://github.com/abtris/phplogger-mongodb'>githubu</a>. V ukázce je ještě samozřejmě upravený controller pro zobrazování a obsahuje možnost vytvářet testovací data.</p>
+
+<p>MongoDb můžete nainstalovat lokálně nebo použít hosting <a href='http://mongohq.com'>mongohq.com</a>, kde základní databáze, která k testování stačí je zdarma. Potom se mi docela hodila utilita na Macu <a href="http://mongohub.todayclose.com/">Mongohub</a>, která poskytuje trochu konfortnější konzoli než webová konzole obsahující lokální instalaci. Na hostingu MongoHQ mají pěknou webovou administrační konzoli.</p>
+
+<p>V PHP se kromě vlastní extenze dá ještě dobře použít pro Zend Framework knihovna <a href="https://github.com/coen-hyde/Shanty-Mongo">Shanty Mongo</a>, která zjednodušuje práci s Mongo Db na maximum.</p>
+
+<p>Pokud budete chtít dělat složitější dotazy do MongoDb hodí se
+<a href="http://www.mongodb.org/display/DOCS/SQL+to+Mongo+Mapping+Chart">SQL to Mongo Mapping Chart</a>.</p>
+
+<p>Případné další tipy se nebojte napsat do komentářů.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -933,383 +1059,6 @@ fi
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/04/5-alternativnich-systemu-jak-tvorit-slidy/">5 alternativních systémů jak tvořit slidy</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-04-26T00:00:00+02:00" pubdate data-updated="true">26. 04. 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><!--:en-->
-
-
-<p>Pokud občas nebo více přednášíte, určitě jste zkusili nějaký tento program na tvorbu slidů. Já žádný z nich nepovažuji za ideální, hlavně pokud potřebujete mít ve slidech zdrojové kódy. Pokud máte slidy v html nebo xml můžete je verzovat pomocí například Gitu nebo SVN, to vám půjde s binárními formáty také, ale neuvidíte ty diffy, které jsou užitečné.</p>
-
-<ul>
-    <li><a href="http://office.microsoft.com/en-us/powerpoint/">Microsoft PowerPoint</a></li>
-    <li><a href="http://www.openoffice.org/product/impress.html">OpenOffice Impress</a></li>
-    <li><a href="http://www.apple.com/iwork/keynote/">Apple Keynote</a></li>
-    <li><a href="http://prezi.com/">Prezi </a>- více v článku Martina Hassmana <a href="http://met.blog.root.cz/2010/04/11/umi-tohle-i-vas-prezentacni-system-aneb-jak-jsem-zkousel-prezi/">Umí tohle i váš prezentační systém? Aneb jak jsem zkoušel Prezi</a></li>
-</ul>
-
-
-<p>Určitě jich bude ještě více. Pokud pracujete s HTML a XML máte další možnosti, ať jsou to <a href="http://www.miwie.org/presentations/html/dbslides.html">Docbook slides</a> nebo některá varianta založená na HTML nebo markupu (<a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>, <a href="http://en.wikipedia.org/wiki/Textile_%28markup_language%29">Textile</a>, <a href="http://texy.info/cs/syntax">Texy</a>).</p>
-
-<p>Dnes tu představím 5 systémů, které generují HTML nebo se slidy v HTML přímo píšou.</p>
-
-<ol>
-    <li>S5</li>
-    <li>Swinger</li>
-    <li>Slidedown</li>
-    <li>W3C (Slidy, B5, slidemaker)</li>
-    <li>JUSH slides</li>
-</ol>
-
-
-<p><strong>1. <a href="http://meyerweb.com/eric/tools/s5/">S5</a></strong>
-Klasické slidy v HTML dole je vidět jak vypadá jednoduchý předpis.</p>
-
-<pre>
-
-
-<title><em>[slide show title]</em></title>
-
-
-
-
-
-
-
-
-<div>
-
-<div></div>
-<div></div>
-<div>
-<div></div>
-</div>
-
-</div>
-<div>
-
-<div>
-<h1><em>[slide title]</em></h1>
-</div>
-
-</div>
-
-
-</pre>
-
-
-<p>Demo je k dispozici na <a href="http://meyerweb.com/eric/tools/s5/s5-intro.html"><a href="http://meyerweb.com/eric/tools/s5/s5-intro.html">http://meyerweb.com/eric/tools/s5/s5-intro.html</a></a></p>
-
-<p><strong>2. <a href="http://github.com/quirkey/swinger">Swinger</a></strong></p>
-
-<p>Toto řešení je zajímavé, že máte k dispozici celý editor markupu a všechny data jsou uloženy v CouchDb. Aplikace i prohlížení slidů je jen HTML a Javascript.</p>
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot.png"><img class="aligncenter size-medium wp-image-901" src="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot-300x177.png" alt="" width="300" height="177" /></a></p>
-
-<p>Online verze <a href="http://swinger.quirkey.com/"><a href="http://swinger.quirkey.com/">http://swinger.quirkey.com/</a></a></p>
-
-<p><strong>3. <a href="http://github.com/nakajima/slidedown">Slidedown</a></strong>
-Řešení založené na Ruby, které podle předpisu v markdownu vygeneruje html prezentaci včetně zvýraznění ruby syntaxe i šablon.</p>
-
-<pre>!SLIDE
-
-# This is my talk
-
-!SLIDE
-
-## I hope you enjoy it
-
-!SLIDE code
-
-    def foo
-      :bar
-    end
-
-!SLIDE
-
-Google is [here](http://google.com)
-
-!SLIDE
-
-# Questions?</pre>
-
-
-<p>Zvýraznění syntaxe se dělá takto, například pro javascript.</p>
-
-<pre>@@@ js
-    function foo() {
-      return 'bar';
-    }
-@@@</pre>
-
-
-<p>Demo je dostupné zde <a href="http://nakajima.github.com/slidedown/"><a href="http://nakajima.github.com/slidedown/">http://nakajima.github.com/slidedown/</a></a></p>
-
-<p><strong>4. W3C Talks Tools (<a href="http://www.w3.org/Talks/Tools/">Slidy, B5, Slidemaker/slideme</a>)</strong></p>
-
-<p>Struktura je velmi jednoduchá, základní část je tvořena tagem <div class="slide"></div></p>
-
-<p>a jsou přidané třídy pro speciální chování.</p>
-
-<pre><div>
-  <h1>Analysts - "Open standards programming will become
-  mainstream, focused around VoiceXML"</h1>
-  <!-- use CSS positioning and scaling for adaptive layout -->
-  <img src="trends.png" width="50%" style="float:left" alt="projected growth of VoiceXML" /> 
-
-  <blockquote>
-    VoiceXML will dominate the voice environment, due to its
-    flexibility and eventual multimodal capabilities
-  </blockquote><br /> 
-
-  <p style="text-align:center">Source Data Monitor, March
-  2004</p>
-</div></pre>
-
-
-<p><a href="http://www.w3.org/Talks/Tools/Slidy/#%281%29">Slidy demo</a></p>
-
-<p><strong>5. <a href="http://abtris.github.com/slides/">JUSH Slides</a></strong></p>
-
-<p>Poslední je moje vlastní řešení je založené na W3C Slidy a je doplněné o <a href="http://jush.sourceforge.net/">JUSH zvýrazňovač</a>, který pomůže v tom co já nejvíce potřebuji.</p>
-
-<p>Kromě zvýraznění přidá JUSH linky na dokumentaci u klíčových slov pro html, javascript, php a další. To udělá ze slidů dobrý studijní materiál.</p>
-
-<p>Za další výhodu vidím jednoduchý předpis v html, jen používání xmp tagu není ideální.</p>
-
-<pre><div class="slide">
-    <h1>Filter Input</h1>
-
-<pre><form method="post">
-   <label for="username">Username:</label>
-   <label for="password">Password:</label>
-   <label for="color">Select:</label>
-                                            Red
-                                            Blue
-                                     
-   
-</form></pre>
-
-<pre>// c_type extension
-$clean = array();
-if (c_type_aplha($_POST['username']) {
-    $clean['username'] = $_POST['username'];
-}
-// filter
-$args = array('username' =&gt; FILTER_SANITIZE_STRING, ...);
-$myinputs = filter_input_array(INPUT_POST, $args);
-</pre>
-    <ul>
-
-        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.validate.php">http://cz.php.net/manual/en/filter.filters.validate.php</a>&#8220;&gt;Validate filters</a></li>
-        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.sanitize.php">http://cz.php.net/manual/en/filter.filters.sanitize.php</a>&#8220;&gt;Sanitize filters</a></li>
-    </ul>
-</div></pre>
-
-
-<p>Pokud máte nějaké další zajímavé řešení podělte se s námi v komentářích.<!--:--><!--:cs-->Pokud občas nebo více přednášíte, určitě jste zkusili nějaký tento program na tvorbu slidů. Já žádný z nich nepovažuji za ideální, hlavně pokud potřebujete mít ve slidech zdrojové kódy. Pokud máte slidy v html nebo xml můžete je verzovat pomocí například Gitu nebo SVN, to vám půjde s binárními formáty také, ale neuvidíte ty diffy, které jsou užitečné.</p>
-
-<ul>
-    <li><a href="http://office.microsoft.com/en-us/powerpoint/">Microsoft PowerPoint</a></li>
-    <li><a href="http://www.openoffice.org/product/impress.html">OpenOffice Impress</a></li>
-    <li><a href="http://www.apple.com/iwork/keynote/">Apple Keynote</a></li>
-    <li><a href="http://prezi.com/">Prezi </a>- více v článku Martina Hassmana <a href="http://met.blog.root.cz/2010/04/11/umi-tohle-i-vas-prezentacni-system-aneb-jak-jsem-zkousel-prezi/">Umí tohle i váš prezentační systém? Aneb jak jsem zkoušel Prezi</a></li>
-</ul>
-
-
-<p>Určitě jich bude ještě více. Pokud pracujete s HTML a XML máte další možnosti, ať jsou to <a href="http://www.miwie.org/presentations/html/dbslides.html">Docbook slides</a> nebo některá varianta založená na HTML nebo markupu (<a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>, <a href="http://en.wikipedia.org/wiki/Textile_%28markup_language%29">Textile</a>, <a href="http://texy.info/cs/syntax">Texy</a>).</p>
-
-<p>Dnes tu představím 5 systémů, které generují HTML nebo se slidy v HTML přímo píšou.</p>
-
-<ol>
-    <li>S5</li>
-    <li>Swinger</li>
-    <li>Slidedown</li>
-    <li>W3C (Slidy, B5, slidemaker)</li>
-    <li>JUSH slides</li>
-</ol>
-
-
-<p><strong>1. <a href="http://meyerweb.com/eric/tools/s5/">S5</a></strong></p>
-
-<p>Klasické slidy v HTML dole je vidět jak vypadá jednoduchý předpis.</p>
-
-<pre>
-
-
-<title><em>[slide show title]</em></title>
-
-
-
-
-
-
-
-
-<div>
-
-<div></div>
-<div></div>
-<div>
-<div></div>
-</div>
-
-</div>
-<div>
-
-<div>
-<h1><em>[slide title]</em></h1>
-</div>
-
-</div>
-
-
-</pre>
-
-
-<p>Demo je k dispozici na <a href="http://meyerweb.com/eric/tools/s5/s5-intro.html"><a href="http://meyerweb.com/eric/tools/s5/s5-intro.html">http://meyerweb.com/eric/tools/s5/s5-intro.html</a></a></p>
-
-<p><strong>2. <a href="http://github.com/quirkey/swinger">Swinger</a></strong></p>
-
-<p>Toto řešení je zajímavé, že máte k dispozici celý editor markupu a všechny data jsou uloženy v CouchDb. Aplikace i prohlížení slidů je jen HTML a Javascript.</p>
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot.png"><img class="aligncenter size-medium wp-image-901" src="http://blog.prskavec.net/wp-content/uploads/2010/04/swinger-screenshot-300x177.png" alt="" width="300" height="177" /></a></p>
-
-<p>Online verze <a href="http://swinger.quirkey.com/"><a href="http://swinger.quirkey.com/">http://swinger.quirkey.com/</a></a></p>
-
-<p><strong>3. <a href="http://github.com/nakajima/slidedown">Slidedown</a></strong></p>
-
-<p>Řešení založené na Ruby, které podle předpisu v markdownu vygeneruje html prezentaci včetně zvýraznění ruby syntaxe i šablon.</p>
-
-<pre>!SLIDE
-
-# This is my talk
-
-!SLIDE
-
-## I hope you enjoy it
-
-!SLIDE code
-
-    def foo
-      :bar
-    end
-
-!SLIDE
-
-Google is [here](http://google.com)
-
-!SLIDE
-
-# Questions?</pre>
-
-
-<p>Zvýraznění syntaxe se dělá takto, například pro javascript.</p>
-
-<pre>@@@ js
-    function foo() {
-      return 'bar';
-    }
-@@@</pre>
-
-
-<p>Demo je dostupné zde <a href="http://nakajima.github.com/slidedown/"><a href="http://nakajima.github.com/slidedown/">http://nakajima.github.com/slidedown/</a></a></p>
-
-<p><strong>4. W3C Talks Tools (<a href="http://www.w3.org/Talks/Tools/">Slidy, B5, Slidemaker/slideme</a>)</strong></p>
-
-<p>Struktura je velmi jednoduchá, základní část je tvořena tagem <div class="slide"></div></p>
-
-<p>a jsou přidané třídy pro speciální chování.</p>
-
-<pre><div>
-  <h1>Analysts - "Open standards programming will become
-  mainstream, focused around VoiceXML"</h1>
-  <!-- use CSS positioning and scaling for adaptive layout -->
-  <img src="trends.png" width="50%" style="float:left" alt="projected growth of VoiceXML" /> 
-
-  <blockquote>
-    VoiceXML will dominate the voice environment, due to its
-    flexibility and eventual multimodal capabilities
-  </blockquote><br /> 
-
-  <p style="text-align:center">Source Data Monitor, March
-  2004</p>
-</div></pre>
-
-
-<p><a href="http://www.w3.org/Talks/Tools/Slidy/#%281%29">Slidy demo</a></p>
-
-<p><strong>5. <a href="http://abtris.github.com/slides/">JUSH Slides</a></strong></p>
-
-<p>Poslední je moje vlastní řešení je založené na W3C Slidy a je doplněné o <a href="http://jush.sourceforge.net/">JUSH zvýrazňovač</a>, který pomůže v tom co já nejvíce potřebuji.</p>
-
-<p>Kromě zvýraznění přidá JUSH linky na dokumentaci u klíčových slov pro html, javascript, php a další. To udělá ze slidů dobrý studijní materiál.</p>
-
-<p>Za další výhodu vidím jednoduchý předpis v html, jen používání xmp tagu není ideální.</p>
-
-<pre><div class="slide">
-    <h1>Filter Input</h1>
-
-<pre><form method="post">
-   <label for="username">Username:</label>
-   <label for="password">Password:</label>
-   <label for="color">Select:</label>
-                                            Red
-                                            Blue
-                                     
-   
-</form></pre>
-
-<pre>// c_type extension
-$clean = array();
-if (c_type_aplha($_POST['username']) {
-    $clean['username'] = $_POST['username'];
-}
-// filter
-$args = array('username' =&gt; FILTER_SANITIZE_STRING, ...);
-$myinputs = filter_input_array(INPUT_POST, $args);
-</pre>
-    <ul>
-
-        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.validate.php">http://cz.php.net/manual/en/filter.filters.validate.php</a>&#8220;&gt;Validate filters</a></li>
-        <li>&lt;a href=&quot;<a href="http://cz.php.net/manual/en/filter.filters.sanitize.php">http://cz.php.net/manual/en/filter.filters.sanitize.php</a>&#8220;&gt;Sanitize filters</a></li>
-    </ul>
-</div></pre>
-
-
-<p>Pokud máte nějaké další zajímavé řešení podělte se s námi v komentářích.<!--:--></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/6/">&larr; Older</a>
@@ -1341,6 +1090,10 @@ $myinputs = filter_input_array(INPUT_POST, $args);
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
+      </li>
     
       <li class="post">
         <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
@@ -1376,10 +1129,6 @@ $myinputs = filter_input_array(INPUT_POST, $args);
     
       <li class="post">
         <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/">Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
       </li>
     
   </ul>
