@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-02-05T10:52:19+01:00</updated>
+  <updated>2016-02-05T11:04:33+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -20,7 +20,8 @@
     <id>http://blog.prskavec.net/2016/02/suchy-docker</id>
     <content type="html"><![CDATA[<p><a href="http://suchejunor.cz/">Suchý únor</a> je skvělá akce a tak jsem říkal, zda s Dockerem nebudeme také na suchu. Našťěstí včera se situace změnila a vyšli nové verze Docker Engine, Docker Swarm and Docker Compose.</p>
 
-<p>Pokud budete upgradovat, buďte opatrní, <a href="https://docs.docker.com/engine/breaking_changes/">nový formát image není zpětně kompatibilní</a>.</p>
+<blockquote><p>Pokud budete upgradovat, buďte opatrní, nový formát image není zpětně kompatibilní.</p><footer><strong>Docker docs</strong> <cite><a href='https://docs.docker.com/engine/breaking_changes/'>docs.docker.com/engine/&hellip;</a></cite></footer></blockquote>
+
 
 <p>V originálu si novinky můžete prostudovat na blogu Dockeru:</p>
 
@@ -86,13 +87,17 @@
 
 <p>Migrace většinou nebude <a href="https://docs.docker.com/compose/compose-file/#upgrading">složitá</a>, stačí přidat <code>version: 2</code> a <code>services:</code> na začátek a odsadit.</p>
 
-<p>Nové vlastnosti:
-&ndash; nový příkaz <code>events</code> stejný jako <a href="https://docs.docker.com/engine/reference/commandline/events/"><code>docker events</code></a>
-&ndash; nový příkaz <code>config</code> pro validaci <code>docker-compose.yml</code> včetně interpolací a použítí extendu
-&ndash; nový příkaz <code>create</code> pro vytvoření kontejnerů bez spuštění
-&ndash; nový příkaz <code>down</code> pro stopnutí a odstranění všeho co pouští příkaz <code>up</code>
-&ndash; přídané nové konfigurační vlastnosti <code>cpu_quota</code>, <code>stop_signal</code>
-&ndash; flag <code>--abort-on-container-exit</code> stopne všechny kontainery pokud jeden vyhodí exit</p>
+<h3>Nové vlastnosti</h3>
+
+<ul>
+<li>nový příkaz <code>events</code> stejný jako <a href="https://docs.docker.com/engine/reference/commandline/events/"><code>docker events</code></a></li>
+<li>nový příkaz <code>config</code> pro validaci <code>docker-compose.yml</code> včetně interpolací a použítí extendu</li>
+<li>nový příkaz <code>create</code> pro vytvoření kontejnerů bez spuštění</li>
+<li>nový příkaz <code>down</code> pro stopnutí a odstranění všeho co pouští příkaz <code>up</code></li>
+<li>přídané nové konfigurační vlastnosti <code>cpu_quota</code>, <code>stop_signal</code></li>
+<li>flag <code>--abort-on-container-exit</code> stopne všechny kontainery pokud jeden vyhodí exit</li>
+</ul>
+
 
 <h2>Docker Machine 0.6</h2>
 
@@ -105,6 +110,8 @@
 <h2>Závěr</h2>
 
 <p>Každý release přinese spoustu změn. Celý ekosystém dockeru je poměrně mladý, ale o to <a href="https://twitter.com/icecrime/status/694558000615288834">více dynamický</a>.</p>
+
+<p>V Praze se každý měsíc konají <a href="http://www.meetup.com/Docker-Prague-Czech-Republic/">docker meetupy</a>, pokud vás tato problematika zajímá. Přijďte nebo nabídněte svoji přednášku pořadatelům.</p>
 ]]></content>
   </entry>
   
