@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: jekyll | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/jekyll/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-02-05T10:51:18+01:00</updated>
+  <updated>2016-02-05T10:52:19+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -51,15 +51,17 @@
 <p>Podporuje publikování v textile a markdown, případně html.</p>
 
 <p>Instalace pomocí rubygems
-{% highlight sh %}
-sudo gem install jekyll
-{% endhighlight %}</p>
+<div>
+  <pre><code class='sh'>sudo gem install jekyll</code></pre>
+</div>
+</p>
 
 <p>Pro ladění na lokálním počítači jde pustit lokální instanci, která běží <a href="http://localhost:4000">http://localhost:4000</a>.</p>
 
-<p>{% highlight sh %}
-jekyll &mdash;server &mdash;auto
-{% endhighlight %}</p>
+<p><div>
+  <pre><code class='sh'>jekyll &amp;mdash;server &amp;mdash;auto</code></pre>
+</div>
+</p>
 
 <p>Jekyll funguje tak, že na základě předpisu generuje statické stránky do adresáře <code>_site</code>. Parametr <code>auto</code> umí po editaci automaticky přegenerovat změněný soubor.</p>
 
@@ -70,11 +72,12 @@ jekyll &mdash;server &mdash;auto
 </ol>
 
 
-<p>{% highlight sh %}
-mkdir blog.prskavec.net
+<p><div>
+  <pre><code class='sh'>mkdir blog.prskavec.net
 cd blog.prskavec.net
-git init
-{% endhighlight %}</p>
+git init</code></pre>
+</div>
+</p>
 
 <ol>
 <li><p>Je potřeba udělat export z Wordpressu, pomocí <code>export.php</code>.</p></li>

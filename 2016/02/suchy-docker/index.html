@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>JUSH Wordpress plugin - Prskavčí blog</title>
+  <title>Suchý docker - Prskavčí blog</title>
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Pokud chcete použít ve Wordpressu odkazy do dokumentace pomocí JUSH, můžete použít plugin do Wordpressu. Ukázka: &lt;table onclick="alert(this.rows. &hellip;">
+  <meta name="description" content="Suchý únor je skvělá akce a tak jsem říkal, zda s Dockerem nebudeme také na suchu. Našťěstí včera se situace změnila a vyšli nové verze Docker Engine &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.prskavec.net/2010/04/jush-wordpress-plugin/">
+  <link rel="canonical" href="http://blog.prskavec.net/2016/02/suchy-docker/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
@@ -62,7 +62,7 @@
   
   <header>
     
-      <h1 class="entry-title">JUSH Wordpress plugin</h1>
+      <h1 class="entry-title">Suchý docker</h1>
     
     
       <p class="meta">
@@ -78,35 +78,100 @@
   
 
 
-<time datetime="2010-04-02T00:00:00+02:00" pubdate data-updated="true">02. 04. 2010</time>
+<time datetime="2016-02-05T09:20:00+01:00" pubdate data-updated="true">05. 02. 2016</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Pokud chcete použít ve Wordpressu <a href="http://php.vrana.cz/vytvareni-odkazu-do-dokumentace.php">odkazy do dokumentace</a> pomocí <a href="http://jush.sourceforge.net/">JUSH</a>, můžete použít <a href="http://github.com/abtris/jushplugin">plugin do Wordpressu</a>.</p>
+<div class="entry-content"><p><a href="http://suchejunor.cz/">Suchý únor</a> je skvělá akce a tak jsem říkal, zda s Dockerem nebudeme také na suchu. Našťěstí včera se situace změnila a vyšli nové verze Docker Engine, Docker Swarm and Docker Compose.</p>
 
-<p><strong>Ukázka:</strong></p>
+<p>Pokud budete upgradovat, buďte opatrní, <a href="https://docs.docker.com/engine/breaking_changes/">nový formát image není zpětně kompatibilní</a>.</p>
 
-<pre class="jush">
-&lt;table onclick="alert(this.rows.length);" cellspacing="0" cellpadding="2"&gt;
-&lt;meta http-equiv="Content-Type: text/html"&gt;
-</pre>
+<p>V originálu si novinky můžete prostudovat na blogu Dockeru:</p>
 
-
-
-
-<pre class="jush-php">
-mail("", "", "", "From:")
-ini_set("display_errors", true)
-</pre>
+<ul>
+<li><a href="http://blog.docker.com/2016/02/docker-1-10/">Docker 1.10: New Compose file, improved security, networking and much more!</a></li>
+<li><a href="http://blog.docker.com/2016/02/docker-engine-1-10-security/">Docker Engine 1.10 Security Improvements</a></li>
+<li><a href="http://blog.docker.com/2016/02/compose-1-6/">Compose 1.6: New Compose file for defining networks and volumes</a></li>
+</ul>
 
 
-<pre class="jush-sql">
-SELECT NOW() FROM `table` WHERE `id` > 22 GROUP BY `text` ORDER BY `name`
-</pre>
+<p>pokud si chcete přečíst novinky v češtině pokračujte v mém článku.</p>
 
+<!-- more -->
+
+
+<p>Novinek je spousta, ale budu se věnovat jen těm zásadním.</p>
+
+<h2>Docker Engine 1.10</h2>
+
+<p>Docker 1.10 používá nový systém pro ukládání image a layers. Není to zpětně kompatibilní, pokud uděláte upgrade, nemůžete použít staršího clienta. Migrace, která se spustí může trvat poměrně dlouho, pozor pokud máte docker v produkci. Při migraci se počítají SHA256 checksumy pro každý soubor.</p>
+
+<p>Tyto změny s podporou paralelního pushovaní by měli urychlit <code>docker push</code> a <code>docker pull</code>, zvláště při pushi by to mělo být znát.</p>
+
+<p>Další změny se týkají bezpečnosti. Podpora <a href="https://en.wikipedia.org/wiki/Seccomp">seccomp profiles</a>, User namespaces, Authorization plugins. V dalších verzích budou PID Control Group.</p>
+
+<ul>
+<li>nový příkaz <code>docker update</code> umožňuje měnit resources za běhu například pro navýšení paměti apod.</li>
+<li>příkaz <code>docker images</code> podporuje flag <code>--format</code></li>
+<li>nový <code>status=dead</code> pro filtrování v <code>docker ps</code></li>
+<li>deprecated <code>-f</code> pro <code>docker tag</code></li>
+<li>přidaný support pro <code>**</code> v <code>.dockerignore</code> pro více úrovní adresářů</li>
+<li>nový logging ovladač pro Splunk</li>
+<li>podpora více tagů v buildu</li>
+</ul>
+
+
+<h2>Docker Compose 1.6</h2>
+
+<p>Nový formát <a href="https://docs.docker.com/compose/compose-file/#version-2">version 2</a> pro <code>docker-compose.yml</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="s">&#39;2&#39;</span>
+</span><span class='line'><span class="l-Scalar-Plain">services</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>     <span class="p-Indicator">-</span> <span class="s">&quot;5000:5000&quot;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>     <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">.:/code</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">redis</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">redis</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Migrace většinou nebude <a href="https://docs.docker.com/compose/compose-file/#upgrading">složitá</a>, stačí přidat <code>version: 2</code> a <code>services:</code> na začátek a odsadit.</p>
+
+<p>Nové vlastnosti:
+&ndash; nový příkaz <code>events</code> stejný jako <a href="https://docs.docker.com/engine/reference/commandline/events/"><code>docker events</code></a>
+&ndash; nový příkaz <code>config</code> pro validaci <code>docker-compose.yml</code> včetně interpolací a použítí extendu
+&ndash; nový příkaz <code>create</code> pro vytvoření kontejnerů bez spuštění
+&ndash; nový příkaz <code>down</code> pro stopnutí a odstranění všeho co pouští příkaz <code>up</code>
+&ndash; přídané nové konfigurační vlastnosti <code>cpu_quota</code>, <code>stop_signal</code>
+&ndash; flag <code>--abort-on-container-exit</code> stopne všechny kontainery pokud jeden vyhodí exit</p>
+
+<h2>Docker Machine 0.6</h2>
+
+<p>Zásadní vylepšení developer experience v příkazech docker-machine start, docker-machine stop a ostatních nemusíte používat argument <code>default</code> pokud ho přímo nespecifikujete.</p>
+
+<p>Driver pro EC2 umí používat default VPC and automaticky číst přístupové údaje z <code>~/.aws/credentials</code>.</p>
+
+<p>Spousta drobných změn, které mi nepřišli už důležité.</p>
+
+<h2>Závěr</h2>
+
+<p>Každý release přinese spoustu změn. Celý ekosystém dockeru je poměrně mladý, ale o to <a href="https://twitter.com/icecrime/status/694558000615288834">více dynamický</a>.</p>
 </div>
 
 
@@ -129,8 +194,14 @@ SELECT NOW() FROM `table` WHERE `id` > 22 GROUP BY `text` ORDER BY `name`
   
 
 
-<time datetime="2010-04-02T00:00:00+02:00" pubdate data-updated="true">02. 04. 2010</time>
+<time datetime="2016-02-05T09:20:00+01:00" pubdate data-updated="true">05. 02. 2016</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/categories/docker/'>docker</a>
+  
+</span>
 
 
     </p>
@@ -144,14 +215,18 @@ SELECT NOW() FROM `table` WHERE `id` > 22 GROUP BY `text` ORDER BY `name`
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2010/02/jetbrains-phpstorm/" title="Previous Post: JetBrains PhpStorm">&laquo; JetBrains PhpStorm</a>
+        <a class="basic-alignment left" href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/" title="Previous Post: Nástroje co používám pro vývoj a správu">&laquo; Nástroje co používám pro vývoj a správu</a>
       
-      
-        <a class="basic-alignment right" href="/2010/04/internet-developer-forum-2010/" title="Next Post: Internet Developer Forum 2010">Internet Developer Forum 2010 &raquo;</a>
       
     </p>
   </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -309,7 +384,10 @@ SELECT NOW() FROM `table` WHERE `id` > 22 GROUP BY `text` ORDER BY `name`
       var disqus_shortname = 'prskavecblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.prskavec.net/2016/02/suchy-docker/';
+        var disqus_url = 'http://blog.prskavec.net/2016/02/suchy-docker/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

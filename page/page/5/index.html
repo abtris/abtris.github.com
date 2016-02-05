@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Jak už jsem psal v minulém díle o CouchDb není žádný problém v použití dokumentových databází na logy. Výhodou je že se nemusíte starat o schema, což &hellip;">
+  <meta name="description" content="Oracle VirtualBox je známé virtualizační prostředí pro platformy linux, mac a windows. Já VirtualBox používám na linux, mám na něm Ubuntu, které &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,234 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/02/vytvareni-vyvojoveho-virtualniho-prostredi-s-pomoci-virtualboxu-a-vagrantu/">Vytváření vývojového Virtuálního prostředí pomocí VirtualBoxu a Vagrantu</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T00:00:00+01:00" pubdate data-updated="true">02. 02. 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.virtualbox.org/">Oracle VirtualBox</a> je známé virtualizační prostředí pro platformy linux, mac a windows. Já VirtualBox používám na linux, mám na něm Ubuntu, které používám na školení Subversion nebo na vývoj webových aplikací jako server. Do nedávna jsem to používal na Macu nebo Linux pro běh Windows apod. O tomto používání nechci dnes mluvit.</p>
+
+<p><a href="http://www.vagrantup.com">Vagrant</a> je nástroj napsaný v Ruby, který nám umožňuje modifikovat virtualní stroj podle našich představ pomocí nějakého předpisu, který nám udělá co chceme. Ukážeme si to na příkladu, že připravím linuxový server pro webový vývoj s Apache, PHP5, MySQL, CouchDB.</p>
+
+<p>Začneme instalací Vagrantu</p>
+
+<pre class="code">sudo gem install vagrant
+vagrant box add base http://files.vagrantup.com/lucid32.box</pre>
+
+
+<p>Vytvoříme si ukázkový projekt.</p>
+
+<pre class="code">mkdir vagrant-lamp
+cd vagrant-lamp
+vagrant init</pre>
+
+
+<p>Musíme upravit Vagrantfile podle následujícího předpisu (pro Vagrant 0.7).</p>
+
+<pre class="code">Vagrant::Config.run do |config|
+  # All Vagrant configuration is done here. For a detailed explanation
+  # and listing of configuration options, please view the documentation
+  # online.
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.box = "base"
+
+  config.vm.forward_port("http", 80, 8080)
+  config.vm.forward_port("mysql", 3306, 3306)
+  config.vm.forward_port("couchdb", 5984, 5984)
+
+  config.vm.provision :chef_solo do |chef|
+     chef.cookbooks_path = "cookbooks"
+     chef.json.merge!({
+        :mysql =&gt; {
+            :server_root_password =&gt; "root"
+        }
+     })
+     chef.add_recipe("vagrant_main")
+  end
+
+end</pre>
+
+
+<p>Vytvoříme si adresáře pro recepty a pro web.</p>
+
+<pre class="code">mkdir cookbooks
+mkdir public</pre>
+
+
+<p>Do cookbooks je potřeba nakopírovat recepty pro Chef. Doporučuji si vzít z Githubu celou cookbooks repository.
+git clone <a href="https://github.com/opscode/cookbooks.git"><a href="https://github.com/opscode/cookbooks.git">https://github.com/opscode/cookbooks.git</a></a></p>
+
+<p>protože receptů je hodně, doporučuji si to dám někam mimo a nakopírovat jen potřebné recepty. Pro nás jsou to ty, které jsou v úvodu default.rb a některé navíc jako je třeba erlang pro couchdb.</p>
+
+<p>do adresáře cookbooks jsem si nakopíroval tyto recepty z cookbooks repository.</p>
+
+<pre>apache2
+apt
+couchdb
+erlang
+git
+mysql
+openssl
+php</pre>
+
+
+<p>Potom si vytvoříme vlastní recept, který celou akci <a href="http://www.opscode.com/chef">Chefa</a> v Vagrantu bude řídit.</p>
+
+<pre>mkdir -p cookbooks/vagrant_main/recipes
+vim default.rb</pre>
+
+
+<p>Přidáme potřebné recepty</p>
+
+<pre>require_recipe "apt"
+require_recipe "apache2"
+require_recipe "mysql::server"
+require_recipe "php::php5"
+require_recipe "git"
+require_recipe "couchdb"</pre>
+
+
+<p>Kromě instalace z receptů provede instalaci některý dalších balíčků v Ubuntu</p>
+
+<pre># Some neat package (subversion is needed for "subversion" chef ressource)
+%w{ debconf php5-xdebug subversion mc htop curl }.each do |a_package|
+  package a_package
+end</pre>
+
+
+<p>Vytvoříme si testovací vývojový web.</p>
+
+<pre>s = "dev-site"
+site = {
+  :name =&gt; s,
+  :host =&gt; "www.#{s}.com",
+  :aliases =&gt; ["#{s}.com", "dev.#{s}-static.com"]
+}</pre>
+
+
+<p>použije se template uložena v vagrant_main/templates/default/sites.conf.erb a příslušné proměnné</p>
+
+<pre># Configure the development site
+web_app site[:name] do
+  template "sites.conf.erb"
+  server_name site[:host]
+  server_aliases site[:aliases]
+  docroot "/vagrant/public/"
+end</pre>
+
+
+<p>modifikujeme si hosty</p>
+
+<pre># Add site info in /etc/hosts
+bash "info_in_etc_hosts" do
+  code "echo 127.0.0.1 #{site[:host]} #{site[:aliases]} &gt;&gt; /etc/hosts"
+end</pre>
+
+
+<p>přidáme některé knihovny přímo z repository Subversion</p>
+
+<pre># Retrieve webgrind for xdebug trace analysis
+subversion "Webgrind" do
+  repository "http://webgrind.googlecode.com/svn/trunk/"
+  revision "HEAD"
+  destination "/var/www/webgrind"
+  action :sync
+end</pre>
+
+
+<p>nebo Git</p>
+
+<pre># Retrieve adminer
+git "Adminer" do
+  repository "https://github.com/vrana/adminer.git"
+  revision "HEAD"
+  destination "/var/www/adminer/"
+  action :sync
+end</pre>
+
+
+<p>a další</p>
+
+<pre># Latest Zend Framework version
+subversion "Zend" do
+  # repository "http://framework.zend.com/svn/framework/standard/trunk/library/"
+  repository "http://framework.zend.com/svn/framework/standard/tags/release-1.11.3/library/"
+  revision "HEAD"
+  destination "/srv/lib/php/"
+  action :sync
+end</pre>
+
+
+<p>Potom je tu script, kterým se dá modifikovat práva pro MySQL, není problém si podobně udělat jakékoliv úpravy.</p>
+
+<pre># Add an admin user to mysql
+execute "add-admin-user" do
+  command "/usr/bin/mysql -u root -p#{node[:mysql][:server_root_password]} -e \"" +
+      "CREATE USER 'myadmin'@'localhost' IDENTIFIED BY 'myadmin';" +
+      "GRANT ALL PRIVILEGES ON *.* TO 'myadmin'@'localhost' WITH GRANT OPTION;" +
+      "CREATE USER 'myadmin'@'%' IDENTIFIED BY 'myadmin';" +
+      "GRANT ALL PRIVILEGES ON *.* TO 'myadmin'@'%' WITH GRANT OPTION;\" " +
+      "mysql"
+  action :run
+  ignore_failure true
+end</pre>
+
+
+<p>pro funkční port forwarding u CouchDb modifikovat konfiguraci a potřeba dát po prvním spuštění dát vargant reload aby se tato poslední změna promítla do nastavení virtuálu.</p>
+
+<pre># Replace 127.0.0.1 bind port with 0.0.0.0 is necessary for port forwarding
+execute "port-forward-couchdb" do
+  command "sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/couchdb/default.ini"
+  action :run
+end</pre>
+
+
+<p>První spuštění pomocí</p>
+
+<pre>vagrant up</pre>
+
+
+<p>potom je potřeba pro CouchDb</p>
+
+<pre>vagrant reload</pre>
+
+
+<p>Kompletní repositář s tímto ukázkovým prostředím jsou dostupné na <a href="https://github.com/abtris/vagrant-lamp">Githubu</a>.</p>
+
+<p>Pokud si rozbijete virtuál tak není problém začít znovu. Dáte <code>vagrant destroy</code> a potom znovu pustíte celý proces pomocí <code>vagrant up</code>.</p>
+
+<p>Pokud se chcete přihlásit na virtuál použijte <code>vagrant ssh</code>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -941,124 +1169,6 @@ fi
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/04/subversion-dnes-a-zitra/">Subversion dnes a zítra</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-04-30T00:00:00+02:00" pubdate data-updated="true">30. 04. 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><!--        @page { margin: 0.79in }        P { margin-bottom: 0.08in } -->
-
-
-<p>Já osobně jsem začal pracovat s někde kolem roku 2000 se systémem CVS z kterého jsem nebyl vůbec nadšený, hned jak jsem se pokusil něco přejmenovat. Později jsem přešel na Subversion, který mě v té době nadechl a to mi celkem vydrželo po dlouhou dobu než jsem před několika lety začal koketovat s distribuovanými systémy a teď asi rok už aktivně používám Git a pře ním jsem si hrál s Bazaar a Mercurialem. Na Subversion jsem, ale nijak nezanevřel a stále ho používáme ve firmě jako jediný verzovací systém v poměrně slušném nasazení (asi 100 repositářů, několik desítek GB místa). Znám limity Subversion a podle toho s ním zacházím.</p>
-
-<p>Verzovací systémy jsou tu už 38 let, první verzovací systém SCCS vznikal v Bellových laboratořích v roce 1972. Dodnes existuje na mnoha unixových systémech v GNU variantě.</p>
-
-<p>Protože SCCS to byl proprietární verzovací systém, vytvořil na Walter F. Tichy  na Pordue University open source variantu tohoto software pojmenovanou RCS. RCS se dodnes používá například v Twiki pro uchovávání historie stránek.</p>
-
-<p>Následovali další jako CVS, PRCS (Project Revision Control systém). CVS byla původně jen nadstavba na RCS, sada skriptů, které používali příkazy RCS. Většinu vlastností CVS má poděděnou od RCS.</p>
-
-<p>Subversion vznikl nový verzovací systém, který odstraní chyby co lidem vadili v CVS a byl napsán úplně znova i když filozoficky se hodně držel původního CVS, ale byl tree oriented, což přineslo některé výhody, ale i nevýhody.</p>
-
-<p>Protože řada vývojářů nebyla s CVS spokojená vznikali další systémy a za některými stál i Microsoft, který přišel se svým verzovacím systémem Delta v roce 1994. Tento systém dlouho nevydržel, protože MS udělal výhodou akvizici a koupil firmu SourceSafe a další rok už vydal nový verzovací systém VSS. Tento systém měl mnoho nevýhod a pokud někdo s ním pracoval určitě mi dá za pravdu, že to nebylo jednoduché. Problémy se zamykáním souborů, přenos přes sdílené disky apod. V roce 2005 naštěstí MS představil moderní centralizovaný systém, který je součásti TFS, který jako datové úložiště používá MS SQL.</p>
-
-<p>Larry McVoy je klíčová osobnost návrhu verzovacích systémů. Stál u vývoje verzovacího systému  Sun TeamWare, který vedl Evan Adams a potom na základě těchto zkušeností vytvořil BitKeeper. To jsou první distribuované verzovací systémy. TeamWare byl postavený na základech SCCS, přesto přinesl spoustu nových věcí, které dali později vzniknou dnešním systémům. Implementace TeamWare začala v roce 1991, to můžeme považovat za datum vzniku distribuovaných systémů.</p>
-
-<p>TeamWare to začal, ale BitKeeper může za vznik Gitu a Mercurialu, kteří patří dnes mezi nejznámější distribuované verzovací systémy. Společnost BitKeeper se na základě událostí v roce 2005 rozhodla odebrat (reverse enginnering na linux konferenci pomoci telnetu) volné použití linuxové komunitě, která BitKeeper používala k vývoji jádra.</p>
-
-<p>To vedlo ke vzniku Gitu (Linus Torvald) a Mercurial (Matt Mackall) v roce 2005. Git je inspirován BitKeeperem a Monotone (sha1 hash), také velkou část práce na něm udělal Petr Baudiš, který stojí například za frontendem Cogito  a příklad git-filter-branch.</p>
-
-<p>Výhody Gitu vidím v těchto vlastnostech:</p>
-
-<ul>
-    <li>pružnost   (moderní různá worklow)</li>
-    <li>lokální   větve</li>
-    <li>jednoduchý a   rychlý merge</li>
-    <li>rychlost a  offline commit</li>
-    <li>vysoký     failover, díky lokálním kompletním kopiím</li>
-</ul>
-
-
-<p>Tak proč všichni nepoužívají Git, ale Subversion? Je proto několik důvodů.</p>
-
-<ol>
-    <li>ne všichni     považují tyto výhody za důležité, priority mají jinde</li>
-    <li>pro SVN mluví  vysoká rozšířenost, snadná dostupnost v mnoha IDE</li>
-    <li>vynikající    TortoiseSVN, který pomáhá více než by se na první pohled mohlo    zdát</li>
-    <li>dostupný   placený support včetně tvoření balíků pro linux, windows     (CollabNet)</li>
-    <li>http, apache    pro snadné začlenění do každé sítě</li>
-    <li>napojeni    ldap, active diretory nastavení práv až na úrověň každého   adresáře</li>
-    <li>znalost</li>
-</ol>
-
-
-<p>Proto více než 80% firem dnes používá Subversion.</p>
-
-<p>Dnes je důležité používat určitě aktuální verzi Subversion, vůbec nedoporučuji pracovat s verzemi 1.4 a nižší, které nepodporovali mergeinfo. Subversion má desetileté výročí. Ale stále je to malé dítě, které potřebuje dospět. Už jsou pryč dětské nemoci, ale některé problémy přetrvávají.</p>
-
-<p>Subversion byl začleněn pod Apache Foudation do toho doufám, že se trochu akceleruje vývoj Subversion k následujícím verzím. Tým kolem SVN si je dobře vědom věcí, které SVN scházejí a dobře vědí, že to není jednoduché je odstranit. Proto existuje tato roadmapa.</p>
-
-<p>Je to roadmapa přibližně na 4 roky dopředu, klíčový bude letošek a uvidíme jak se podaří vývoj verze 1.7 o které budu teď. K ostatním verzím se vrátím později.</p>
-
-<p>Verze 1.7 by měla obsahovat tyto novinky</p>
-
-<ul>
-    <li>httpv2</li>
-    <li>wc-ng</li>
-    <li>svn patch</li>
-</ul>
-
-
-<p>Nová verze HTTPv2 by měla přinést větší rychlost při zachování všech výhod http protokolu.</p>
-
-<p>Pracovní kopie nové generace je důležitá součást nutná pro další následné změny, které odstraní dnešní problémy (tree conflict, rename tracking). Bude to sqlite databáze v jednom adresáři .svn, kde budou všechny potřebná metadata o repository.</p>
-
-<p>Svn patch jen umožní to co umí příkaz patch v linux, drobnost, která v svn chyběla.</p>
-
-<p>Ve verzi 1.8, která by měla být za rok bychom se snad díky nové WC-NG mohli již dočkat sledování přejmenovaných souborů napříč historii. Nastavení pro jednotlivé repository ne jen globálně a vylepšení problémů s tree conflicty.</p>
-
-<p>Co bude v dalších verzích uvidíme, autoři slibují nový FS, nový editor a další vylepšení. Uvidíme zda se do budoucna dočkáme třeba i offline commitů.</p>
-
-<p>Na závěr bych chtěl shrnout co by jste si měli odnést těchto 4 věci:</p>
-
-<ul>
-    <li>pokud máte         subversion, ujistěte se že používáte poslední verze</li>
-    <li>pokud chcete        přejít na DVCS mějte pro to dobré zdůvodnění nedělejte to       je kvůli módě</li>
-    <li>na      subversion se stále pracuje</li>
-    <li>existují       distribuované verzovací systémy a přinášejí něco nového</li>
-</ul>
-
-
-<p>Tento článek je přepis mojí přednášky na <a href="http://www.slideshare.net/ladislavprskavec/subversion-dnes-a-ztra">Teched 2010</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/6/">&larr; Older</a>
@@ -1090,6 +1200,10 @@ fi
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/02/suchy-docker/">Suchý docker</a>
+      </li>
     
       <li class="post">
         <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
@@ -1125,10 +1239,6 @@ fi
     
       <li class="post">
         <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
       </li>
     
   </ul>
@@ -1171,7 +1281,7 @@ fi
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Ladislav Prskavec -
+  Copyright &copy; 2016 - Ladislav Prskavec -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

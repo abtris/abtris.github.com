@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-12-03T11:49:28+01:00</updated>
+  <updated>2016-02-05T10:52:19+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -12,6 +12,101 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Suchý docker]]></title>
+    <link href="http://blog.prskavec.net/2016/02/suchy-docker/"/>
+    <updated>2016-02-05T09:20:00+01:00</updated>
+    <id>http://blog.prskavec.net/2016/02/suchy-docker</id>
+    <content type="html"><![CDATA[<p><a href="http://suchejunor.cz/">Suchý únor</a> je skvělá akce a tak jsem říkal, zda s Dockerem nebudeme také na suchu. Našťěstí včera se situace změnila a vyšli nové verze Docker Engine, Docker Swarm and Docker Compose.</p>
+
+<p>Pokud budete upgradovat, buďte opatrní, <a href="https://docs.docker.com/engine/breaking_changes/">nový formát image není zpětně kompatibilní</a>.</p>
+
+<p>V originálu si novinky můžete prostudovat na blogu Dockeru:</p>
+
+<ul>
+<li><a href="http://blog.docker.com/2016/02/docker-1-10/">Docker 1.10: New Compose file, improved security, networking and much more!</a></li>
+<li><a href="http://blog.docker.com/2016/02/docker-engine-1-10-security/">Docker Engine 1.10 Security Improvements</a></li>
+<li><a href="http://blog.docker.com/2016/02/compose-1-6/">Compose 1.6: New Compose file for defining networks and volumes</a></li>
+</ul>
+
+
+<p>pokud si chcete přečíst novinky v češtině pokračujte v mém článku.</p>
+
+<!-- more -->
+
+
+<p>Novinek je spousta, ale budu se věnovat jen těm zásadním.</p>
+
+<h2>Docker Engine 1.10</h2>
+
+<p>Docker 1.10 používá nový systém pro ukládání image a layers. Není to zpětně kompatibilní, pokud uděláte upgrade, nemůžete použít staršího clienta. Migrace, která se spustí může trvat poměrně dlouho, pozor pokud máte docker v produkci. Při migraci se počítají SHA256 checksumy pro každý soubor.</p>
+
+<p>Tyto změny s podporou paralelního pushovaní by měli urychlit <code>docker push</code> a <code>docker pull</code>, zvláště při pushi by to mělo být znát.</p>
+
+<p>Další změny se týkají bezpečnosti. Podpora <a href="https://en.wikipedia.org/wiki/Seccomp">seccomp profiles</a>, User namespaces, Authorization plugins. V dalších verzích budou PID Control Group.</p>
+
+<ul>
+<li>nový příkaz <code>docker update</code> umožňuje měnit resources za běhu například pro navýšení paměti apod.</li>
+<li>příkaz <code>docker images</code> podporuje flag <code>--format</code></li>
+<li>nový <code>status=dead</code> pro filtrování v <code>docker ps</code></li>
+<li>deprecated <code>-f</code> pro <code>docker tag</code></li>
+<li>přidaný support pro <code>**</code> v <code>.dockerignore</code> pro více úrovní adresářů</li>
+<li>nový logging ovladač pro Splunk</li>
+<li>podpora více tagů v buildu</li>
+</ul>
+
+
+<h2>Docker Compose 1.6</h2>
+
+<p>Nový formát <a href="https://docs.docker.com/compose/compose-file/#version-2">version 2</a> pro <code>docker-compose.yml</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="s">&#39;2&#39;</span>
+</span><span class='line'><span class="l-Scalar-Plain">services</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>     <span class="p-Indicator">-</span> <span class="s">&quot;5000:5000&quot;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>     <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">.:/code</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">redis</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">redis</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Migrace většinou nebude <a href="https://docs.docker.com/compose/compose-file/#upgrading">složitá</a>, stačí přidat <code>version: 2</code> a <code>services:</code> na začátek a odsadit.</p>
+
+<p>Nové vlastnosti:
+&ndash; nový příkaz <code>events</code> stejný jako <a href="https://docs.docker.com/engine/reference/commandline/events/"><code>docker events</code></a>
+&ndash; nový příkaz <code>config</code> pro validaci <code>docker-compose.yml</code> včetně interpolací a použítí extendu
+&ndash; nový příkaz <code>create</code> pro vytvoření kontejnerů bez spuštění
+&ndash; nový příkaz <code>down</code> pro stopnutí a odstranění všeho co pouští příkaz <code>up</code>
+&ndash; přídané nové konfigurační vlastnosti <code>cpu_quota</code>, <code>stop_signal</code>
+&ndash; flag <code>--abort-on-container-exit</code> stopne všechny kontainery pokud jeden vyhodí exit</p>
+
+<h2>Docker Machine 0.6</h2>
+
+<p>Zásadní vylepšení developer experience v příkazech docker-machine start, docker-machine stop a ostatních nemusíte používat argument <code>default</code> pokud ho přímo nespecifikujete.</p>
+
+<p>Driver pro EC2 umí používat default VPC and automaticky číst přístupové údaje z <code>~/.aws/credentials</code>.</p>
+
+<p>Spousta drobných změn, které mi nepřišli už důležité.</p>
+
+<h2>Závěr</h2>
+
+<p>Každý release přinese spoustu změn. Celý ekosystém dockeru je poměrně mladý, ale o to <a href="https://twitter.com/icecrime/status/694558000615288834">více dynamický</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Nástroje co používám pro vývoj a správu]]></title>
@@ -1547,30 +1642,6 @@ $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller
 <p><img class="center" src="http://blog.prskavec.net/images/scmpolling/graph-04.png" title="'Prehled z munina'" ></p>
 
 <p>Další doporučení a tipy triky z praxe se dozvíte na mém školení <a href="http://bit.ly/k-ci">Jenkins &ndash; jak na Continuous Integration v PHP a Javascriptu</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[AngularJS 1.0.0]]></title>
-    <link href="http://blog.prskavec.net/2012/06/angularjs-1-dot-0-0/"/>
-    <updated>2012-06-15T14:08:00+02:00</updated>
-    <id>http://blog.prskavec.net/2012/06/angularjs-1-dot-0-0</id>
-    <content type="html"><![CDATA[<h2>Konečně tady!</h2>
-
-<p>Po celkem dlouhém čekání a 12 RC verzí 1.0 je konečně venku finální verze na kterou od jara čekáme. Trochu jsem si říkal zda se nečeká na něco jiné například <a href="http://blog.angularjs.org/2012/06/doubleclick-super-powered-by-angularjs.html">DoubleClick</a> jako stěžení referenci pro AngularJS.</p>
-
-<!--more-->
-
-
-<p>Na blogu Google Developers vyšel pěkný <a href="http://googledevelopers.blogspot.cz/2012/06/better-web-templating-with-angularjs-10.html">článek</a>, který shrnuje hlavní věci, které mě na AngularJS baví, doporučuji přečíst každému.</p>
-
-<p>Pokud se moje přednáška dostane na Webexpo 2012. Budu povídat jak to používáme AngularJS na <a href="http://www.jobs.cz">Jobs.cz</a>.</p>
-
-<p>Jsme kromě DoubleClicku zatím jediná komeční aplikace v produkci, která je uvedena na stránkách <a href="http://builtwith.angularjs.org/">builtwith.angularjs.org</a>. Doufám, že pokud něco máte nebudete se bát poslat a rozšiřte řady těch co ukazují, že v AngularJS je radost pracovat a stojí to za to.</p>
-
-<p>Pokud si chcete přijít o AngularJS popovídat určitě mě zastihnete a nejen mě na pravidelné akci Poslední čtvrtek, pravidelné setkání přátel Javascriptu.</p>
-
-<p>Sledovat nás můžete na <a href="https://www.facebook.com/groups/123334754348651/">Facebooku</a> nebo přes <a href="http://srazy.info/angularjs-meetup/2429">Srazy</a>.</p>
 ]]></content>
   </entry>
   

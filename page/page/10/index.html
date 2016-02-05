@@ -9,8 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Jako jiné blogy, jsem udělal žebříček podle toho kolik lidí který příspěvek shlédlo. Wordpress Themes
-Zend Framework 1.6 a moje zkušenosti s Dojo &hellip;">
+  <meta name="description" content="Dneska za mnou přišel kolega, že mu vadí na SVN, že neumí exportovat poslední revizi s plnou cestou. Potřebuje to na server kde nemá shell aby mohl &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -60,6 +59,71 @@ Zend Framework 1.6 a moje zkušenosti s Dojo &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/01/export-posledni-revize-ze-subversion/">Export poslední revize ze Subversion</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-19T00:00:00+01:00" pubdate data-updated="true">19. 01. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dneska za mnou přišel kolega, že mu vadí na SVN, že neumí exportovat poslední revizi s plnou cestou. Potřebuje to na server kde nemá shell aby mohl spustit patch, který si můžeme vygenerovat pomocí <a href="http://svnbook.red-bean.com/en/1.5/svn.ref.svn.c.diff.html"><code>svn diff</code></a>. A nechce všechny soubory jak to standardně dělá <a href="http://svnbook.red-bean.com/en/1.5/svn.ref.svn.c.export.html"><code>svn export</code></a>, ale jen ty které se změnili.</p>
+
+<p>Trochu jsem se na to díval a myslím si, že řešení přímo jen pomocí SVN není, pokud někdo ví jak to udělat elegantně ať mi dá vědět. Já jsem na to napsal jednoduchý shell skript, který to řeší, třeba to bude někomu také ku prospěchu.</p>
+
+<pre name="code" class="bash">
+EXPORTPATH=/tmp/testexport/
+REPOS=file:///home/prskavecl/repos/project/
+REPOSPATH=/home/prskavecl/repos/project/
+REV="$( svnlook youngest $REPOSPATH )"
+
+# function to list and export file by file
+pathexport() # $1
+{
+mkdir -p $EXPORTPATH${2%/*}
+svn export --force $1$2 $EXPORTPATH$2
+}
+
+# make export path
+mkdir -p $EXPORTPATH
+# list all changed files
+for i in $( svnlook changed -r $REV $REPOSPATH ); do
+if [ "${#i}" -gt "2" ]
+then pathexport $REPOS $i
+fi
+done</pre>
+
+
+<p>Na začátku skriptu se nastaví proměnné s cestami. Před svnlook si skript zjistí poslední revizi a projde všechny soubory, které se v revizi změnili. K nim vytvoří příslušné adresáře a vyexportuje jednotlivé soubory. Neměl by být problém napsat obdobný skript i pro windows.</p>
+
+<p>Více o exportu také najdete na <a href="http://svn.prskavec.net/">svn.prskavec.net</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -792,42 +856,6 @@ echo $t-&gt;_(‘Vítejete v aplikaci’);
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/07/ankhsvn-20-je-konecne-finln/">AnkhSVN 2.0 je konečně finální</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-07-10T00:00:00+02:00" pubdate data-updated="true">10. 07. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://ankhsvn.open.collab.net/">AnkhSVN</a> je SVN klient pro Visual Studio,&#160; verze 2.0 přináší kromě řady vylepšení podporu <a href="http://blog.prskavec.net/?p=141">Subversion 1.5</a>. Vyžaduje VS2005 a vyšší. Myslím, že to je dobrá správa pro všechny kdo VS a SVN používají.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/11/">&larr; Older</a>
@@ -859,6 +887,10 @@ echo $t-&gt;_(‘Vítejete v aplikaci’);
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/02/suchy-docker/">Suchý docker</a>
+      </li>
     
       <li class="post">
         <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
@@ -894,10 +926,6 @@ echo $t-&gt;_(‘Vítejete v aplikaci’);
     
       <li class="post">
         <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
       </li>
     
   </ul>
@@ -940,7 +968,7 @@ echo $t-&gt;_(‘Vítejete v aplikaci’);
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Ladislav Prskavec -
+  Copyright &copy; 2016 - Ladislav Prskavec -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

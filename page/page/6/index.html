@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Pokud občas nebo více přednášíte, určitě jste zkusili nějaký tento program na tvorbu slidů. Já žádný z nich nepovažuji za ideální, hlavně pokud &hellip;">
+  <meta name="description" content="Já osobně jsem začal pracovat s někde kolem roku 2000 se systémem CVS z kterého jsem nebyl vůbec nadšený, hned jak jsem se pokusil něco přejmenovat &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,124 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/subversion-dnes-a-zitra/">Subversion dnes a zítra</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-30T00:00:00+02:00" pubdate data-updated="true">30. 04. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><!--        @page { margin: 0.79in }        P { margin-bottom: 0.08in } -->
+
+
+<p>Já osobně jsem začal pracovat s někde kolem roku 2000 se systémem CVS z kterého jsem nebyl vůbec nadšený, hned jak jsem se pokusil něco přejmenovat. Později jsem přešel na Subversion, který mě v té době nadechl a to mi celkem vydrželo po dlouhou dobu než jsem před několika lety začal koketovat s distribuovanými systémy a teď asi rok už aktivně používám Git a pře ním jsem si hrál s Bazaar a Mercurialem. Na Subversion jsem, ale nijak nezanevřel a stále ho používáme ve firmě jako jediný verzovací systém v poměrně slušném nasazení (asi 100 repositářů, několik desítek GB místa). Znám limity Subversion a podle toho s ním zacházím.</p>
+
+<p>Verzovací systémy jsou tu už 38 let, první verzovací systém SCCS vznikal v Bellových laboratořích v roce 1972. Dodnes existuje na mnoha unixových systémech v GNU variantě.</p>
+
+<p>Protože SCCS to byl proprietární verzovací systém, vytvořil na Walter F. Tichy  na Pordue University open source variantu tohoto software pojmenovanou RCS. RCS se dodnes používá například v Twiki pro uchovávání historie stránek.</p>
+
+<p>Následovali další jako CVS, PRCS (Project Revision Control systém). CVS byla původně jen nadstavba na RCS, sada skriptů, které používali příkazy RCS. Většinu vlastností CVS má poděděnou od RCS.</p>
+
+<p>Subversion vznikl nový verzovací systém, který odstraní chyby co lidem vadili v CVS a byl napsán úplně znova i když filozoficky se hodně držel původního CVS, ale byl tree oriented, což přineslo některé výhody, ale i nevýhody.</p>
+
+<p>Protože řada vývojářů nebyla s CVS spokojená vznikali další systémy a za některými stál i Microsoft, který přišel se svým verzovacím systémem Delta v roce 1994. Tento systém dlouho nevydržel, protože MS udělal výhodou akvizici a koupil firmu SourceSafe a další rok už vydal nový verzovací systém VSS. Tento systém měl mnoho nevýhod a pokud někdo s ním pracoval určitě mi dá za pravdu, že to nebylo jednoduché. Problémy se zamykáním souborů, přenos přes sdílené disky apod. V roce 2005 naštěstí MS představil moderní centralizovaný systém, který je součásti TFS, který jako datové úložiště používá MS SQL.</p>
+
+<p>Larry McVoy je klíčová osobnost návrhu verzovacích systémů. Stál u vývoje verzovacího systému  Sun TeamWare, který vedl Evan Adams a potom na základě těchto zkušeností vytvořil BitKeeper. To jsou první distribuované verzovací systémy. TeamWare byl postavený na základech SCCS, přesto přinesl spoustu nových věcí, které dali později vzniknou dnešním systémům. Implementace TeamWare začala v roce 1991, to můžeme považovat za datum vzniku distribuovaných systémů.</p>
+
+<p>TeamWare to začal, ale BitKeeper může za vznik Gitu a Mercurialu, kteří patří dnes mezi nejznámější distribuované verzovací systémy. Společnost BitKeeper se na základě událostí v roce 2005 rozhodla odebrat (reverse enginnering na linux konferenci pomoci telnetu) volné použití linuxové komunitě, která BitKeeper používala k vývoji jádra.</p>
+
+<p>To vedlo ke vzniku Gitu (Linus Torvald) a Mercurial (Matt Mackall) v roce 2005. Git je inspirován BitKeeperem a Monotone (sha1 hash), také velkou část práce na něm udělal Petr Baudiš, který stojí například za frontendem Cogito  a příklad git-filter-branch.</p>
+
+<p>Výhody Gitu vidím v těchto vlastnostech:</p>
+
+<ul>
+    <li>pružnost   (moderní různá worklow)</li>
+    <li>lokální   větve</li>
+    <li>jednoduchý a   rychlý merge</li>
+    <li>rychlost a  offline commit</li>
+    <li>vysoký     failover, díky lokálním kompletním kopiím</li>
+</ul>
+
+
+<p>Tak proč všichni nepoužívají Git, ale Subversion? Je proto několik důvodů.</p>
+
+<ol>
+    <li>ne všichni     považují tyto výhody za důležité, priority mají jinde</li>
+    <li>pro SVN mluví  vysoká rozšířenost, snadná dostupnost v mnoha IDE</li>
+    <li>vynikající    TortoiseSVN, který pomáhá více než by se na první pohled mohlo    zdát</li>
+    <li>dostupný   placený support včetně tvoření balíků pro linux, windows     (CollabNet)</li>
+    <li>http, apache    pro snadné začlenění do každé sítě</li>
+    <li>napojeni    ldap, active diretory nastavení práv až na úrověň každého   adresáře</li>
+    <li>znalost</li>
+</ol>
+
+
+<p>Proto více než 80% firem dnes používá Subversion.</p>
+
+<p>Dnes je důležité používat určitě aktuální verzi Subversion, vůbec nedoporučuji pracovat s verzemi 1.4 a nižší, které nepodporovali mergeinfo. Subversion má desetileté výročí. Ale stále je to malé dítě, které potřebuje dospět. Už jsou pryč dětské nemoci, ale některé problémy přetrvávají.</p>
+
+<p>Subversion byl začleněn pod Apache Foudation do toho doufám, že se trochu akceleruje vývoj Subversion k následujícím verzím. Tým kolem SVN si je dobře vědom věcí, které SVN scházejí a dobře vědí, že to není jednoduché je odstranit. Proto existuje tato roadmapa.</p>
+
+<p>Je to roadmapa přibližně na 4 roky dopředu, klíčový bude letošek a uvidíme jak se podaří vývoj verze 1.7 o které budu teď. K ostatním verzím se vrátím později.</p>
+
+<p>Verze 1.7 by měla obsahovat tyto novinky</p>
+
+<ul>
+    <li>httpv2</li>
+    <li>wc-ng</li>
+    <li>svn patch</li>
+</ul>
+
+
+<p>Nová verze HTTPv2 by měla přinést větší rychlost při zachování všech výhod http protokolu.</p>
+
+<p>Pracovní kopie nové generace je důležitá součást nutná pro další následné změny, které odstraní dnešní problémy (tree conflict, rename tracking). Bude to sqlite databáze v jednom adresáři .svn, kde budou všechny potřebná metadata o repository.</p>
+
+<p>Svn patch jen umožní to co umí příkaz patch v linux, drobnost, která v svn chyběla.</p>
+
+<p>Ve verzi 1.8, která by měla být za rok bychom se snad díky nové WC-NG mohli již dočkat sledování přejmenovaných souborů napříč historii. Nastavení pro jednotlivé repository ne jen globálně a vylepšení problémů s tree conflicty.</p>
+
+<p>Co bude v dalších verzích uvidíme, autoři slibují nový FS, nový editor a další vylepšení. Uvidíme zda se do budoucna dočkáme třeba i offline commitů.</p>
+
+<p>Na závěr bych chtěl shrnout co by jste si měli odnést těchto 4 věci:</p>
+
+<ul>
+    <li>pokud máte         subversion, ujistěte se že používáte poslední verze</li>
+    <li>pokud chcete        přejít na DVCS mějte pro to dobré zdůvodnění nedělejte to       je kvůli módě</li>
+    <li>na      subversion se stále pracuje</li>
+    <li>existují       distribuované verzovací systémy a přinášejí něco nového</li>
+</ul>
+
+
+<p>Tento článek je přepis mojí přednášky na <a href="http://www.slideshare.net/ladislavprskavec/subversion-dnes-a-ztra">Teched 2010</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1038,113 +1156,6 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/10/co-me-zaujalo-na-zendconu-2009/">Co mě zaujalo na ZendConu 2009</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-10-23T00:00:00+02:00" pubdate data-updated="true">23. 10. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Ve dnech 19-22 října se v San Jose v Kalifornii konal 5. ročník konference ZendCon (<a href="http://www.zendcon.com" target="_blank">Zend PHP Conference for Developers</a>). Na této konferenci je skvělé to, že je opravdu pro vývojáře a i když jsem se tam letos nedostal tak si ze slidů z konference a probíraných témat něco odnesu. To se tolik nedá říci o lokálním <a href="http://www.webexpo.cz">Webexpu</a>, kde jsou přednášky cíleny spíše na začátečníky a na ty co s danou problematikou většinou nepřišli do styku.</p>
-
-
-
-
-<p>Nejvíce mě zaujaly přednášky od těchto přednášejících:</p>
-
-
-<p><strong>Ilia Alshanetsky</strong></p>
-
-
-<ul>
-    <li><a href="http://ilia.ws/files/ZendCon2009_Optimization_Mistakes.pdf">Premature Optimization Mistakes</a></li>
-    <li><a href="http://ilia.ws/files/ZendCon2009_PHP53_Intro.pdf">PHP 5.3 = Awesome!</a></li>
-    <li><a href="http://ilia.ws/files/ZendCon2009_APC_Memcache.pdf">APC &amp; Memcache the High Performance Duo</a></li>
-</ul>
-
-
-<p><strong>Fabien Potencier</strong></p>
-
-
-<ul>
-    <li><a href="http://www.slideshare.net/fabpot/symfony-and-zend-framework-together-2009">Using Zend Framework and Symfony Together</a></li>
-<li><a href="http://www.slideshare.net/fabpot/twig-the-flexible-fast-and-securetemplate-language-for-php">Twig, the flexible, fast, and secure template language for PHP</a></li>
-</ul>
-
-
-<p><strong>Stefan Priebsch</strong></p>
-
-
-<ul>
-    <li><a href="http://www.slideshare.net/spriebsch/seven-steps-to-better-oop-code-updated-for-zendcon09">Seven Steps to Better OOP Code</a></li>
-</ul>
-
-
-<p><strong>Derick Rethans</strong></p>
-
-
-<ul>
-    <li><a href="http://derickrethans.nl/files/time-zendcon9.pdf">Time = Money</a></li>
-    <li><a href="http://derickrethans.nl/files/xdebug-zendcon9.pdf">Xdebug — PHP developer&#8217;s swiss-army knife</a></li>
-</ul>
-
-
-<p><strong>Ralph Schindler</strong></p>
-
-
-<ul>
-    <li><a href="http://ralphschindler.com/dropbox/Zend_Tool-ZendCon.ppt?phpMyAdmin=a6829262f2ed2f7ad31d20c3a7dd8382">Zend_Tool: Practical use and Extending</a></li>
-    <li>Extending Zend Framework &amp; Extending with Zend Framework</li>
-</ul>
-
-
-<p><strong>Matthew Weier O&#8217;Phinney</strong></p>
-
-
-<ul>
-    <li><a href="http://www.slideshare.net/weierophinney/architecting-ajax-applications-with-zend-framework">Architecting Ajax Applications with Zend Framework</a></li>
-    <li><a href="http://www.slideshare.net/weierophinney/architecting-your-models">Architecting Your Models</a></li>
-    <li><a href="http://www.slideshare.net/weierophinney/zend-framework-tutorial-zendcon-2009">Introduction to Zend Framework</a> (pro ty co neznají)</li>
-</ul>
-
-
-
-
-<p>Tyto přednášky jistě stojí za to se na ně podívat a poučit se co se na nejznámější konferenci probíralo, <a href="http://www.slideshare.net/tag/zendcon09">samozřejmě to jistě nebylo všechno</a>. Žádný účastník také jistě nestihl všechno co chtěl, protože program byl hodně plný. Mluvilo se také o uvedení <a href="http://www.zend.com/en/products/server/zend-server-5-new">Zend Server 5.0 beta</a> a <a href="http://www.zend.com/en/products/studio/studio-71-whats-new">Zend Studia 7.1 beta</a>, které si můžete již vyzkoušet.</p>
-
-
-
-
-<p>Pokud někoho zaujalo něco dalšího tak to napište do komentářů.</p>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/7/">&larr; Older</a>
@@ -1176,6 +1187,10 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/02/suchy-docker/">Suchý docker</a>
+      </li>
     
       <li class="post">
         <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
@@ -1211,10 +1226,6 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
     
       <li class="post">
         <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
       </li>
     
   </ul>
@@ -1257,7 +1268,7 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Ladislav Prskavec -
+  Copyright &copy; 2016 - Ladislav Prskavec -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

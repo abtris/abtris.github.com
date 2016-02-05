@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="V poslední době jsme přešli ve firmě z Eclipse PDT 2.0 na Zend Studio 6.1.1, přechod byl víceméně bezbolestný, ale pár drobností mě trápilo, vše jsem &hellip;">
+  <meta name="description" content="CentOS 5 Pokud jste někdo musel pracovat na serveru s touto distribucí tak vězte, že v repozitory i pro verzi 5.3 je PHP 5.1.6 a pokud potřebujete &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,122 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/04/ubuntu-centos-5-a-php-529-v-zend-server-ce/">Ubuntu, CentOS 5 a PHP 5.2.9 v Zend Server CE</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-02T00:00:00+02:00" pubdate data-updated="true">02. 04. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>CentOS 5</h2>
+
+
+<p>Pokud jste někdo musel pracovat na serveru s touto distribucí tak vězte, že v repozitory i pro verzi 5.3 je PHP 5.1.6 a pokud potřebujete novější musíte si ji zkompilovat nebo sehnat jiný zdroj, kde může být problém s ověřením. Jako vývojáře mě příliš nezajímá na čem běží servery, kde se provozují moje aplikace, jen verze PHP a příslušné moduly je třeba hlídat.</p>
+
+<p>Moje stanice je Ubuntu 8.10 a aktuální PHP 5.2.6-2ubuntu4.1 with Suhosin-Patch 0.9.6.2, které mi celkem přijde jako ok produkční verze i s ohledem, že mám i jeden Ubuntu server, kde je verze stejná.</p>
+
+<h2>Zend Server CE</h2>
+
+
+<p>Pokud chcete provozovat server s nejnovější verzí PHP 5.2.9 na linuxu nebo windows objevila se zajímavá alternativa <a href="http://www.zend.com/en/community/zend-server-ce">Zend Server CE</a>. CE (Community editon) je zdarma a nemá všechny vlastnosti <a href="http://www.zend.com/en/products/server/editions">Zend Serveru</a>, ale mě se líbí hlavně proto, že jsou k dispozici RPM a DEB balíčky s kterýmí je instalace bezproblémová (zkoušel jsem Ubuntu a CentOS5). Máte za chvíli k dispozici server s PHP pro vývoj včetně ladící konzole, která umožňuje jednoduchou administraci php.ini, čtení logů  a práci s extenzemi.</p>
+
+<p>V základní instalaci Zend Server CE 4.0.0 beta je obsaženo:</p>
+
+<ul>
+    <li>PHP 5.2.9</li>
+    <li>Zend Framework  1.7.5</li>
+    <li>Zend Data Cache 4.0</li>
+    <li>Zend Debugger 5.2</li>
+    <li>Zend Optimizer+ 4.0</li>
+</ul>
+
+
+<p>Zend Server pro běh konzole na <a href="https://localhost:10082/ZendServer/"><a href="https://localhost:10082/ZendServer/">https://localhost:10082/ZendServer/</a></a> používá <a href="http://www.lighttpd.net/">LightHttpd</a> a konzole je napsaná v Zend Frameworku. Apache pro běh aplikací jak jsem měl nainstalován to neovlivní a přidá si to jen do konfigurace pár nastavení. Nic vám nebraní používat váš  document root jak jste zvyklí a to je velká přednost Zend Serveru.</p>
+
+<p>Plná verze má další komponenty jako Guard Loader, Java Bridge, Monitor, Page Cache a ZDS (Zend Download Server). Tyto části jsem nevyzkoušel, ale Monitor pro předcházení problémů pomocí nastavených událostí nebo ZDS pro paralelní stahování souborů se zdají být také užitečné ale ne nezbytné.</p>
+
+<h2>Instalace na CentOS5</h2>
+
+
+<ol>
+    <li>Otevřete konzoli a přejděte do režimu root <code>su</code></li>
+    <li>Vytvořte nový zdroj pro YUM:
+<pre>nano /etc/yum.repos.d/zend.repo</pre>
+Do souboru vložte tento obsah
+<pre>[Zend]
+name=Zend CE $releasever - $basearch - Released Updates 
+baseurl=http://repos.zend.com/rpm/ce/$basearch/
+enabled=1
+gpgcheck=0
+
+[Zendce-noarch]
+name=Zend CE - noarch
+baseurl=http://repos.zend.com/rpm/ce/noarch
+enabled=1
+gpgcheck=0</pre>
+</li>
+    <li>Aktualizace balíčků:
+<pre>yum clean all</pre>
+</li>
+    <li>Instalace Zend Serveru CE:
+<pre>yum install zend-ce</pre>
+</li>
+</ol>
+
+
+<p><a href="http://files.zend.com/help/Zend-Server-Community-Edition/zend-server-community-edition.htm#rpm_installation.htm">Detailní postup v angličtině pro RPM balíčky.</a></p>
+
+<h2>Instalace na Ubuntu</h2>
+
+
+<ol>
+    <li>Otevřete konzoli a přejděte do režimu root <code>sudo -i</code></li>
+    <li>Přidejte do seznamu repozitory:
+<pre>nano /etc/apt/sources.list</pre>
+nový zdroj (řádek):
+<pre>deb http://repos.zend.com/deb/ce ce non-free</pre>
+</li>
+    <li>Veřejný klíč k repozitory:
+<pre>wget http://repos.zend.com/deb/zend.key -O- |apt-key add -</pre>
+</li>
+    <li>Aktualizace balíčků:
+<pre>apt-get update</pre>
+</li>
+    <li>Instalace Zend Serveru CE:
+<pre>aptitude install zend-ce</pre>
+</li>
+</ol>
+
+
+<p><a href="http://files.zend.com/help/Zend-Server-Community-Edition/zend-server-community-edition.htm#deb_installation.htm">Detailní postup v angličtině pro DEB balíčky.</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -869,71 +985,6 @@ svn up
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/01/export-posledni-revize-ze-subversion/">Export poslední revize ze Subversion</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-19T00:00:00+01:00" pubdate data-updated="true">19. 01. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Dneska za mnou přišel kolega, že mu vadí na SVN, že neumí exportovat poslední revizi s plnou cestou. Potřebuje to na server kde nemá shell aby mohl spustit patch, který si můžeme vygenerovat pomocí <a href="http://svnbook.red-bean.com/en/1.5/svn.ref.svn.c.diff.html"><code>svn diff</code></a>. A nechce všechny soubory jak to standardně dělá <a href="http://svnbook.red-bean.com/en/1.5/svn.ref.svn.c.export.html"><code>svn export</code></a>, ale jen ty které se změnili.</p>
-
-<p>Trochu jsem se na to díval a myslím si, že řešení přímo jen pomocí SVN není, pokud někdo ví jak to udělat elegantně ať mi dá vědět. Já jsem na to napsal jednoduchý shell skript, který to řeší, třeba to bude někomu také ku prospěchu.</p>
-
-<pre name="code" class="bash">
-EXPORTPATH=/tmp/testexport/
-REPOS=file:///home/prskavecl/repos/project/
-REPOSPATH=/home/prskavecl/repos/project/
-REV="$( svnlook youngest $REPOSPATH )"
-
-# function to list and export file by file
-pathexport() # $1
-{
-mkdir -p $EXPORTPATH${2%/*}
-svn export --force $1$2 $EXPORTPATH$2
-}
-
-# make export path
-mkdir -p $EXPORTPATH
-# list all changed files
-for i in $( svnlook changed -r $REV $REPOSPATH ); do
-if [ "${#i}" -gt "2" ]
-then pathexport $REPOS $i
-fi
-done</pre>
-
-
-<p>Na začátku skriptu se nastaví proměnné s cestami. Před svnlook si skript zjistí poslední revizi a projde všechny soubory, které se v revizi změnili. K nim vytvoří příslušné adresáře a vyexportuje jednotlivé soubory. Neměl by být problém napsat obdobný skript i pro windows.</p>
-
-<p>Více o exportu také najdete na <a href="http://svn.prskavec.net/">svn.prskavec.net</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/10/">&larr; Older</a>
@@ -965,6 +1016,10 @@ done</pre>
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/02/suchy-docker/">Suchý docker</a>
+      </li>
     
       <li class="post">
         <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
@@ -1000,10 +1055,6 @@ done</pre>
     
       <li class="post">
         <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/06/angularjs-1-dot-2/">Jaký bude AngularJS 1.2?</a>
       </li>
     
   </ul>
@@ -1046,7 +1097,7 @@ done</pre>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Ladislav Prskavec -
+  Copyright &copy; 2016 - Ladislav Prskavec -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
