@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: web | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/web/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-12-03T11:49:28+01:00</updated>
+  <updated>2016-02-05T10:48:45+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -83,17 +83,17 @@ Budík &ndash; umí měřit spánkové cykly. Umí nahrávat spánkovou aktivitu
 <p>10:10 Mano Marks a Jarda Bengl &ndash; Google Maps
 První Google Maps Mashup &ndash; <a href="http://housingmaps.com">http://housingmaps.com</a>. Google Fusion Tables &ndash; <a href="http://mano-demos.googlecode.com/svn/trunk/demos/europepopsliders.html">demo s populací evropy</a>. WebGL v mapách, klikněte vlevo dole vyzkoušet něco nového a mapy se přepnou do WebGL. Úžasné celé vektorové mapy místo obrázků a 3D budovy v normálních mapách provázání s satelitní mapou (ukázky New York, Rome, Venice).</p>
 
-<p><img class="center" src="/assets/googlemaps_webgl_1.png" title="&lsquo;Venice&rsquo;" ></p>
+<p>{% img center /assets/googlemaps_webgl_1.png &lsquo;Venice&rsquo; %}</p>
 
 <center>Ukázka Venice, kde je vidět vektory a 3D domy.</center>
 
 
-<p><img class="center" src="/assets/googlemaps_webgl_2.png" title="&lsquo;Rome&rsquo;" ></p>
+<p>{% img center /assets/googlemaps_webgl_2.png &lsquo;Rome&rsquo; %}</p>
 
 <center>Při zoomu jsou některé budovy vidět v náhledu 45 stupňů.</center>
 
 
-<p><img class="center" src="/assets/googlemaps_webgl_3.png" title="&lsquo;Rome&rsquo;" ></p>
+<p>{% img center /assets/googlemaps_webgl_3.png &lsquo;Rome&rsquo; %}</p>
 
 <center>A dá se s nimi i otáčet.</center>
 

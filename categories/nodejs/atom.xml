@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: nodejs, | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/nodejs/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-12-03T11:49:28+01:00</updated>
+  <updated>2016-02-05T10:48:45+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -39,11 +39,11 @@
 </ul>
 
 
-<p><img class="center" src="/images/raspberry/raspberry.jpg" title="&lsquo;Raspberry running&rsquo;" ></p>
+<p>{% img center /images/raspberry/raspberry.jpg &lsquo;Raspberry running&rsquo; %}</p>
 
 <p>Ze stránek <a href="http://www.raspberrypi.org/downloads">raspberry</a> jsem si stáhnul Raspbian “wheezy” a pomocí dd jsme ho nahrál na sd kartu.</p>
 
-<p><img class="center" src="/images/raspberry/debian.jpg" title="&lsquo;Raspbian “wheezy”&rsquo;" ></p>
+<p>{% img center /images/raspberry/debian.jpg &lsquo;Raspbian “wheezy”&rsquo; %}</p>
 
 <h2>Node.js na Raspberry PI</h2>
 
@@ -54,7 +54,7 @@
 
 <p>Není potom problém pustit aplikaci.</p>
 
-<p><img class="center" src="/images/raspberry/nodejs.jpg" title="&lsquo;Node.js&rsquo;" ></p>
+<p>{% img center /images/raspberry/nodejs.jpg &lsquo;Node.js&rsquo; %}</p>
 ]]></content>
   </entry>
   

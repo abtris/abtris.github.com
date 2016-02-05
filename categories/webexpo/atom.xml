@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: webexpo, | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/webexpo/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-12-03T11:49:28+01:00</updated>
+  <updated>2016-02-05T10:48:45+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -47,7 +47,9 @@
 
 <p>Trochu mi chybělo v přednášce detailní vysvětlení rebase.</p>
 
-<p><blockquote><p>Do not rebase commits that you have pushed to a public repository.</p><footer><strong>Scott Chacon <a href="http://git-scm.com/book/en/Git-Branching-Rebasing">http://git-scm.com/book/en/Git-Branching-Rebasing</a> The Perils of Rebasing</strong></footer></blockquote></p>
+<p>{% blockquote Scott Chacon <a href="http://git-scm.com/book/en/Git-Branching-Rebasing">http://git-scm.com/book/en/Git-Branching-Rebasing</a> The Perils of Rebasing %}
+Do not rebase commits that you have pushed to a public repository.
+{% endblockquote %}</p>
 
 <p>Vašek to moc stavěl jako rebase vs merge, ale z mých zkušeností to nikdy tak není. Je potřeba kombinovat přístupy oba tam, kde se mají kombinovat.</p>
 

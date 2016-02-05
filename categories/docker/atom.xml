@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: docker | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/docker/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2015-12-03T11:49:28+01:00</updated>
+  <updated>2016-02-05T10:48:45+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -12,6 +12,97 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Suchý docker]]></title>
+    <link href="http://blog.prskavec.net/2016/02/suchy-docker/"/>
+    <updated>2016-02-05T09:20:00+01:00</updated>
+    <id>http://blog.prskavec.net/2016/02/suchy-docker</id>
+    <content type="html"><![CDATA[<p><a href="http://suchejunor.cz/">Suchý únor</a> je skvělá akce a tak jsem říkal, zda s Dockerem nebudeme také na suchu. Našťěstí včera se situace změnila a vyšli nové verze Docker Engine, Docker Swarm and Docker Compose.</p>
+
+<p>Pokud budete upgradovat, buďte opatrní, <a href="https://docs.docker.com/engine/breaking_changes/">nový formát image není zpětně kompatibilní</a>.</p>
+
+<p>V originálu si novinky můžete prostudovat na blogu Dockeru:</p>
+
+<ul>
+<li><a href="http://blog.docker.com/2016/02/docker-1-10/">Docker 1.10: New Compose file, improved security, networking and much more!</a></li>
+<li><a href="http://blog.docker.com/2016/02/docker-engine-1-10-security/">Docker Engine 1.10 Security Improvements</a></li>
+<li><a href="http://blog.docker.com/2016/02/compose-1-6/">Compose 1.6: New Compose file for defining networks and volumes</a></li>
+</ul>
+
+
+<p>pokud si chcete přečíst novinky v češtině pokračujte v mém článku.</p>
+
+<!-- more -->
+
+
+<p>Novinek je spousta, ale budu se věnovat jen těm zásadním.</p>
+
+<h2>Docker Engine 1.10</h2>
+
+<p>Docker 1.10 používá nový systém pro ukládání image a layers. Není to zpětně kompatibilní, pokud uděláte upgrade, nemůžete použít staršího clienta. Migrace, která se spustí může trvat poměrně dlouho, pozor pokud máte docker v produkci. Při migraci se počítají SHA256 checksumy pro každý soubor.</p>
+
+<p>Tyto změny s podporou paralelního pushovaní by měli urychlit <code>docker push</code> a <code>docker pull</code>, zvláště při pushi by to mělo být znát.</p>
+
+<p>Další změny se týkají bezpečnosti. Podpora <a href="https://en.wikipedia.org/wiki/Seccomp">seccomp profiles</a>, User namespaces, Authorization plugins. V dalších verzích budou PID Control Group.</p>
+
+<ul>
+<li>nový příkaz <code>docker update</code> umožňuje měnit resources za běhu například pro navýšení paměti apod.</li>
+<li>příkaz <code>docker images</code> podporuje flag <code>--format</code></li>
+<li>nový <code>status=dead</code> pro filtrování v <code>docker ps</code></li>
+<li>deprecated <code>-f</code> pro <code>docker tag</code></li>
+<li>přidaný support pro <code>**</code> v <code>.dockerignore</code> pro více úrovní adresářů</li>
+<li>nový logging ovladač pro Splunk</li>
+<li>podpora více tagů v buildu</li>
+</ul>
+
+
+<h2>Docker Compose 1.6</h2>
+
+<p>Nový formát <a href="https://docs.docker.com/compose/compose-file/#version-2">version 2</a> pro <code>docker-compose.yml</code>.</p>
+
+<p>```docker-compose
+version: &lsquo;2&rsquo;
+services:
+  web:</p>
+
+<pre><code>build: .
+ports:
+ - "5000:5000"
+volumes:
+ - .:/code
+</code></pre>
+
+<p>  redis:</p>
+
+<pre><code>image: redis
+</code></pre>
+
+<p>```</p>
+
+<p>Migrace většinou nebude <a href="https://docs.docker.com/compose/compose-file/#upgrading">složitá</a>, stačí přidat <code>version: 2</code> a <code>services:</code> na začátek a odsadit.</p>
+
+<p>Nové vlastnosti:
+&ndash; nový příkaz <code>events</code> stejný jako <a href="https://docs.docker.com/engine/reference/commandline/events/"><code>docker events</code></a>
+&ndash; nový příkaz <code>config</code> pro validaci <code>docker-compose.yml</code> včetně interpolací a použítí extendu
+&ndash; nový příkaz <code>create</code> pro vytvoření kontejnerů bez spuštění
+&ndash; nový příkaz <code>down</code> pro stopnutí a odstranění všeho co pouští příkaz <code>up</code>
+&ndash; přídané nové konfigurační vlastnosti <code>cpu_quota</code>, <code>stop_signal</code>
+&ndash; flag <code>--abort-on-container-exit</code> stopne všechny kontainery pokud jeden vyhodí exit</p>
+
+<h2>Docker Machine 0.6</h2>
+
+<p>Zásadní vylepšení developer experience v příkazech docker-machine start, docker-machine stop a ostatních nemusíte používat argument <code>default</code> pokud ho přímo nespecifikujete.</p>
+
+<p>Driver pro EC2 umí používat default VPC and automaticky číst přístupové údaje z <code>~/.aws/credentials</code>.</p>
+
+<p>Spousta drobných změn, které mi nepřišli už důležité.</p>
+
+<h2>Závěr</h2>
+
+<p>Každý release přinese spoustu změn. Celý ekosystém dockeru je poměrně mladý, ale o to <a href="https://twitter.com/icecrime/status/694558000615288834">více dynamický</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Amazon Elastic Beanstalk a docker]]></title>
