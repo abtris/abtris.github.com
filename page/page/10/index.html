@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Dneska za mnou přišel kolega, že mu vadí na SVN, že neumí exportovat poslední revizi s plnou cestou. Potřebuje to na server kde nemá shell aby mohl &hellip;">
+  <meta name="description" content="Jeden ze čtenářů mého blogu mě poprosil o radu, tak jsem si řekl co se hodí jednomu, může pomoci více lidem. Pokud máte Ubuntu (KUbuntu, Linux Mint) &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,45 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/01/ubuntu-a-konfigurace-xdebug-pro-eclipse-pdt-20/">Ubuntu a konfigurace XDebug pro Eclipse PDT 2.0</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-28T00:00:00+01:00" pubdate data-updated="true">28. 01. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Jeden ze čtenářů mého blogu mě poprosil o radu, tak jsem si řekl co se hodí jednomu, může pomoci více lidem.</p>
+
+
+<p>  <p>Pokud máte Ubuntu (KUbuntu, Linux Mint) nebo jiného příbuzného ubuntu provedu vás instalací Eclipse s PDT a konfiguraci XDebug.</p>  <h3>Instalace</h3>  <p>1. Eclipse můžete nainstalovat z repozitory, ale PDT tam není a proto tento postup nedoporučuji. Lepší je stáhnout si verzi <a href="http://www.eclipse.org/pdt/downloads/">PDT 2.0 All In Ones</a>.    <br />2. Samozřejmě předpokládám, že máte nainstalovaný apache2 a php5 z repozitory. Pro xdebug nezapomeňte nainstalovat <code>php5-xdebug</code> balíček.    <br />3. Jako další krok, než začnu konfigurovat Eclipse, vytvořím kopii php.ini pro XDebug, kam se přidá na konec.    <br /><code>     <br />[xdebug]      <br />zend_extension=/usr/lib/php5/20060613+lfs/xdebug.so      <br /></code></p>  <h3>Konfigurace</h3>  <p>4. Pokud je toto připraveno stačí nakonfigurovat XDebug v Eclipse.   <br />5. otevřeme nastavení: Window &ndash;&gt; Preferences    <br />6. pod PHP si najdeme PHP Servers a nastavíme si ho na workspace Eclipse. Já osobně mám vytvořený v Apache virtual host, který je pojmenovaný workspace a vede jeho document root na /home/user/workspace/ kde pracuji s Eclipse.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/phpserver.png" /></p>  <p>7. v PHP Executables si nastavím cesty k php a k modifikovanému php.ini pro XDebug.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/phpexecutables.png" /></p>  <p>8. V záložce PHP &ndash;&gt; Debug potom musíte mít zapnuté nakonfigurované služby, ale dají se přepínat i přes debug konfiguraci.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/debugsettings.png" /></p>  <p>9. V menu Run &ndash;&gt; Debug Configurations je dobré zkontrolovat, zda pro daný soubor odpovídá nastavení, také pokud se při debugu objeví nějaká chyba je dobré se v první řadě podívat sem a zkontrolovat zda se nepouští třeba jiný debugger, který nemáte nastavený apod.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/debugconfiguration.png" /></p>  <p>10. Můžete začít debugovat, např. Run &ndash;&gt; Debug as &ndash;&gt; PHP Script. Na obrázku je vidět debug jednoduchého skriptu v akci.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/final.png" /></p>  <h3>Závěr</h3>  <p>Rozšíření XDebug umí také <a href="http://www.xdebug.org/docs/profiler">profiling</a>, pomocí KCacheGrind nebo WinCacheGrind a také <a href="http://www.xdebug.org/docs/code_coverage">analýzu pokrytí kódu</a>. Doufám, že někomu návod pomůže, pokud máte jakékoliv připomínky nebo dotazy k tématu neváhejte se v komentářích vyjádřit.</p></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -781,81 +820,6 @@ file_put_contents("index.html",str_replace("&lt;/head&gt;","&gt;&lt;link href='d
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/07/gettext-a-php/">Gettext a PHP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-07-15T00:00:00+02:00" pubdate data-updated="true">15. 07. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Gettext je Open Source nástroj na překlad aplikací. Kdo s tímto nástrojem pracuje může můj článek rovnou vynechat, protože tyto věci zná.</p>
-
-<p>Getext má jedinou nevýhodu, kterou lze celkem přejít, nejde přímo lidsky číst, ukládájí se v binárním tvaru do souboru s příponou *.mo. Pokud používáte nějakou vlastní metodu pro překlad určitě to bude něco z toho co nabízí Zend Framework (ZF) v Zend_Translate (pole, csv, xml – tbx, xliff, xmltm, gettext) nebo nějakou metodu založenou na databázi. Sám jsem zkusil během let většinu těchto metod a celkem se s nimi pracovalo dobře pokud se aplikace moc nerozrostla a případně pokud neměl překládat někdo kdo neuměl pracovat s prostředím ve kterém jsem pracoval.</p>
-
-<p>Na Gettextu se mi líbí hlavně aplikace pro editaci <a href="http://www.poedit.net">poEdit</a>. Aplikace umí parsovat zdrojové kódy pro překlad. To je asi nejlepší co moje dřívější metody nikdy neměli, gettext si najde sám co překládat a umožňuje použít už hotové překlady pro automatické překlady.</p>
-
-<p>Pro práci s Gettextem potřebujete buď ZF nebo extenze pro gettext. ZF v 1.5 zatím nepodporuje množná čísla.</p>
-
-<p>Ukázka použití getextu jako extenze PHP.</p>
-
-<pre>
-
-</pre>
-
-
-<p>V ZF nemusíte tak striktně dodržovate cesty a práce s gettextem je obdobná.</p>
-
-<pre>setLocale('cs');
-
-// tisk
-
-echo $t-&gt;_(‘Vítejete v aplikaci’);
-
-?&gt;
-</pre>
-
-
-<p>Aplikace poEdit je podle mě asi nejznámější a teké nejlepší pro práci s Gettextem, edituje soubory zdrojové v <em>.po a kompiluje výsledek do </em>.mo při ukládání. Je potřeba jen mít správně nastavené cesty k projektu se kterým právě pracujete.</p>
-
-<p>Pro práci s ZF je jen potřeba přidat pro v konfiguraci další koncovky do PHP parseru, já jsem používal překlad kromě php skriptech také v v phtml. Bez úpravy nastavení by nenašel xgettext vaše řetězce k předkladu.</p>
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2008/07/image1.png"></a></p>
-
-<p>Osobně se mi líbí na gettextu, že můžu mít poEdit současně otevřený s Eclipse nebo jiným editorem a překlady průběžně doplňovat a když je to větší projekt tak jednoduše to celé dělám v jednom jazyce případně v CZ, EN variantě a potom může kdokoliv lehce přeložit text do dalšího jazyka.</p>
-
-<p>Zdrojáky ukázky jsou ke stažení na <a href="http://ladislav.prskavec.net/download/gettext.zip">zip archivu</a>.</p>
-
-<p>V ZF 1.6 budou změny v <a href="http://weblog.ronnieweb.net/index.php?text=21-nove-view-helpery-a-zmeny-v-zend-translate-v-zend-frameworku-1-6">Zend_Translate</a>.</p>
-
-<p>Používá někdo nějakou vlastní metodu s parsováním pro překlad textů obdobně jako to dělá getext?</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/11/">&larr; Older</a>
@@ -887,6 +851,10 @@ echo $t-&gt;_(‘Vítejete v aplikaci’);
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/03/co-to-je-sre/">Co to je SRE?</a>
+      </li>
     
       <li class="post">
         <a href="/2016/02/suchy-docker/">Suchý docker</a>
@@ -922,10 +890,6 @@ echo $t-&gt;_(‘Vítejete v aplikaci’);
     
       <li class="post">
         <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
       </li>
     
   </ul>

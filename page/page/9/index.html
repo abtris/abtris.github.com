@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="CentOS 5 Pokud jste někdo musel pracovat na serveru s touto distribucí tak vězte, že v repozitory i pro verzi 5.3 je PHP 5.1.6 a pokud potřebujete &hellip;">
+  <meta name="description" content="Zend Server CE má administrační konzoli, která umožňuje práci s extenzemi php, čtení logu apod. Celá konzole běží na lighthttpd a nemá z vlastní &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,84 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/04/zend-server-ce-a-phpminadmin-phpmyadmin-na-ubuntu/">Zend Server CE a phpMinAdmin, phpMyAdmin na Ubuntu</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-08T00:00:00+02:00" pubdate data-updated="true">08. 04. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Zend Server CE má administrační konzoli, která umožňuje práci s extenzemi php, čtení logu apod. Celá konzole běží na lighthttpd a nemá z vlastní konfiguraci, která neodpovídá té, kterou máte pro Apache nebo IIS.</p>
+
+<h2>Instalace phpMyAdmin do konzole</h2>
+
+
+<p>Předpokládám, že Zend Server nainstalovaný z DEB balíku z repozitory jak jsem popisoval v<a href="http://blog.prskavec.net/2009/04/ubuntu-centos-5-a-php-529-v-zend-server-ce/"> minulém článku</a>.</p>
+
+<pre>sudo apt-get install phpmyadmin-zend-ce</pre>
+
+
+<p>Po instalaci, která u mě obsahovala i vlastní Mysql5 server je k dispozici phpmyadmin <a href="https://localhost:10082/phpmyadmin/"><a href="https://localhost:10082/phpmyadmin/">https://localhost:10082/phpmyadmin/</a></a> v konzoli.</p>
+
+<h2>Instalace phpMinAdmin do konzole</h2>
+
+
+<p>PhpMinAdmin se neumí připojit přímo bez extenze mysql, mysqli nebo pdo_mysql. Proto je potřeba aby v</p>
+
+<pre>sudo vim /usr/local/zend/gui/lighttpd/etc/php-fcgi.ini</pre>
+
+
+<p>přidat řádek</p>
+
+<pre>extension=mysql.so</pre>
+
+
+<p>pokud ho tam nemáte např. z instalace phpMyAdmina a nezapomeňte restartovat Zend Server</p>
+
+<pre>sudo /etc/init.d/zend-server restart</pre>
+
+
+<p>potom stačí vytvořit adresář a stáhnout do něj phpMinAdmina</p>
+
+<pre>
+sudo mkdir /usr/local/zend/gui/lighttpd/htdocs/phpminadmin
+cd /usr/local/zend/gui/lighttpd/htdocs/phpminadmin
+sudo wget http://switch.dl.sourceforge.net/sourceforge/phpminadmin/phpMinAdmin-1.9.1.php
+sudo mv phpMinAdmin-1.9.1.php index.php
+</pre>
+
+
+<p>Phpminadmin je k dispozici: <a href="https://localhost:10082/phpminadmin/"><a href="https://localhost:10082/phpminadmin/">https://localhost:10082/phpminadmin/</a></a></p>
+
+<p>Pokud máte nastaveny přístup pro port 10082 jen pro localhost nemusíte se bát, že se někdo dostane přes chybu v  PMA do db. <a href="http://www.flickr.com/photos/abtris/sets/72157616497712368/">Zend Server v obrazech. </a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -946,45 +1024,6 @@ svn up
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/01/ubuntu-a-konfigurace-xdebug-pro-eclipse-pdt-20/">Ubuntu a konfigurace XDebug pro Eclipse PDT 2.0</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-28T00:00:00+01:00" pubdate data-updated="true">28. 01. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Jeden ze čtenářů mého blogu mě poprosil o radu, tak jsem si řekl co se hodí jednomu, může pomoci více lidem.</p>
-
-
-<p>  <p>Pokud máte Ubuntu (KUbuntu, Linux Mint) nebo jiného příbuzného ubuntu provedu vás instalací Eclipse s PDT a konfiguraci XDebug.</p>  <h3>Instalace</h3>  <p>1. Eclipse můžete nainstalovat z repozitory, ale PDT tam není a proto tento postup nedoporučuji. Lepší je stáhnout si verzi <a href="http://www.eclipse.org/pdt/downloads/">PDT 2.0 All In Ones</a>.    <br />2. Samozřejmě předpokládám, že máte nainstalovaný apache2 a php5 z repozitory. Pro xdebug nezapomeňte nainstalovat <code>php5-xdebug</code> balíček.    <br />3. Jako další krok, než začnu konfigurovat Eclipse, vytvořím kopii php.ini pro XDebug, kam se přidá na konec.    <br /><code>     <br />[xdebug]      <br />zend_extension=/usr/lib/php5/20060613+lfs/xdebug.so      <br /></code></p>  <h3>Konfigurace</h3>  <p>4. Pokud je toto připraveno stačí nakonfigurovat XDebug v Eclipse.   <br />5. otevřeme nastavení: Window &ndash;&gt; Preferences    <br />6. pod PHP si najdeme PHP Servers a nastavíme si ho na workspace Eclipse. Já osobně mám vytvořený v Apache virtual host, který je pojmenovaný workspace a vede jeho document root na /home/user/workspace/ kde pracuji s Eclipse.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/phpserver.png" /></p>  <p>7. v PHP Executables si nastavím cesty k php a k modifikovanému php.ini pro XDebug.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/phpexecutables.png" /></p>  <p>8. V záložce PHP &ndash;&gt; Debug potom musíte mít zapnuté nakonfigurované služby, ale dají se přepínat i přes debug konfiguraci.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/debugsettings.png" /></p>  <p>9. V menu Run &ndash;&gt; Debug Configurations je dobré zkontrolovat, zda pro daný soubor odpovídá nastavení, také pokud se při debugu objeví nějaká chyba je dobré se v první řadě podívat sem a zkontrolovat zda se nepouští třeba jiný debugger, který nemáte nastavený apod.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/debugconfiguration.png" /></p>  <p>10. Můžete začít debugovat, např. Run &ndash;&gt; Debug as &ndash;&gt; PHP Script. Na obrázku je vidět debug jednoduchého skriptu v akci.</p>  <p><img alt="" src="http://blog.prskavec.net/wp-content/uploads/2009/01/final.png" /></p>  <h3>Závěr</h3>  <p>Rozšíření XDebug umí také <a href="http://www.xdebug.org/docs/profiler">profiling</a>, pomocí KCacheGrind nebo WinCacheGrind a také <a href="http://www.xdebug.org/docs/code_coverage">analýzu pokrytí kódu</a>. Doufám, že někomu návod pomůže, pokud máte jakékoliv připomínky nebo dotazy k tématu neváhejte se v komentářích vyjádřit.</p></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/10/">&larr; Older</a>
@@ -1016,6 +1055,10 @@ svn up
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/03/co-to-je-sre/">Co to je SRE?</a>
+      </li>
     
       <li class="post">
         <a href="/2016/02/suchy-docker/">Suchý docker</a>
@@ -1051,10 +1094,6 @@ svn up
     
       <li class="post">
         <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
       </li>
     
   </ul>

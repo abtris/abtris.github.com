@@ -9,7 +9,10 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Já osobně jsem začal pracovat s někde kolem roku 2000 se systémem CVS z kterého jsem nebyl vůbec nadšený, hned jak jsem se pokusil něco přejmenovat &hellip;">
+  <meta name="description" content="Pokud máte strukturu repository podobnou této: /repository/project1/trunk
+/repository/project1/branches
+/repository/project1/tags
+/repository/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +62,81 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/05/subversion-post-commit-pro-vice-projektu-v-jednom-repository/">Subversion post-commit pro více projektů v jednom repository</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-26T00:00:00+02:00" pubdate data-updated="true">26. 05. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud máte strukturu repository podobnou této:</p>
+
+<pre>/repository/project1/trunk
+/repository/project1/branches
+/repository/project1/tags
+/repository/project2/trunk
+/repository/project2/branches
+/repository/project2/tags</pre>
+
+
+<p>a chtěli jste dělat nějakou akci pro jednotlivé projekty nebo jen pro některé je potřeba si trochu pohrát s post-commitem. Zde uvádím příklad na posílání mailu jen pro projekty, které začínají &ldquo;php_&rdquo;.</p>
+
+<pre>#!/bin/sh
+# POST-COMMIT HOOK
+REPOS="$1"
+REV="$2"
+REPNAME="${1##*/}"
+SVNLOOK="/usr/bin/svnlook"
+AWK="/usr/bin/awk"
+GREP="/bin/egrep"
+ERR="/tmp/errors"  
+
+TEST=1
+
+CHANGED=`$SVNLOOK changed  -r "$REV" "$REPOS" | $AWK '{print $2}' | $GREP ^php_`
+for FILE in $CHANGED 
+do
+    # echo $FILE &gt;&gt; $ERR 
+    TEST=0
+done 
+
+if [ $TEST = 0 ]; then
+    /srv/svn/tools/commit-email.pl "$REPOS" "$REV" adresat@email.com -h svn.hostname.cz -s "SVN: $REPNAME" &gt; /tmp/postcommit-log 2&gt;&amp;1
+    # echo "Send mail" &gt;&gt; $ERR
+    exit 0
+fi
+</pre>
+
+
+<p>Post commit je upraven tak, že pomocí svnlook si zjistí provedené změny a podle nich se zachová, tak se dá řídit celá logika akce, kterou chcete vykonat.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1093,69 +1171,6 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/11/proc-jsem-presel-z-mercurial-na-git/">Proč jsem přešel z Mercurial na Git</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-11-03T00:00:00+01:00" pubdate data-updated="true">03. 11. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Verzovací systémy už používám asi 5 let, vystřídal jsem CVS, Subversion, Mercurial, Bazaar a Git. V nedávné době v souvislosti také s tím, že Nette přešlo na Git a vůbec se spousta open source projektů přesunula na Github.com jsem také přešel na distribuovaný systém.</p>
-
-<p>V práci používám Subversion a také přispívám do několika projektů, které pracují na Subversion. Dělal jsem migrace z CVS na SVN ve firmě, kde pracuji apod. Subversion má jednu velkou výhodu, kterou nemají distribuované systémy a to velmi dobré a detailní ACL a různé metody autentizace (LDAP, Active Directory). To si myslím udrží ve spoustě firem Subversion ještě po dlouhou dobu.</p>
-
-<p>Ale protože pracuju na linuxu, pro verzování lokálních projektů a pracovních skriptů apod. používám Git, dříve Mercurial.</p>
-
-<p>Proč jsem nejdříve zvolil Mercurial?</p>
-
-<ol>
-    <li>Bitbucket, jednoduchý, přehledný, rychlý a privatní repository v free variantě (proti Github.com)</li>
-    <li>Jednoduší přechod z SVN (viz <a href="http://svn.prskavec.net/ch07.html#id3029856">Přechod od Subversion k Mercurial</a>)</li>
-</ol>
-
-
-<p>Proč jsem přešel na Git ?</p>
-
-<ol>
-    <li><a href="http://www.karmi.cz/">Karel Minařík</a> mě přesvědčil o výhodách Gitu a odpovídal mě na dotazy, které jsem měl a předvedl mi killer feature (git-filter-branch).</li>
-    <li>Mercurial mi při práci na projektu vyhodil tuto zprávu &#8220;files over 10MB may cause memory and performance problems&#8221;.</li>
-    <li>Zvykl jsem si na syntax Gitu, udělal jsem si hromadu aliasů a to chce prostě trochu čas.</li>
-</ol>
-
-
-<p>Proč mi vadí to upozornění na přidání souboru většího než 10MB? Protože, pokud to tam mají určitě vědí proč. Performance je Gitu velká výhoda a já od verzovacího systému chci hlavně jednu věc a to verzovat cokoliv.</p>
-
-<p>V současnosti používám Subversion, Mercurial i Git současně a nijak mi to nevadí. Git, ale preferuju pro nové projekty. Stávající ponechám tam kde jsou případně pořeším co udělám s těmi nepodporovanými keywords v Gitu, ale stejně mi nepřijdou v poslední době důležité, protože stejně jsou v každém souboru jiné a nenese to tu informaci, kterou většina chce a to je verze revize z SVN. Tohle spíše je lepší přesunout do build scriptu nebo na deployment.</p>
-
-<p>Doufám, že jsem Borkovi Bernardovi odpověděl na co chtěl, případné dotazy do komenářů.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/7/">&larr; Older</a>
@@ -1187,6 +1202,10 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/03/co-to-je-sre/">Co to je SRE?</a>
+      </li>
     
       <li class="post">
         <a href="/2016/02/suchy-docker/">Suchý docker</a>
@@ -1222,10 +1241,6 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
     
       <li class="post">
         <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
       </li>
     
   </ul>

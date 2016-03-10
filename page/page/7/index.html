@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Ve dnech 19-22 října se v San Jose v Kalifornii konal 5. ročník konference ZendCon (Zend PHP Conference for Developers). Na této konferenci je skvělé &hellip;">
+  <meta name="description" content="Verzovací systémy už používám asi 5 let, vystřídal jsem CVS, Subversion, Mercurial, Bazaar a Git. V nedávné době v souvislosti také s tím, že Nette &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,69 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/11/proc-jsem-presel-z-mercurial-na-git/">Proč jsem přešel z Mercurial na Git</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-03T00:00:00+01:00" pubdate data-updated="true">03. 11. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Verzovací systémy už používám asi 5 let, vystřídal jsem CVS, Subversion, Mercurial, Bazaar a Git. V nedávné době v souvislosti také s tím, že Nette přešlo na Git a vůbec se spousta open source projektů přesunula na Github.com jsem také přešel na distribuovaný systém.</p>
+
+<p>V práci používám Subversion a také přispívám do několika projektů, které pracují na Subversion. Dělal jsem migrace z CVS na SVN ve firmě, kde pracuji apod. Subversion má jednu velkou výhodu, kterou nemají distribuované systémy a to velmi dobré a detailní ACL a různé metody autentizace (LDAP, Active Directory). To si myslím udrží ve spoustě firem Subversion ještě po dlouhou dobu.</p>
+
+<p>Ale protože pracuju na linuxu, pro verzování lokálních projektů a pracovních skriptů apod. používám Git, dříve Mercurial.</p>
+
+<p>Proč jsem nejdříve zvolil Mercurial?</p>
+
+<ol>
+    <li>Bitbucket, jednoduchý, přehledný, rychlý a privatní repository v free variantě (proti Github.com)</li>
+    <li>Jednoduší přechod z SVN (viz <a href="http://svn.prskavec.net/ch07.html#id3029856">Přechod od Subversion k Mercurial</a>)</li>
+</ol>
+
+
+<p>Proč jsem přešel na Git ?</p>
+
+<ol>
+    <li><a href="http://www.karmi.cz/">Karel Minařík</a> mě přesvědčil o výhodách Gitu a odpovídal mě na dotazy, které jsem měl a předvedl mi killer feature (git-filter-branch).</li>
+    <li>Mercurial mi při práci na projektu vyhodil tuto zprávu &#8220;files over 10MB may cause memory and performance problems&#8221;.</li>
+    <li>Zvykl jsem si na syntax Gitu, udělal jsem si hromadu aliasů a to chce prostě trochu čas.</li>
+</ol>
+
+
+<p>Proč mi vadí to upozornění na přidání souboru většího než 10MB? Protože, pokud to tam mají určitě vědí proč. Performance je Gitu velká výhoda a já od verzovacího systému chci hlavně jednu věc a to verzovat cokoliv.</p>
+
+<p>V současnosti používám Subversion, Mercurial i Git současně a nijak mi to nevadí. Git, ale preferuju pro nové projekty. Stávající ponechám tam kde jsou případně pořeším co udělám s těmi nepodporovanými keywords v Gitu, ale stejně mi nepřijdou v poslední době důležité, protože stejně jsou v každém souboru jiné a nenese to tu informaci, kterou většina chce a to je verze revize z SVN. Tohle spíše je lepší přesunout do build scriptu nebo na deployment.</p>
+
+<p>Doufám, že jsem Borkovi Bernardovi odpověděl na co chtěl, případné dotazy do komenářů.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -911,213 +974,6 @@ Nastavit mirror a pustit synchronizaci to najdete i v manuálu, ale přidal jsem
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/07/php-bytekit/">PHP Bytekit</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-07-01T00:00:00+02:00" pubdate data-updated="true">01. 07. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Bytekit</h3>
-
-
-<p><a href="http://www.bytekit.org/">Bytekit</a> je nová extenze pro PHP, která umožňuje analyzovat PHP kód na úrovni opcodes, které generuje compiler v PHP. Také nám umožňuje pomocí disassembleru sledovat jak probíhá program na úrovni compileru. Je to další z nástrojů, které umožní zlepšit kvalitu kódu a určitě přinese řadu další analytických nástrojů. Autorem je Stefan Esser, kterého jistě každý zná. Jeho <a href="http://www.suspekt.org/">blog</a> a příspěvky k bezpečnosti PHP jsou známy. </p>
-
-
-
-
-<h3>Bytekit-cli</h3>
-
-
-<p>
-Samotná extenze, ale není všechno. Abychom mohli ji dobře využít tak <a href="http://sebastian-bergmann.de/archives/871-bytekit-cli.html">Sebastian Bergmann</a> vytvořil <a href="http://github.com/sebastianbergmann/bytekit-cli/tree/master">bytekit-cli</a>, které nám umožní ho využít.
-V článku od SB jsou pěkné příklady, které doporučuji vyzkoušet. Bytekit zatím není dostupné přes PECL tak ho musíte zkompilovat ze zdrojového kódu, známým postupem (phpize, configure, make, make install) a zkompilovanou extenzi přidat do konfigurace PHP. Potom si z githubu můžete stáhnout aktuální verzi bitekit-cli a můžete si hrát.</p>
-
-
-<p>Například otestuji jak je na tom s přímým výstupem Zend Framework.</p>
-
-<pre>
-abtris@ubuntu# bytekit --rule=DirectOutput ZendFramework/
-
- - Direct output of variable $message
-    in ZendFramework/demos/Zend/Gdata/YouTubeVideoApp/operations.php:1094
-
-  - Direct output of variable $playlistEntries
-    in ZendFramework/demos/Zend/Gdata/YouTubeVideoApp/operations.php:906
-
-  - Direct output of variable $message
-    in ZendFramework/demos/Zend/Gdata/YouTubeVideoApp/operations.php:270
-
-  - Direct output of variable $message
-    in ZendFramework/demos/Zend/Gdata/YouTubeVideoApp/operations.php:276
-
-  - Direct output of variable $user
-    in ZendFramework/demos/Zend/Gdata/Photos.php:796
-
-  - Direct output of variable $albumId
-    in ZendFramework/demos/Zend/Gdata/Photos.php:797
-
-  - Direct output of variable $photoId
-    in ZendFramework/demos/Zend/Gdata/Photos.php:798
-
-  - Direct output of variable $user
-    in ZendFramework/demos/Zend/Gdata/Photos.php:825
-
-  - Direct output of variable $albumId
-    in ZendFramework/demos/Zend/Gdata/Photos.php:826
-
-  - Direct output of variable $photoId
-    in ZendFramework/demos/Zend/Gdata/Photos.php:827
-
-  - Direct output of variable $user
-    in ZendFramework/demos/Zend/Gdata/Photos.php:741
-
-  - Direct output of variable $albumId
-    in ZendFramework/demos/Zend/Gdata/Photos.php:742
-
-  - Direct output of variable $user
-    in ZendFramework/demos/Zend/Gdata/Photos.php:688
-
-  - Direct output of variable $type
-    in ZendFramework/demos/Zend/WebServices/Amazon/amazon-search.php:153
-
-  - Direct output of variable $type
-    in ZendFramework/demos/Zend/WebServices/Amazon/amazon-search.php:157
-
-  - Direct output of variable $keywords
-    in ZendFramework/demos/Zend/WebServices/Flickr/flickr-composite.php:92
-
-  - Direct output of variable $form
-    in ZendFramework/demos/Zend/ProgressBar/ZendForm.php:209
-
-  - Direct output of variable $ret
-    in ZendFramework/demos/Zend/OpenId/test_server.php:264
-
-  - Direct output of variable $id
-    in ZendFramework/demos/Zend/OpenId/test_consumer.php:115
-
-  - Direct output of variable $response
-    in ZendFramework/library/Zend/Rest/Server.php:277
-
-  - Direct output of variable $output
-    in ZendFramework/library/Zend/Cache/Frontend/Class.php:226
-
-  - Direct output of variable $data
-    in ZendFramework/library/Zend/Cache/Frontend/Page.php:280
-
-  - Direct output of variable $data
-    in ZendFramework/library/Zend/Cache/Frontend/Output.php:101
-
-  - Direct output of variable $data
-    in ZendFramework/library/Zend/Cache/Frontend/Output.php:65
-
-  - Direct output of variable $output
-    in ZendFramework/library/Zend/Cache/Frontend/Function.php:107
-
-  - Direct output of variable $response
-    in ZendFramework/library/Zend/Json/Server.php:198
-
-  - Direct output of variable $data
-    in ZendFramework/library/Zend/ProgressBar/Adapter/JsPull.php:111
-
-  - Direct output of variable $output
-    in ZendFramework/library/Zend/Debug.php:102
-
-  - Direct output of variable $exceptions
-    in ZendFramework/library/Zend/Controller/Response/Abstract.php:734
-
-  - Direct output of variable $content
-    in ZendFramework/library/Zend/Controller/Response/Abstract.php:546
-
-  - Direct output of variable $output
-    in ZendFramework/library/Zend/Tool/Framework/Client/Console.php:194
-</pre>
-
-
-<p>Používá Zend Framework někde EVAL?</p>
-
-<pre>
-abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
- - Disallowed opcode "EVAL"
-    in ZendFramework/demos/Zend/Gdata/Health.php:92
-
-  - Disallowed opcode "EVAL"
-    in ZendFramework/demos/Zend/Gdata/Health.php:99
-
-  - Disallowed opcode "EVAL"
-    in ZendFramework/demos/Zend/Gdata/Health.php:126
-
-  - Disallowed opcode "EVAL"
-    in ZendFramework/demos/Zend/Gdata/Health.php:129
-
-  - Disallowed opcode "EVAL"
-    in ZendFramework/demos/Zend/Gdata/Health.php:159
-
-  - Disallowed opcode "EVAL"
-    in ZendFramework/demos/Zend/Gdata/Health.php:164
-
-  - Disallowed opcode "EVAL"
-    in ZendFramework/demos/Zend/Gdata/Health.php:195
-
-  - Disallowed opcode "EVAL"
-    in ZendFramework/demos/Zend/Gdata/Health.php:200
-
-  - Disallowed opcode "EVAL"
-    in ZendFramework/demos/Zend/Gdata/Health.php:223
-
-  - Disallowed opcode "EVAL"
-    in ZendFramework/demos/Zend/Gdata/Health.php:230
-
-  - Disallowed opcode "EVAL"
-    in ZendFramework/demos/Zend/Gdata/Health.php:271
-</pre>
-
-
-
-
-<h3>Závěr</h3>
-
-
-<p>Stefan Esser ve své <a href="http://www.suspekt.org/downloads/DPC_Secure_Programming_With_The_Zend_Framework.pdf">přednášce o bezpečnosti Zend Frameworku</a> se zmiňuje o možnosti například kontrolovat EVAL v pre-commitu tasku, obdobně jako například dnes kontroluji syntaxi php.</p>
-
-
-<p></p>
-
-<p>Koncem září se budu věnovat porovnání PHP Frameworků z hlediska nástrojů pro QA, které jsem dělal v článku <a href="http://blog.prskavec.net/2009/03/pdepend-a-php-frameworky/">pDepend a php frameworky</a>, uvidíme jak jednotlivé frameworky za tu dobu pokročili a také si budu všímat frameworků pomocí dalších nástrojů mezi které bytekit jistě zahrnu.</p>
-
-
-<p>Nesmím opomenout připomenout také, že je venku PHP 5.3, na které se čekalo poměrně dlouho a doufám jen, že nebude tolik plné chyb jako jeho přechůdci 5.2 a 5.1. Uvidíme zda na příchod PHP 5.3 jsou připraveny i jiné frameworky než <a href="http://nettephp.com">Nette</a>.</p>
-
-
-<p></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/8/">&larr; Older</a>
@@ -1149,6 +1005,10 @@ abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/03/co-to-je-sre/">Co to je SRE?</a>
+      </li>
     
       <li class="post">
         <a href="/2016/02/suchy-docker/">Suchý docker</a>
@@ -1184,10 +1044,6 @@ abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
     
       <li class="post">
         <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/08/firebase-a-angularjs/">Firebase a AngularJS</a>
       </li>
     
   </ul>
