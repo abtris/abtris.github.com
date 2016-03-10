@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: sre | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/sre/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-03-10T09:59:57+01:00</updated>
+  <updated>2016-03-10T10:05:24+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -18,7 +18,7 @@
     <link href="http://blog.prskavec.net/2016/03/co-to-je-sre/"/>
     <updated>2016-03-10T08:45:00+01:00</updated>
     <id>http://blog.prskavec.net/2016/03/co-to-je-sre</id>
-    <content type="html"><![CDATA[<p>Včera jsem měl <a href="">přednášku v Brně o dockeru</a> a ptal jsem se lidí kolem na meetup a v hospodě potom zda znají Site Reliability Engineering (SRE) ze svého okolí. Tento koncept od Googlu rozšiřuje klasické pojetí DevOps a myslím, že je to jedna z nejlepších věcí co Google vymyslel.</p>
+    <content type="html"><![CDATA[<p>Včera jsem měl <a href="http://srazy.info/jak-nejlepe-nasadit-docker-kontejnery-do-cloudu/6197">přednášku v Brně o dockeru</a> a ptal jsem se lidí kolem na meetup a v hospodě potom zda znají Site Reliability Engineering (SRE) ze svého okolí. Tento koncept od Googlu rozšiřuje klasické pojetí DevOps a myslím, že je to jedna z nejlepších věcí co Google vymyslel.</p>
 
 <p>Můžete to slyšet přímo od Bena Treynora. Poslechněte jeho skvělou přednášku <a href="https://www.usenix.org/conference/srecon14/technical-sessions/presentation/keys-sre">Keys to SRE z SRECon14</a>.</p>
 
@@ -29,7 +29,7 @@
 
 <p>Jestli jste se snažili někdy ve firmě zavést DevOps tak jste možná narazili, případně říkáte, že máte DevOps, ale často to úplně ve všem nepomohlo.</p>
 
-<p>Přišel jsem před 7 lety do LMC. Měli jsme všecho rozdělené na týmy podle toho co kdo dělal a přišlo nám to tehdy logické. Produkt měl svůj tým, QA měl svůj tým, Support, Ops, Sales, Marketing a Development také. Development byl ještě rozdělný na tři týmy podle specializace (interní systémy, B2C). A ještě jsme měli externí partnery. Také jsme měli release 3-4 krát do roka a celkem to fungovalo.</p>
+<p>Přišel jsem před 7 lety do <a href="http://www.lmc.eu">LMC</a>. Měli jsme všecho rozdělené na týmy podle toho co kdo dělal a přišlo nám to tehdy logické. Produkt měl svůj tým, QA měl svůj tým, Support, Ops, Sales, Marketing a Development také. Development byl ještě rozdělný na tři týmy podle specializace (interní systémy, B2C). A ještě jsme měli externí partnery. Také jsme měli release 3-4 krát do roka a celkem to fungovalo.</p>
 
 <p>Potom, ale přišla revoluce. Měli jsme skvělé školení od produktového vývoje a ve firmě se všechno začalo měnit. Vytvořili se produktové týmy. Každý tým měl scrummastera, produkťáka, ux a programátory, kterří dělali i QA. Jediné co zůstalo bylo Operations. Potom jsem z firmy odešel a nevím zda se v tom posunuly dál, ale to je dost těžký krok zvláště pro větší firmu.</p>
 
@@ -39,7 +39,7 @@
 
 <p>Začněte SRE dělat hned ono se vám to v budoucnu vrátí. V Googlu začali v 6 lidech (2003) a těď mají v SRE asi 2500 lidí (odněkud zaslechnuto).</p>
 
-<p>Musíte zapojit do OPS práce programátory. V Apiary každý programátor má službu a stará se i produkční systémy, je to potřeba, aby to každý z nich uměl. Využíváme hodně SaaS řešení což celou práci programátorům ulehčuje, když máte technický problém, je tu support od poskytovale co vám rád pomůže. Tohle funguje velmi dobře.</p>
+<p>Musíte zapojit do OPS práce programátory. V <a href="https://apiary.io">Apiary</a> každý programátor má službu a stará se i produkční systémy, je to potřeba, aby to každý z nich uměl. Využíváme hodně SaaS řešení což celou práci programátorům ulehčuje, když máte technický problém, je tu support od poskytovale co vám rád pomůže. Tohle funguje velmi dobře.</p>
 
 <p>Klíčový rozdíl mezi SRE a DevOPS jsou error buggety. Aby jste neměli válku mezi DEV a OPS týmy, dá se to nastavit jednoduše. Stanovíte SLA mezi systémy. SLA může být interní nebo externí se zákazníky a tuto metriku nestanoví obvykle ani SRE nebo DEV tým. Je to spíš nástroj managementu. Důležité je jen, aby tým se svým SLA souhlasil, nepřišlo mu to nesmyslé. Potom se dá vypočítat <strong>error budget</strong> pomocí: <code>1 - SLA</code> a máte v hodnotu budgetu.</p>
 
