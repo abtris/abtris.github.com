@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Gettext je Open Source nástroj na překlad aplikací. Kdo s tímto nástrojem pracuje může můj článek rovnou vynechat, protože tyto věci zná. Getext má &hellip;">
+  <meta name="description" content="Protože jsem v češtině nenašel žádnou knihu, kterou bych mohl strčit do ruky někomu kdo se mě ptá jak začít pracovat se Subversion a návody na webu &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,66 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/07/subversion-pro-kazdho/">Subversion pro každého</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-28T00:00:00+02:00" pubdate data-updated="true">28. 07. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Protože jsem v češtině nenašel žádnou knihu, kterou bych mohl strčit do ruky někomu kdo se mě ptá jak začít pracovat se Subversion a návody na webu nejsou zcela ucelené, tak jsem se rozhodl <a href="http://svn.prskavec.net">napsat takovou příručku pro každého</a> kdo chce se Subversion pracovat.</p>
+
+<p>Nesnažím se o překlad <a href="http://svnbook.red-bean.com/">SVN book</a> i když ten by této knize výrazně pomohl, ale snažím se shrnout postupy a praxe co nejjednodušeji, aby to začátečník pochopil. Já už se SVN, ale dělám delší čas a nemám potřebný odstup a proto budu vděčný za zpětnou vazbu co týká obsahu, co přidat a co je zbytečné a případných chyb.</p>
+
+<p>Ke psaní jsem použil <a href="http://www.docbook.cz">Docbook</a> a jako editor XMLmind, PSPad a SciTE. Do html převádím docbook za pomoci PHP tímto jednoduchým skriptem.</p>
+
+<pre name='code' class="php">
+&lt;?php
+$xml_filename="svn-kniha.xml";
+$xsl_filename="c:\Program Files\XMLmind_XML_Editor\addon\config\docbook\xsl\xhtml\docbook.xsl";
+
+$doc = new DOMDocument();
+$xsl = new XSLTProcessor();
+
+$doc-&gt;load($xsl_filename);
+$xsl-&gt;importStyleSheet($doc);
+
+$doc-&gt;load($xml_filename);
+
+file_put_contents("index.html",str_replace("&lt;/head&gt;","&gt;&lt;link href='default.css' type='text/css' rel='stylesheet' /&gt;
+&lt;/head&gt;",$xsl-&gt;transformToXML($doc)));
+
+?&gt;
+</pre>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -828,45 +888,6 @@ print "";</pre>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/06/on-air-tour-v-praze/">on Air Tour v Praze</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-06-10T00:00:00+02:00" pubdate data-updated="true">10. 06. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://blog.prskavec.net/wp-content/uploads/2008/06/air-appicon.jpg"><img style="border-right: 0px; border-top: 0px; margin: 10px 10px 10px 0px; border-left: 0px; border-bottom: 0px" height="146" alt="air_appicon" src="http://blog.prskavec.net/wp-content/uploads/2008/06/air-appicon-thumb.jpg" width="146" align="left" border="0"/></a> Adobe nás přivítala ve velkém stylu, tak dobře organizačně připravenou akci jsem dlouho nezažil. Na začátku jsem dostal materiály, vizitku, k dispozici je internet, občerstvení po celou dobu akce a každý byl osobně uveden jejich pracovníkem a obsluha se o vás stará.&nbsp; Balíček co jsem dostal obsahoval: <a href="http://www.tostring.org/books/adobe-air-for-javascript-developers-pocketguide/1.0/en/">Adobe AIR for Javascript Developers</a>, <a href="http://www.adobe.com/support/flash/action_scripts/actionscript_dictionary/">ActionScript Reference</a>, Flex Early Evalutation: Assessing Flex Your Project Needs. Nejsou to jen propagační materiály, ale příručka co se může opravdu hodit a reference ActionScriptu, která je sice k dispozici online, ale někdy se to hodí i vytištěné. Do místnosti kde se ve <a href="http://navstevnicke-centrum.pivovarystaropramen.cz/">Staropramen pivovaru</a> přednášelo, byly přidány prodlužováky se zásuvkami pro každého a jediný dojem z celé akce trochu ničil hluk z ulice hned za okny.</p>
-
-
-<p> <p>Program akce byl velmi dobře sestaven a zaměřen převážně na začínající vývojáře na platformě Adobe Air, která tu je od února a teď v červnu bude k dispozici verze 1.1. </p> <p>Na úvod jedna poznámka pro ty co se s Air ještě nesetkali. Adobe Air je runtime prostředí pro běh aplikací napsaných v JS, HTML, Flash (Flex). Není to jen Flash, aplikace může být jen např. HTML a JS. Během vývoje mělo Adobe Air vývojový název Apollo, pod kterým občas něco najdete. Adobe Air je k dispozici pro Windows, Mac a Linux (<a href="http://labs.adobe.com/technologies/air/">alpha</a>).</p> <h3>Program</h3> <p>Nebudu detailně probírat každou přednášku, ale jen to lehce shrnu a uvedu nejzajímavější odkazy. V Keynote Ryan Stewart řekl co to Adobe Air je, kam se bude ubírat <a href="http://labs.adobe.com/technologies/flashplayer10/">Flash Player 10</a> a kam další verze Adobe Air, které na nás brzo čeká.</p> <p>V další sérii přednášek byli ukázky jak vybudovat Adobe Air aplikaci pomocí Adobe Flex 3 builderu, Adobe Flex SDK a notepadu nebo pomocí Aptana IDE, které je zdarma. </p> <p>Kromě vývojových nástrojů byla také představeny různé aplikace, které v Adobe Air jsou již vyrobeny. Pokud budete dělat vlastní aplikace je potřeba je digitálně podepsat, aby při instalaci jste byli důvěryhodní chce to také důvěryhodný certifikát a ne self signed. Certifikáty vydává pro Firefox např. <a href="http://www.thawte.com/">Thawte</a> ($299 za rok). </p> <p>V rámci přednášek také byli přestaveny projekty <a href="http://www.flash.cz">www.flash.cz</a> a <a href="http://www.flexgarden.net">www.flexgarden.net</a>, které nám problematiku vývoje ve Flexu přinášjí v české a slovenském jazyce.</p> <p>Přenášeli většinou američané a bylo to poznat např. na tom jak intenzivně používají sociální sítě jak Twitter, <a href="http://brightkite.com/">Brightkite</a>, Tabrio, Facebook a další. O tomto fenoménu, který u nás ještě není tak rozvinutý přinesu další článek někdy později.</p> <p>Další materiály jsou k dispozci také na stránkých akce, kde najdete např. i videoblog.</p> <p></p> <ul> <li><a href="http://onair.adobe.com/schedule/cities/prague.php"><a href="http://onair.adobe.com/schedule/cities/prague.php">http://onair.adobe.com/schedule/cities/prague.php</a></a>  </li><li><a href="http://adobe.com/go/air/"><a href="http://adobe.com/go/air/">http://adobe.com/go/air/</a></a>  </li><li><a href="http://adobe.com/go/ria/"><a href="http://adobe.com/go/ria/">http://adobe.com/go/ria/</a></a></li></ul> <h4>Keynote &ndash; Ryan Stewart</h4> <ul> <li><a title="http://blog.digitalbackcountry.com/" href="http://blog.digitalbackcountry.com/"><a href="http://blog.digitalbackcountry.com/">http://blog.digitalbackcountry.com/</a></a></li></ul> <h4>Building your first Adobe AIR application with Adobe Flex &ndash; Mike Chambers</h4> <p>Jak udělat jednoduchou aplikaci a další témata, které byli probírány na přednáškách? Stačí si pročíst knížku <a href="http://www.tostring.org/books/adobe-air-for-javascript-developers-pocketguide/1.0/en/">Adobe Air for Javascript Developers</a>. Tam najdere všechny důležité informace o Adobe Air.</p> <ul> <li><a title="http://www.mikechambers.com/blog/" href="http://www.mikechambers.com/blog/"><a href="http://www.mikechambers.com/blog/">http://www.mikechambers.com/blog/</a></a></li></ul> <h4>Building your first AIR application with HTML and JavaScript &ndash; Kevin Hoyt</h4> <ul> <li><a title="http://blog.kevinhoyt.org/" href="http://blog.kevinhoyt.org/"><a href="http://blog.kevinhoyt.org/">http://blog.kevinhoyt.org/</a></a></li></ul> <h4>Leveraging HTML and JavaScript within Adobe AIR &ndash; Kevin Hoyt</h4> <ul> <li><a title="http://blog.kevinhoyt.org/" href="http://blog.kevinhoyt.org/"><a href="http://blog.kevinhoyt.org/">http://blog.kevinhoyt.org/</a></a></li></ul> <h4>Deploying and Updating AIR Applications &ndash; Serge Jespers</h4> <ul> <li><a title="http://www.webkitchen.be/" href="http://www.webkitchen.be/"><a href="http://www.webkitchen.be/">http://www.webkitchen.be/</a></a></li></ul> <h4>Adobe AIR API Overview &ndash; Daniel Dura</h4> <ul> <li><a title="http://www.danieldura.com/" href="http://www.danieldura.com/"><a href="http://www.danieldura.com/">http://www.danieldura.com/</a></a></li></ul> <h4>Google App Engine and RIAs &ndash; Dion Almaer</h4> <p>Google App engine má jako runtime Python a využívá část framewroku <a href="http://www.djangoproject.com/">Django</a>.</p> <ul> <li><a title="http://almaer.com/" href="http://almaer.com/"><a href="http://almaer.com/">http://almaer.com/</a></a></li></ul> <h4>Data Intensive Enterprise AIR Applications &ndash; Enrique Duvos</h4> <ul> <li><a title="http://www.jamesward.com/census/" href="http://www.jamesward.com/census/"><a href="http://www.jamesward.com/census/">http://www.jamesward.com/census/</a></a></li></ul> <h4>Using JavaScript Frameworks in AIR Applications &ndash; Andre Charland</h4> <ul> <li><a title="http://www.nitobi.com/" href="http://www.nitobi.com/"><a href="http://www.nitobi.com/">http://www.nitobi.com/</a></a></li></ul> <h4>AIR Conditioning &ndash; Lee Brimelow</h4> <ul> <li><a title="http://www.gotoandlearn.com/" href="http://www.gotoandlearn.com/"><a href="http://www.gotoandlearn.com/">http://www.gotoandlearn.com/</a></a>  </li><li><a title="http://theflashblog.com/" href="http://theflashblog.com/"><a href="http://theflashblog.com/">http://theflashblog.com/</a></a></li></ul> <h3>Adobe Air Aplikace</h3> <ul> <li><a title="http://getsnitter.com/" href="http://getsnitter.com/"><a href="http://getsnitter.com/">http://getsnitter.com/</a></a> &ndash; Twitter  </li><li><a title="http://www.tabrio.com/" href="http://www.tabrio.com/"><a href="http://www.tabrio.com/">http://www.tabrio.com/</a></a> &ndash; Tabrio  </li><li><a href="http://CleVR.com"><a href="http://CleVR.com">http://CleVR.com</a></a> &ndash; CleVR panorama photos </li><li><a title="http://shifd.com/" href="http://shifd.com/"><a href="http://shifd.com/">http://shifd.com/</a></a> &ndash; Shifd easily allows you to shifd content including notes, places, links between multiple devices. </li><li><a title="http://freshairapps.com/" href="http://freshairapps.com/"><a href="http://freshairapps.com/">http://freshairapps.com/</a></a></li></ul> <h3>Fotografie</h3> <p><a title="http://www.flickr.com/photos/tags/onair2008prague/" href="http://www.flickr.com/photos/tags/onair2008prague/"><a href="http://www.flickr.com/photos/tags/onair2008prague/">http://www.flickr.com/photos/tags/onair2008prague/</a></a></p></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/12/">&larr; Older</a>
@@ -898,6 +919,10 @@ print "";</pre>
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/06/serverless-jako-neco-vic-nez-docker/">Serverless jako něco víc než Docker</a>
+      </li>
     
       <li class="post">
         <a href="/2016/03/co-to-je-sre/">Co to je SRE?</a>
@@ -933,10 +958,6 @@ print "";</pre>
     
       <li class="post">
         <a href="/2013/11/docker/">docker</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
       </li>
     
   </ul>

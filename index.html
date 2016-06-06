@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Včera jsem měl přednášku v Brně o dockeru a ptal jsem se lidí kolem na meetup a v hospodě potom zda znají Site Reliability Engineering (SRE) ze svého &hellip;">
+  <meta name="description" content="Serverless Zkusím popsat co je to serverless trochu lidsky. Samotné bez serveru je asi moc široký pojem. Pokud se podíváte na Awesome Serverless &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,69 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2016/06/serverless-jako-neco-vic-nez-docker/">Serverless jako něco víc než Docker</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-06-06T13:50:00+02:00" pubdate data-updated="true">06. 06. 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Serverless</h2>
+
+<p>Zkusím popsat co je to serverless trochu lidsky. Samotné bez serveru je asi moc široký pojem. Pokud se podíváte na <a href="https://github.com/anaibol/awesome-serverless">Awesome Serverless</a> najdete zde všechno možné od databází jako Firebase, Hoodie, které poskytují frontendovým aplikacím vše co potřebují k běhu, až k systémům, které vám umožňují více než stávající řešení na principu virtuálních serverů. O těch se hodně mluví a nejstarší z nich je AWS Lambda.</p>
+
+<p>AWS příšlo se základním systémem v roce <a href="https://aws.amazon.com/blogs/aws/run-code-cloud/">2014</a> a postupně to rozšiřovali, přidali v roce 2015 <a href="https://aws.amazon.com/blogs/aws/amazon-api-gateway-build-and-run-scalable-application-backends/">AWS Gateway</a> a dnes je systém celkem dobře použitelný a vzniklo i několik frameworků (<a href="http://serverless.com/">Serverless</a>, <a href="http://apex.run/">Apex</a> a <a href="http://thenewstack.io/amazon-debuts-flourish-runtime-application-model-serverless-computing/">Flourish</a>).</p>
+
+<p>Amazon, ale není jediný kdo má podobný systém. Dnes je k dispozici těch systémů několik.</p>
+
+<ul>
+<li><a href="http://www.ibm.com/cloud-computing/bluemix/openwhisk/">IBM Bluemix OpenWhisk</a>    (únor 2016, early access)</li>
+<li><a href="https://cloud.google.com/functions/">Google Cloud Functions</a> (únor 2016, alfa)</li>
+<li><a href="https://azure.microsoft.com/en-us/services/functions/">Microsoft Azure Functions</a> (březen 2016, in preview)</li>
+</ul>
+
+
+<p>Jak vidíte kromě AWS, ale jsou ostatní spíše na začátku, ale za pár let v tom bude dobrá konkurence. Zvláště je důležité dořešit věci o které se snaží frameworky a to zjednodušit vývojáři nastavení samotné infrastruktury, verzování aplikace a prostředí do kterých nasazujete.</p>
+
+<h2>Proč by mě to mělo zajímat?</h2>
+
+<p>Dnes se můžete na Lambdu koukat jako na něco co umí pustit kód v NodeJS, Pythonu nebo Javě. Ale hlavní síla je v kombinaci s dalšími AWS službami, ze kterých můžete vytvořit obří velmi dobře škálující aplikaci za velmi nízkých nákladů pro provoz resp. závislé na tom co opravdu aplikace dělá. Skoro zdarma dostanete neprodukční prostředí, které můžete mít stejné jako to produkční. Je potřeba samozřejmě aplikace navrhovat trochu jinak a ne pro každé použití je to správná cesta, ale na spoustu věcí to je zajímé.</p>
+
+<p>Například si můžete udělat vlastní <a href="https://github.com/serverless/serverless-graphql-blog">GraphQL server</a> nebo <a href="https://aws.amazon.com/blogs/aws/new-slack-integration-blueprints-for-aws-lambda/">Slack bot</a>.</p>
+
+<p>Před nedávnem se konala i <a href="http://serverlessconf.io/">specializovaná konference</a> na toto téma.</p>
+
+<h2>PragueJS o Serverless</h2>
+
+<p>Pokud vás to zaujalo, přijďte si poslechnout nejen moji přednášku o Serverless na meetup 30.6.2016 do kanceláří STRV. Registrace je na <a href="https://www.eventbrite.com/edit?eid=25563194202">evetbrite</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -509,47 +572,6 @@ git init
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-05T10:01:00+02:00" pubdate data-updated="true">05. 09. 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Minulý rok jsem psal o tom, že <a href="http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo/">polling v Jenkinsu je zlo</a>. To stále platí, ale i když máte tento přístup nemusí to stačit.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2013/09/jenkins-polling-a-git-notify/">Dále &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/2/">&larr; Older</a>
@@ -579,6 +601,10 @@ git init
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/06/serverless-jako-neco-vic-nez-docker/">Serverless jako něco víc než Docker</a>
+      </li>
     
       <li class="post">
         <a href="/2016/03/co-to-je-sre/">Co to je SRE?</a>
@@ -614,10 +640,6 @@ git init
     
       <li class="post">
         <a href="/2013/11/docker/">docker</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
       </li>
     
   </ul>

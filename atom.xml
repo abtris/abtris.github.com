@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-03-29T10:47:05+02:00</updated>
+  <updated>2016-06-06T14:05:20+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -12,6 +12,42 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Serverless jako něco víc než Docker]]></title>
+    <link href="http://blog.prskavec.net/2016/06/serverless-jako-neco-vic-nez-docker/"/>
+    <updated>2016-06-06T13:50:00+02:00</updated>
+    <id>http://blog.prskavec.net/2016/06/serverless-jako-neco-vic-nez-docker</id>
+    <content type="html"><![CDATA[<h2>Serverless</h2>
+
+<p>Zkusím popsat co je to serverless trochu lidsky. Samotné bez serveru je asi moc široký pojem. Pokud se podíváte na <a href="https://github.com/anaibol/awesome-serverless">Awesome Serverless</a> najdete zde všechno možné od databází jako Firebase, Hoodie, které poskytují frontendovým aplikacím vše co potřebují k běhu, až k systémům, které vám umožňují více než stávající řešení na principu virtuálních serverů. O těch se hodně mluví a nejstarší z nich je AWS Lambda.</p>
+
+<p>AWS příšlo se základním systémem v roce <a href="https://aws.amazon.com/blogs/aws/run-code-cloud/">2014</a> a postupně to rozšiřovali, přidali v roce 2015 <a href="https://aws.amazon.com/blogs/aws/amazon-api-gateway-build-and-run-scalable-application-backends/">AWS Gateway</a> a dnes je systém celkem dobře použitelný a vzniklo i několik frameworků (<a href="http://serverless.com/">Serverless</a>, <a href="http://apex.run/">Apex</a> a <a href="http://thenewstack.io/amazon-debuts-flourish-runtime-application-model-serverless-computing/">Flourish</a>).</p>
+
+<p>Amazon, ale není jediný kdo má podobný systém. Dnes je k dispozici těch systémů několik.</p>
+
+<ul>
+<li><a href="http://www.ibm.com/cloud-computing/bluemix/openwhisk/">IBM Bluemix OpenWhisk</a>    (únor 2016, early access)</li>
+<li><a href="https://cloud.google.com/functions/">Google Cloud Functions</a> (únor 2016, alfa)</li>
+<li><a href="https://azure.microsoft.com/en-us/services/functions/">Microsoft Azure Functions</a> (březen 2016, in preview)</li>
+</ul>
+
+
+<p>Jak vidíte kromě AWS, ale jsou ostatní spíše na začátku, ale za pár let v tom bude dobrá konkurence. Zvláště je důležité dořešit věci o které se snaží frameworky a to zjednodušit vývojáři nastavení samotné infrastruktury, verzování aplikace a prostředí do kterých nasazujete.</p>
+
+<h2>Proč by mě to mělo zajímat?</h2>
+
+<p>Dnes se můžete na Lambdu koukat jako na něco co umí pustit kód v NodeJS, Pythonu nebo Javě. Ale hlavní síla je v kombinaci s dalšími AWS službami, ze kterých můžete vytvořit obří velmi dobře škálující aplikaci za velmi nízkých nákladů pro provoz resp. závislé na tom co opravdu aplikace dělá. Skoro zdarma dostanete neprodukční prostředí, které můžete mít stejné jako to produkční. Je potřeba samozřejmě aplikace navrhovat trochu jinak a ne pro každé použití je to správná cesta, ale na spoustu věcí to je zajímé.</p>
+
+<p>Například si můžete udělat vlastní <a href="https://github.com/serverless/serverless-graphql-blog">GraphQL server</a> nebo <a href="https://aws.amazon.com/blogs/aws/new-slack-integration-blueprints-for-aws-lambda/">Slack bot</a>.</p>
+
+<p>Před nedávnem se konala i <a href="http://serverlessconf.io/">specializovaná konference</a> na toto téma.</p>
+
+<h2>PragueJS o Serverless</h2>
+
+<p>Pokud vás to zaujalo, přijďte si poslechnout nejen moji přednášku o Serverless na meetup 30.6.2016 do kanceláří STRV. Registrace je na <a href="https://www.eventbrite.com/edit?eid=25563194202">evetbrite</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Co to je SRE?]]></title>
@@ -1598,51 +1634,6 @@ $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller
 <h1>Závěr</h1>
 
 <p>Držte se toho jak je to v AngularJS vymyšlené, zbastlit lze všechno, ale není to ideální a proto používejte samostatné šablony na vývoj a při deploymentu to dejte do stránky to je nejlepší způsob.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Raspberry Pi]]></title>
-    <link href="http://blog.prskavec.net/2012/07/raspberry-pi/"/>
-    <updated>2012-07-28T13:15:00+02:00</updated>
-    <id>http://blog.prskavec.net/2012/07/raspberry-pi</id>
-    <content type="html"><![CDATA[<h2>Jak jsem si pořidil</h2>
-
-<p>Rapsberry Pi jsem objednal u <a href="http://export.farnell.com/rp/order/">Farnellu</a> v červnu a na konci července mi přišel dopis ve kterém bylo zařízení.</p>
-
-<!--more-->
-
-
-<h2>Co jsem potřeboval, aby to fungovalo</h2>
-
-<p>Měl jsem zařízení, ale co dál aby to fungovalo.</p>
-
-<p>Potřebujete:</p>
-
-<ul>
-<li>zdroj (700mA, 5V s microUSB) &ndash; použil jsem nabíječku z iphone a dal jiný usb kabel</li>
-<li>SD kartu, kam dáte systém (použil jsem 4GB class 10)</li>
-<li>kabel na připojení monitoru, použil jsem HDMI</li>
-<li>klavesnici a myš (USB)</li>
-</ul>
-
-
-<p><img class="center" src="http://blog.prskavec.net/images/raspberry/raspberry.jpg" title="'Raspberry running'" ></p>
-
-<p>Ze stránek <a href="http://www.raspberrypi.org/downloads">raspberry</a> jsem si stáhnul Raspbian “wheezy” a pomocí dd jsme ho nahrál na sd kartu.</p>
-
-<p><img class="center" src="http://blog.prskavec.net/images/raspberry/debian.jpg" title="'Raspbian “wheezy”'" ></p>
-
-<h2>Node.js na Raspberry PI</h2>
-
-<p>Po rozběhnutí systému není problém nainstalovat cokoliv potřebujete. Spustil jsem ssh server na nainstaloval NodeJS.</p>
-
-<pre><code>sudo apt-get install nodejs npm
-</code></pre>
-
-<p>Není potom problém pustit aplikaci.</p>
-
-<p><img class="center" src="http://blog.prskavec.net/images/raspberry/nodejs.jpg" title="'Node.js'" ></p>
 ]]></content>
   </entry>
   

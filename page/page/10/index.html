@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Jeden ze čtenářů mého blogu mě poprosil o radu, tak jsem si řekl co se hodí jednomu, může pomoci více lidem. Pokud máte Ubuntu (KUbuntu, Linux Mint) &hellip;">
+  <meta name="description" content="Pokud se někomu líbí vzhled, který používám a stáhl jsi ho od autora, zjistil, že není lokalizováno do češtiny všechno co vidí. Protože jsem autor &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,77 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/02/uplna-lokalizace-wp-theme-inove-123/">Úplná lokalizace WP Theme iNove 1.2.3</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-03T00:00:00+01:00" pubdate data-updated="true">03. 02. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud se někomu líbí vzhled, který používám a stáhl jsi ho od autora, zjistil, že není lokalizováno do češtiny všechno co vidí. Protože jsem autor lokalizace tak to musím uvést na pravou míru. Lokalizoval jsem co je v překladovém souboru, ale autor nehodlá jak mi sdělil některé věci lokalizovat, nepřijde mu to důležité. Opravdu nechápu proč, ale je to jeho právo, týká se to hlavně textů v postraní lište.</p>
+
+
+<p>  <p>Pokud to chcete upravit otevřete si soubor sidebar.php a najděte tyto řádky a udělejte tyto změny (originál zaměňte za počeštěnou verzi):</p>  <pre class="php">65: $posts_widget_title = &lsquo;Recent Posts&rsquo;;
+65: $posts_widget_title = &lsquo;Poslední příspěvky&rsquo;;</p>
+
+<p>67: $posts_widget_title = &lsquo;Random Posts&rsquo;;
+67: $posts_widget_title = &lsquo;Náhodné příspěvky&rsquo;;</p>
+
+<p>92:&lt;h3&gt;Recent Comments&lt;/h3&gt;
+92:&lt;h3&gt;Poslední komentáře&lt;/h3&gt;</p>
+
+<p>102:&lt;h3&gt;Tag Cloud&lt;/h3&gt;
+102:&lt;h3&gt;Oblak štítků&lt;/h3&gt;</p>
+
+<p>119:&lt;h3&gt;Categories&lt;/h3&gt;
+119:&lt;h3&gt;Kategorie&lt;/h3&gt;</p>
+
+<p>135:&lt;h3&gt;Archives&lt;/h3&gt;
+135:&lt;h3&gt;Archív&lt;/h3&gt;</p>
+
+<p>153:&lt;h3&gt;Meta&lt;/h3&gt;
+153:&lt;h3&gt;Meta&lt;/h3&gt;</pre></p>
+
+<p>Pro ty co umějí aplikovat patch je tu diff ze SVN: <a href="http://blog.prskavec.net/wp-content/uploads/2009/02/sidebar.diff">sidebar.diff</a></p>
+
+
+
+
+<p>Ve verzi iNove 1.2.3. je drobný bug (comments.php), díky kterému se nepřeloží některé věci pokud jste přihlášení, opraveno to bude v další verzi.</p>
+
+
+
+
+<p>Nenechte se zmást, že moje verze nevypadá jako vaše po instalaci, udělal jsem další drobné úpravy velikosti písma, změny barvy nadpisů, přidal jsem další položky do sidebar.php.</p>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -760,66 +831,6 @@ echo "&lt;/form&gt;";
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/07/subversion-pro-kazdho/">Subversion pro každého</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-07-28T00:00:00+02:00" pubdate data-updated="true">28. 07. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Protože jsem v češtině nenašel žádnou knihu, kterou bych mohl strčit do ruky někomu kdo se mě ptá jak začít pracovat se Subversion a návody na webu nejsou zcela ucelené, tak jsem se rozhodl <a href="http://svn.prskavec.net">napsat takovou příručku pro každého</a> kdo chce se Subversion pracovat.</p>
-
-<p>Nesnažím se o překlad <a href="http://svnbook.red-bean.com/">SVN book</a> i když ten by této knize výrazně pomohl, ale snažím se shrnout postupy a praxe co nejjednodušeji, aby to začátečník pochopil. Já už se SVN, ale dělám delší čas a nemám potřebný odstup a proto budu vděčný za zpětnou vazbu co týká obsahu, co přidat a co je zbytečné a případných chyb.</p>
-
-<p>Ke psaní jsem použil <a href="http://www.docbook.cz">Docbook</a> a jako editor XMLmind, PSPad a SciTE. Do html převádím docbook za pomoci PHP tímto jednoduchým skriptem.</p>
-
-<pre name='code' class="php">
-&lt;?php
-$xml_filename="svn-kniha.xml";
-$xsl_filename="c:\Program Files\XMLmind_XML_Editor\addon\config\docbook\xsl\xhtml\docbook.xsl";
-
-$doc = new DOMDocument();
-$xsl = new XSLTProcessor();
-
-$doc-&gt;load($xsl_filename);
-$xsl-&gt;importStyleSheet($doc);
-
-$doc-&gt;load($xml_filename);
-
-file_put_contents("index.html",str_replace("&lt;/head&gt;","&gt;&lt;link href='default.css' type='text/css' rel='stylesheet' /&gt;
-&lt;/head&gt;",$xsl-&gt;transformToXML($doc)));
-
-?&gt;
-</pre>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/11/">&larr; Older</a>
@@ -851,6 +862,10 @@ file_put_contents("index.html",str_replace("&lt;/head&gt;","&gt;&lt;link href='d
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/06/serverless-jako-neco-vic-nez-docker/">Serverless jako něco víc než Docker</a>
+      </li>
     
       <li class="post">
         <a href="/2016/03/co-to-je-sre/">Co to je SRE?</a>
@@ -886,10 +901,6 @@ file_put_contents("index.html",str_replace("&lt;/head&gt;","&gt;&lt;link href='d
     
       <li class="post">
         <a href="/2013/11/docker/">docker</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
       </li>
     
   </ul>

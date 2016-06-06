@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="V nové verzi jsou toto hlavní novinky: Merge Tracking Cyrus SASL support for svnserve Sparse checkouts Changelist support Log message caching &hellip;">
+  <meta name="description" content="Ve dnech 27-28. 3. 2008 se uskutečnila v Praze Dejvicích v Masarykově koleji konference věnovaná webdevelopmentu a webdesignu. Konferenci pořádali &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,45 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/04/webcamp08/">Webcamp&#8217;08</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-23T00:00:00+02:00" pubdate data-updated="true">23. 04. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Ve dnech 27-28. 3. 2008 se uskutečnila v Praze Dejvicích v Masarykově koleji <a href="http://blog.prskavec.net/?p=39">konference</a> věnovaná webdevelopmentu a webdesignu. Konferenci pořádali <a href="http://blog.prskavec.net/?p=47">Jakub Vrána a Vilém Málek</a>. </p>
+
+
+<p>  <p>Jakub Vrána je odborník na programování v jazyku PHP, tuto problematiku školí v rámci vlastních školení a učí na MFF UK. Píše vynikající blog PHP triky (<a href="http://php.vrana.cz"><a href="http://php.vrana.cz">http://php.vrana.cz</a></a>). </p>  <p>Vilém Málek je šéfredaktor známého webového odborného časopisu o internetu Interval (<a href="http://www.interval.cz"><a href="http://www.interval.cz">http://www.interval.cz</a></a>). </p>  <h3>27. 3. 2008 &ndash; webdevelopment</h3>  <p>Konference začala přednáškou Štěpána Bechynského na téma PHP a IIS 7.0, Expression Web 2.0 pro PHP vývojáře. Přednáška představila FASTCGI modul (<a href="http://www.iis.net/php/">www.iis.net/php/</a>) pro provoz PHP na IIS, který vyvinul Microsoft (MS) ve spolupráci s firmou Zend. Modul je volně ke stažení a bude součástí Windows Serveru 2008. Umožňuje také kombinaci ASP.NET a PHP na jednom serveru. MS vydal také Expression Web 2.0, který nahrazuje známý Frontpage. Ve verzi 2.0 přidali základní podporu pro PHP. Funguje zvýrazňování syntaxe a doplňování funkcí z manuálu. Doplňování syntaxe nefunguje na vlastních třídách a funkcích. Pokud neprogramujete v PHP, můžete využít Visual Web Developer Express, který je k dispozici zdarma. Dá se to využít např. pro programování v JavaScriptu &ndash; v kombinaci s IE můžete debugovat JavaScript a samozřejmě programovat v .NET jazycích. </p>  <p>V další přednášce <a href="http://www.derickrethans.nl/">Derick Rethans</a> z Holandska nám přednášel o výkonu aplikací PHP. Jeho přednáška měla název Performance of PHP Applications. Přednáška byla velmi odborná, ukazovala, jak vývojáři PHP zlepšují výkon jednotlivých částí PHP. V současném PHP použitý parser Flex bude v nové verzi PHP 5.3 nahrazen výkonnějším re2c. Derick ukazoval použití disassembleru VLD a APC pro ladění výkonu skriptů. V PHP 5.3 je také plánován GC (garbage collector), který může v určitých typech aplikací velmi pomoci, celkově se správa paměti v PHP 5.3 zlepší, pomůže i nový nativní driver pro MySQL, ale o tom mluvil v další přednášce <a href="http://www.sindelka.cz">Pavel Šindelka</a>. </p>  <p>Další vývoj PHP &ndash; verze 5.3 a 6.0. Pavel se soustředil na verzi 5.3, protože to je verze, která nás čeká v průběhu roku, kdežto 6.0 je zatím v nedohlednu. Z novinek ve verzi 5.3 zdůraznil jmenné prostory (namespaces), pozdní statickou vazbu (late state binding), zkrácený ternární operátor, magickou konstantu <strong>DIR</strong> a hlavně novou knihovnu mysqlnd, která nahradí stávající libmysql. Díky nové knihovně bude nativní podpora zahrnuta přímo do PHP, bude mít vlastní vývojový cyklus a oproti dnešnímu řešení dojde k ušetření zhruba poloviny paměti. Bude také fungovat omezení paměti, které nastavíte v php.ini, což dnes pro MySQL databázi neplatí a někdy to způsobuje velké problémy. Spolu s GC to jistě přinese řadu zlepšení. </p>  <p><a href="http://php.vrana.cz">Jakub Vrána</a> měl přednášku o Generování administračního rozhraní (<a href="http://www.adminer.cz">www.adminer.cz</a>). Dokumentace, kterou na webu zveřejnil, ukazuje všechny možnosti, které jeho systém umožňuje. Nám ale také ukázal něco zevnitř jeho systému. Mě zaujal hlavně skript, který používá pro porovnání SQL skriptu, ze kterého se generuje administrační rozhraní, se stávající databází. Skript potom vyhodí SQL skript obsahující příslušné ALTER příkazy. </p>  <p>Borek Bernard se nevěnoval PHP, ale technologiím pro webový vývoj. Mluvilo se o MS Silverlightu, Adobe Flexu ve kterém je nedávno spuštěný Adobe Photoshop Express. Dalším tématem také byly webové aplikace pro desktop. Adobe AIR, Mozilla Prism, Google Gears a Jaxer. </p>  <p><a href="http://www.phpguru.cz/">Jan Tichý</a> měl zajímavou přednášku na téma Návrhové vzory. Problematika návrhových vzorů je pro objektové programování velmi důležitá, ale mnoho programátorů si myslí, že v PHP vystačí s procedurálním programováním. Přednáška obsahovala nejběžnější návrhové vzory a ukázala jejich aplikaci v použití v Zend Frameworku, kde se dá najít dost příkladů. V přednášce byla zmíněna kniha Rudolfa Pecinovského Návrhové vzory, která vyšla v nakladatelství Computer Press v roce 2007. Kniha není jen sbírka typů návrhových vzorů, ale také učebnicí moderního programování. Autor je zkušený učitel jazyka Java, ale poznatky si můžete odnést i pro programování v PHP 5. </p>  <p>V přednášce PHP a Silverlight pomocí Phalangeru představil <a href="http://blog.vyvojar.cz/tomas/default.aspx">Tomáš Petříček</a> aktuální verzi Phalangeru, který umožňuje programovat Silverlight za pomoci PHP a případně ho kombinovat s .NET technologií. Více podrobností na <a href="http://php-compiler.net"><a href="http://php-compiler.net">http://php-compiler.net</a></a>. </p>  <p>První den zakončil <a href="http://davidgrudl.com/">David Grudl</a> přednáškou Vznik a architektura <a href="http://texy.info/">Texy</a>. Zpracování dokumentu s ohledem na strukturu textu není vůbec jednoduché. V Texy jsou použitý dva parsery, blokový a řádkový. Celý dokument se transformuje do DOM a převede do TexyHtml. </p>  <h3>28. 3. 2008 &ndash; webdesign</h3>  <p>Druhý den se věnoval webdesignu, dopoledne bylo převážně zaměřené na přístupnost. Věnoval se tomu <a href="http://pristupnost.nawebu.cz/">David Špinar</a> v přenášce o Českých pravidlech přístupnosti, která 1. 3. 2008 vstoupila v platnost pro českou státní správu a samosprávu. </p>  <p>Pokračovala přednáška Přístupnost komerčních portálů, kterou představili Lukáš Marvan ze Seznamu a Karel Břinda z <a href="http://www.tereza.fjfi.cvut.cz/">centra Tereza</a>. Výsledky jejich spolupráce jsou vidět na stránkách Seznamu, nejen v přístupném vyhledávání a v přístupné CAPTCHe. Seznam definoval strategii pro rozvoj přístupnosti na svých projektech. </p>  <p><a href="http://www.tyflocentrum-bm.cz/">Radek Pavlíček</a> v jejich společné přednášce vysvětlil co je důležité z hlediska přístupnosti a software JAWS. Mimořádně zajímavě působila část přednášky Michala Jelínka. On sám jako nevidomý předvedl praktické ovládání prohlížeče pomocí odečítacího programu JAWS. Přednáška poukázala na chyby, které vývojáři dělají a tím znepřístupňují stránky nevidomým. </p>  <p><a href="http://www.webylon.info/">Tomáš &quot;Chamurappi&quot; Hradil</a> představil svůj <a href="http://validator.w3.cz/">český validátor</a>, okolo kterého se strhla docela zajímavá diskuse. Tento validátor je podle mě hlavně docela dobrá pomůcka pro ty, co neumějí anglicky. </p>  <p><a href="http://www.marigold.cz/">Patrick Zandl</a> nám řekl o internetové televizi Stream. Ukazoval, jak se měnil návrh designu v průběhu vzniku projektu až do dneška. Přítomné upoutala formulace, že musí mít kolečko pro křečka aneb jak si udržet diváka co nejdéle na webu. </p>  <p><a href="http://www.met.cz/">Martin Hassman</a> měl přednášku o HTML5. Viděli jsme některé novinky, které už mají prohlížeče implementovány. Ať je to webkit (SQL5, storage engine, canvas), IE8 (canvas, hashchange) nebo Opera 9 (WebForms2). SQL5 používá sqlite pro lokální db na straně prohlížeče.</p></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -591,48 +630,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/03/webcamp08-development-2732008/">WebCamp&#8217;08</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-28T00:00:00+01:00" pubdate data-updated="true">28. 03. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Včera 27.3. jsem se byl podívat na první PHP konferenci <a href="http://www.webcamp.cz">Webcamp&#8217;08</a> kterou pořádal <a href="http://php.vrana.cz">Jakub Vrána</a> a <a href="http://interval.cz">Vilém Málek</a>. Podrobnosti o jednotlivých přednáškách a celkové shrnutí akce přinesu v dalším příspěvku po ukončení konference. Některé příspěvky byli velmi zajímavé i poučné.</p>
-
-<p>UPDATE:</p>
-
-<p>Druhý den 28.3. probíhal ve znamení webdesignu, dopoledne se věnovalo hlavně přístupnosti. Nejzajímavější pro mě bylo vidět naživo jak si s procházením stránky poradí nevidomí co používal JAWS. Jako vidící člověk jsem neměl tu představu jak to v realu vypadá dokud jsem to neviděl. Myslím, že by všichni vývojáři a hlavně kodéři stránek měli myslet na přístupnost a brát to jako základ své práce. Odpoledne odlehčil Patrick Zandl svým zajímavým povídáním od <a href="http://www.stream.cz">Stream</a>u a nejvíce mě zaujala přednáška na konec o HTML5 a to kam web jde v následujících letech.</p>
-
-<p><a href="http://www.flickr.com/photos/abtris/sets/72157604272771686/">Fotografie z WebCampu na Flickeru.</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/14/">&larr; Older</a>
@@ -664,6 +661,10 @@
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/06/serverless-jako-neco-vic-nez-docker/">Serverless jako něco víc než Docker</a>
+      </li>
     
       <li class="post">
         <a href="/2016/03/co-to-je-sre/">Co to je SRE?</a>
@@ -699,10 +700,6 @@
     
       <li class="post">
         <a href="/2013/11/docker/">docker</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
       </li>
     
   </ul>

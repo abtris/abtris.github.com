@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Zend Server CE má administrační konzoli, která umožňuje práci s extenzemi php, čtení logu apod. Celá konzole běží na lighthttpd a nemá z vlastní &hellip;">
+  <meta name="description" content="Pokud někdo neznáte plugin WP-EasyArchives tak ho vyzkoušejte například u mě v archívu. Je to pěkný, plugin na zobrazení archívu s rozbalovacími menu &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,44 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/04/wp-easyarchives-102-konecne-take-v-ceske-verzi/">WP-EasyArchives 1.0.2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-19T00:00:00+02:00" pubdate data-updated="true">19. 04. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud někdo neznáte plugin <a href=" http://wordpress.org/extend/plugins/wp-easyarchives/">WP-EasyArchives</a> tak ho vyzkoušejte například u mě v <a href="http://blog.prskavec.net/about/archiv/">archívu.</a></p>
+
+<p>Je to pěkný, plugin na zobrazení archívu s rozbalovacími menu, které umožňují lepší orientaci. Pokud budete mít podněty k překladu pluginu, prosím do komentářů.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -953,77 +991,6 @@ svn up
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/02/uplna-lokalizace-wp-theme-inove-123/">Úplná lokalizace WP Theme iNove 1.2.3</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-03T00:00:00+01:00" pubdate data-updated="true">03. 02. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Pokud se někomu líbí vzhled, který používám a stáhl jsi ho od autora, zjistil, že není lokalizováno do češtiny všechno co vidí. Protože jsem autor lokalizace tak to musím uvést na pravou míru. Lokalizoval jsem co je v překladovém souboru, ale autor nehodlá jak mi sdělil některé věci lokalizovat, nepřijde mu to důležité. Opravdu nechápu proč, ale je to jeho právo, týká se to hlavně textů v postraní lište.</p>
-
-
-<p>  <p>Pokud to chcete upravit otevřete si soubor sidebar.php a najděte tyto řádky a udělejte tyto změny (originál zaměňte za počeštěnou verzi):</p>  <pre class="php">65: $posts_widget_title = &lsquo;Recent Posts&rsquo;;
-65: $posts_widget_title = &lsquo;Poslední příspěvky&rsquo;;</p>
-
-<p>67: $posts_widget_title = &lsquo;Random Posts&rsquo;;
-67: $posts_widget_title = &lsquo;Náhodné příspěvky&rsquo;;</p>
-
-<p>92:&lt;h3&gt;Recent Comments&lt;/h3&gt;
-92:&lt;h3&gt;Poslední komentáře&lt;/h3&gt;</p>
-
-<p>102:&lt;h3&gt;Tag Cloud&lt;/h3&gt;
-102:&lt;h3&gt;Oblak štítků&lt;/h3&gt;</p>
-
-<p>119:&lt;h3&gt;Categories&lt;/h3&gt;
-119:&lt;h3&gt;Kategorie&lt;/h3&gt;</p>
-
-<p>135:&lt;h3&gt;Archives&lt;/h3&gt;
-135:&lt;h3&gt;Archív&lt;/h3&gt;</p>
-
-<p>153:&lt;h3&gt;Meta&lt;/h3&gt;
-153:&lt;h3&gt;Meta&lt;/h3&gt;</pre></p>
-
-<p>Pro ty co umějí aplikovat patch je tu diff ze SVN: <a href="http://blog.prskavec.net/wp-content/uploads/2009/02/sidebar.diff">sidebar.diff</a></p>
-
-
-
-
-<p>Ve verzi iNove 1.2.3. je drobný bug (comments.php), díky kterému se nepřeloží některé věci pokud jste přihlášení, opraveno to bude v další verzi.</p>
-
-
-
-
-<p>Nenechte se zmást, že moje verze nevypadá jako vaše po instalaci, udělal jsem další drobné úpravy velikosti písma, změny barvy nadpisů, přidal jsem další položky do sidebar.php.</p>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/10/">&larr; Older</a>
@@ -1055,6 +1022,10 @@ svn up
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/06/serverless-jako-neco-vic-nez-docker/">Serverless jako něco víc než Docker</a>
+      </li>
     
       <li class="post">
         <a href="/2016/03/co-to-je-sre/">Co to je SRE?</a>
@@ -1090,10 +1061,6 @@ svn up
     
       <li class="post">
         <a href="/2013/11/docker/">docker</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
       </li>
     
   </ul>

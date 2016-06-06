@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Dnes 14.2.2011 vyšela nová verze IDE pro PHP od JetBrains PHPStorm 2.0. Hlavní výhody tohoto IDE základní vlastnosti IDE jednoduchá instalace rychlý &hellip;">
+  <meta name="description" content="Dnes je část profilování v Xdebugu (http://xdebug.org) ukládána do souborů v KCacheGrind formátu. Tato funkce byla přidána do Xdebugu, ale není dle &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,48 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/02/podpora-profilovani-cachegrindkcachegrind/">Podpora profilování cachegrind/KCachegrind v Xdebugu</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-23T00:00:00+01:00" pubdate data-updated="true">23. 02. 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dnes je část profilování v Xdebugu (<a title="Xdebug je open-source nástroj na ladění PHP. " href="http://xdebug.org"><a href="http://xdebug.org">http://xdebug.org</a></a>) ukládána do souborů v KCacheGrind formátu. Tato funkce byla přidána do Xdebugu, ale není dle <a href="http://kcachegrind.sourceforge.net/html/CallgrindFormat.html">specifikace formátu</a>. Byla vytvořena revezním inženýrstvým a tato stávající implementace obsahuje chyby a nepřesnosti.</p>
+
+<p>Od verze 0.6 je KCacheGrind více striktní ohledně interpretace formátu a to způsobuje chyby při jeho používání s výstupy Xdebugu  <a href="https://bugs.kde.org/show_bug.cgi?id=256425"><a href="https://bugs.kde.org/show_bug.cgi?id=256425">https://bugs.kde.org/show_bug.cgi?id=256425</a></a>.</p>
+
+<p><strong>Vybraná částka</strong> bude použita, aby <strong>Derick Rethans</strong> mohl správně vyřešit problém s integrací Xdebugu/KCacheGrindu. Správně vyřešit znamená, že předělá celou část zapisu profilovacích souborů. Rozhodně se tedy nejedná jen o jednoduchou opravu chyby jako je přidání jednoho řádku.</p>
+
+<p><strong>Dnes 2.3.2011 byla částka úspěšně vybrána, všem co přispěli na dobrou věc děkuji.</strong></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1155,50 +1197,6 @@ xdebug.profiler_output_dir="/tmp/xdebug"
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/06/adblock-neni-vrazda-ale-zkuste-si-ho-nechat-zapnuty/">Adblock není vražda, ale zkuste si ho nechat zapnutý!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-06-28T00:00:00+02:00" pubdate data-updated="true">28. 06. 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Po <a href="http://zdrojak.root.cz/clanky/adblock-neni-vrazda/">přečtení článku z minulého týdne</a> jsem si myslel, že brzo začne někdo uživatele adblocku blokovat. Dnes jsem narazil na první a určitě ne jediny z nich.</p>
-
-<p>Při hledání češtiny do Wordpresu 3.0 jsem narazil na stránku <a href="http://www.cwordpress.cz/navody/instalace-cestiny-do-wordpressu.html">kde vyskočí zajímavé</a> okno, která mě přesměruje na stránku upozorňující na to, že mám zapnutý adblock (Firefox 3.6.4, Ubuntu 9.10).</p>
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/06/Adblock.png"><img class="aligncenter size-medium wp-image-940" src="http://blog.prskavec.net/wp-content/uploads/2010/06/Adblock-300x160.png" alt="" width="300" height="160" /></a></p>
-
-<p>Chápu <a href="http://www.cpalead.com/">CPALead</a>, že jim to kazí obchody, ale nechápu provozovatele stránek, kteří se takto připravují o návštěvníky. Protože vám nedají jinou šanci než odejít nebo adblock vypnout. Příjemnější by bylo na stránce upozornění a ne přesměrování někam, kde nemám šanci ani zjistit, co s tím má přechozí stránka společného.</p>
-
-<p>Tak tedy ne!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/6/">&larr; Older</a>
@@ -1230,6 +1228,10 @@ xdebug.profiler_output_dir="/tmp/xdebug"
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/06/serverless-jako-neco-vic-nez-docker/">Serverless jako něco víc než Docker</a>
+      </li>
     
       <li class="post">
         <a href="/2016/03/co-to-je-sre/">Co to je SRE?</a>
@@ -1265,10 +1267,6 @@ xdebug.profiler_output_dir="/tmp/xdebug"
     
       <li class="post">
         <a href="/2013/11/docker/">docker</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/09/jenkins-polling-a-git-notify/">Jenkins polling a git-notify</a>
       </li>
     
   </ul>
