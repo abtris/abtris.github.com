@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: jenkins | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/jenkins/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-06-18T21:27:41+02:00</updated>
+  <updated>2016-06-18T21:39:36+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -25,7 +25,137 @@
 
 <p>Tady je příklad hooku pro gitolite, který používáme na některých repository.</p>
 
-<p>{% gist 5625369 %}</p>
+<p><div><script src='https://gist.github.com/5625369.js'></script>
+<noscript><pre><code>#!/bin/bash
+
+NOBOLD=&quot;\033[0m&quot;
+BOLD=&quot;\033[1m&quot;
+BLACK=&quot;\033[30m&quot;
+GREY=&quot;\033[0m&quot;
+RED=&quot;\033[31m&quot;
+GREEN=&quot;\033[32m&quot;
+YELLOW=&quot;\033[33m&quot;
+BLUE=&quot;\033[34m&quot;
+MAGENTA=&quot;\033[35m&quot;
+CYAN=&quot;\033[36m&quot;
+WHITE=&quot;\033[37m&quot;
+
+# V +1007
+
+# Peff helped:
+# http://thread.gmane.org/gmane.comp.version-control.git/118626
+
+syntax_check=&quot;xmllint --noout &quot;
+tmp=$(mktemp /tmp/git.update.XXXXXX)
+log=$(mktemp /tmp/git.update.log.XXXXXX)
+tree=$(mktemp /tmp/git.diff-tree.XXXXXX)
+
+git diff-tree -r &quot;$2&quot; &quot;$3&quot; &gt; $tree
+ 
+echo
+echo diff-tree:
+cat $tree
+
+exit_status=0
+
+while read old_mode new_mode old_sha1 new_sha1 status name
+do
+  # skip lines showing parent commit
+  test -z &quot;$new_sha1&quot; &amp;&amp; continue
+  # skip deletions
+  [ &quot;$new_sha1&quot; = &quot;0000000000000000000000000000000000000000&quot; ] &amp;&amp; continue
+  # check all files for unmerged signs
+    mergefail=`git cat-file blob $new_sha1 | grep -e &quot;^&lt;&lt;&lt;&lt;&lt;&lt;&quot; -e &quot;^&gt;&gt;&gt;&gt;&gt;&gt;&quot;`
+    if [[ &quot;$mergefail&quot; != &quot;&quot; ]]
+    then
+      echo
+      echo &quot;umerged file $name&quot; &gt;&amp;2
+      echo &quot;$mergefail&quot; &gt;&amp;2
+      echo
+      exit_status=1
+    fi
+
+  # Only test .xml, xsl(t)? files
+  if [[ $name =~ [.]xml$|xsl(t)?$ ]]
+  then
+    git cat-file blob $new_sha1 &gt; $tmp
+    set -o pipefail
+    $syntax_check $tmp 2&gt;&amp;1 | sed 's|/tmp/git.update.......:\([0-9]*\)$|JOJOMOJO:\1|'&gt; $log
+    if [[ $? != 0 ]]
+    then
+      echo
+      echo -e &quot;$(cat $log | sed 's|JOJOMOJO|'\\${RED}${name}\\${NOBOLD}'|')&quot; &gt;&amp;2
+      echo -e &quot;For more details run this: ${CYAN} git diff $old_sha1 $new_sha1 ${NOBOLD}&quot; &gt;&amp;2
+      echo
+      exit_status=1
+    fi
+  fi
+
+  # CRLF check only java, xml
+  if [[ $name =~ [.]java$|xml$ ]]
+  then  
+    git cat-file blob $new_sha1 &gt; $tmp
+    RESULT=`grep -Pl '\r\n' $tmp`
+    echo $RESULT
+    if [ &quot;$RESULT&quot; = &quot;$tmp&quot; ]; then
+          echo &quot;###################################################################################################&quot; &gt;&amp;2
+          echo &quot;# '$name' contains CRLF! Dear Windows developer, please activate the GIT core.autocrlf feature,&quot; &gt;&amp;2
+          echo &quot;# or change the line endings to LF before trying to push.&quot; &gt;&amp;2
+          echo &quot;# Use 'git config core.autocrlf true' to activate CRLF conversion.&quot; &gt;&amp;2
+          echo &quot;# OR use 'git reset HEAD~1' to undo your last commit and fix the line endings.&quot; &gt;&amp;2
+          echo &quot;###################################################################################################&quot; &gt;&amp;2
+          exit_status=1
+    fi  
+  fi
+
+done &lt; $tree
+
+# jenkins polling
+branch=$(git rev-parse --symbolic --abbrev-ref $1)
+escaped_branch=$(echo $branch | sed s:/:%2F:g)
+
+refname=&quot;$1&quot;
+oldrev=&quot;$2&quot;
+newrev=&quot;$3&quot;
+# --- Check types
+# if $newrev is 0000...0000, it's a commit to delete a ref.
+zero=&quot;0000000000000000000000000000000000000000&quot;
+if [ &quot;$newrev&quot; = &quot;$zero&quot; ]; then
+  newrev_type=delete
+else
+  newrev_type=$(git cat-file -t $newrev)
+fi
+skip_notify=0
+echo &quot;$refname $newrev_type&quot; &gt;&amp;2
+case &quot;$refname&quot;,&quot;$newrev_type&quot; in
+  refs/tags/*,delete)
+    # delete tag
+    skip_notify=1
+    echo &quot;Delete tag&quot; &gt;&amp;2
+    ;;
+  refs/heads/*,delete)
+    # delete branch
+    skip_notify=1
+    echo &quot;Delete branch&quot; &gt;&amp;2
+    ;;
+  refs/remotes/*,delete)
+    # delete tracking branch
+    skip_notify=1
+    echo &quot;Delete tracking branch&quot; &gt;&amp;2
+    ;;
+  *)
+esac
+if [[ &quot;$skip_notify&quot; == &quot;0&quot; ]]
+then
+  REPOSITORY_BASENAME=$(basename &quot;$PWD&quot;)
+  curl &quot;http://jenkins.firma.cz/git/notifyCommit?url=ssh://git@git.firma.cz/$REPOSITORY_BASENAME&amp;branch=$escaped_branch&quot;
+fi
+
+rm -f $log $tmp $tree
+exit $exit_status
+
+</code></pre></noscript></div>
+</p>
 
 <p>Občas je potřeba notifikovat jen větev, která se změní, aby to nepustilo zbytečně joby, kde změny neproběhli.</p>
 
@@ -69,21 +199,21 @@ curl http://jenkins.firma.cz/jenkins/git/notifyCommit?url=ssh://git@git.firma.cz
 
 <p>Abych se vrátil k SCM pollingu. Naši systémaci udělali analýzu nejvytíženějších repository v Gitu. A data mám udávají čas spotřebovaný na provedení všech činností po dobu 14 dní. Na grafu je vidět přehled podle repository.</p>
 
-<p>{% img center /images/scmpolling/graph-01.png &lsquo;Prehled repository podle casu&rsquo; %}</p>
+<p><img class="center" src="/images/scmpolling/graph-01.png" title="&lsquo;Prehled repository podle casu&rsquo;" ></p>
 
 <p>V dalším grafu je vidět potom rozložení podle zátěže jednotlivými klienty, jak stroji (převážně jenkins a slave nodes, uživatelé jsou v minoritě).</p>
 
-<p>{% img center /images/scmpolling/graph-02.png &lsquo;Prehled repository podle uzivatele&rsquo; %}</p>
+<p><img class="center" src="/images/scmpolling/graph-02.png" title="&lsquo;Prehled repository podle uzivatele&rsquo;" ></p>
 
 <p>Poslední graf ukazuje počet přístupů do jednotlivých repository. Je potřeba podle toho upravit joby a jejich SCM polling.</p>
 
-<p>{% img center /images/scmpolling/graph-03.png &lsquo;Prehled repository podle poctu pristupu&rsquo; %}</p>
+<p><img class="center" src="/images/scmpolling/graph-03.png" title="&lsquo;Prehled repository podle poctu pristupu&rsquo;" ></p>
 
 <p>Na hromadné změny SCM pollingu můžete úspěšně použít <a href="https://wiki.jenkins-ci.org/display/JENKINS/Configuration+Slicing+Plugin">Configuration Slicing Plugin</a>, který vám práci usnadní. U nějvíce vytížených repository doporučili použít notifikace pomocí git-update hooku, případně to můžete udělat všude.</p>
 
 <p>Výsledná zátěž stroje potom výrazně klesla potom co jsme upravili nastavení jak je vidět z grafů muninu.</p>
 
-<p>{% img center /images/scmpolling/graph-04.png &lsquo;Prehled z munina&rsquo; %}</p>
+<p><img class="center" src="/images/scmpolling/graph-04.png" title="&lsquo;Prehled z munina&rsquo;" ></p>
 
 <p>Další doporučení a tipy triky z praxe se dozvíte na mém školení <a href="http://bit.ly/k-ci">Jenkins &ndash; jak na Continuous Integration v PHP a Javascriptu</a>.</p>
 ]]></content>
@@ -147,7 +277,7 @@ curl http://jenkins.firma.cz/jenkins/git/notifyCommit?url=ssh://git@git.firma.cz
 
 <p>Kapacita: Zbývají 2 místa.</p>
 
-<p>Objednávky: <a href="mailto:academy@webexpo.net"><a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x61;&#99;&#97;&#x64;&#101;&#x6d;&#x79;&#64;&#x77;&#101;&#98;&#101;&#120;&#x70;&#x6f;&#46;&#x6e;&#101;&#x74;">&#97;&#x63;&#97;&#100;&#x65;&#x6d;&#121;&#64;&#x77;&#101;&#x62;&#x65;&#120;&#x70;&#x6f;&#x2e;&#110;&#101;&#116;</a></a>, +420 775 477 457</p>
+<p>Objednávky: <a href="mailto:academy@webexpo.net"><a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#58;&#97;&#99;&#97;&#x64;&#x65;&#109;&#121;&#64;&#119;&#x65;&#98;&#101;&#120;&#x70;&#111;&#46;&#x6e;&#101;&#116;">&#97;&#99;&#x61;&#x64;&#101;&#109;&#121;&#64;&#x77;&#x65;&#98;&#x65;&#120;&#x70;&#x6f;&#x2e;&#110;&#x65;&#116;</a></a>, +420 775 477 457</p>
 
 <p>Školení se konají v Praze v prostoru WebHub, adresa: Kafkova 16, Praha 6, dvě minuty pěšky od metra Dejvická.</p>
 

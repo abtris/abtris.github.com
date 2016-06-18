@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: docker | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/docker/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-06-18T21:27:41+02:00</updated>
+  <updated>2016-06-18T21:39:36+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -20,9 +20,7 @@
     <id>http://blog.prskavec.net/2016/02/suchy-docker</id>
     <content type="html"><![CDATA[<p><a href="http://suchejunor.cz/">Suchý únor</a> je skvělá akce a tak jsem říkal, zda s Dockerem nebudeme také na suchu. Našťěstí včera se situace změnila a vyšli nové verze Docker Engine, Docker Swarm and Docker Compose.</p>
 
-<p>{% blockquote Docker docs <a href="https://docs.docker.com/engine/breaking_changes/">https://docs.docker.com/engine/breaking_changes/</a> %}
-Pokud budete upgradovat, buďte opatrní, nový formát image není zpětně kompatibilní.
-{% endblockquote %}</p>
+<p><blockquote><p>Pokud budete upgradovat, buďte opatrní, nový formát image není zpětně kompatibilní.</p><footer><strong>Docker docs <a href="https://docs.docker.com/engine/breaking_changes/">https://docs.docker.com/engine/breaking_changes/</a></strong></footer></blockquote></p>
 
 <p>V originálu si novinky můžete prostudovat na blogu Dockeru:</p>
 

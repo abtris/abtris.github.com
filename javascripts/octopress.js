@@ -144,11 +144,6 @@ $.domReady(function() {
     scales = [0.25, 1.6];
     doc[addEvent](type, fix, true);
   }
-
-  $('fieldset > .mobile-nav').children('select').bind('change', function(event) {
-    if (event.target.value) { window.location.href = event.target.value; }
-  });
-
 }(document));
 
 /*!	SWFObject v2.2 modified by Brandon Mathis to contain only what is necessary to dynamically embed flash objects
