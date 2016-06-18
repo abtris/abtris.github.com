@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: angularjs | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/angularjs/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-06-18T21:22:08+02:00</updated>
+  <updated>2016-06-18T21:23:35+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -80,7 +80,7 @@
 <p>v šabloně potom máte vlastní přihlašování</p>
 
 <pre><code>&lt;span ng-show="user"&gt;
-{{user.name}} | &lt;a ng-click="logout()"&gt;Logout&lt;/a&gt;
+ | &lt;a ng-click="logout()"&gt;Logout&lt;/a&gt;
 &lt;/span&gt;
 &lt;span ng-hide="user"&gt;&lt;a ng-click="login()"&gt;Login&lt;/a&gt;&lt;/span&gt;
 </code></pre>
@@ -166,19 +166,49 @@ $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller
 
 <p>Dá se použít například <a href="http://gruntjs.com/">GruntJS</a> script pro vložení samostaných šablon pro vývoj do inline šablon. Ukázkový script udělal <a href="https://github.com/vojtajina">Vojta Jína</a>.</p>
 
-<p>{% gist 3347478 %}</p>
+<p><div><script src='https://gist.github.com/3347478.js'></script>
+<noscript><pre><code>module.exports = function(grunt) {
+
+  grunt.initConfig({
+    inline: {
+      'index.html': ['tpl/*.html']
+    }
+  });
+
+  grunt.registerMultiTask('inline', 'Inline AngularJS templates into single file.', function() {
+    var SCRIPT = '&lt;script type=&quot;text/ng-template&quot; id=&quot;&lt;%= id %&gt;&quot;&gt;&lt;%= content %&gt;&lt;/script&gt;\n';
+
+    var html = '$1\n\n';
+    grunt.file.expandFiles(this.data).forEach(function(file) {
+      grunt.log.writeln('Inlining ' + file);
+      html += grunt.template.process(SCRIPT, {id: file, content: grunt.file.read(file)});
+    });
+
+    var result = this.target;
+    grunt.file.write(result, grunt.file.read(result).replace(/(&lt;body[^&gt;]*&gt;)/, html));
+  });
+};
+</code></pre></noscript></div>
+</p>
 
 <h2>Další možnosti</h2>
 
 <p>K tomu článku mě přivedl tento tweet.</p>
 
-<p>{% blockquote @PatrikVotocek <a href="https://twitter.com/PatrikVotocek/statuses/235100756905189376">https://twitter.com/PatrikVotocek/statuses/235100756905189376</a> %}
-Nevíte někdo jak v #angularjs docílit toho abych měl jeden (externí) soubor se všema šablonama?
-{% endblockquote %}</p>
+<p><blockquote><p>Nevíte někdo jak v #angularjs docílit toho abych měl jeden (externí) soubor se všema šablonama?</p><footer><strong>@PatrikVotocek <a href="https://twitter.com/PatrikVotocek/statuses/235100756905189376">https://twitter.com/PatrikVotocek/statuses/235100756905189376</a></strong></footer></blockquote></p>
 
 <p>To by předpokládalo řešení, že budeme mít soubor s šablonami a zkusíme ho načíst a zpracovat. Musíte vytvořit falešnou template cache a tu použít, díky Vojtovy za implementaci.</p>
 
-<p>{% gist 3354046 %}</p>
+<p><div><script src='https://gist.github.com/3354046.js'></script>
+<noscript><pre><code>&lt;script type=&quot;text/ng-template&quot; id=&quot;one.html&quot;&gt;
+&lt;div&gt;This is first template&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type=&quot;text/ng-template&quot; id=&quot;two.html&quot;&gt;
+&lt;div&gt;This is second template&lt;/div&gt;
+&lt;/script&gt;
+</code></pre></noscript></div>
+</p>
 
 <p>Rozhodně to, ale není něco co byste měli používat i když to funguje.</p>
 

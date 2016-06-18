@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: konference | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/konference/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-06-18T21:22:08+02:00</updated>
+  <updated>2016-06-18T21:23:35+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -392,13 +392,7 @@ echo "run: ln -nfs /srv/www/demoApp/@@CURRENT@@/ /srv/www/demoApp/current"
 </ul>
 
 
-<p>{% blockquote Ladislav Prskavec &ndash; Kurz Jenkins <a href="http://webexpo.cz/academy/kurzy/jenkins-jak-na-continuous-integration-v-php">http://webexpo.cz/academy/kurzy/jenkins-jak-na-continuous-integration-v-php</a> WebExpo Academy %}</p>
-
-<h4>Jenkins - jak na Continuous Integration v PHP</h4>
-
-
-<p>Pochopení a využití procesu Continuous Integration s využitím nástroje Jenkins vám pomůže zvýšit kvalitu softwaru, který vyvíjíte, a zároveň snížit čas na jeho dodávku. Continuous Integration vám umožňuje kontrolovat kvalitu softwaru průběžně po malých částech a minimalizovat tak riziko rozsáhlých chyb, jak tomu bylo v případě klasického vodopádového přístupu.
-{% endblockquote %}</p>
+<p><blockquote><p></p></p><p><h4>Jenkins - jak na Continuous Integration v PHP</h4></p><p><br/><p>Pochopení a využití procesu Continuous Integration s využitím nástroje Jenkins vám pomůže zvýšit kvalitu softwaru, který vyvíjíte, a zároveň snížit čas na jeho dodávku. Continuous Integration vám umožňuje kontrolovat kvalitu softwaru průběžně po malých částech a minimalizovat tak riziko rozsáhlých chyb, jak tomu bylo v případě klasického vodopádového přístupu.</p><footer><strong>Ladislav Prskavec &ndash; Kurz Jenkins <a href="http://webexpo.cz/academy/kurzy/jenkins-jak-na-continuous-integration-v-php">http://webexpo.cz/academy/kurzy/jenkins-jak-na-continuous-integration-v-php</a> WebExpo Academy</strong></footer></blockquote></p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: events | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/events/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-06-18T21:22:08+02:00</updated>
+  <updated>2016-06-18T21:23:35+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -23,9 +23,7 @@
 <!--more-->
 
 
-<p>{% blockquote RailsGirls website, <a href="http://railsgirls.com">http://railsgirls.com</a> %}
-Our aim is to give tools and a community for women to understand technology and to build their ideas. We do this by providing a great experience on building things and by making technology more approachable.
-{% endblockquote %}</p>
+<p><blockquote><p>Our aim is to give tools and a community for women to understand technology and to build their ideas. We do this by providing a great experience on building things and by making technology more approachable.</p><footer><strong>RailsGirls website</strong> <cite><a href="http://railsgirls.com">http://railsgirls.com</a></cite></footer></blockquote></p>
 
 <p>Já jsem se celé akce zúčastnil jako jeden z organizátorů a také jsem trochu přispěl jako kouč. Osobně se mi nápad celé akce velmi líbí a jsem rád, že jsem se toho účastnil. Do Prahy celou akci přivedla Cristina Santamarina, která organizuje RailsGirls Berlin.</p>
 
@@ -68,10 +66,10 @@ Our aim is to give tools and a community for women to understand technology and 
 <ul>
 <li>v sobotu nás překvapilo náledí ale přesto dorazilo 27 účastníků</li>
 <li>začalo se <a href="http://data.karmi.cz/railsgirls/railsgirls-introduction-to-programming.html#0">úvodem do programování</a> od Karla Minaříka
-{% img center /images/railsgirls_001.jpg &ldquo;RailsGirls &ndash; úvodní přednáška&rdquo; %}</li>
+<img class="center" src="/images/railsgirls_001.jpg" title="&ldquo;RailsGirls &ndash; úvodní přednáška&rdquo;" ></li>
 <li>po přestávce na skvělé kafe od <a href="http://virtualmaster.com">Virtualmaster</a> si všichni zkoušeli základy Ruby pomocí <a href="http://tryruby.org">TryRuby</a> nebo IRB (Interactive Ruby Shell).</li>
 <li>po obědě jsme se vrhli na <a href="http://guides.railsgirls.com/app/">tutorial</a>, Karel celý tutorial ukázal a potom jsme v jednotlivých týmech projeli tutorial podrobně znovu.
-{% img center /images/railsgirls_002.jpg &ldquo;RailsGirls &ndash; coding&rdquo; %}</li>
+<img class="center" src="/images/railsgirls_002.jpg" title="&ldquo;RailsGirls &ndash; coding&rdquo;" ></li>
 <li>kdo byl dříve hotov tak potom mohl tutorial vylepšovat, obarvovat apod.</li>
 </ul>
 
