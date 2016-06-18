@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: barcamp | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/barcamp/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-06-18T21:23:35+02:00</updated>
+  <updated>2016-06-18T21:27:41+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -39,7 +39,7 @@
 
 <p>Kromě iBooks2 aplikace, ale největší přínos je v tom, že Apple vydal aplikaci v které si zdarma takovou knihu můžete vytvořit. Na Mac je tato aplikace prostě úžasná, zcela ve stylu nástrojů iWork a každý průměrný uživatel si lehce vytvoří co chce.</p>
 
-<p><img class="center" src="/assets/svnbook.jpg" title="&lsquo;SVN kniha v iBook Author&rsquo;" ></p>
+<p>{% img center /assets/svnbook.jpg &lsquo;SVN kniha v iBook Author&rsquo; %}</p>
 
 <p>Já jsem si více hrál s HTML5 widgety, pomocí, kterých se dájí možnosti rozšiřovat a také jsem řešil jak sázet matematiku. Matematiku dostanete do iBooks Author podobně jako do iWork například pomocí <a href="http://www.dessci.com/en/products/MathType_Mac/">MathType</a> nebo <a href="http://www.chachatelier.fr/latexit/">LaTeXiT</a>.</p>
 
@@ -61,19 +61,19 @@
 
 <p>Pokud projedete celou výrobou knihy je potřeba ji dostat do iBookstore. Nejdříve se musíte zaregistrovat jako autor a potom si můžete stáhnout program iTunes Producer, pomocí, kterého můžete dílo uploadnout do iBookstore.</p>
 
-<p><img class="center" src="/assets/itunesproducer.jpg" title="&lsquo;iTunesProducer&rsquo;" ></p>
+<p>{% img center /assets/itunesproducer.jpg &lsquo;iTunesProducer&rsquo; %}</p>
 
 <p>Jak je vidět na obrázku musíte vyplňit povinné údaje. Ve výběru jazyka není čeština k dispozici. Ale napište <strong>cze</strong> a kniha v češtině projde. Screenshoty ke knize udělejte přímo na iPadu, aby měli správné rozlišení a exportujte je jako <strong>JPG</strong>.</p>
 
 <p>Po tom co nahrajete knihu pres iTunes producer a Apple ji schválí (cca 1 týden), můžete přes iTunes Connect sledovat statistiky jak se kniha stahuje po celém světě.</p>
 
-<p><img class="center" src="/assets/sales_and_trends1.jpg" title="&lsquo;iTunesConnect&rsquo;" ></p>
+<p>{% img center /assets/sales_and_trends1.jpg &lsquo;iTunesConnect&rsquo; %}</p>
 
-<p><img class="center" src="/assets/sales_and_trends2.jpg" title="&lsquo;iTunesConnect2&rsquo;" ></p>
+<p>{% img center /assets/sales_and_trends2.jpg &lsquo;iTunesConnect2&rsquo; %}</p>
 
 <p>Jako asi <a href="http://itunes.apple.com/cz/book/subversion/id498008712?mt=11">první česká kniha ve formátu</a> iBooks2 stažená více jak 15 kusů je vlastně bestseller jak říkala ve své přednášce Olga.</p>
 
-<p><img class="center" src="/assets/cite-nofreeusernames.jpg" title="&lsquo;cite barcamp vsetin 2012&rsquo;" ></p>
+<p>{% img center /assets/cite-nofreeusernames.jpg &lsquo;cite barcamp vsetin 2012&rsquo; %}</p>
 
 <h3>Závěr</h3>
 
