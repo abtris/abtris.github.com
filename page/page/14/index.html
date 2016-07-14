@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Včera 27.3. jsem se byl podívat na první PHP konferenci Webcamp&#8217;08 kterou pořádal Jakub Vrána a Vilém Málek. Podrobnosti o jednotlivých &hellip;">
+  <meta name="description" content="Pokud jste vývojáři a používáte Subversion (SVN) pod Windows máte několik možností jak to dělat. Donedávna jsem používal jen klienta buď Subclipse &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,46 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2008/03/subversion-pod-windows/">Subversion pod Windows</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-31T00:00:00+01:00" pubdate data-updated="true">31. 03. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud jste vývojáři a používáte Subversion (SVN) pod Windows máte několik možností jak to dělat. Donedávna jsem používal jen klienta buď Subclipse nebo <a href="http://tortoisesvn.tigris.org/">Tortoisesvn</a> (TSVN) a tím jsem to řešil. Buď jsem se vzdáleně připojil na SVN server nebo jsem používal lokální repozitory, které umí TSVN vytvořit a zpracovat. Pro vývoj je vcelku jedno které řešení používáte, pokud máte stálé připojení k internetu, musíte používat stejně centrální repozitory. Pro některé moje projekty, ale vlastní repozitory server nemám a hostuji to jen lokálně a celé repozitory jen zálohuji jako soubory.</p>
+
+<p>Pár let co používám SVN to bylo v pořádku, pro vývoj to stačí. Pokud jsem používal Linux, tak to bylo o to jednoduší, měl jsem tak plný SVN server (1.4.6 aktuálně) a lokální nebo vzdálená administrace je totéž. Podobně se můžete zachovat i na Windows pokud k tomu máte motivaci, kterou jsem donedávna neměl. K instalaci na windows dopoučiji balíček <a href="http://tortoisesvn.net/downloads">TortoiseSVN-1.4.8.12137-win32-svn-1.4.6.msi</a> a aby vám fungoval server jako service je dobré to doplňit o <a href="http://svnservice.tigris.org">svnservice-1.0.0.msi</a>. Po jednoduché instalaci těchto balíčků a nastavení SVNROOT můžete ve svém klientovi přistupovat přes svn protokol a používat všechny běžné příkazy.</p>
+
+<p>Já jsem měl v motivaci ve vytváření changelogu pro deploy pomoci <em>svn.exe log &mdash;xml svn://localhost/rep_name</em> což přes klienta TSVN nějak rozumně nešlo a při exportu přes schránku jsem měl problém s exportem češtiny ve výsledném dokumentu. Takto to jednoduše obejdu a můj jednoduchý skript udělá pro každý projekt aktuální changelog.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2008/03/webcamp08-development-2732008/">WebCamp&#8217;08</a></h1>
     
     
@@ -81,7 +121,7 @@
   
 
 
-<time datetime="2008-03-28T00:00:00+01:00" pubdate data-updated="true">28. 03. 2008</time>
+<time datetime="2008-03-28T00:00:00+00:00" pubdate data-updated="true">28. 03. 2008</time>
         
       </p>
     
@@ -123,7 +163,7 @@
   
 
 
-<time datetime="2008-03-28T00:00:00+01:00" pubdate data-updated="true">28. 03. 2008</time>
+<time datetime="2008-03-28T00:00:00+00:00" pubdate data-updated="true">28. 03. 2008</time>
         
       </p>
     
@@ -171,7 +211,7 @@
   
 
 
-<time datetime="2007-11-24T00:00:00+01:00" pubdate data-updated="true">24. 11. 2007</time>
+<time datetime="2007-11-24T00:00:00+00:00" pubdate data-updated="true">24. 11. 2007</time>
         
       </p>
     
@@ -210,7 +250,7 @@
   
 
 
-<time datetime="2007-11-13T00:00:00+01:00" pubdate data-updated="true">13. 11. 2007</time>
+<time datetime="2007-11-13T00:00:00+00:00" pubdate data-updated="true">13. 11. 2007</time>
         
       </p>
     
@@ -249,7 +289,7 @@
   
 
 
-<time datetime="2007-11-12T00:00:00+01:00" pubdate data-updated="true">12. 11. 2007</time>
+<time datetime="2007-11-12T00:00:00+00:00" pubdate data-updated="true">12. 11. 2007</time>
         
       </p>
     
@@ -286,7 +326,7 @@
   
 
 
-<time datetime="2007-11-10T00:00:00+01:00" pubdate data-updated="true">10. 11. 2007</time>
+<time datetime="2007-11-10T00:00:00+00:00" pubdate data-updated="true">10. 11. 2007</time>
         
       </p>
     
@@ -325,7 +365,7 @@
   
 
 
-<time datetime="2007-11-10T00:00:00+01:00" pubdate data-updated="true">10. 11. 2007</time>
+<time datetime="2007-11-10T00:00:00+00:00" pubdate data-updated="true">10. 11. 2007</time>
         
       </p>
     
@@ -362,7 +402,7 @@
   
 
 
-<time datetime="2007-11-07T00:00:00+01:00" pubdate data-updated="true">07. 11. 2007</time>
+<time datetime="2007-11-07T00:00:00+00:00" pubdate data-updated="true">07. 11. 2007</time>
         
       </p>
     
@@ -403,7 +443,7 @@
   
 
 
-<time datetime="2007-11-05T00:00:00+01:00" pubdate data-updated="true">05. 11. 2007</time>
+<time datetime="2007-11-05T00:00:00+00:00" pubdate data-updated="true">05. 11. 2007</time>
         
       </p>
     
@@ -465,79 +505,6 @@ curl_close($ch);
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2007/10/zend-studio-neon-beta/">Zend Studio NEON beta - pokračování</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-10-26T00:00:00+02:00" pubdate data-updated="true">26. 10. 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p ALIGN="left">Nedávno vyšla beta nového Zend Studia a tak jsem se jí vyzkoušel.</p>
-
-
-
-
-<h2 ALIGN="left">Instalace pod Windows Vista</h2>
-
-
-<p ALIGN="left">Stáhnete si installer ze <a TITLE="stránek Zend" HREF="http://www.zend.com/free_download/studio" ID="hfa5">stránek Zendu</a> (musíte  být u nich  zaregistrovaní). Spustíte instalaci která je velmi jednoduchá. Začnete úvodem, přejděte dál (Next).</p>
-
-
-<p><img STYLE="width: 626px; height: 476px" SRC="http://docs.google.com/File?id=d94cn6n_63m7957tf" /></p>
-
-<p>V konfiguraci nastavíte co chcete instalovat (zvolil jsme vše) a pokračujete v intalaci.
-<img STYLE="width: 626px; height: 476px" SRC="http://docs.google.com/File?id=d94cn6n_7p66pmxcr" />
-Vyberete koncovky, které bude otevírat Zend Studio.
-<img STYLE="width: 626px; height: 476px" SRC="http://docs.google.com/File?id=d94cn6n_8gv4p6bfz" /></p>
-
-<p ALIGN="left">  Instalace zabere neco kolem 400MB.</p>
-
-
-<p><img STYLE="width: 626px; height: 476px" SRC="http://docs.google.com/File?id=d94cn6n_9dj9z32fv" /></p>
-
-<p>Během instalace pár reklam na Zend a je třeba vidět, že zrovna instaluje PHP manuál.
-<img STYLE="width: 626px; height: 476px" SRC="http://docs.google.com/File?id=d94cn6n_10hpkmrrfq" />
-Hotovo, můžeme spustit Zend Studio.
-<img STYLE="width: 626px; height: 476px" SRC="http://docs.google.com/File?id=d94cn6n_12fztrn7ds" /></p>
-
-<p>Zend Studio Neon po nastartování.</p>
-
-<p><img STYLE="width: 600px; height: 450px" SRC="http://docs.google.com/File?id=d94cn6n_13fxcpk8cp" />
-Zend Studio v akci.
-<img STYLE="width: 600px; height: 450px" SRC="http://docs.google.com/File?id=d94cn6n_14d2mg52dd" /></p>
-
-<h2>Závěr</h2>
-
-
-<p>Instalace proběhla bez problémů a příště si ukážeme co je nového a také nastíním porovnání s Eclipse + PDT, ze kterého Neon vychází.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/15/">&larr; Older</a>
@@ -569,6 +536,10 @@ Zend Studio v akci.
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/07/srecon-16-europe/">SREcon&#8217;16 Europe</a>
+      </li>
     
       <li class="post">
         <a href="/2016/06/serverless-jako-neco-vic-nez-docker/">Serverless jako něco víc než Docker</a>
@@ -604,10 +575,6 @@ Zend Studio v akci.
     
       <li class="post">
         <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/11/docker/">docker</a>
       </li>
     
   </ul>

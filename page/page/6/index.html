@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Po přečtení článku z minulého týdne jsem si myslel, že brzo začne někdo uživatele adblocku blokovat. Dnes jsem narazil na první a určitě ne jediny z &hellip;">
+  <meta name="description" content="Včera vyšela nová verze Xdebug 2.1. Z hlavních novinek bych zdůraznil podporu pro PHP 5.3 a další můžete vyčíst z Derickova oznámení. Xdebug jsem &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,77 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2010/06/xdebug-2-1-instalace-ze-zdrojovych-kodu/">Xdebug 2.1 instalace ze zdrojových kódů</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-30T00:00:00+01:00" pubdate data-updated="true">30. 06. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Včera vyšela nová verze <a href="http://derickrethans.nl/xdebug-2.1-released.html">Xdebug 2.1</a>. Z hlavních novinek bych zdůraznil podporu pro PHP 5.3 a další můžete vyčíst z Derickova oznámení.</p>
+
+<p>Xdebug jsem instaloval na Mac OS X 10.6.4 a Ubuntu 9.10 a bez problémů jsem to zkompiloval ze zdrojových kódů.</p>
+
+<p>V Ubuntu i na Macu je potřeba mít podporu pro kompilaci ze zdrojových kódů. V ubuntu je to balíček build-essential a autoconf a na Macovi Xcode s příslušenstvím, případně si přes Port doinstalujete co potřebujete.</p>
+
+<ul>
+    <li>Stáhnout zdrojové kódy xdebugu, rozbalit a dat kompilovat.
+<pre class="bash">wget http://www.xdebug.org/files/xdebug-2.1.0.tgz
+tar -xzf xdebug-2.1.0.tgz
+cd xdebug-2.1.0/
+phpize
+./configure --enable-xdebug
+make</pre>
+</li>
+    <li>Knihovnu najdete v <code>xdebug-2.1.0/modules/xdebug.so</code></li>
+    <li>Knihovnu nakopirujte k ostatním knihovnám, případně kam chcete</li>
+    <li>Přidejte nakonec do <code>php.ini</code> řádek
+<pre class="bash">zend_extension=/cesta-k-modulum/xdebug.so</pre>
+</li>
+    <li>Nezapomeňte restartovat server</li>
+</ul>
+
+
+<p>Pokud máte nějaké potíže s kompilací nebo s Xdebugem, klidně se ozvěte ve komentářích.</p>
+
+<p>P.S.: Pokud instalujete xdebug poprvé nezapomeňte zkontrolovat zda máte správně konfiguraci pro debugging pro IDE (např. NetBeans)</p>
+
+<pre class="bash">xdebug.remote_enable=1
+xdebug.remote_host=localhost
+xdebug.remote_port=9000
+xdebug.remote_handler=dbgp
+xdebug.profiler_enable=1
+xdebug.profiler_output_dir="/tmp/xdebug"
+</pre>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2010/06/adblock-neni-vrazda-ale-zkuste-si-ho-nechat-zapnuty/">Adblock není vražda, ale zkuste si ho nechat zapnutý!</a></h1>
     
     
@@ -81,7 +152,7 @@
   
 
 
-<time datetime="2010-06-28T00:00:00+02:00" pubdate data-updated="true">28. 06. 2010</time>
+<time datetime="2010-06-28T00:00:00+01:00" pubdate data-updated="true">28. 06. 2010</time>
         
       </p>
     
@@ -125,7 +196,7 @@
   
 
 
-<time datetime="2010-05-26T00:00:00+02:00" pubdate data-updated="true">26. 05. 2010</time>
+<time datetime="2010-05-26T00:00:00+01:00" pubdate data-updated="true">26. 05. 2010</time>
         
       </p>
     
@@ -200,7 +271,7 @@ fi
   
 
 
-<time datetime="2010-04-30T00:00:00+02:00" pubdate data-updated="true">30. 04. 2010</time>
+<time datetime="2010-04-30T00:00:00+01:00" pubdate data-updated="true">30. 04. 2010</time>
         
       </p>
     
@@ -318,7 +389,7 @@ fi
   
 
 
-<time datetime="2010-04-26T00:00:00+02:00" pubdate data-updated="true">26. 04. 2010</time>
+<time datetime="2010-04-26T00:00:00+01:00" pubdate data-updated="true">26. 04. 2010</time>
         
       </p>
     
@@ -695,7 +766,7 @@ $myinputs = filter_input_array(INPUT_POST, $args);
   
 
 
-<time datetime="2010-04-07T00:00:00+02:00" pubdate data-updated="true">07. 04. 2010</time>
+<time datetime="2010-04-07T00:00:00+01:00" pubdate data-updated="true">07. 04. 2010</time>
         
       </p>
     
@@ -828,7 +899,7 @@ Celá živá ukázka byla o autocomplete v Nette.</p>
   
 
 
-<time datetime="2010-04-02T00:00:00+02:00" pubdate data-updated="true">02. 04. 2010</time>
+<time datetime="2010-04-02T00:00:00+01:00" pubdate data-updated="true">02. 04. 2010</time>
         
       </p>
     
@@ -885,7 +956,7 @@ SELECT NOW() FROM `table` WHERE `id` > 22 GROUP BY `text` ORDER BY `name`
   
 
 
-<time datetime="2010-02-25T00:00:00+01:00" pubdate data-updated="true">25. 02. 2010</time>
+<time datetime="2010-02-25T00:00:00+00:00" pubdate data-updated="true">25. 02. 2010</time>
         
       </p>
     
@@ -962,7 +1033,7 @@ Myslím, že mezi IDE, které jsou zdarma mi přijde v současné době nejlepš
   
 
 
-<time datetime="2009-12-28T00:00:00+01:00" pubdate data-updated="true">28. 12. 2009</time>
+<time datetime="2009-12-28T00:00:00+00:00" pubdate data-updated="true">28. 12. 2009</time>
         
       </p>
     
@@ -1014,7 +1085,7 @@ Myslím, že mezi IDE, které jsou zdarma mi přijde v současné době nejlepš
   
 
 
-<time datetime="2009-12-11T00:00:00+01:00" pubdate data-updated="true">11. 12. 2009</time>
+<time datetime="2009-12-11T00:00:00+00:00" pubdate data-updated="true">11. 12. 2009</time>
         
       </p>
     
@@ -1093,55 +1164,6 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/11/linux-mint-8-helena/">Linux Mint 8 Helena</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-11-30T00:00:00+01:00" pubdate data-updated="true">30. 11. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.linuxmint.com/blog/?p=1155" target="_blank">Linux Mint &ldquo;Helena&rdquo;</a> je konečně venku. Tato distribuce je založená na Ubuntu 9.10, ale má několik vlastností proč jí na desktopu rád preferuji oproti klasickému Ubuntu.</p>
-
-<ul>
-    <li>neobsahuje standardně v Ubuntu instalovaný Evolution, ale Thunderbird</li>
-    <li>má stále Pidgin jako IM</li>
-    <li>vypadá dobře a má dostupné kodeky (mediaubuntu.org)</li>
-    <li>vlastní vylepšení (mintInstaller, mintUploader, mintUpdater)</li>
-</ul>
-
-
-<pre><code>&lt;a href="http://blog.prskavec.net/wp-content/uploads/2009/11/mint8.png"&gt;&lt;img class="aligncenter size-medium wp-image-772" src="http://blog.prskavec.net/wp-content/uploads/2009/11/mint8-300x206.png" alt="mint8" width="300" height="206" /&gt;&lt;/a&gt;&lt;/li&gt;
-</code></pre>
-
-<p>Je to prostě dotažené a např. ve Ubuntu 9.04 mi nefungovalo v MC klávesa CTRL+\ pro hotlist a v Linux Mint 7 bez problémů. Jsou to detaily, ale je příjemné, že to funguje jak má. Pokud jste o <a href="http://www.darkcode.cc">Linux</a> Mint neslyšeli, tak doporučuji za vyzkoušení.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/7/">&larr; Older</a>
@@ -1173,6 +1195,10 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/07/srecon-16-europe/">SREcon&#8217;16 Europe</a>
+      </li>
     
       <li class="post">
         <a href="/2016/06/serverless-jako-neco-vic-nez-docker/">Serverless jako něco víc než Docker</a>
@@ -1208,10 +1234,6 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
     
       <li class="post">
         <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/11/docker/">docker</a>
       </li>
     
   </ul>

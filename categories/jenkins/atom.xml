@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: jenkins | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/jenkins/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-06-18T21:39:36+02:00</updated>
+  <updated>2016-07-14T09:35:23+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Jenkins polling a git-notify]]></title>
     <link href="http://blog.prskavec.net/2013/09/jenkins-polling-a-git-notify/"/>
-    <updated>2013-09-05T10:01:00+02:00</updated>
+    <updated>2013-09-05T10:01:00+01:00</updated>
     <id>http://blog.prskavec.net/2013/09/jenkins-polling-a-git-notify</id>
     <content type="html"><![CDATA[<p>Minulý rok jsem psal o tom, že <a href="http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo/">polling v Jenkinsu je zlo</a>. To stále platí, ale i když máte tento přístup nemusí to stačit.</p>
 
@@ -178,7 +178,7 @@ curl "http://jenkins.firma.cz/git/notifyCommit?url=ssh://git@git.firma.cz/$REPOS
   <entry>
     <title type="html"><![CDATA[Jenkins SCM polling je zlo!]]></title>
     <link href="http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo/"/>
-    <updated>2012-06-20T18:54:00+02:00</updated>
+    <updated>2012-06-20T18:54:00+01:00</updated>
     <id>http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo</id>
     <content type="html"><![CDATA[<p>Moc jsem nechápal problémy, které řešil <a href="http://kohsuke.org/2011/12/01/polling-must-die-triggering-jenkins-builds-from-a-git-hook/">Kohsuke Kawaguchi</a> na konci roku. Ale brzo jsem to měl zjistit. Před časem přišel za mnou kolega, že chce zkonfigurovat polling stylem popisovaným v článku.</p>
 
@@ -222,7 +222,7 @@ curl http://jenkins.firma.cz/jenkins/git/notifyCommit?url=ssh://git@git.firma.cz
   <entry>
     <title type="html"><![CDATA[Jenkins - jak na Continuous Integration v PHP a Javascriptu 26.6.2012]]></title>
     <link href="http://blog.prskavec.net/2012/06/jenkins-jak-na-continuous-integration-v-php-a-javascriptu-26-dot-6-2012/"/>
-    <updated>2012-06-14T14:32:00+02:00</updated>
+    <updated>2012-06-14T14:32:00+01:00</updated>
     <id>http://blog.prskavec.net/2012/06/jenkins-jak-na-continuous-integration-v-php-a-javascriptu-26-dot-6-2012</id>
     <content type="html"><![CDATA[<h2>Aktuání školeni 26.6.2012</h2>
 
@@ -239,7 +239,7 @@ curl http://jenkins.firma.cz/jenkins/git/notifyCommit?url=ssh://git@git.firma.cz
   <entry>
     <title type="html"><![CDATA[Jenkins – použití Continuous Integration engine pro PHP]]></title>
     <link href="http://blog.prskavec.net/2011/11/jenkins-pouziti-continuous-integration-engine-pro-php/"/>
-    <updated>2011-11-24T20:24:00+01:00</updated>
+    <updated>2011-11-24T20:24:00+00:00</updated>
     <id>http://blog.prskavec.net/2011/11/jenkins-pouziti-continuous-integration-engine-pro-php</id>
     <content type="html"><![CDATA[<p>Vyvíjíte větší PHP projekt a potřebujete zlepšit koordinaci vašeho týmu a vaše softwarové procesy? Přístup Continuous Integration a nástroj Jenkins, který jej umožňuje implementovat, vám pomohou. Dozvíte se, jak Jenkins nainstalovat, jak ověřovat kvalitu softwarového produktu, jak řešit spouštění automatických testů, jak testovat coding standard, jaké si stanovovat softwarové metriky či jak kontinuálně deployovat vaše průběžné výsledky.</p>
 
@@ -277,7 +277,7 @@ curl http://jenkins.firma.cz/jenkins/git/notifyCommit?url=ssh://git@git.firma.cz
 
 <p>Kapacita: Zbývají 2 místa.</p>
 
-<p>Objednávky: <a href="mailto:academy@webexpo.net"><a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#58;&#97;&#99;&#97;&#x64;&#x65;&#109;&#121;&#64;&#119;&#x65;&#98;&#101;&#120;&#x70;&#111;&#46;&#x6e;&#101;&#116;">&#97;&#99;&#x61;&#x64;&#101;&#109;&#121;&#64;&#x77;&#x65;&#98;&#x65;&#120;&#x70;&#x6f;&#x2e;&#110;&#x65;&#116;</a></a>, +420 775 477 457</p>
+<p>Objednávky: <a href="mailto:academy@webexpo.net"><a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#x61;&#99;&#x61;&#x64;&#101;&#109;&#121;&#64;&#x77;&#x65;&#98;&#101;&#x78;&#112;&#111;&#46;&#110;&#x65;&#x74;">&#97;&#99;&#x61;&#x64;&#x65;&#x6d;&#x79;&#x40;&#119;&#101;&#98;&#x65;&#x78;&#x70;&#x6f;&#x2e;&#x6e;&#x65;&#x74;</a></a>, +420 775 477 457</p>
 
 <p>Školení se konají v Praze v prostoru WebHub, adresa: Kafkova 16, Praha 6, dvě minuty pěšky od metra Dejvická.</p>
 

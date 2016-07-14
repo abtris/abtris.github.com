@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: konference | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/konference/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-06-18T21:39:36+02:00</updated>
+  <updated>2016-07-14T09:35:23+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -14,9 +14,107 @@
 
   
   <entry>
+    <title type="html"><![CDATA[SREcon'16 Europe]]></title>
+    <link href="http://blog.prskavec.net/2016/07/srecon-16-europe/"/>
+    <updated>2016-07-14T08:13:00+01:00</updated>
+    <id>http://blog.prskavec.net/2016/07/srecon-16-europe</id>
+    <content type="html"><![CDATA[<p>Letošní <a href="https://www.usenix.org/conference/srecon16europe">SREcon</a> byl zase v Dublinu. Od 11.7. do 13.7. se zde setkali velcí hráči (Google, Facebook, Microsoft, Amazon) s těmi menšími a vyměňovali si spoustu zkušeností. Letos jsem se mohl poprvé zúčastnit. Nebyl jsem z ČR sám, zastoupení měli Avast, Seznam nebo Skype či Algolia. Dohromady asi 5 lidí.
+Konference byla vyprodaná a hodně míst měli lidé z Googlu a pokud vás zajímalo jak se pracuje v Dublinském Googlu nebo Facebooku mohli jste si o tom s lidmi promluvit.
+Celá konference byla ve 4 sálech a to jeden hlavní, který se po keynote rozdělil na dva a potom poslední dva byli hlavně pro workshopy a lighting talky.</p>
+
+<h2>Co to SRE je?</h2>
+
+<p>Pokud nevíte co je SRE, tak existuje skvělá kniha <a href="http://shop.oreilly.com/product/0636920041528.do">Site Reliability Engineering</a> od lidí z Googlu, kde se všechno detailně vysvětluje a skoro každý přenášející něco z knihy citoval. Je to taková bible SRE a vůbec první kniha zastřešujíc tento obor.</p>
+
+<!-- more -->
+
+
+<h2>Nejzajímavější přednášky</h2>
+
+<p>K přednáškám chci jen dodat, jsou to mé postřehy, pokud vás to zaujme měli by být videa za pár týdnů veřejně dostupné na youtube.</p>
+
+<h3>Splicing SRE DNA Sequences in the Biggest Software Company on the Planet &ndash; Greg Veith, Microsoft</h3>
+
+<p>Greg mluvil o transformaci v Microsoftu a jeho práci na zavádění SRE do práce týmů kolem MS Azure. Začali budovat SRE kolem roku 2009 a doteď transformace probíhá nejen v MS Azure, ale v celé firmě. Pro zavedení byli klíčové tři věci. Za prvé vlastní start SRE týmu, zavedení principů. Za druhé aplikaci principů, aby jste model otestovali. Za třetí musíte akcelerovat a vylepšovat ho tak, aby zahrnul celou firmu. Gregova přednáška byla také hodně o tom jak je MS velký firma a tak je to práce pro hodně lidí, přesto hlavní SRE tým je asi jen 5-7 lidí.</p>
+
+<p>Diskuze o tom kolik SRE lidí má být ve firmě byla celkem častá. Osobně se mi libí názor z LinkedIN, kde uvádějí 1:10 poměr SRE a Engineeringu. U velkých firem jako je Google je to asi 5%. Tomu 1:10 odpovídáme i v Apiary a myslím, že je dobré se toho držet.</p>
+
+<h3>Doorman: Global Distributed Client-Side Rate Limiting &ndash; Jos Visser, Google</h3>
+
+<p>Jos mluvil o projektu <a href="https://github.com/youtube/doorman">Doorman</a>, který používají v Youtube limitaci zdrojů v distribuovaném systému pro omezení zátěže MySQL. Doorman je napsaný v Go langu, používá pro komunikaci gRPC. Zajímavé je hlavně to, že nemá žádný diskový prostor pro ukládání stavu a drží informace jen v paměti. Pokud dojde k výpadku tak se pustí learning mode a od klientů se dozví všechno co potřebuje a potom pokračuje ve funkci.</p>
+
+<p> ### Building and Running SRE Teams &ndash; Kurt Andersen, LinkedIn
+Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-Complex/dp/1591847486">Team of Teams</a> a jak aplikovat vojenské postupy do SRE a systému rozhodování. Jako klíčové viděl hlavně posun důležitých rozhodnutí na lidi co jsou nejblíže tomu tu akci potom vykonat.</p>
+
+<h3>The Production Engineering Lifecycle: How We Build, Run, and Disband Great Reliability-focused Teams &ndash; Andrew Ryan, Facebook</h3>
+
+<p>Andrew mluvil o Production Engineeringu (PE) ve Facebooku. Je to obdoba SRE. Mají asi 700 lidí v šesti kancelářích po celém světe. Drží poměr 1:10 podobně jako LinkedIn. Hodně řeší nakolik je v každém týmu potřeba PE a zda je produkt opravdu tak důležitý pro firmu, aby bylo nutné mít oncall (min. 12+ PE). Pokud ne tak se oncall přesune na vývojáře a PE může působit jako poradce jak věci zlepšit. Naopak na core produktech mají například pro cache pět paralelních rotací na oncallu.</p>
+
+<h3>How to Improve Your Service by Roasting It &ndash; Jake Welch, Microsoft</h3>
+
+<p>Jake mluvil o tom jak přenést znalosti o komplexních systémech od autorů k dalším lidem do firmy. Doporučil vytvořit skupinku a věnovat 45min týdně po dobu 10 týdnů na předávání znalostí. Je důležité, aby to někdo řídil. Role Roast Master je pro úspěch klíčová. Musí hlídat jak tón řeči a vůbec vyjadřování, aby to nesklouzlo k osobním antipatijím a drželo se to v racionální rovině. Agendu je potřeba správně rozdělit po komponentách nebo subsystémech a držet se toho, na konci potom stanovit co se bude probírat příště a nepřekračovat čas 45min.</p>
+
+<h3>What SRE Means in a Start-up &ndash; Brian Scanlon, Intercom</h3>
+
+<p>Brian mluvil o SRE ve startupu, kde je situace jednoduší pokud se prostě nastaví politika od začátku, často se používá hostovaná infrastruktura, která celou věc usnadňuje. Celkem to kopírovalo to jak to děláme mi v Apiary.</p>
+
+<p>Hodně je vidět jaký velký rozdíl a kolik práce to dá pokud chcete firmu předělat na SRE (brownfielding) nebo začnete hned.</p>
+
+<h3>The Many Ways Your Monitoring Is Lying to You &ndash; Sebastian Kirsch, Google, <a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#115;&#x6b;&#105;&#x72;&#115;&#x63;&#x68;&#x40;&#103;&#111;&#111;&#x67;&#x6c;&#x65;&#46;&#99;&#111;&#109;">&#x73;&#x6b;&#x69;&#x72;&#115;&#x63;&#x68;&#64;&#x67;&#x6f;&#111;&#x67;&#x6c;&#101;&#46;&#x63;&#x6f;&#x6d;</a></h3>
+
+<p>Skvělá přednáška o tom jak nemůžete věřit každému grafu v monitoringu. Doporučuji schlédnout až bude video, bylo tam hodně příkladů. Jde o to, že věci, které uváděl nejsou pro mě například vůbec nové díky lekcím z numerické matematiky a statistiky na ČVUT, ale ne každý má statistický background a nebývá to až tak běžná součást Computer Science.</p>
+
+<h3>Next-generation Alerting and Fault Detection &ndash; Dieter Plaetinck, <a href="http://raintank.io">raintank</a></h3>
+
+<p>Dieter hodně zdůrazňoval použití machine learning na detekci anomálií a to jak to prakticky moc nefunguje a proto se uchylujeme k streamovanému zpracování dat pomocí nástrojů jako je Spark nebo Riemann.io. Ale nejzajímavější věc zmíněná v přednášce je <a href="https://bosun.org">Bosun</a>, také IDE pro alerting, kde se dá dělat historický testing, ladění alertů, vyhodnocování na základě dalších dat. Pro podrobosti doporučuji projít články na <a href="http://dieter.plaetinck.be">blogu</a>.</p>
+
+<h3>DNS @ Shopify &ndash; Emil Stolarsky, Shopify</h3>
+
+<p>Krátký lighting talk o mangementu DNS používající Git a CI. Čerstvé open source přímo před konferencí.</p>
+
+<ul>
+<li><a href="https://github.com/Shopify/record_store">https://github.com/Shopify/record_store</a></li>
+<li><a href="https://github.com/Shopify/ejson">https://github.com/Shopify/ejson</a></li>
+</ul>
+
+
+<h3>Availability Objectives of SoundCloud’s Microservices &ndash; Bora Tunca, SoundCloud</h3>
+
+<p>SoudCloud je autorem Prometheus.io monitoringu a měli dvě přednášky co jsem viděl. Mají dnes microservice architekturu rozdělenou do několika vrstev a podle toho je daná požadovaný dostupnost a také pracují s graceful degradation pokud to jde. Jako příklad jsou třeba statistky k jednotlivým trackům. Modul stats má SLO 95% a tracks mají 99.995% a tak je to zohledněné i na UI.</p>
+
+<h3>The Knowledge: Towards a Culture of Engineering Documentation &ndash; Riona MacNamara, Staff technical writer, Google</h3>
+
+<p>Riona mluvila o hrozném stavu dokumentace v Google. Přirovnala ji k testování v roce 2005. Jak to celkově zhoršuje produktivitu, spolehlivost a rychost. Zkoušeli to několikrát vyřešit pomocí vytvoření komplexního dokumentačního systému, který vytvoří někdo pro celou firmu a zeshora se to prosadí.</p>
+
+<p>Tento přístup nefungoval a proto v roce 2014 úplně změnili přístup, začali ze zdola nahoru od jednotlivých engineerů a vytvořili systém g3doc, který dnes používá 10k projektů v google a mají přes 17k autorů, kteří do dokumentace přispívají.</p>
+
+<p>Klíčové bylo dát dokumentaci přímo do repositářů projektu, mít to v jednoduchém formátů čitelném přímo v IDE. Zvolili markdown, který si potom silně vylepšili. Mají potom na serverové straně systém, který vygeneruje HTML a publikuje dokumentaci na url, které se dá lehce podle jména projektu odhadnout.</p>
+
+<p>Projekt bohužel není open source, ale snad jednou bude. Díky spoustě googlerů, kteří do projektu v rámci svých 20% přispěli je tam hodně funkcí, které mi máme díky Sphinx.</p>
+
+<h2>Odkazy na zdroje</h2>
+
+<ul>
+<li><a href="http://www.franklinangulo.com/blog/2016/7/11/srecon-2016-dublin-day-1">http://www.franklinangulo.com/blog/2016/7/11/srecon-2016-dublin-day-1</a></li>
+<li><a href="http://www.slideshare.net/goldshtn/the-next-linux-superpower-ebpf-primer">http://www.slideshare.net/goldshtn/the-next-linux-superpower-ebpf-primer</a></li>
+<li><a href="https://github.com/dastergon/awesome-sre">https://github.com/dastergon/awesome-sre</a></li>
+</ul>
+
+
+<p>Budu se snažit průběžně doplňovat zdroje a přidám odkazy na videa až budou.</p>
+
+<h2>Shrnutí</h2>
+
+<p>Pokud se zajímáte o transformaci engineeringu a říká vám něco DevOps nebo SRE je to konference pro vás. Pokud vás to zajímá a chtěli by jste si o tom promluvit, klidně mě kontaktujte. Bohužel jsem nenašel vhodnou konferenci v Česku, kde o tom mluvit, aby se to dostalo více do povědomí firmem.</p>
+
+<p>Další SREcon bude příští rok zase v USA (March 13–14, 2017, SF), Evropě (Dublin) a také poprvé v Asii (May 22–24, 2017, Singapur).</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Deployment prakticky - WebExpo 2011]]></title>
     <link href="http://blog.prskavec.net/2011/09/deployment-prakticky-webexpo-2011/"/>
-    <updated>2011-09-25T00:00:00+02:00</updated>
+    <updated>2011-09-25T00:00:00+01:00</updated>
     <id>http://blog.prskavec.net/2011/09/deployment-prakticky-webexpo-2011</id>
     <content type="html"><![CDATA[<p>Letos jsem přednášel na Webexpu na téma deployment. Ve 30 minutách se nedá říci dost, aby jste se dozvěděli všechno tak zkusím v tomto článku shrnout o čem jsem mluvil a přidat nějaké zdroje, které pomůžou v dalších úsilí při automatizaci deploymentu.</p>
 

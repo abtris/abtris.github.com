@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Pokud někdo neznáte plugin WP-EasyArchives tak ho vyzkoušejte například u mě v archívu. Je to pěkný, plugin na zobrazení archívu s rozbalovacími menu &hellip;">
+  <meta name="description" content="Vyvořil jsem pro mě užitečnou třídu v php pro práci s Hudsonem, která má zatím implementovány základní věci z remote api, kterým Hudson disponuje. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,66 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2009/04/phphudson/">PhpHudson</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-29T00:00:00+01:00" pubdate data-updated="true">29. 04. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Vyvořil jsem pro mě <a href="http://code.google.com/p/php4hudson/">užitečnou třídu v php</a> pro práci s <a href="http://hudson.dev.java.net">Hudsonem</a>, která má zatím implementovány základní věci z remote api, kterým Hudson disponuje. Knihovna používá Curl a pracuje s Hudsonem přes REST.</p>
+
+<p>Používám tuto knihovnu např. pro migraci všech jobů z jednoho hudsona na druhý.</p>
+
+<p>Lehce můžeme totiž stáhnout všechny konfigurační soubory do jednoho adresáře.</p>
+
+<pre>
+getAllConfigs("/tmp/hudson/");
+</pre>
+
+
+<p>Potom můžeme projít adresář a založit jednotlivé joby.</p>
+
+<pre>
+createJob(basename(str_replace("-config.xml","",$file)), file_get_contents($dir.$file));
+    }
+    closedir($handle);
+}
+</pre>
+
+
+<p>Pokud by chtěl někdo třídu používat, pracujte prosím se zdrojovým kódem:</p>
+
+<pre>svn checkout http://php4hudson.googlecode.com/svn/trunk/ php4hudson-read-only</pre>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2009/04/wp-easyarchives-102-konecne-take-v-ceske-verzi/">WP-EasyArchives 1.0.2</a></h1>
     
     
@@ -81,7 +141,7 @@
   
 
 
-<time datetime="2009-04-19T00:00:00+02:00" pubdate data-updated="true">19. 04. 2009</time>
+<time datetime="2009-04-19T00:00:00+01:00" pubdate data-updated="true">19. 04. 2009</time>
         
       </p>
     
@@ -119,7 +179,7 @@
   
 
 
-<time datetime="2009-04-08T00:00:00+02:00" pubdate data-updated="true">08. 04. 2009</time>
+<time datetime="2009-04-08T00:00:00+01:00" pubdate data-updated="true">08. 04. 2009</time>
         
       </p>
     
@@ -197,7 +257,7 @@ sudo mv phpMinAdmin-1.9.1.php index.php
   
 
 
-<time datetime="2009-04-02T00:00:00+02:00" pubdate data-updated="true">02. 04. 2009</time>
+<time datetime="2009-04-02T00:00:00+01:00" pubdate data-updated="true">02. 04. 2009</time>
         
       </p>
     
@@ -313,7 +373,7 @@ nový zdroj (řádek):
   
 
 
-<time datetime="2009-03-30T00:00:00+02:00" pubdate data-updated="true">30. 03. 2009</time>
+<time datetime="2009-03-30T00:00:00+01:00" pubdate data-updated="true">30. 03. 2009</time>
         
       </p>
     
@@ -436,7 +496,7 @@ org.eclipse.php.core.PHPNature
   
 
 
-<time datetime="2009-03-20T00:00:00+01:00" pubdate data-updated="true">20. 03. 2009</time>
+<time datetime="2009-03-20T00:00:00+00:00" pubdate data-updated="true">20. 03. 2009</time>
         
       </p>
     
@@ -493,7 +553,7 @@ org.eclipse.php.core.PHPNature
   
 
 
-<time datetime="2009-03-16T00:00:00+01:00" pubdate data-updated="true">16. 03. 2009</time>
+<time datetime="2009-03-16T00:00:00+00:00" pubdate data-updated="true">16. 03. 2009</time>
         
       </p>
     
@@ -606,7 +666,7 @@ Z pyramid mě zaujali čísla kolem LOC (počet řádků kódu) v porodnání s 
   
 
 
-<time datetime="2009-02-26T00:00:00+01:00" pubdate data-updated="true">26. 02. 2009</time>
+<time datetime="2009-02-26T00:00:00+00:00" pubdate data-updated="true">26. 02. 2009</time>
         
       </p>
     
@@ -771,7 +831,7 @@ Z pyramid mě zaujali čísla kolem LOC (počet řádků kódu) v porodnání s 
   
 
 
-<time datetime="2009-02-23T00:00:00+01:00" pubdate data-updated="true">23. 02. 2009</time>
+<time datetime="2009-02-23T00:00:00+00:00" pubdate data-updated="true">23. 02. 2009</time>
         
       </p>
     
@@ -897,7 +957,7 @@ svn up
   
 
 
-<time datetime="2009-02-18T00:00:00+01:00" pubdate data-updated="true">18. 02. 2009</time>
+<time datetime="2009-02-18T00:00:00+00:00" pubdate data-updated="true">18. 02. 2009</time>
         
       </p>
     
@@ -947,50 +1007,6 @@ svn up
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/02/subversion-a-directive-svnindexxslt/">Subversion a directive SVNIndexXSLT</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-09T00:00:00+01:00" pubdate data-updated="true">09. 02. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Pokud jste si někdz hráli s nastavením SVN pod Apachem tak jste narazili na directivu SVNIndexXSLT. Pokud se vám nelíbí obvyklý styl jak to zobrazuje SVN. Pokud použijete XSL ze stránek <a href="http://subversion.tigris.org/tools_contrib.html#xslt">Subversion tools</a> bude výsledek jako je obrázku. Je to lepší ale žádný zázrak.</p>
-
-<p style="text-align: center;"><a href="http://blog.prskavec.net/wp-content/uploads/2009/02/svn-default-xsl.png"><img class="size-full wp-image-299 aligncenter" style="border: 1px solid #000000;" title="svn-default-xsl" src="http://blog.prskavec.net/wp-content/uploads/2009/02/svn-default-xsl.png" alt="svn-default-xsl" width="473" height="435" /></a></p>
-
-
-<p>Pokud chcete aby výsledek byl lepší a nepoužijete <a href="http://www.viewvc.org/">ViewVC</a>, kde styly ujdou až tak od verze 1.1 a ještě by je to chtělo taky vylepšit tak doporučuji navštívit <a href="http://www.reposstyle.com/">ReposStyle</a>, kde autor vytvořil pěkný styl, který se dá hned použít.
-<a href="http://blog.prskavec.net/wp-content/uploads/2009/02/svn-reposstyle.png"><img class="aligncenter size-full wp-image-300" title="svn-reposstyle" src="http://blog.prskavec.net/wp-content/uploads/2009/02/svn-reposstyle.png" alt="svn-reposstyle" width="270" height="250" /></a></p>
-
-<p>Není problém si vytvořit vlastní styl a nebo případně upravit ten co vám vyhovuje. Doporučuji se podívat na <a href="https://labs.repos.se/data/style/trunk/"><a href="https://labs.repos.se/data/style/trunk/">https://labs.repos.se/data/style/trunk/</a></a> kde je vidět ReposStyle v akci.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/10/">&larr; Older</a>
@@ -1022,6 +1038,10 @@ svn up
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/07/srecon-16-europe/">SREcon&#8217;16 Europe</a>
+      </li>
     
       <li class="post">
         <a href="/2016/06/serverless-jako-neco-vic-nez-docker/">Serverless jako něco víc než Docker</a>
@@ -1057,10 +1077,6 @@ svn up
     
       <li class="post">
         <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2013/11/docker/">docker</a>
       </li>
     
   </ul>
