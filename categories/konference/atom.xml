@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: konference | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/konference/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-07-14T09:35:23+01:00</updated>
+  <updated>2016-07-14T14:00:08+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -24,7 +24,7 @@ Celá konference byla ve 4 sálech a to jeden hlavní, který se po keynote rozd
 
 <h2>Co to SRE je?</h2>
 
-<p>Pokud nevíte co je SRE, tak existuje skvělá kniha <a href="http://shop.oreilly.com/product/0636920041528.do">Site Reliability Engineering</a> od lidí z Googlu, kde se všechno detailně vysvětluje a skoro každý přenášející něco z knihy citoval. Je to taková bible SRE a vůbec první kniha zastřešujíc tento obor.</p>
+<p>Pokud nevíte <a href="http://blog.prskavec.net/2016/03/co-to-je-sre/">co to je SRE</a>, tak kromě mého článku existuje skvělá kniha <a href="http://shop.oreilly.com/product/0636920041528.do">Site Reliability Engineering</a> od lidí z Googlu, kde se všechno detailně vysvětluje a skoro každý přenášející něco z knihy citoval. Je to taková bible SRE a vůbec první kniha zastřešujíc tento obor.</p>
 
 <!-- more -->
 
@@ -60,7 +60,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
 
 <p>Hodně je vidět jaký velký rozdíl a kolik práce to dá pokud chcete firmu předělat na SRE (brownfielding) nebo začnete hned.</p>
 
-<h3>The Many Ways Your Monitoring Is Lying to You &ndash; Sebastian Kirsch, Google, <a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#115;&#x6b;&#105;&#x72;&#115;&#x63;&#x68;&#x40;&#103;&#111;&#111;&#x67;&#x6c;&#x65;&#46;&#99;&#111;&#109;">&#x73;&#x6b;&#x69;&#x72;&#115;&#x63;&#x68;&#64;&#x67;&#x6f;&#111;&#x67;&#x6c;&#101;&#46;&#x63;&#x6f;&#x6d;</a></h3>
+<h3>The Many Ways Your Monitoring Is Lying to You &ndash; Sebastian Kirsch, Google, <a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#58;&#x73;&#x6b;&#105;&#x72;&#115;&#x63;&#104;&#x40;&#x67;&#111;&#x6f;&#103;&#x6c;&#101;&#46;&#99;&#x6f;&#x6d;">&#115;&#107;&#x69;&#x72;&#x73;&#99;&#104;&#64;&#x67;&#111;&#x6f;&#x67;&#108;&#x65;&#46;&#99;&#111;&#109;</a></h3>
 
 <p>Skvělá přednáška o tom jak nemůžete věřit každému grafu v monitoringu. Doporučuji schlédnout až bude video, bylo tam hodně příkladů. Jde o to, že věci, které uváděl nejsou pro mě například vůbec nové díky lekcím z numerické matematiky a statistiky na ČVUT, ale ne každý má statistický background a nebývá to až tak běžná součást Computer Science.</p>
 
