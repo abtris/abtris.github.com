@@ -78,7 +78,7 @@
   
 
 
-<time datetime="2013-09-05T10:01:00+01:00" pubdate data-updated="true">05. 09. 2013</time>
+<time datetime="2013-09-05T10:01:00+02:00" pubdate data-updated="true">05. 09. 2013</time>
         
       </p>
     
@@ -147,11 +147,11 @@ do
   then
     git cat-file blob $new_sha1 &gt; $tmp
     set -o pipefail
-    $syntax_check $tmp 2&gt;&amp;1 | sed 's|/tmp/git.update.......:\([0-9]*\)$|JOJOMOJO:\1|'&gt; $log
+    $syntax_check $tmp 2&gt;&amp;1 | sed &#39;s|/tmp/git.update.......:\([0-9]*\)$|JOJOMOJO:\1|&#39;&gt; $log
     if [[ $? != 0 ]]
     then
       echo
-      echo -e &quot;$(cat $log | sed 's|JOJOMOJO|'\\${RED}${name}\\${NOBOLD}'|')&quot; &gt;&amp;2
+      echo -e &quot;$(cat $log | sed &#39;s|JOJOMOJO|&#39;\\${RED}${name}\\${NOBOLD}&#39;|&#39;)&quot; &gt;&amp;2
       echo -e &quot;For more details run this: ${CYAN} git diff $old_sha1 $new_sha1 ${NOBOLD}&quot; &gt;&amp;2
       echo
       exit_status=1
@@ -162,14 +162,14 @@ do
   if [[ $name =~ [.]java$|xml$ ]]
   then  
     git cat-file blob $new_sha1 &gt; $tmp
-    RESULT=`grep -Pl '\r\n' $tmp`
+    RESULT=`grep -Pl &#39;\r\n&#39; $tmp`
     echo $RESULT
     if [ &quot;$RESULT&quot; = &quot;$tmp&quot; ]; then
           echo &quot;###################################################################################################&quot; &gt;&amp;2
-          echo &quot;# '$name' contains CRLF! Dear Windows developer, please activate the GIT core.autocrlf feature,&quot; &gt;&amp;2
+          echo &quot;# &#39;$name&#39; contains CRLF! Dear Windows developer, please activate the GIT core.autocrlf feature,&quot; &gt;&amp;2
           echo &quot;# or change the line endings to LF before trying to push.&quot; &gt;&amp;2
-          echo &quot;# Use 'git config core.autocrlf true' to activate CRLF conversion.&quot; &gt;&amp;2
-          echo &quot;# OR use 'git reset HEAD~1' to undo your last commit and fix the line endings.&quot; &gt;&amp;2
+          echo &quot;# Use &#39;git config core.autocrlf true&#39; to activate CRLF conversion.&quot; &gt;&amp;2
+          echo &quot;# OR use &#39;git reset HEAD~1&#39; to undo your last commit and fix the line endings.&quot; &gt;&amp;2
           echo &quot;###################################################################################################&quot; &gt;&amp;2
           exit_status=1
     fi  
@@ -185,7 +185,7 @@ refname=&quot;$1&quot;
 oldrev=&quot;$2&quot;
 newrev=&quot;$3&quot;
 # --- Check types
-# if $newrev is 0000...0000, it's a commit to delete a ref.
+# if $newrev is 0000...0000, it&#39;s a commit to delete a ref.
 zero=&quot;0000000000000000000000000000000000000000&quot;
 if [ &quot;$newrev&quot; = &quot;$zero&quot; ]; then
   newrev_type=delete
@@ -261,7 +261,7 @@ curl "http://jenkins.firma.cz/git/notifyCommit?url=ssh://git@git.firma.cz/$REPOS
   
 
 
-<time datetime="2013-09-05T10:01:00+01:00" pubdate data-updated="true">05. 09. 2013</time>
+<time datetime="2013-09-05T10:01:00+02:00" pubdate data-updated="true">05. 09. 2013</time>
       
 
 <span class="categories">
@@ -322,6 +322,10 @@ curl "http://jenkins.firma.cz/git/notifyCommit?url=ssh://git@git.firma.cz/$REPOS
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2016/10/prednaska-o-sre-na-devops-meetupu/">Přednáška o SRE na DevOPS meetupu</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/07/srecon-16-europe/">SREcon'16 Europe</a>
       </li>
     
@@ -355,10 +359,6 @@ curl "http://jenkins.firma.cz/git/notifyCommit?url=ssh://git@git.firma.cz/$REPOS
     
       <li class="post">
         <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
       </li>
     
   </ul>

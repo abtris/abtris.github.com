@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Vyvořil jsem pro mě užitečnou třídu v php pro práci s Hudsonem, která má zatím implementovány základní věci z remote api, kterým Hudson disponuje. &hellip;">
+  <meta name="description" content="Zend Server 4.0.2 Zend aktualizoval Zend Server na verzi 4.0.2, přidána hlavně podpora pro ZF 1.8 a další drobné změny. Jen mi z repozitory pro &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,121 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2009/05/zend-server-ce-a-vlastni-logy-v-konzoli/">Zend Server CE a vlastni logy v konzoli</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-05T00:00:00+02:00" pubdate data-updated="true">05. 05. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Zend Server 4.0.2</h2>
+
+
+<p>
+Zend aktualizoval <a href="http://static.zend.com/topics/Zend-Server-Release-Notes-V4.0.2.txt">Zend Server na verzi 4.0.2</a>, přidána hlavně podpora pro <a href="http://devzone.zend.com/article/4524-Zend-Framework-1.8.0-Released">ZF 1.8</a> a další drobné změny. Jen mi z repozitory pro Ubuntu nefunguje Zend_Tool, doufám, že tuto drobnost brzo opraví zatím ji stejně s Zend Studiem moc nevyužiji.
+</p>
+
+
+
+
+<p><em>Update 6.5.2009</em> po <a href="http://forums.zend.com/viewtopic.php?f=44&amp;t=615">mém upozornění</a> dnes Zend provedl update ZF 1.8 v repozitory pro Zend Server CE a už to funguje, soubor najdete v <code>/usr/local/zend/share/ZendFramework/bin/zf.sh</code>. Doporučuji si udělat symlink nebo přidat adresář do $PATH.</p>
+
+
+
+
+<h2>Zend Debbuger a PHPUnit</h2>
+
+
+<p></p>
+
+<p>
+Jen mi trochu vadí, že kvůli code coverage a dalším možnostem co má PHPUnit s Xdebugem jsem nucen vypnout Zend Debugger v Zend Serveru a dát si tam Xdebug. Zend Debugger má sice tyto možnosti k dispozici přes Zend Studio, ale pokud to voláte z Antu tak jsem nepřišel na to jak rozchodit PHPUnit a Zend Debugger dohromady.
+</p>
+
+
+<h2>Logy</h2>
+
+
+<p>
+Pokud chcete na konzoli Zend Serveru vidět další logy. Konfigurační soubor je <code>/usr/local/zend/gui/application/data/logfiles.xml</code>. Logy je dobré směrovat do <code>/usr/local/zend/var/log/</code>. Pomocí symlinků si přidejte do tohoto adresáře logy, které jsou uloženy v <code>/var/log/apache2/</code>.
+</p>
+
+
+<pre>
+
+
+    
+        PHP Error Log
+        
+                error_log
+    
+    
+        Server Error Log
+        /usr/local/zend/var/log/error.log
+                
+    
+    
+        Server Access Log
+        /usr/local/zend/var/log/access.log
+                
+    
+        
+                Server Workspace Access Log
+                /usr/local/zend/var/log/access-workspace.log
+                
+        
+        
+                Server Workspace Error Log
+                /usr/local/zend/var/log/error-workspace.log
+                
+        
+
+
+</pre>
+
+
+<p>
+Pokud budete mít problémy s právy nazapomeňte přidat uživateli <code>zend</code> práva na čtení potřebných logů a práva r+x na adresář <code>/var/log/apache2</code>, kde je máte uložené.
+</p>
+
+
+<p>
+Potom by jste v konzoli měli vidět toto.
+</p>
+
+
+<p>
+<a href="http://blog.prskavec.net/wp-content/uploads/2009/05/zend-server_1241527431260.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/05/zend-server_1241527431260-300x168.png" alt="zend-server_1241527431260" class="aligncenter size-medium wp-image-501" /></a>
+</p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2009/04/phphudson/">PhpHudson</a></h1>
     
     
@@ -81,7 +196,7 @@
   
 
 
-<time datetime="2009-04-29T00:00:00+01:00" pubdate data-updated="true">29. 04. 2009</time>
+<time datetime="2009-04-29T00:00:00+02:00" pubdate data-updated="true">29. 04. 2009</time>
         
       </p>
     
@@ -141,7 +256,7 @@ createJob(basename(str_replace("-config.xml","",$file)), file_get_contents($dir.
   
 
 
-<time datetime="2009-04-19T00:00:00+01:00" pubdate data-updated="true">19. 04. 2009</time>
+<time datetime="2009-04-19T00:00:00+02:00" pubdate data-updated="true">19. 04. 2009</time>
         
       </p>
     
@@ -179,7 +294,7 @@ createJob(basename(str_replace("-config.xml","",$file)), file_get_contents($dir.
   
 
 
-<time datetime="2009-04-08T00:00:00+01:00" pubdate data-updated="true">08. 04. 2009</time>
+<time datetime="2009-04-08T00:00:00+02:00" pubdate data-updated="true">08. 04. 2009</time>
         
       </p>
     
@@ -257,7 +372,7 @@ sudo mv phpMinAdmin-1.9.1.php index.php
   
 
 
-<time datetime="2009-04-02T00:00:00+01:00" pubdate data-updated="true">02. 04. 2009</time>
+<time datetime="2009-04-02T00:00:00+02:00" pubdate data-updated="true">02. 04. 2009</time>
         
       </p>
     
@@ -373,7 +488,7 @@ nový zdroj (řádek):
   
 
 
-<time datetime="2009-03-30T00:00:00+01:00" pubdate data-updated="true">30. 03. 2009</time>
+<time datetime="2009-03-30T00:00:00+02:00" pubdate data-updated="true">30. 03. 2009</time>
         
       </p>
     
@@ -496,7 +611,7 @@ org.eclipse.php.core.PHPNature
   
 
 
-<time datetime="2009-03-20T00:00:00+00:00" pubdate data-updated="true">20. 03. 2009</time>
+<time datetime="2009-03-20T00:00:00+01:00" pubdate data-updated="true">20. 03. 2009</time>
         
       </p>
     
@@ -553,7 +668,7 @@ org.eclipse.php.core.PHPNature
   
 
 
-<time datetime="2009-03-16T00:00:00+00:00" pubdate data-updated="true">16. 03. 2009</time>
+<time datetime="2009-03-16T00:00:00+01:00" pubdate data-updated="true">16. 03. 2009</time>
         
       </p>
     
@@ -666,7 +781,7 @@ Z pyramid mě zaujali čísla kolem LOC (počet řádků kódu) v porodnání s 
   
 
 
-<time datetime="2009-02-26T00:00:00+00:00" pubdate data-updated="true">26. 02. 2009</time>
+<time datetime="2009-02-26T00:00:00+01:00" pubdate data-updated="true">26. 02. 2009</time>
         
       </p>
     
@@ -831,7 +946,7 @@ Z pyramid mě zaujali čísla kolem LOC (počet řádků kódu) v porodnání s 
   
 
 
-<time datetime="2009-02-23T00:00:00+00:00" pubdate data-updated="true">23. 02. 2009</time>
+<time datetime="2009-02-23T00:00:00+01:00" pubdate data-updated="true">23. 02. 2009</time>
         
       </p>
     
@@ -936,77 +1051,6 @@ svn up
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/02/subversion-a-spojeni-dvou-repozitory/">Subversion a spojení dvou repozitory</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-18T00:00:00+00:00" pubdate data-updated="true">18. 02. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Pokud se vám někdy stane, že pracujete na projektu a máte vzdálený SVN server dejme tomu např. s 500 revizemi.</p>
-
-<p>Teď ale jedete někam pryč kde nemáte připojení k internetu nebo má server výpadek. Pracovat na projektu musíte, tak např. pomocí TSVN uděláte lokální repozitory a importujete working copy a pracujete dál, uděláte 50 revizí a server zase začne fungovat.</p>
-
-<h3>Co teď? Máte podle mne tyto možnosti.</h3>
-
-
-<br />
-
-
-<ol>
-    <li>Můžete vzít zase svoji WC a tu naimportovat do původního repozitory</li>
-    <li>Nebo zahodit staré SVN a udělat dump nového a to naimportovat místo starého.</li>
-    <li>Nebo mít na serveru obě repozitory.</li>
-    <li>Spojení obou repozitory</li>
-</ol>
-
-
-<h3>SVN Merge</h3>
-
-
-<br />
-
-
-<p>Já jsem pro spojení obou repozitory, to se dá udělat také různě. Napadají mě dvě možnosti jak to provést.</p>
-
-<ol>
-    <li>Vygenerovat diff patche pro jednotlivé revize v nové repozitory a ty aplikovat postupně na WC ze původního repozitory.</li>
-<li>Udělat dump repozitory pomocí <code>svnadmin dump</code> a potom použít příkaz <code>svnadmin load</code>  s nastavením <code class="option">--parent-dir</code> a import provést do jiné branche.</li>
-    <li><del datetime="2009-02-19T08:58:49+00:00">Udělat dump pomocí <code>svnadmin dump</code> s parametrem <code>--incremental</code> a se stejným parametrem jej i importovat. Tento postup uvádějí <a href="http://svnbook.red-bean.com/en/1.5/svn.reposadmin.maint.html#svn.reposadmin.maint.tk.svnadmin" target="_blank">v manuálu</a>, ale nemám ho zatím odzkoušený.</del></li>
-       <li>můžete také použít <a href="http://svn.borg.ch/svndumptool/">svndumptool</a> a udělat merge na úrovni dump souborů, to mi přijde nejlepší řešení pokud požadujete jednu větev vývoje.</li>
-
-</ol>
-
-
-<p>Pokud máte nějaké jiné zkušenosti se spojováním repozitory doufám, že to uvedete v komentářích. Ozvěte se také pokud by byl zájem, můžu uvést nějaký příklad s tím jak se to dělá pomocí příkazového řádku, krok za krokem.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/10/">&larr; Older</a>
@@ -1038,6 +1082,10 @@ svn up
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/10/prednaska-o-sre-na-devops-meetupu/">Přednáška o SRE na DevOPS meetupu</a>
+      </li>
     
       <li class="post">
         <a href="/2016/07/srecon-16-europe/">SREcon&#8217;16 Europe</a>
@@ -1073,10 +1121,6 @@ svn up
     
       <li class="post">
         <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: css | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/css/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-07-14T14:00:08+01:00</updated>
+  <updated>2016-10-17T08:28:07+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Jak snadno pracovat s CSS sprites]]></title>
     <link href="http://blog.prskavec.net/2012/03/jak-snadno-pracovat-s-css-sprites/"/>
-    <updated>2012-03-01T22:00:00+00:00</updated>
+    <updated>2012-03-01T22:00:00+01:00</updated>
     <id>http://blog.prskavec.net/2012/03/jak-snadno-pracovat-s-css-sprites</id>
     <content type="html"><![CDATA[<p><blockquote><p>CSS spirty představují způsob, jak snížit počet HTTP požadavků, které klient vyšle k získání prvků obsažených na stránce. Obrázky se sloučí do jednoho většího a umístí se na určených X,Y souřadnicích. Pak pomocí CSS atributu background-position můžeme nastavit vzniklý obrázek na pozadí různým elementům stránky a pomocí dalších CSS vlastností umístíme pozadí tak, aby požadovaný jednotlivý obrázek padl do viditelné oblasti elementu na stránce.</p><footer><strong>cs.spritegen.website-performance.org <a href="http://cs.spritegen.website-performance.org/section/what-are-css-sprites/">http://cs.spritegen.website-performance.org/section/what-are-css-sprites/</a> Co jsou CSS sprites?</strong></footer></blockquote></p>
 

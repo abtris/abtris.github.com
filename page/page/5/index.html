@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Pokud se zajímáte o cloudové technologie, tak možná znáte Heroku. Heroku je pěkné řešení pro Ruby, které vám umožní vytvářet aplikace v Sinatře nebo &hellip;">
+  <meta name="description" content="V poslední době se objevilo hodně článků o RabbitMQ a připravuje se kniha kde většina příkladů je v PHP. Připravil jsem malou demonstraci jak se &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,181 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2011/04/php-a-rabbitmq/">PHP a RabbitMQ</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-10T00:00:00+02:00" pubdate data-updated="true">10. 04. 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>V poslední době se objevilo hodně článků o <a href="http://www.rabbitmq.com/">RabbitMQ</a> a připravuje se <a href="http://manning.com/videla/">kniha</a> kde většina příkladů je v PHP.  Připravil jsem malou demonstraci jak se message queue dobře využit. RabbitMQ je napsaný v Erlangu podobně jako CouchDB a hodí ke zpracování dávkových úloh. V demonstraci využívám knihovnu <a href="http://code.google.com/p/wkhtmltopdf/">wkhtmltopdf</a> která umí zpracovat html stránku na PDF, používá k tomu webkit jádro.</p>
+
+<h2>Design</h2>
+
+
+<p>Malý design aplikace jsem zvolil takto:  <img class="aligncenter" title="rabbitmq_design" src="https://github.com/abtris/php-rabbitmq-wkhtmltox-demo/raw/master/docs/design.png" alt="" width="600" /></p>
+
+<h2>Kód</h2>
+
+
+<p>Základ aplikace jsou dva úlohy producer a consumer. Nejdříve je potřeba pustit consumer.</p>
+
+<pre class="code">error_reporting(E_ALL);
+/**
+ * Application path
+ */
+define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
+/**
+ * Application enviroment
+ */
+define('APPLICATION_ENV', 'development');
+
+require_once APPLICATION_PATH . '/models/Rabbit.php';
+/**
+ * /Ensure library/ is on include_path
+ */
+set_include_path(implode(PATH_SEPARATOR, array(
+    realpath(APPLICATION_PATH . '/../library'),
+    get_include_path()
+)));
+
+/** Zend_Application */
+require_once 'Zend/Application.php';
+
+// Create application, bootstrap, and run
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    APPLICATION_PATH . '/configs/application.ini'
+);
+$application-&gt;getBootstrap()-&gt;bootstrap();
+
+$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
+
+$r = new Application_Model_Rabbit($config-&gt;rabbitmq);
+$r-&gt;consumer();</pre>
+
+
+<p>Tento script musí běžet na serveru, kde se zpracovává vlastní požadavek. Model potom volá metodu, která se vykoná.</p>
+
+<pre class="code">        $conn = new AMQPConnection($this-&gt;options['host'],
+                                   $this-&gt;options['port'],
+                                   $this-&gt;options['user'],
+                                   $this-&gt;options['pass'],
+                                   $this-&gt;options['vhost']
+        );
+
+        $channel = $conn-&gt;channel();
+        /**
+         * $exchange, $type,$passive=false,$durable=false,$auto_delete=true,
+         */
+        $channel-&gt;exchange_declare(self::EXCHANGE, 'direct', false, true, false);
+        $channel-&gt;queue_declare(self::QUEUE);
+        $channel-&gt;queue_bind(self::QUEUE, self::EXCHANGE);
+
+        $consumer = function($msg) {
+          $msg-&gt;delivery_info['channel']-&gt;basic_cancel($msg-&gt;delivery_info['delivery_tag']);
+          if ($msg-&gt;body == 'quit') {
+              $msg-&gt;delivery_info['channel']-&gt;basic_cancel($msg-&gt;delivery_info['consumer_tag']);
+          } else {
+              if (!empty($msg-&gt;body))  {
+                  // make PDF
+                  Application_Model_Wkhtmltopdf::proceed($msg-&gt;body, APPLICATION_PATH . '/../output/');
+                  // notify user
+                  system("growlnotify -n \"Rabbit demo\" -m \"PDF CREATED\"");
+              }
+          }
+        };
+
+        $channel-&gt;basic_consume(self::QUEUE,
+                                self::CONSUMER_TAG,
+                                false,
+                                false,
+                                false,
+                                false,
+                                $consumer);
+        while (count($channel-&gt;callbacks)) {
+            $channel-&gt;wait();
+        }
+
+        $channel-&gt;close();
+        $conn-&gt;close();</pre>
+
+
+<p>Vlastní aplikace je potom jednoduchá</p>
+
+<pre class="code">    public function indexAction()
+    {
+        $r = new Application_Model_Rabbit($this-&gt;_config-&gt;rabbitmq);
+
+        $this-&gt;view-&gt;form = $form = new Application_Form_AddUrl();
+        // process form
+        if ($this-&gt;getRequest()-&gt;isPost()) {
+            $formData = $this-&gt;getRequest()-&gt;getParams();
+            if ($form-&gt;isValid($formData)) {
+                $r-&gt;setUrl($form-&gt;url-&gt;getValue());
+                $r-&gt;run();
+            } else {
+                $form-&gt;populate($formData);
+            }
+        }
+
+        $this-&gt;view-&gt;url = $r-&gt;getUrl();
+    }</pre>
+
+
+<p>a volá se producer, který invokuje RabbitMQ</p>
+
+<pre class="code">        $conn = new AMQPConnection($this-&gt;options['host'],
+                                   $this-&gt;options['port'],
+                                   $this-&gt;options['user'],
+                                   $this-&gt;options['pass'],
+                                   $this-&gt;options['vhost']
+        );
+        $channel = $conn-&gt;channel();
+        $channel-&gt;exchange_declare(self::EXCHANGE,
+                                   'direct',
+                                   false,
+                                   true,
+                                   false);
+        $msg = new AMQPMessage($string, array('content-type' =&gt; 'text/plain'));
+        $channel-&gt;basic_publish($msg, self::EXCHANGE);
+        $channel-&gt;close();
+        $conn-&gt;close();</pre>
+
+
+<p>Demo u mne funguje velmi dobře, nevím jak na jiných platformách, zkoušel jsem to jen na Macu. Na linuxu by to mělo fungovat obdobně. Jen pro webovou aplikaci by bylo vhodné použít jiný systém notifikace pro webovou aplikaci. Nenašel jsem jak například předávat notifikace přes RabbitMQ, ale pokud někdo víte jak to elegatně udělat přidejte to do komentářů.</p>
+
+<p>Veškerý zdrojový kód je <a href="https://github.com/abtris/php-rabbitmq-wkhtmltox-demo">dostupný na githubu</a>.</p>
+
+<p>Zvolil jsem jednoduché jednosměrné řešení bez implementace RPC, kde by se dala pro notifikaci použít reply fronta. Ale myslím, že to celkem stačí pro vetšinu dávkových aplikací jako jsou logovaní, upload souborů i generovaní PDF. Nic nebrání nahradit moji notifikaci například posláním linku ke stažení výsledného PDF apod. Příklad by šel pomocí RPC vylepšit na notifikaci přímo v aplikaci. Pro implementaci RPC lze například použít <a href="https://github.com/tnc/Thumper">Thumper</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2011/03/phpfog-cloudove-reseni-pro-php/">phpfog - cloudové řešení pro PHP?</a></h1>
     
     
@@ -81,7 +256,7 @@
   
 
 
-<time datetime="2011-03-14T00:00:00+00:00" pubdate data-updated="true">14. 03. 2011</time>
+<time datetime="2011-03-14T00:00:00+01:00" pubdate data-updated="true">14. 03. 2011</time>
         
       </p>
     
@@ -167,7 +342,7 @@
   
 
 
-<time datetime="2011-02-23T00:00:00+00:00" pubdate data-updated="true">23. 02. 2011</time>
+<time datetime="2011-02-23T00:00:00+01:00" pubdate data-updated="true">23. 02. 2011</time>
         
       </p>
     
@@ -209,7 +384,7 @@
   
 
 
-<time datetime="2011-02-14T00:00:00+00:00" pubdate data-updated="true">14. 02. 2011</time>
+<time datetime="2011-02-14T00:00:00+01:00" pubdate data-updated="true">14. 02. 2011</time>
         
       </p>
     
@@ -314,7 +489,7 @@
   
 
 
-<time datetime="2011-02-02T00:00:00+00:00" pubdate data-updated="true">02. 02. 2011</time>
+<time datetime="2011-02-02T00:00:00+01:00" pubdate data-updated="true">02. 02. 2011</time>
         
       </p>
     
@@ -542,7 +717,7 @@ end</pre>
   
 
 
-<time datetime="2011-01-28T00:00:00+00:00" pubdate data-updated="true">28. 01. 2011</time>
+<time datetime="2011-01-28T00:00:00+01:00" pubdate data-updated="true">28. 01. 2011</time>
         
       </p>
     
@@ -668,7 +843,7 @@ class App_Log_Writer_MongoDb extends Zend_Log_Writer_Abstract
   
 
 
-<time datetime="2010-12-23T00:00:00+00:00" pubdate data-updated="true">23. 12. 2010</time>
+<time datetime="2010-12-23T00:00:00+01:00" pubdate data-updated="true">23. 12. 2010</time>
         
       </p>
     
@@ -722,7 +897,7 @@ class App_Log_Writer_MongoDb extends Zend_Log_Writer_Abstract
   
 
 
-<time datetime="2010-09-12T00:00:00+01:00" pubdate data-updated="true">12. 09. 2010</time>
+<time datetime="2010-09-12T00:00:00+02:00" pubdate data-updated="true">12. 09. 2010</time>
         
       </p>
     
@@ -893,7 +1068,7 @@ class App_Log_Writer_MongoDb extends Zend_Log_Writer_Abstract
   
 
 
-<time datetime="2010-08-31T00:00:00+01:00" pubdate data-updated="true">31. 08. 2010</time>
+<time datetime="2010-08-31T00:00:00+02:00" pubdate data-updated="true">31. 08. 2010</time>
         
       </p>
     
@@ -972,7 +1147,7 @@ class App_Log_Writer_MongoDb extends Zend_Log_Writer_Abstract
   
 
 
-<time datetime="2010-08-24T00:00:00+01:00" pubdate data-updated="true">24. 08. 2010</time>
+<time datetime="2010-08-24T00:00:00+02:00" pubdate data-updated="true">24. 08. 2010</time>
         
       </p>
     
@@ -1162,56 +1337,6 @@ couchdb.db = "test-log"
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/07/jak-jsem-si-koupil-amazon-kindle/">Jak jsem si koupil Amazon Kindle</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-07-14T00:00:00+01:00" pubdate data-updated="true">14. 07. 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Čtečka knih Amazon kindle byla nedávno s nástupem iPadu zlevněna tak jsem se rozhodl zakoupit ji pro své používání, protože již touto dobu používám kindle v telefonu s Androidem a na počítači.</p>
-
-<p>Objednal jsem 8.7.2010 a doporučeno bylo 13.7.2010 pomocí UPS. Cena $187 (s pouzdrem a zálohou na clo $287) &ndash; cca 6000 Kč.</p>
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/07/kindle.jpg"><img src="http://blog.prskavec.net/wp-content/uploads/2010/07/kindle-300x226.jpg" alt="" width="300" height="226" class="aligncenter size-medium wp-image-963" /></a></p>
-
-<p>Kindle byl aktivovaný na můj účet na Amazonu. Firmware 2.3, provedl jsem upgrade na <a href="http://www.amazon.com/gp/help/customer/display.html?nodeId=200324680">poslední verzi 2.5.2</a>, která přidá možnost zaheslování, zoom v PDF, podporu facebook, twitter a další.</p>
-
-<p>Dostat do Kindlu obsah není žádný problém, stačí ho připojit přes USB (microusb) a přenést přes mass storage. Pokud je PDF, Mobi čtečka se si s tím bezproblémů poradí. Pokud máte ePub, html je potřeba to převést. Můžete použít službu Amazonu, která vám za malý poplatek převede a pošle dokument. Toto řešení jsem nevyzkoušel, protože se mi nechtělo za to platit. Stáhnul jsem si <a href="http://www.amazon.com/gp/feature.html?docId=1000234621">kindlegen</a>, pomocí kterého si to můžete převést sami. Převedl jsem HTML manuál PHP (40MB) do formátu mobi (16MB). Převod trval 1h, ale úspěšně se to provedl. V Kindlu pokud chcete vyhledávat chvíli trvá než si ho zaindexuje.</p>
-
-<p>Pokud chcete nějaké české tituly tak kromě PDF (napr. <a href="http://knihy.nic.cz">knihy.nic.cz</a>) dopočuji i <a href="http://palmknihy.cz/">palmknihy.cz</a>, kde sice <a href="http://www.nakupujvamerice.cz/clanek.php?clanek=amazon-kindle-3-z-usa">Kindle</a> není přímo zmíněn, ale formát Mobi Unicode funguje bez problémů. Jako další dobrý zdroj se dá použít <a href="http://www.root.cz/knihy/">Elektronická knihovna Root.cz</a>, kde se najdou volné tituly ke stažení anglicky i česky.</p>
-
-<p>Samozřejmě máte v angličtině k dispozici 620 000 titulů přímo na Amazonu. Nejsou to jen knihy, ale i časopisy a noviny. Z čech tam najdete jenom <a href="http://www.praguepost.com/">Prague Post </a>. Kdybu měli Mladou frontu, tak si ji hned předplatím.</p>
-
-<p>Pokud máte zajímavé typy pro Kindle tak se námi podělte v komentářích, pokud nic o elektronických čtečkách nevíte doporučuji <a href="http://met.blog.root.cz/2010/04/21/jak-evoluuje-elektronicky-ctenar/">článek Martina Hassmana</a> a postřehy <a href="http://www.sovavsiti.cz/weblog/151/amazon-pocmarane-knihy">Marka Prokopa</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/6/">&larr; Older</a>
@@ -1243,6 +1368,10 @@ couchdb.db = "test-log"
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/10/prednaska-o-sre-na-devops-meetupu/">Přednáška o SRE na DevOPS meetupu</a>
+      </li>
     
       <li class="post">
         <a href="/2016/07/srecon-16-europe/">SREcon&#8217;16 Europe</a>
@@ -1278,10 +1407,6 @@ couchdb.db = "test-log"
     
       <li class="post">
         <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
       </li>
     
   </ul>

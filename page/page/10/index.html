@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Pokud jste si někdz hráli s nastavením SVN pod Apachem tak jste narazili na directivu SVNIndexXSLT. Pokud se vám nelíbí obvyklý styl jak to zobrazuje &hellip;">
+  <meta name="description" content="Pokud se vám někdy stane, že pracujete na projektu a máte vzdálený SVN server dejme tomu např. s 500 revizemi. Teď ale jedete někam pryč kde nemáte &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,77 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2009/02/subversion-a-spojeni-dvou-repozitory/">Subversion a spojení dvou repozitory</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-18T00:00:00+01:00" pubdate data-updated="true">18. 02. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud se vám někdy stane, že pracujete na projektu a máte vzdálený SVN server dejme tomu např. s 500 revizemi.</p>
+
+<p>Teď ale jedete někam pryč kde nemáte připojení k internetu nebo má server výpadek. Pracovat na projektu musíte, tak např. pomocí TSVN uděláte lokální repozitory a importujete working copy a pracujete dál, uděláte 50 revizí a server zase začne fungovat.</p>
+
+<h3>Co teď? Máte podle mne tyto možnosti.</h3>
+
+
+<br />
+
+
+<ol>
+    <li>Můžete vzít zase svoji WC a tu naimportovat do původního repozitory</li>
+    <li>Nebo zahodit staré SVN a udělat dump nového a to naimportovat místo starého.</li>
+    <li>Nebo mít na serveru obě repozitory.</li>
+    <li>Spojení obou repozitory</li>
+</ol>
+
+
+<h3>SVN Merge</h3>
+
+
+<br />
+
+
+<p>Já jsem pro spojení obou repozitory, to se dá udělat také různě. Napadají mě dvě možnosti jak to provést.</p>
+
+<ol>
+    <li>Vygenerovat diff patche pro jednotlivé revize v nové repozitory a ty aplikovat postupně na WC ze původního repozitory.</li>
+<li>Udělat dump repozitory pomocí <code>svnadmin dump</code> a potom použít příkaz <code>svnadmin load</code>  s nastavením <code class="option">--parent-dir</code> a import provést do jiné branche.</li>
+    <li><del datetime="2009-02-19T08:58:49+00:00">Udělat dump pomocí <code>svnadmin dump</code> s parametrem <code>--incremental</code> a se stejným parametrem jej i importovat. Tento postup uvádějí <a href="http://svnbook.red-bean.com/en/1.5/svn.reposadmin.maint.html#svn.reposadmin.maint.tk.svnadmin" target="_blank">v manuálu</a>, ale nemám ho zatím odzkoušený.</del></li>
+       <li>můžete také použít <a href="http://svn.borg.ch/svndumptool/">svndumptool</a> a udělat merge na úrovni dump souborů, to mi přijde nejlepší řešení pokud požadujete jednu větev vývoje.</li>
+
+</ol>
+
+
+<p>Pokud máte nějaké jiné zkušenosti se spojováním repozitory doufám, že to uvedete v komentářích. Ozvěte se také pokud by byl zájem, můžu uvést nějaký příklad s tím jak se to dělá pomocí příkazového řádku, krok za krokem.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2009/02/subversion-a-directive-svnindexxslt/">Subversion a directive SVNIndexXSLT</a></h1>
     
     
@@ -81,7 +152,7 @@
   
 
 
-<time datetime="2009-02-09T00:00:00+00:00" pubdate data-updated="true">09. 02. 2009</time>
+<time datetime="2009-02-09T00:00:00+01:00" pubdate data-updated="true">09. 02. 2009</time>
         
       </p>
     
@@ -125,7 +196,7 @@
   
 
 
-<time datetime="2009-02-03T00:00:00+00:00" pubdate data-updated="true">03. 02. 2009</time>
+<time datetime="2009-02-03T00:00:00+01:00" pubdate data-updated="true">03. 02. 2009</time>
         
       </p>
     
@@ -196,7 +267,7 @@
   
 
 
-<time datetime="2009-01-28T00:00:00+00:00" pubdate data-updated="true">28. 01. 2009</time>
+<time datetime="2009-01-28T00:00:00+01:00" pubdate data-updated="true">28. 01. 2009</time>
         
       </p>
     
@@ -235,7 +306,7 @@
   
 
 
-<time datetime="2009-01-19T00:00:00+00:00" pubdate data-updated="true">19. 01. 2009</time>
+<time datetime="2009-01-19T00:00:00+01:00" pubdate data-updated="true">19. 01. 2009</time>
         
       </p>
     
@@ -300,7 +371,7 @@ done</pre>
   
 
 
-<time datetime="2009-01-12T00:00:00+00:00" pubdate data-updated="true">12. 01. 2009</time>
+<time datetime="2009-01-12T00:00:00+01:00" pubdate data-updated="true">12. 01. 2009</time>
         
       </p>
     
@@ -349,7 +420,7 @@ done</pre>
   
 
 
-<time datetime="2008-12-23T00:00:00+00:00" pubdate data-updated="true">23. 12. 2008</time>
+<time datetime="2008-12-23T00:00:00+01:00" pubdate data-updated="true">23. 12. 2008</time>
         
       </p>
     
@@ -386,7 +457,7 @@ done</pre>
   
 
 
-<time datetime="2008-12-22T00:00:00+00:00" pubdate data-updated="true">22. 12. 2008</time>
+<time datetime="2008-12-22T00:00:00+01:00" pubdate data-updated="true">22. 12. 2008</time>
         
       </p>
     
@@ -504,7 +575,7 @@ modprobe r5u870
   
 
 
-<time datetime="2008-12-10T00:00:00+00:00" pubdate data-updated="true">10. 12. 2008</time>
+<time datetime="2008-12-10T00:00:00+01:00" pubdate data-updated="true">10. 12. 2008</time>
         
       </p>
     
@@ -603,7 +674,7 @@ modprobe r5u870
   
 
 
-<time datetime="2008-11-04T00:00:00+00:00" pubdate data-updated="true">04. 11. 2008</time>
+<time datetime="2008-11-04T00:00:00+01:00" pubdate data-updated="true">04. 11. 2008</time>
         
       </p>
     
@@ -614,109 +685,6 @@ modprobe r5u870
 
 
 <p>  <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/11/development.png"><font color="#ffffff"></font><img style="border-right: 0px;border-top: 0px;float: none;margin-left: auto;border-left: 0px;margin-right: auto;border-bottom: 0px" height="493" alt="Development" src="http://blog.prskavec.net/wp-content/uploads/2008/11/development-thumb.png" width="635" border="0" /></a> Vývojář PHP má výhodu libovolného IDE (preferuji Eclipse PDT). Pro zdrojové kódy používám jako SCM Subversion. Nedávno jsem přidal pre-commit hook skript na kontrolu syntaxe. Používám ho hlavně pro kontrolu projektů v Zend Frameworku. PHP_CodeSniffer podporuje <a href="http://checkstyle.sourceforge.net/">Checkstyle</a> tak není problém výstup zaintegrovat i do jiných programů. Jako post-commit skript používám generován XML logů, které používá stránka s náhledy na projekty na kterých pracuji.</p>  <p>Protože jsem si oblíbil <a href="http://blog.prskavec.net/?p=142">Phing</a> pro automatizaci tvroby buildu hledal jsem něco co by to celé zastřešilo. Řešení je <a href="http://en.wikipedia.org/wiki/Continuous_integration">Continuous integration</a> a pro php jsou použitelné jen dva projekty a to <a href="http://www.phpundercontrol.org">phpUnderControl</a> a <a href="http://code.google.com/p/xinc/">Xinc</a>. Oba umí stejné nebo podobné věci a přece jenom se trochu liší jak vznikli a jak se provozují.</p>  <p>Jako první jsem zkoušel phpUnderControl. Ten je založený jako plugin do <a href="http://cruisecontrol.sourceforge.net/">Cruisecontrolu</a>, který je napsaný v Jave a běží jako vlastní webový server, který používá <a href="http://ant.apache.org/">Ant</a> a může volat víceméně přes něj cokoliv si zamanete. V phpUnderControl je integrována podpora pro PHPUnit (<a href="http://www.phpunit.de/pocket_guide/3.2/en/code-coverage-analysis.html">Code Coverage</a>, Project Mess Detection and Software Metrics), PHPDocumentor a PHP_CodeSniffer. Pro zobrazení dat je připravena sada XSL stylesheetů pro Cruisecontrol, tak jsou vidět <a href="http://www.phpundercontrol.org/images/0.3.5-metrics.png">pěkné grafy</a>.</p>  <p>Jedinou nevýhodu vidím v tom, že je to odělený systém běžící na Javě, ale to může být pro někoho klidně i výhoda.</p>  <p>Další CI server jsem vyzkoušel Xinc, ten má výhodu, že je napsaný v PHP a stačí mu Apache a skript který slouží jako CRON pro buildy. Místo Antu je použitý Phing a má ještě navíc podporu pro XDebug, který také umí Code Coverage Analysis a Profiling.</p>  <p>Xinc má vzhled založený na knihovně <a href="http://ezcomponents.org/">eZ Components</a>, používá <a href="http://ezcomponents.org/docs/tutorials/Base">Base</a> a <a href="http://ezcomponents.org/docs/tutorials/Graph">Graph</a>. Chybí mi v defaultních templates lepší podpora pro zobrazování výsledků z PHPDocumentor, PHP_CodeSniffer jak to má udělené phpUnderControl. Jak je vidět např. v <a href="http://www.xinc.eu/#xinc">demu</a>, tak pokud se podívate na jednotlivý projekt je to jen log a odkazy, není to příliš elegantní a nejsou to jednotlivé html stránky na které lze odkazovat. Vývoj ale intenzivně pokračuje a uvidíme jakých vylepšení se dočkáme ve verzi 2.1. Výhody Xincu také vidím ve psaní pluginů přímo v php.</p>  <p>Zajímalo by mě jak to funguje jinde a případně, které řešení používate a proč.</p></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/09/zend-framework-16-a-ajax-pomoc-jquery/">Zend Framework 1.6 a ajax pomocí jQuery</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-09-23T00:00:00+01:00" pubdate data-updated="true">23. 09. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Jak jsem psal v <a href="http://blog.prskavec.net/?p=163">Zend Framework 1.6 a moje zkušenosti s Dojo TabContainer</a>, nakonec jsem použil jQuery. Ve formuláři se dají měnit některá data, které jsou závislá na dalších, které automaticky předvyplňuji a na to jsem použil při změnách ajax. Docela mě potěšilo jak jednoduše a pěkně se to dá udělat pomocí <a href="http://jquery.com/">jQuery</a>.</p>
-
-<pre name='code' class="php">&lt;script&gt;
-$(document).ready(function(){
-     $("#example &gt; ul").tabs();
-     $('#page1-deadline_vyzva').datepicker();
-     $('#page3-datum_zahajeni').datepicker();
-     $('#page3-datum_ukonceni').datepicker();
-
-      $('#page1-editor').change(function(){
-             $.ajax({
-                        type: "POST",
-                        url: "&lt;?php echo $this-&gt;baseUrl();?&gt;/user/info/idcvut/" + $(this).val(),
-                        success: function(xml){
-                    if ($.browser.msie)
-                    {
-                        xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
-                        xmlDoc.async="false";
-                        xmlDoc.loadXML(xml);
-                        $("#page1-navrhovatel_jmeno")[0].value = xmlDoc.getElementsByTagName("name")[0].childNodes[0].nodeValue;
-                        $("#page1-navrhovatel_email")[0].value = xmlDoc.getElementsByTagName("email")[0].childNodes[0].nodeValue;
-                        $("#page1-navrhovatel_telefon")[0].value = xmlDoc.getElementsByTagName("phone")[0].childNodes[0].nodeValue;
-                        $("#page1-navrhovatel_pracoviste")[0].value = xmlDoc.getElementsByTagName("dept")[0].childNodes[0].nodeValue;
-                    }
-                    else
-                    {
-                    $("#page1-navrhovatel_jmeno")[0].value = $("name", xml).text();
-                    $("#page1-navrhovatel_email")[0].value = $("email", xml).text();
-                    $("#page1-navrhovatel_telefon")[0].value = $("phone", xml).text();
-                    $("#page1-navrhovatel_pracoviste")[0].value = $("dept", xml).text();
-                    }
-                        }
-             }); // end ajax
-      }); // end change function
-}); // end document ready
-&lt;/script&gt;
-...</pre>
-
-
-<p>Původní skript jsem rošířil o několik dalších funkcí, přidal jsem datapickery pro datumy a potom ten ajax. Nejprve pomocí vybere prvek a přidáme mu attribut onChange.</p>
-
-<pre name='code' class="javascript">$('#page1-editor').change(function(){ … });</pre>
-
-
-<p>Do této funkce jsem vložil volání ajaxu. Je to jednoduché a dobře pochopitelné. Type je typ GET nebo POST, v url je URL Controlleru, který vrací XML s potřebnými daty. Pomocí $(this.val) si šáhnu na vyplněnou hodnotu v políčku na které jsem aplikoval onChange(). Success vrací data, které si jednoduše parsuji přes $(&ldquo;name&rdquo;, xml).text(), kde name je &lt;name&gt;&lt;/name&gt; z xml dat, které posílá php.</p>
-
-<p>Je to jednoduché a moc pěkný kód, který najde uplatnění. Dobré je, že není potřeba do formuláře přidávat do atributů funkci onchange, jak jsem to musel dělat, když jsem nepoužívat jQuery.</p>
-
-<p>Ještě přidám část kódu z controlleru:</p>
-
-<pre name='code' class="php">…
-function infoAction()
-{
-$this-&gt;_helper-&gt;layout-&gt;disableLayout();
-$this-&gt;_helper-&gt;getHelper('ViewRenderer')-&gt;setNoRender();
-$idcvut = (int)$this-&gt;_request-&gt;getParam('idcvut');
-//echo $idcvut;
-$ssu = new Usermap($this-&gt;config);
-// make xml
-//Zend_Debug($i);
-$i=$ssu-&gt;getUsermapInfoByID($idcvut);
-$xml = '&lt;user&gt;&lt;name&gt;'.$i[‘cn’].'&lt;/name&gt;&lt;email&gt;'.$i['email'].'&lt;/email&gt;&lt;phone&gt;'.$i[‘phone’].'&lt;/phone&gt;&lt;dept&gt;'.$i[‘department’].'&lt;/dept&gt;&lt;/user&gt;';
-echo $xml;
-}
-…</pre>
-
-
-<p>Snad to někomu pomůže, moc příkladů na Zend a jQuery ajax jsem nikde nenašel.</p>
 </div>
   
   
@@ -757,6 +725,10 @@ echo $xml;
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2016/10/prednaska-o-sre-na-devops-meetupu/">Přednáška o SRE na DevOPS meetupu</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/07/srecon-16-europe/">SREcon&#8217;16 Europe</a>
       </li>
     
@@ -790,10 +762,6 @@ echo $xml;
     
       <li class="post">
         <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
       </li>
     
   </ul>

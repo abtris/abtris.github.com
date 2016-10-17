@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Linux Mint &ldquo;Helena&rdquo; je konečně venku. Tato distribuce je založená na Ubuntu 9.10, ale má několik vlastností proč jí na desktopu rád &hellip;">
+  <meta name="description" content="Před časem se objevil nový reportovací nástroj, který vezme logy z PHPUnit, PHP_Codesniffer a umí je pěkně zobrazit. Instalace je z PEAR (http://pear &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,106 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2009/12/php-codebrowser/">PHP CodeBrowser a Hudson</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-11T00:00:00+01:00" pubdate data-updated="true">11. 12. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Před časem se <a href="http://blog.thinkphp.de/archives/464-PHP_CodeBrowser-Release-version-0.1.0.html">objevil</a> nový reportovací nástroj, který vezme logy z <a href="http://www.phpunit.de/">PHPUnit</a>, <a href="http://pear.php.net/package/PHP_CodeSniffer/">PHP_Codesniffer</a> a umí je pěkně zobrazit.</p>
+
+
+<p><strong>Instalace</strong> je z PEAR (<a href="http://pear.phpunit.de/get/">http://pear.phpunit.de/get/</a>)<br />
+<code><br />
+pear config-set preferred_state alpha<br />
+pear channel-discover pear.phpunit.de<br />
+pear install --alldeps phpunit/PHP_CodeBrowser<br />
+</code></p>
+
+
+<p>nebo z SVN</p>
+
+
+<p><code>svn co svn://phpunit.de/phpunit/phpcb/trunk PHP_CodeBrowser</code></p>
+
+
+<p><strong>Integrace</strong><br />
+Tento tool jde integrovat do CIE</p>
+
+
+<ul>
+<li>phpundercontrol (<a href="http://phpundercontrol.org/download.html">dostupné od verze 0.5</a>)</li>
+<li>atlassion bamboo (<a href="http://twitter.com/s_bergmann/status/6499094572">zatím asi není oficiálně dostupně ale, jde to</a>)</li>
+<li>hudson</li>
+</ul>
+
+
+<p>Postup integrace do Hudsonu si ukážeme</p>
+
+
+<ol>
+<li>Potřebujete do Hudsonu doinstalovat plugin <a href="http%3A%2F%2Fwiki.hudson-ci.org%2Fdisplay%2FHUDSON%2FHTML%2BPublisher%2BPlugin">HTML Publisher Plugin</a></li>
+<li>Nastavíte build script by používal phpcb<br />
+<code><br />
+<br />
+<br />
+&lt;arg line=&quot;--log reports/logs/<br />
+--source source/<br />
+--output reports/phpcb/" /&gt;<br />
+<br />
+</code></li>
+<li>Nastavíte HTML Publisher plugin, aby četl html, které vyrobí phpcb<a href="http://blog.prskavec.net/wp-content/uploads/2009/12/hudson_phpcb.png"><img class="aligncenter size-medium wp-image-781" src="http://blog.prskavec.net/wp-content/uploads/2009/12/hudson_phpcb-300x37.png" alt="hudson_phpcb" width="300" height="37" /></a>
+<ul>
+<li><em>HTML Directory to archive</em><br />
+Cesta k reportům podle toho jak jste si to nastavili v build skriptu, u mne <code><strong>reports/phpcb/</strong></code></li>
+<li><em>Index page[s]</em><br />
+Defaultně je <strong>index.html</strong>, ponechejte.</li>
+<li><em>Report title</em><br />
+Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
+</li>
+</ol>
+
+
+<p>Výsledek bude vypadat nějak takto:</p>
+
+
+<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/12/hudson-phpcb-3.png"><img class="aligncenter size-medium wp-image-783" src="http://blog.prskavec.net/wp-content/uploads/2009/12/hudson-phpcb-3-300x117.png" alt="hudson-phpcb-3" width="300" height="117" /></a></p>
+
+
+<p>PHP_CodeBrowser sám o sobě nepřidává žádnou funkcionality, ale umožňuje získané výsledky pěkně a přehledně zobrazit. To se hodí a pokud jste příznivci použítí jednoduchého Hudsonu jako já, doufám že vám to bude k užitku.</p>
+
+
+<p>PHP_CodeBrowser můžete samozřejmě použít i bez jakékoliv integrace, protože je to běžné HTML. Pokud používáte verzi z SVN jako já pozor na to, že verze pokud jí pouštíte symlinkem nefunguje úplně správně musíte být v adresáři kde máte PHP_CodeBrowser a je lepší zadat plné cesty k logům phpunit i zdrojovým kódům.</p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2009/11/linux-mint-8-helena/">Linux Mint 8 Helena</a></h1>
     
     
@@ -81,7 +181,7 @@
   
 
 
-<time datetime="2009-11-30T00:00:00+00:00" pubdate data-updated="true">30. 11. 2009</time>
+<time datetime="2009-11-30T00:00:00+01:00" pubdate data-updated="true">30. 11. 2009</time>
         
       </p>
     
@@ -130,7 +230,7 @@
   
 
 
-<time datetime="2009-11-05T00:00:00+00:00" pubdate data-updated="true">05. 11. 2009</time>
+<time datetime="2009-11-05T00:00:00+01:00" pubdate data-updated="true">05. 11. 2009</time>
         
       </p>
     
@@ -200,7 +300,7 @@
   
 
 
-<time datetime="2009-11-03T00:00:00+00:00" pubdate data-updated="true">03. 11. 2009</time>
+<time datetime="2009-11-03T00:00:00+01:00" pubdate data-updated="true">03. 11. 2009</time>
         
       </p>
     
@@ -263,7 +363,7 @@
   
 
 
-<time datetime="2009-10-23T00:00:00+01:00" pubdate data-updated="true">23. 10. 2009</time>
+<time datetime="2009-10-23T00:00:00+02:00" pubdate data-updated="true">23. 10. 2009</time>
         
       </p>
     
@@ -370,7 +470,7 @@
   
 
 
-<time datetime="2009-10-05T00:00:00+01:00" pubdate data-updated="true">05. 10. 2009</time>
+<time datetime="2009-10-05T00:00:00+02:00" pubdate data-updated="true">05. 10. 2009</time>
         
       </p>
     
@@ -439,7 +539,7 @@
   
 
 
-<time datetime="2009-09-24T00:00:00+01:00" pubdate data-updated="true">24. 09. 2009</time>
+<time datetime="2009-09-24T00:00:00+02:00" pubdate data-updated="true">24. 09. 2009</time>
         
       </p>
     
@@ -489,7 +589,7 @@
   
 
 
-<time datetime="2009-09-14T00:00:00+01:00" pubdate data-updated="true">14. 09. 2009</time>
+<time datetime="2009-09-14T00:00:00+02:00" pubdate data-updated="true">14. 09. 2009</time>
         
       </p>
     
@@ -613,7 +713,7 @@ Pokud si dáte v Internet Exploreru <a href="//urlmon.dll/ietldlist.xml">res://u
   
 
 
-<time datetime="2009-09-12T00:00:00+01:00" pubdate data-updated="true">12. 09. 2009</time>
+<time datetime="2009-09-12T00:00:00+02:00" pubdate data-updated="true">12. 09. 2009</time>
         
       </p>
     
@@ -708,7 +808,7 @@ drwxr-xr-x 2 abtris 4.0K 2009-09-12 21:28 languages
   
 
 
-<time datetime="2009-09-01T00:00:00+01:00" pubdate data-updated="true">01. 09. 2009</time>
+<time datetime="2009-09-01T00:00:00+02:00" pubdate data-updated="true">01. 09. 2009</time>
         
       </p>
     
@@ -908,92 +1008,6 @@ class AlbumsController extends Zend_Rest_Controller
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/08/jak-na-vypadek-sluzby-twitter-pri-pouziti-zend-service-twitter/">Jak na výpadek služby Twitter při použití Zend_Service_Twitter</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-08-06T00:00:00+01:00" pubdate data-updated="true">06. 08. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Během dneška (6.8.2009) byl výpadek služby Twitter a koukal jsem, že mi to položilo <a href="http://php-frameworks.net">php-frameworks.net</a> na kolena.</p>
-
-<p>Jak jsem se zjišťovat co s tím a proč mi to hlásí:</p>
-
-<pre>
-Zend_Http_Client_Adapter_Exception: Unable to Connect to tcp://twitter.com:80. Error #110: Connection timed out in /srv/lib/php/Zend/Http/Client/Adapter/Socket.php on line 213
-</pre>
-
-
-<p>Tento kód nějak selhal a výpadek nastal dříve, asi to vypadá na nějakou chybu v Zendu, protože se Zend_Service_Twitter_Exception nevrátí i při výpadku spojení jak jsem očekával.</p>
-
-<pre>
-try {
-    $twitter = new Zend_Service_Twitter($config-&gt;twitter-&gt;username, $config-&gt;twitter-&gt;password);
-} catch (Zend_Service_Twitter_Exception $e) {
-    $this-&gt;logger-&gt;err("Exception caught importing twitter: {$e-&gt;getMessage()}\n");
-}
-</pre>
-
-
-<p>Řešení je otestovat vlastní připojení předem ke kterému jsem se nakonec uchýlil.</p>
-
-<pre>
-        // Testing connect to twitter
-        try {
-        $client = new Zend_Http_Client('http://twitter.com', array(
-            'maxredirects' =&gt; 0,
-            'timeout'      =&gt; 5));
-        $response = $client-&gt;request();
-        } catch (Zend_Http_Client_Adapter_Exception $e) {
-            $this-&gt;logger-&gt;err("Exception caught connect twitter: {$e-&gt;getMessage()}\n");
-        }
-
-        // if have $response try connect twitter
-        if (isset($response)) {
-            try {
-                $twitter = new Zend_Service_Twitter($config-&gt;twitter-&gt;username, $config-&gt;twitter-&gt;password);
-            } catch (Zend_Service_Twitter_Exception $e) {
-                $this-&gt;logger-&gt;err("<a href="http://www.unlocalize.com/">Exception</a> caught importing twitter: {$e-&gt;getMessage()}\n");
-            }
-            if (isset($twitter)) {
-            $response = $twitter-&gt;status-&gt;friendsTimeline(array("count" =&gt; $config-&gt;twitter-&gt;count));
-            $this-&gt;view-&gt;twitter = $response;
-            } else {
-            $this-&gt;view-&gt;twitter = null;
-            }
-        }
-</pre>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/8/">&larr; Older</a>
@@ -1025,6 +1039,10 @@ try {
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/10/prednaska-o-sre-na-devops-meetupu/">Přednáška o SRE na DevOPS meetupu</a>
+      </li>
     
       <li class="post">
         <a href="/2016/07/srecon-16-europe/">SREcon&#8217;16 Europe</a>
@@ -1060,10 +1078,6 @@ try {
     
       <li class="post">
         <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: angularjs | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/angularjs/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-07-14T14:00:08+01:00</updated>
+  <updated>2016-10-17T08:28:07+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Firebase a AngularJS]]></title>
     <link href="http://blog.prskavec.net/2013/08/firebase-a-angularjs/"/>
-    <updated>2013-08-29T11:31:00+01:00</updated>
+    <updated>2013-08-29T11:31:00+02:00</updated>
     <id>http://blog.prskavec.net/2013/08/firebase-a-angularjs</id>
     <content type="html"><![CDATA[<p>Dnešní většina aplikací v javascriptu má architekturu klient server. Pokud nechcete psát nějaký backend pro vaši aplikaci, můžete se tomu vyhnout pokud použijete nějaký druh úložiště (databáze), která vám k tomu přidá i funkce, které má nějaký backend napsaný např. v nodejs nebo php.</p>
 
@@ -117,7 +117,7 @@ $scope.logout = function() {
   <entry>
     <title type="html"><![CDATA[Šablony v AngularJS]]></title>
     <link href="http://blog.prskavec.net/2012/08/angualarjs-templates/"/>
-    <updated>2012-08-14T21:40:00+01:00</updated>
+    <updated>2012-08-14T21:40:00+02:00</updated>
     <id>http://blog.prskavec.net/2012/08/angualarjs-templates</id>
     <content type="html"><![CDATA[<p>Pokud začínáte s <a href="http://www.angularjs.org">AngularJS</a> je dobré pro aplikace použít <a href="https://github.com/angular/angular-seed">angular-seed</a>.</p>
 
@@ -171,16 +171,16 @@ $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller
 
   grunt.initConfig({
     inline: {
-      'index.html': ['tpl/*.html']
+      &#39;index.html&#39;: [&#39;tpl/*.html&#39;]
     }
   });
 
-  grunt.registerMultiTask('inline', 'Inline AngularJS templates into single file.', function() {
-    var SCRIPT = '&lt;script type=&quot;text/ng-template&quot; id=&quot;&lt;%= id %&gt;&quot;&gt;&lt;%= content %&gt;&lt;/script&gt;\n';
+  grunt.registerMultiTask(&#39;inline&#39;, &#39;Inline AngularJS templates into single file.&#39;, function() {
+    var SCRIPT = &#39;&lt;script type=&quot;text/ng-template&quot; id=&quot;&lt;%= id %&gt;&quot;&gt;&lt;%= content %&gt;&lt;/script&gt;\n&#39;;
 
-    var html = '$1\n\n';
+    var html = &#39;$1\n\n&#39;;
     grunt.file.expandFiles(this.data).forEach(function(file) {
-      grunt.log.writeln('Inlining ' + file);
+      grunt.log.writeln(&#39;Inlining &#39; + file);
       html += grunt.template.process(SCRIPT, {id: file, content: grunt.file.read(file)});
     });
 

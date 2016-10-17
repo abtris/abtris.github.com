@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Pokud jste instalovali Zend Server CE ve verzi 4.0.4 a předtím jste neměli provedený upgrade PEARu z 1.8.0 na 1.8.1 možná se setkáte s chybovou &hellip;">
+  <meta name="description" content="Během dneška (6.8.2009) byl výpadek služby Twitter a koukal jsem, že mi to položilo php-frameworks.net na kolena. Jak jsem se zjišťovat co s tím a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,92 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2009/08/jak-na-vypadek-sluzby-twitter-pri-pouziti-zend-service-twitter/">Jak na výpadek služby Twitter při použití Zend_Service_Twitter</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-06T00:00:00+02:00" pubdate data-updated="true">06. 08. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Během dneška (6.8.2009) byl výpadek služby Twitter a koukal jsem, že mi to položilo <a href="http://php-frameworks.net">php-frameworks.net</a> na kolena.</p>
+
+<p>Jak jsem se zjišťovat co s tím a proč mi to hlásí:</p>
+
+<pre>
+Zend_Http_Client_Adapter_Exception: Unable to Connect to tcp://twitter.com:80. Error #110: Connection timed out in /srv/lib/php/Zend/Http/Client/Adapter/Socket.php on line 213
+</pre>
+
+
+<p>Tento kód nějak selhal a výpadek nastal dříve, asi to vypadá na nějakou chybu v Zendu, protože se Zend_Service_Twitter_Exception nevrátí i při výpadku spojení jak jsem očekával.</p>
+
+<pre>
+try {
+    $twitter = new Zend_Service_Twitter($config-&gt;twitter-&gt;username, $config-&gt;twitter-&gt;password);
+} catch (Zend_Service_Twitter_Exception $e) {
+    $this-&gt;logger-&gt;err("Exception caught importing twitter: {$e-&gt;getMessage()}\n");
+}
+</pre>
+
+
+<p>Řešení je otestovat vlastní připojení předem ke kterému jsem se nakonec uchýlil.</p>
+
+<pre>
+        // Testing connect to twitter
+        try {
+        $client = new Zend_Http_Client('http://twitter.com', array(
+            'maxredirects' =&gt; 0,
+            'timeout'      =&gt; 5));
+        $response = $client-&gt;request();
+        } catch (Zend_Http_Client_Adapter_Exception $e) {
+            $this-&gt;logger-&gt;err("Exception caught connect twitter: {$e-&gt;getMessage()}\n");
+        }
+
+        // if have $response try connect twitter
+        if (isset($response)) {
+            try {
+                $twitter = new Zend_Service_Twitter($config-&gt;twitter-&gt;username, $config-&gt;twitter-&gt;password);
+            } catch (Zend_Service_Twitter_Exception $e) {
+                $this-&gt;logger-&gt;err("<a href="http://www.unlocalize.com/">Exception</a> caught importing twitter: {$e-&gt;getMessage()}\n");
+            }
+            if (isset($twitter)) {
+            $response = $twitter-&gt;status-&gt;friendsTimeline(array("count" =&gt; $config-&gt;twitter-&gt;count));
+            $this-&gt;view-&gt;twitter = $response;
+            } else {
+            $this-&gt;view-&gt;twitter = null;
+            }
+        }
+</pre>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2009/07/pear-a-zend-server-ce-4-0-4/">PEAR a Zend Server CE 4.0.4</a></h1>
     
     
@@ -81,7 +167,7 @@
   
 
 
-<time datetime="2009-07-20T00:00:00+01:00" pubdate data-updated="true">20. 07. 2009</time>
+<time datetime="2009-07-20T00:00:00+02:00" pubdate data-updated="true">20. 07. 2009</time>
         
       </p>
     
@@ -143,7 +229,7 @@ install failed
   
 
 
-<time datetime="2009-07-15T00:00:00+01:00" pubdate data-updated="true">15. 07. 2009</time>
+<time datetime="2009-07-15T00:00:00+02:00" pubdate data-updated="true">15. 07. 2009</time>
         
       </p>
     
@@ -180,7 +266,7 @@ Nastavit mirror a pustit synchronizaci to najdete i v manuálu, ale přidal jsem
   
 
 
-<time datetime="2009-07-01T00:00:00+01:00" pubdate data-updated="true">01. 07. 2009</time>
+<time datetime="2009-07-01T00:00:00+02:00" pubdate data-updated="true">01. 07. 2009</time>
         
       </p>
     
@@ -387,7 +473,7 @@ abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
   
 
 
-<time datetime="2009-07-01T00:00:00+01:00" pubdate data-updated="true">01. 07. 2009</time>
+<time datetime="2009-07-01T00:00:00+02:00" pubdate data-updated="true">01. 07. 2009</time>
         
       </p>
     
@@ -482,7 +568,7 @@ abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
   
 
 
-<time datetime="2009-06-23T00:00:00+01:00" pubdate data-updated="true">23. 06. 2009</time>
+<time datetime="2009-06-23T00:00:00+02:00" pubdate data-updated="true">23. 06. 2009</time>
         
       </p>
     
@@ -555,7 +641,7 @@ abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
   
 
 
-<time datetime="2009-06-01T00:00:00+01:00" pubdate data-updated="true">01. 06. 2009</time>
+<time datetime="2009-06-01T00:00:00+02:00" pubdate data-updated="true">01. 06. 2009</time>
         
       </p>
     
@@ -617,7 +703,7 @@ abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
   
 
 
-<time datetime="2009-05-29T00:00:00+01:00" pubdate data-updated="true">29. 05. 2009</time>
+<time datetime="2009-05-29T00:00:00+02:00" pubdate data-updated="true">29. 05. 2009</time>
         
       </p>
     
@@ -750,7 +836,7 @@ abtris@ubuntu#bytekit --rule=DisallowedOpcodes:EVAL ZendFramework/
   
 
 
-<time datetime="2009-05-18T00:00:00+01:00" pubdate data-updated="true">18. 05. 2009</time>
+<time datetime="2009-05-18T00:00:00+02:00" pubdate data-updated="true">18. 05. 2009</time>
         
       </p>
     
@@ -826,7 +912,7 @@ make</pre>
   
 
 
-<time datetime="2009-05-16T00:00:00+01:00" pubdate data-updated="true">16. 05. 2009</time>
+<time datetime="2009-05-16T00:00:00+02:00" pubdate data-updated="true">16. 05. 2009</time>
         
       </p>
     
@@ -842,121 +928,6 @@ make</pre>
 
 
 <p>[gallery link=&ldquo;file&rdquo;]</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/05/zend-server-ce-a-vlastni-logy-v-konzoli/">Zend Server CE a vlastni logy v konzoli</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-05T00:00:00+01:00" pubdate data-updated="true">05. 05. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Zend Server 4.0.2</h2>
-
-
-<p>
-Zend aktualizoval <a href="http://static.zend.com/topics/Zend-Server-Release-Notes-V4.0.2.txt">Zend Server na verzi 4.0.2</a>, přidána hlavně podpora pro <a href="http://devzone.zend.com/article/4524-Zend-Framework-1.8.0-Released">ZF 1.8</a> a další drobné změny. Jen mi z repozitory pro Ubuntu nefunguje Zend_Tool, doufám, že tuto drobnost brzo opraví zatím ji stejně s Zend Studiem moc nevyužiji.
-</p>
-
-
-
-
-<p><em>Update 6.5.2009</em> po <a href="http://forums.zend.com/viewtopic.php?f=44&amp;t=615">mém upozornění</a> dnes Zend provedl update ZF 1.8 v repozitory pro Zend Server CE a už to funguje, soubor najdete v <code>/usr/local/zend/share/ZendFramework/bin/zf.sh</code>. Doporučuji si udělat symlink nebo přidat adresář do $PATH.</p>
-
-
-
-
-<h2>Zend Debbuger a PHPUnit</h2>
-
-
-<p></p>
-
-<p>
-Jen mi trochu vadí, že kvůli code coverage a dalším možnostem co má PHPUnit s Xdebugem jsem nucen vypnout Zend Debugger v Zend Serveru a dát si tam Xdebug. Zend Debugger má sice tyto možnosti k dispozici přes Zend Studio, ale pokud to voláte z Antu tak jsem nepřišel na to jak rozchodit PHPUnit a Zend Debugger dohromady.
-</p>
-
-
-<h2>Logy</h2>
-
-
-<p>
-Pokud chcete na konzoli Zend Serveru vidět další logy. Konfigurační soubor je <code>/usr/local/zend/gui/application/data/logfiles.xml</code>. Logy je dobré směrovat do <code>/usr/local/zend/var/log/</code>. Pomocí symlinků si přidejte do tohoto adresáře logy, které jsou uloženy v <code>/var/log/apache2/</code>.
-</p>
-
-
-<pre>
-
-
-    
-        PHP Error Log
-        
-                error_log
-    
-    
-        Server Error Log
-        /usr/local/zend/var/log/error.log
-                
-    
-    
-        Server Access Log
-        /usr/local/zend/var/log/access.log
-                
-    
-        
-                Server Workspace Access Log
-                /usr/local/zend/var/log/access-workspace.log
-                
-        
-        
-                Server Workspace Error Log
-                /usr/local/zend/var/log/error-workspace.log
-                
-        
-
-
-</pre>
-
-
-<p>
-Pokud budete mít problémy s právy nazapomeňte přidat uživateli <code>zend</code> práva na čtení potřebných logů a práva r+x na adresář <code>/var/log/apache2</code>, kde je máte uložené.
-</p>
-
-
-<p>
-Potom by jste v konzoli měli vidět toto.
-</p>
-
-
-<p>
-<a href="http://blog.prskavec.net/wp-content/uploads/2009/05/zend-server_1241527431260.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/05/zend-server_1241527431260-300x168.png" alt="zend-server_1241527431260" class="aligncenter size-medium wp-image-501" /></a>
-</p>
-
 </div>
   
   
@@ -997,6 +968,10 @@ Potom by jste v konzoli měli vidět toto.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2016/10/prednaska-o-sre-na-devops-meetupu/">Přednáška o SRE na DevOPS meetupu</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/07/srecon-16-europe/">SREcon&#8217;16 Europe</a>
       </li>
     
@@ -1030,10 +1005,6 @@ Potom by jste v konzoli měli vidět toto.
     
       <li class="post">
         <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">Git a pre-commit hook pro kontrolu syntaxe</a>
       </li>
     
   </ul>

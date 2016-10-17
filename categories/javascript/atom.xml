@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: javascript | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/javascript/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-07-14T14:00:08+01:00</updated>
+  <updated>2016-10-17T08:28:07+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Firebase a AngularJS]]></title>
     <link href="http://blog.prskavec.net/2013/08/firebase-a-angularjs/"/>
-    <updated>2013-08-29T11:31:00+01:00</updated>
+    <updated>2013-08-29T11:31:00+02:00</updated>
     <id>http://blog.prskavec.net/2013/08/firebase-a-angularjs</id>
     <content type="html"><![CDATA[<p>Dnešní většina aplikací v javascriptu má architekturu klient server. Pokud nechcete psát nějaký backend pro vaši aplikaci, můžete se tomu vyhnout pokud použijete nějaký druh úložiště (databáze), která vám k tomu přidá i funkce, které má nějaký backend napsaný např. v nodejs nebo php.</p>
 
@@ -117,7 +117,7 @@ $scope.logout = function() {
   <entry>
     <title type="html"><![CDATA[Jaký bude AngularJS 1.2?]]></title>
     <link href="http://blog.prskavec.net/2013/06/angularjs-1-dot-2/"/>
-    <updated>2013-06-13T22:08:00+01:00</updated>
+    <updated>2013-06-13T22:08:00+02:00</updated>
     <id>http://blog.prskavec.net/2013/06/angularjs-1-dot-2</id>
     <content type="html"><![CDATA[<p>Pokud sledujete dění kolem frameworku <a href="http://angularjs.org">AngularJS</a> tak jste jistě zaznamenali, že se pracuje na nové verzi 1.2, která je teď blízko k dokončení. V masteru mají dnes verzi pojmenovanou jako verzi 1.1.8 a brzy se snad dočkáme finální verze. Zkusím zde popsat nejdůležitější věci z <a href="https://docs.google.com/presentation/d/1WHCcp3G3HxoE7b_ut_ERKJF4zQK_P4qFlESjE2E9AUQ/preview?sle=true#slide=id.geaf70e8e_16">prezentace</a> na meetupu 11.6. co prezentovali Igor Minár a Brad Green.</p>
 
@@ -190,7 +190,7 @@ Konečně lze napsat:</p>
   <entry>
     <title type="html"><![CDATA[NodeJS Hosting]]></title>
     <link href="http://blog.prskavec.net/2013/03/nodejs-hosting/"/>
-    <updated>2013-03-31T21:20:00+01:00</updated>
+    <updated>2013-03-31T21:20:00+02:00</updated>
     <id>http://blog.prskavec.net/2013/03/nodejs-hosting</id>
     <content type="html"><![CDATA[<p>Mám několik webů, které jsou na NodeJS. Spousta lidí zná moje weby o javascriptu <a href="http://praguejs.cz">PragueJS</a>, které běží na NodeJS a je napsaný <a href="http://expressjs.com/">ExpressJS</a>. Web je napsaný v coffee-scriptu. Nic extra, ale řešil jsem kde web hostovat.</p>
 
