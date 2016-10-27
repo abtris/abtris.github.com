@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Jak jsem psal v Zend Framework 1.6 a moje zkušenosti s Dojo TabContainer, nakonec jsem použil jQuery. Ve formuláři se dají měnit některá data, které &hellip;">
+  <meta name="description" content="Nedávno jsem se snažil trochu vylepšit vývoj o některé aspekty, které mají spíše formálnější charakter. Celý vývojový proces jsem načrtl na &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,45 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/11/phpundercontrol-vs-xinc/">phpUnderControl vs Xinc</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-04T00:00:00+01:00" pubdate data-updated="true">04. 11. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Nedávno jsem se snažil trochu vylepšit vývoj o některé aspekty, které mají spíše formálnější charakter. Celý vývojový proces jsem načrtl na následujícím obrázku.</p>
+
+
+<p>  <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/11/development.png"><font color="#ffffff"></font><img style="border-right: 0px;border-top: 0px;float: none;margin-left: auto;border-left: 0px;margin-right: auto;border-bottom: 0px" height="493" alt="Development" src="http://blog.prskavec.net/wp-content/uploads/2008/11/development-thumb.png" width="635" border="0" /></a> Vývojář PHP má výhodu libovolného IDE (preferuji Eclipse PDT). Pro zdrojové kódy používám jako SCM Subversion. Nedávno jsem přidal pre-commit hook skript na kontrolu syntaxe. Používám ho hlavně pro kontrolu projektů v Zend Frameworku. PHP_CodeSniffer podporuje <a href="http://checkstyle.sourceforge.net/">Checkstyle</a> tak není problém výstup zaintegrovat i do jiných programů. Jako post-commit skript používám generován XML logů, které používá stránka s náhledy na projekty na kterých pracuji.</p>  <p>Protože jsem si oblíbil <a href="http://blog.prskavec.net/?p=142">Phing</a> pro automatizaci tvroby buildu hledal jsem něco co by to celé zastřešilo. Řešení je <a href="http://en.wikipedia.org/wiki/Continuous_integration">Continuous integration</a> a pro php jsou použitelné jen dva projekty a to <a href="http://www.phpundercontrol.org">phpUnderControl</a> a <a href="http://code.google.com/p/xinc/">Xinc</a>. Oba umí stejné nebo podobné věci a přece jenom se trochu liší jak vznikli a jak se provozují.</p>  <p>Jako první jsem zkoušel phpUnderControl. Ten je založený jako plugin do <a href="http://cruisecontrol.sourceforge.net/">Cruisecontrolu</a>, který je napsaný v Jave a běží jako vlastní webový server, který používá <a href="http://ant.apache.org/">Ant</a> a může volat víceméně přes něj cokoliv si zamanete. V phpUnderControl je integrována podpora pro PHPUnit (<a href="http://www.phpunit.de/pocket_guide/3.2/en/code-coverage-analysis.html">Code Coverage</a>, Project Mess Detection and Software Metrics), PHPDocumentor a PHP_CodeSniffer. Pro zobrazení dat je připravena sada XSL stylesheetů pro Cruisecontrol, tak jsou vidět <a href="http://www.phpundercontrol.org/images/0.3.5-metrics.png">pěkné grafy</a>.</p>  <p>Jedinou nevýhodu vidím v tom, že je to odělený systém běžící na Javě, ale to může být pro někoho klidně i výhoda.</p>  <p>Další CI server jsem vyzkoušel Xinc, ten má výhodu, že je napsaný v PHP a stačí mu Apache a skript který slouží jako CRON pro buildy. Místo Antu je použitý Phing a má ještě navíc podporu pro XDebug, který také umí Code Coverage Analysis a Profiling.</p>  <p>Xinc má vzhled založený na knihovně <a href="http://ezcomponents.org/">eZ Components</a>, používá <a href="http://ezcomponents.org/docs/tutorials/Base">Base</a> a <a href="http://ezcomponents.org/docs/tutorials/Graph">Graph</a>. Chybí mi v defaultních templates lepší podpora pro zobrazování výsledků z PHPDocumentor, PHP_CodeSniffer jak to má udělené phpUnderControl. Jak je vidět např. v <a href="http://www.xinc.eu/#xinc">demu</a>, tak pokud se podívate na jednotlivý projekt je to jen log a odkazy, není to příliš elegantní a nejsou to jednotlivé html stránky na které lze odkazovat. Vývoj ale intenzivně pokračuje a uvidíme jakých vylepšení se dočkáme ve verzi 2.1. Výhody Xincu také vidím ve psaní pluginů přímo v php.</p>  <p>Zajímalo by mě jak to funguje jinde a případně, které řešení používate a proč.</p></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -926,57 +965,6 @@ FOR /F  %%M IN (dir1.txt) DO (
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/06/opensuse-11-a-jak-to-nakonec-dopadlo/">OpenSuSE 11 a jak to nakonec dopadlo</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-06-19T00:00:00+02:00" pubdate data-updated="true">19. 06. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Dnes vyšlo čerstvé <a href="http://software.opensuse.org/">OpenSUSE 11</a> a já jsem myslel, že by to mohlo být to pravé pro můj Sony VIAO VGN-TZ31XN. Ale bohužel jsem opět zkrachoval na tom, že moje rozlišení 1366x768 nějak nebrali v úvahu. Ať jsem to nastavil nebo ne. Detekce to nepozná a ruční nastavení nefungovalo. Nemyslím, že pokud nefunguje taková triviální věc jako nastavení rozlišení tak by to obyčejný člověk používal.  Tak jsem se vrátil k <a href="http://www.ubuntu.cz">Ubuntu 8.04</a>, kde není sebemenší problém a všechno funguje jak má.</p>
-
-<h3>Problémy s Lighting 0.8 na Ubuntu</h3>
-
-
-<p>Jen jsem narazil vždy na problém s instalací Lightingu 0.8 do Thunderbirda. Úplně mi to rozhodilo Thunderbird a nezobrazoval se kalendář kde měl. Tak mě napadlo si pořádně přečíst release notes a co se dočtu:</p>
-
-<p><em>Many modern Linux distributions only package libstdc++6, which is incompatible with Lightning. Therefore please install the package &#8220;libstdc++5&#8221; or &#8220;compat-libstdc++&#8221; on your system before installing Lightning) </em></p>
-
-
-<p> Ano, Ubuntu je také taková moderní distribuce. Tak jsem vypnul dolněk a potom jsem příslušnou knihovnu nainstaloval.</p>
-
-<pre class="brush: plain">sudo apt-get install libstdc++5</pre>
-
-
-<p>Když jsem doplněk pustil, je všechno ok. Třeba to někomu pomůže, já jsem na to přišel čistě náhodou.  Kdyby někdo věděl jak na Sony VAIO rozchodit to OpenSUSE budu rád za radu.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/12/">&larr; Older</a>
@@ -1008,6 +996,10 @@ FOR /F  %%M IN (dir1.txt) DO (
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/">Jenkins 2.0 - novinky a vylepšení</a>
+      </li>
     
       <li class="post">
         <a href="/2016/10/prednaska-o-sre-na-devops-meetupu/">Přednáška o SRE na DevOPS meetupu</a>
@@ -1043,10 +1035,6 @@ FOR /F  %%M IN (dir1.txt) DO (
     
       <li class="post">
         <a href="/2015/02/docker-cluster-management/">Docker cluster management</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
       </li>
     
   </ul>

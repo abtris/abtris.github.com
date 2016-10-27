@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: jenkins | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/jenkins/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-10-21T15:45:52+02:00</updated>
+  <updated>2016-10-27T10:51:54+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -12,6 +12,99 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení]]></title>
+    <link href="http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/"/>
+    <updated>2016-10-26T19:02:00+02:00</updated>
+    <id>http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni</id>
+    <content type="html"><![CDATA[<p>Jenkins je nejznámější řešení na Continues Integration, který existuje už řadu let. Od září je venku konečně verze 2.x (aktuálně 2.19.1 LTS), která obsahuje několik zásadních novinek.</p>
+
+<p>Jenkins používám řadu let a také ho <a href="/skoleni-a-kurzy/">školím ve firmách</a> co chtějí toto řešení nasadit. Před 2 lety jsem si řekl, že není Jenkins moc dobrá cesta. Žádné použitelné novinky se dlouho neobjevovali a vůbec se nezlepšovalo použití pro větší nasazení Jenkinusů ve firmách.</p>
+
+<!-- more -->
+
+
+<p>Já mám na každé CI tento seznam požadavků:</p>
+
+<ul>
+<li>job definitions in repository</li>
+<li>autoscaling on traffic with lowest possible price</li>
+<li>pipelines / workflow</li>
+<li>solution for caching for installations</li>
+<li>docker support</li>
+<li>matrix builds</li>
+<li>distributed job across multiple nodes</li>
+</ul>
+
+
+<p>a hned ten nejzásadnější právě dlouho Jenkins nesplňoval. Od verze 2.0 je mezi základními rozšířeními podpora pro Continues Delivery Pipelines (dále jen pipelines), které jdou psát do souboru jako <code>Jenkinsfile</code>, který můžete mít s projektem v repozitáři a Jenkins umí spolupracovat s SCM například s Github, kde mu stačí dát jméno organizace nebo uživatele a on proskenuje vaše repositáře a tam kde najde <code>Jenkinsfile</code> pro ty repositáře vytvoří úlohy ke zpracování.</p>
+
+<p>Ukázka jak takový soubor s pipelines vypadá pro malý projekt.</p>
+
+<p>```groovy
+node {
+   stage(&lsquo;Preparation&rsquo;) {</p>
+
+<pre><code>  git 'https://github.com/abtris/bee.git'
+</code></pre>
+
+<p>   }
+   stage(&lsquo;Deps&rsquo;) {</p>
+
+<pre><code>   env.PACKAGE="github.com/abtris/bee"
+   env.GOPATH="~/go"
+   env.GOROOT="/usr/local/opt/go/libexec"
+   sh 'glide --no-color install'
+   sh 'mkdir -p release'
+</code></pre>
+
+<p>   }
+   stage(&lsquo;Test&rsquo;) {</p>
+
+<pre><code>   sh 'make xunit'
+</code></pre>
+
+<p>   }
+   stage(&lsquo;Build&rsquo;) {</p>
+
+<pre><code>     parallel (
+        linux64: { sh "goos=linux goarch=amd64 make build" },
+        linux32: { sh "goos=linux goarch=386 make build" },
+        mac64: { sh "goos=darwin goarch=amd64 make build" },
+        win64: { sh "goos=windows goarch=amd64 make build" }
+      )
+</code></pre>
+
+<p>   }
+   stage(&lsquo;Results&rsquo;) {</p>
+
+<pre><code>  archive 'release/*'
+  junit 'tests.xml'
+</code></pre>
+
+<p>   }
+}
+<code>``
+Jenkinsfile je [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) v programovacím jazyku [Groovy](http://www.groovy-lang.org) obsahuje blok s názvem</code>node` kde si definujete, kde a co se má co spouštět. V ukázce tam není žádná podmínka a tak Jenkins rozhodně sám kde to spustí. Pokud by jste to chtěli upřesnit tak se dá se specifikovat zda to má být master nebo naopak, že to nemá být master (doporučeno) a také jde přímo označit agenta (slave), kterého máte připojeného k Jenkins masteru. Může to být instance na Amazon Web Services (AWS) nebo v jiném cloudu, tak jakýkoliv jiný počítač, který si k tomu určíte a pustíte na něm potřebného klienta.</p>
+
+<p>Další klíčovým slovem je <code>stage</code>, kde si názvem rozdělíme pipeline do nějakých logických celků. Tyto části, pokud to má smysl, můžeme zpracovávat paralelně jako je to v ukázce v části <code>Build</code>. Využití paralelního zpracování je tam, kde chcete zkrátit čas celého build a pokud na to máte volné prostředky (agenty).</p>
+
+<p>Vše spouštím pomocí linuxového shellu pomocí klíčového slova <code>sh</code>. Mohl bych testovat pomocí <code>isUnix()</code> zda jsme na stroji, který toho je vůbec schopen, to vám pomůže pokud používáte různé stroje, některé s Windows a jiné s Linuxem.</p>
+
+<p>V poslední části <code>Results</code> archivujeme artefakty (tady binárné soubory) vytvořené při buildu a výsledky testů z kroku <code>Test</code>.</p>
+
+<p>To je vše a v Jenkinsu to potom vypadá takto:</p>
+
+<p><img src="/images/jenkins/pipelines-parallel.png" alt="" /></p>
+
+<p>Takto se pipelines zobrazují v novém UI BlueOcean.</p>
+
+<p>Pipelines mají před sebou velkou budoucnost, připravují se vylepšení v podobě online editoru a více deklarativního zápisu než dnes.</p>
+
+<p>Dalším požadavkům, které mám na CIE se budu věnovat zase v dalším příspěvku.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Jenkins polling a git-notify]]></title>
@@ -277,7 +370,7 @@ curl http://jenkins.firma.cz/jenkins/git/notifyCommit?url=ssh://git@git.firma.cz
 
 <p>Kapacita: Zbývají 2 místa.</p>
 
-<p>Objednávky: <a href="mailto:academy@webexpo.net"><a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x61;&#x63;&#x61;&#x64;&#x65;&#109;&#x79;&#64;&#119;&#101;&#98;&#x65;&#120;&#x70;&#x6f;&#46;&#x6e;&#101;&#x74;">&#97;&#x63;&#97;&#100;&#x65;&#109;&#121;&#x40;&#x77;&#101;&#98;&#x65;&#x78;&#112;&#x6f;&#46;&#x6e;&#x65;&#x74;</a></a>, +420 775 477 457</p>
+<p>Objednávky: <a href="mailto:academy@webexpo.net"><a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x61;&#x63;&#x61;&#x64;&#101;&#x6d;&#121;&#x40;&#x77;&#101;&#x62;&#x65;&#120;&#x70;&#x6f;&#x2e;&#x6e;&#101;&#116;">&#97;&#x63;&#x61;&#x64;&#101;&#109;&#121;&#x40;&#x77;&#x65;&#98;&#101;&#x78;&#x70;&#111;&#46;&#110;&#x65;&#116;</a></a>, +420 775 477 457</p>
 
 <p>Školení se konají v Praze v prostoru WebHub, adresa: Kafkova 16, Praha 6, dvě minuty pěšky od metra Dejvická.</p>
 

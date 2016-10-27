@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Git-SVN vs Bzr-SVN - Prskavčí blog</title>
+  <title>Jenkins 2.0 - novinky a vylepšení - Prskavčí blog</title>
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Aktualizace (1.7.2009)
-Dnes jsem zkoušel novy git 1.6.0.4 (svn 1.5.4) na práci s SVN repozitory. Konečně práce s repozitory funguje bez problémů a &hellip;">
+  <meta name="description" content="Jenkins je nejznámější řešení na Continues Integration, který existuje už řadu let. Od září je venku konečně verze 2.x (aktuálně 2.19.1 LTS), která &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ Dnes jsem zkoušel novy git 1.6.0.4 (svn 1.5.4) na práci s SVN repozitory. Kone
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.prskavec.net/2009/02/git-svn-vs-bzr-svn/">
+  <link rel="canonical" href="http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
@@ -63,7 +62,7 @@ Dnes jsem zkoušel novy git 1.6.0.4 (svn 1.5.4) na práci s SVN repozitory. Kone
   
   <header>
     
-      <h1 class="entry-title">Git-SVN vs Bzr-SVN</h1>
+      <h1 class="entry-title">Jenkins 2.0 - novinky a vylepšení</h1>
     
     
       <p class="meta">
@@ -79,104 +78,111 @@ Dnes jsem zkoušel novy git 1.6.0.4 (svn 1.5.4) na práci s SVN repozitory. Kone
   
 
 
-<time datetime="2009-02-23T00:00:00+01:00" pubdate data-updated="true">23. 02. 2009</time>
+<time datetime="2016-10-26T19:02:00+02:00" pubdate data-updated="true">26. 10. 2016</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><strong>Aktualizace (1.7.2009)</strong>
-Dnes jsem zkoušel novy git 1.6.0.4 (svn 1.5.4) na práci s SVN repozitory. Konečně práce s repozitory funguje bez problémů a když provádím clone netrvá to 25min, ale pár vteřin jako u bzr. Asi to byla nějaká chyba, kterou vývojáři opravili.</p>
+<div class="entry-content"><p>Jenkins je nejznámější řešení na Continues Integration, který existuje už řadu let. Od září je venku konečně verze 2.x (aktuálně 2.19.1 LTS), která obsahuje několik zásadních novinek.</p>
 
-<p>Nedávno se tu vedla debata o tom jak nejlépe pracovat s Subversion když jsme offline. Nejlepší řešení je přejít na distribuovaný verzovací systém. Bavíme se o řešení na straně klienta, server bude stále Subversion.</p>
+<p>Jenkins používám řadu let a také ho <a href="/skoleni-a-kurzy/">školím ve firmách</a> co chtějí toto řešení nasadit. Před 2 lety jsem si řekl, že není Jenkins moc dobrá cesta. Žádné použitelné novinky se dlouho neobjevovali a vůbec se nezlepšovalo použití pro větší nasazení Jenkinusů ve firmách.</p>
 
-<p>Vytvořil jsem tento skript pomocí kterého si můžu udělat kolik chci revizi do repozitáře, je to primitivní ale pro základní testování to stačilo. Vytvořil jsem repozitory, které má 150 commitů a chci s ním pracovat pomocí git-svn nebo bzr-svn.</p>
-
-<pre>
-#!/bin/bash
-# Settings
-START=2
-COUNT=50
-WC=/home/prskavecl/websites/svn_tests/test2/test2
-
-cd $WC
-touch $WC/trunk/testfile
-svn add $WC/trunk/testfile
-# cyklus pro vytvoreni revizi
-x=$START;     # inicializuje hodnotu x na 0
-while [ "$x" -le $COUNT ]; do
-  echo "Aktuální hodnota x: $x"
-  # zvýšení hodnoty x o 1
-  echo $x &gt;&gt;$WC/trunk/testfile
-  x=$(expr $x + 1)
-  svn commit --message "Insert value $x"
-done 
-svn up
-</pre>
+<!-- more -->
 
 
-<p>Testování jsem prováděl na Dellu D830 (2,4 GHz,Intel Core 2 Duo, 2GB RAM) v Ubuntu 8.10.</p>
-
-<p>Verze použitých programů:</p>
+<p>Já mám na každé CI tento seznam požadavků:</p>
 
 <ul>
-    <li>git 1.5.6.3,</li>
-    <li>svn 1.5.1,</li>
-    <li>bzr 1.6.1 (bzr-svn 0.4.13-2)</li>
+<li>job definitions in repository</li>
+<li>autoscaling on traffic with lowest possible price</li>
+<li>pipelines / workflow</li>
+<li>solution for caching for installations</li>
+<li>docker support</li>
+<li>matrix builds</li>
+<li>distributed job across multiple nodes</li>
 </ul>
 
 
-<p>Postup testování, šlo mi hlavně porovnat rychlost práce. Proto provedu tyto operace.</p>
+<p>a hned ten nejzásadnější právě dlouho Jenkins nesplňoval. Od verze 2.0 je mezi základními rozšířeními podpora pro Continues Delivery Pipelines (dále jen pipelines), které jdou psát do souboru jako <code>Jenkinsfile</code>, který můžete mít s projektem v repozitáři a Jenkins umí spolupracovat s SCM například s Github, kde mu stačí dát jméno organizace nebo uživatele a on proskenuje vaše repositáře a tam kde najde <code>Jenkinsfile</code> pro ty repositáře vytvoří úlohy ke zpracování.</p>
 
-<ol>
-    <li>checkout</li>
-    <li>odpojení od centrálního repozitory</li>
-    <li>změnu v souboru</li>
-    <li>lokální commit</li>
-    <li>napojení na centrální repozitory</li>
-    <li>přenesení změn do centrálního repozitory</li>
-</ol>
+<p>Ukázka jak takový soubor s pipelines vypadá pro malý projekt.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">node</span> <span class="o">{</span>
+</span><span class='line'>   <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Preparation&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">git</span> <span class="s1">&#39;https://github.com/abtris/bee.git&#39;</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'>   <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Deps&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>       <span class="n">env</span><span class="o">.</span><span class="na">PACKAGE</span><span class="o">=</span><span class="s2">&quot;github.com/abtris/bee&quot;</span>
+</span><span class='line'>       <span class="n">env</span><span class="o">.</span><span class="na">GOPATH</span><span class="o">=</span><span class="s2">&quot;~/go&quot;</span>
+</span><span class='line'>       <span class="n">env</span><span class="o">.</span><span class="na">GOROOT</span><span class="o">=</span><span class="s2">&quot;/usr/local/opt/go/libexec&quot;</span>
+</span><span class='line'>       <span class="n">sh</span> <span class="s1">&#39;glide --no-color install&#39;</span>
+</span><span class='line'>       <span class="n">sh</span> <span class="s1">&#39;mkdir -p release&#39;</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'>   <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Test&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>       <span class="n">sh</span> <span class="s1">&#39;make xunit&#39;</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'>   <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Build&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>         <span class="n">parallel</span> <span class="o">(</span>
+</span><span class='line'>            <span class="nl">linux64:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;goos=linux goarch=amd64 make build&quot;</span> <span class="o">},</span>
+</span><span class='line'>            <span class="nl">linux32:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;goos=linux goarch=386 make build&quot;</span> <span class="o">},</span>
+</span><span class='line'>            <span class="nl">mac64:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;goos=darwin goarch=amd64 make build&quot;</span> <span class="o">},</span>
+</span><span class='line'>            <span class="nl">win64:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;goos=windows goarch=amd64 make build&quot;</span> <span class="o">}</span>
+</span><span class='line'>          <span class="o">)</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'>   <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Results&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">archive</span> <span class="s1">&#39;release/*&#39;</span>
+</span><span class='line'>      <span class="n">junit</span> <span class="s1">&#39;tests.xml&#39;</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Jenkinsfile je <a href="https://en.wikipedia.org/wiki/Domain-specific_language">DSL</a> v programovacím jazyku <a href="http://www.groovy-lang.org">Groovy</a> obsahuje blok s názvem <code>node</code> kde si definujete, kde a co se má co spouštět. V ukázce tam není žádná podmínka a tak Jenkins rozhodně sám kde to spustí. Pokud by jste to chtěli upřesnit tak se dá se specifikovat zda to má být master nebo naopak, že to nemá být master (doporučeno) a také jde přímo označit agenta (slave), kterého máte připojeného k Jenkins masteru. Může to být instance na Amazon Web Services (AWS) nebo v jiném cloudu, tak jakýkoliv jiný počítač, který si k tomu určíte a pustíte na něm potřebného klienta.</p>
 
+<p>Další klíčovým slovem je <code>stage</code>, kde si názvem rozdělíme pipeline do nějakých logických celků. Tyto části, pokud to má smysl, můžeme zpracovávat paralelně jako je to v ukázce v části <code>Build</code>. Využití paralelního zpracování je tam, kde chcete zkrátit čas celého build a pokud na to máte volné prostředky (agenty).</p>
 
-<h3>bzr-svn</h3>
+<p>Vše spouštím pomocí linuxového shellu pomocí klíčového slova <code>sh</code>. Mohl bych testovat pomocí <code>isUnix()</code> zda jsme na stroji, který toho je vůbec schopen, to vám pomůže pokud používáte různé stroje, některé s Windows a jiné s Linuxem.</p>
 
+<p>V poslední části <code>Results</code> archivujeme artefakty (tady binárné soubory) vytvořené při buildu a výsledky testů z kroku <code>Test</code>.</p>
 
-<ol>
-    <li>bzr checkout file:///home/svn/repos/test</li>
-    <li>bzr unbind</li>
-        <li>nano /trunk/testfile</li>
-    <li>bzr commit</li>
-        <li>bzr bind</li>
-    <li>bzr push file:///home/svn/repos/test</li>
-</ol>
+<p>To je vše a v Jenkinsu to potom vypadá takto:</p>
 
+<p><img src="/images/jenkins/pipelines-parallel.png" alt="" /></p>
 
-<p>Tento postup lze zkrátit pomocí <code>bzr commit &mdash;local</code> potom nemusíme použít bind a unbind.</p>
+<p>Takto se pipelines zobrazují v novém UI BlueOcean.</p>
 
-<p>Celá operace trvala vteřiny, ani jsem nepoznal, že pracuji s jiným SCM než je SVN.</p>
+<p>Pipelines mají před sebou velkou budoucnost, připravují se vylepšení v podobě online editoru a více deklarativního zápisu než dnes.</p>
 
-<h3>git-svn</h3>
-
-
-<ol>
-    <li>git svn clone file:///home/prskavecl/repos/test</li>
-        <li>není třeba, ale checkout stále jede&#8230;po uplynutí 52 min jsem to málem vzdal</li>
-        <li>nano /trunk/testfile</li>
-        <li>git commit -a (5s)</li>
-        <li>není třeba</li>
-        <li>git svn dcommit (25s)</li>
-</ol>
-
-
-<p>Více o git a subversion najdete v článku <a href="http://www.root.cz/clanky/git-a-subversion/">Dana Horáka</a>.</p>
-
-<h3>Závěr</h3>
-
-
-<p>Vím, že spousta lidí fandí gitu, ale mě vůbec zatím nepřesvědčil, zatím u mne vede <a href="http://bazaar-vcs.org/">Bazzar</a>. Možná je to problém jen git-svn a ne samotného gitu, ale tento druh spolupráce je hrozně pomalý.</p>
+<p>Dalším požadavkům, které mám na CIE se budu věnovat zase v dalším příspěvku.</p>
 </div>
 
 
@@ -199,8 +205,14 @@ svn up
   
 
 
-<time datetime="2009-02-23T00:00:00+01:00" pubdate data-updated="true">23. 02. 2009</time>
+<time datetime="2016-10-26T19:02:00+02:00" pubdate data-updated="true">26. 10. 2016</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/categories/jenkins/'>jenkins</a>
+  
+</span>
 
 
     </p>
@@ -214,14 +226,18 @@ svn up
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2009/02/subversion-a-spojeni-dvou-repozitory/" title="Previous Post: Subversion a spojení dvou repozitory">&laquo; Subversion a spojení dvou repozitory</a>
+        <a class="basic-alignment left" href="/2016/10/prednaska-o-sre-na-devops-meetupu/" title="Previous Post: Přednáška o SRE na DevOPS meetupu">&laquo; Přednáška o SRE na DevOPS meetupu</a>
       
-      
-        <a class="basic-alignment right" href="/2009/02/hudson-a-php/" title="Next Post: Hudson a PHP">Hudson a PHP &raquo;</a>
       
     </p>
   </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -393,7 +409,10 @@ var trackerName=ga[_0x5d8e[4]]()[0][_0x5d8e[3]](_0x5d8e[2]);var isGTMhere=false;
       var disqus_shortname = 'prskavecblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/';
+        var disqus_url = 'http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

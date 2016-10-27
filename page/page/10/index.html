@@ -9,7 +9,8 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Pokud se vám někdy stane, že pracujete na projektu a máte vzdálený SVN server dejme tomu např. s 500 revizemi. Teď ale jedete někam pryč kde nemáte &hellip;">
+  <meta name="description" content="Aktualizace (1.7.2009)
+Dnes jsem zkoušel novy git 1.6.0.4 (svn 1.5.4) na práci s SVN repozitory. Konečně práce s repozitory funguje bez problémů a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +60,132 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/02/git-svn-vs-bzr-svn/">Git-SVN vs Bzr-SVN</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-23T00:00:00+01:00" pubdate data-updated="true">23. 02. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Aktualizace (1.7.2009)</strong>
+Dnes jsem zkoušel novy git 1.6.0.4 (svn 1.5.4) na práci s SVN repozitory. Konečně práce s repozitory funguje bez problémů a když provádím clone netrvá to 25min, ale pár vteřin jako u bzr. Asi to byla nějaká chyba, kterou vývojáři opravili.</p>
+
+<p>Nedávno se tu vedla debata o tom jak nejlépe pracovat s Subversion když jsme offline. Nejlepší řešení je přejít na distribuovaný verzovací systém. Bavíme se o řešení na straně klienta, server bude stále Subversion.</p>
+
+<p>Vytvořil jsem tento skript pomocí kterého si můžu udělat kolik chci revizi do repozitáře, je to primitivní ale pro základní testování to stačilo. Vytvořil jsem repozitory, které má 150 commitů a chci s ním pracovat pomocí git-svn nebo bzr-svn.</p>
+
+<pre>
+#!/bin/bash
+# Settings
+START=2
+COUNT=50
+WC=/home/prskavecl/websites/svn_tests/test2/test2
+
+cd $WC
+touch $WC/trunk/testfile
+svn add $WC/trunk/testfile
+# cyklus pro vytvoreni revizi
+x=$START;     # inicializuje hodnotu x na 0
+while [ "$x" -le $COUNT ]; do
+  echo "Aktuální hodnota x: $x"
+  # zvýšení hodnoty x o 1
+  echo $x &gt;&gt;$WC/trunk/testfile
+  x=$(expr $x + 1)
+  svn commit --message "Insert value $x"
+done 
+svn up
+</pre>
+
+
+<p>Testování jsem prováděl na Dellu D830 (2,4 GHz,Intel Core 2 Duo, 2GB RAM) v Ubuntu 8.10.</p>
+
+<p>Verze použitých programů:</p>
+
+<ul>
+    <li>git 1.5.6.3,</li>
+    <li>svn 1.5.1,</li>
+    <li>bzr 1.6.1 (bzr-svn 0.4.13-2)</li>
+</ul>
+
+
+<p>Postup testování, šlo mi hlavně porovnat rychlost práce. Proto provedu tyto operace.</p>
+
+<ol>
+    <li>checkout</li>
+    <li>odpojení od centrálního repozitory</li>
+    <li>změnu v souboru</li>
+    <li>lokální commit</li>
+    <li>napojení na centrální repozitory</li>
+    <li>přenesení změn do centrálního repozitory</li>
+</ol>
+
+
+
+
+<h3>bzr-svn</h3>
+
+
+<ol>
+    <li>bzr checkout file:///home/svn/repos/test</li>
+    <li>bzr unbind</li>
+        <li>nano /trunk/testfile</li>
+    <li>bzr commit</li>
+        <li>bzr bind</li>
+    <li>bzr push file:///home/svn/repos/test</li>
+</ol>
+
+
+<p>Tento postup lze zkrátit pomocí <code>bzr commit &mdash;local</code> potom nemusíme použít bind a unbind.</p>
+
+<p>Celá operace trvala vteřiny, ani jsem nepoznal, že pracuji s jiným SCM než je SVN.</p>
+
+<h3>git-svn</h3>
+
+
+<ol>
+    <li>git svn clone file:///home/prskavecl/repos/test</li>
+        <li>není třeba, ale checkout stále jede&#8230;po uplynutí 52 min jsem to málem vzdal</li>
+        <li>nano /trunk/testfile</li>
+        <li>git commit -a (5s)</li>
+        <li>není třeba</li>
+        <li>git svn dcommit (25s)</li>
+</ol>
+
+
+<p>Více o git a subversion najdete v článku <a href="http://www.root.cz/clanky/git-a-subversion/">Dana Horáka</a>.</p>
+
+<h3>Závěr</h3>
+
+
+<p>Vím, že spousta lidí fandí gitu, ale mě vůbec zatím nepřesvědčil, zatím u mne vede <a href="http://bazaar-vcs.org/">Bazzar</a>. Možná je to problém jen git-svn a ne samotného gitu, ale tento druh spolupráce je hrozně pomalý.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -653,45 +780,6 @@ modprobe r5u870
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/11/phpundercontrol-vs-xinc/">phpUnderControl vs Xinc</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-04T00:00:00+01:00" pubdate data-updated="true">04. 11. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Nedávno jsem se snažil trochu vylepšit vývoj o některé aspekty, které mají spíše formálnější charakter. Celý vývojový proces jsem načrtl na následujícím obrázku.</p>
-
-
-<p>  <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/11/development.png"><font color="#ffffff"></font><img style="border-right: 0px;border-top: 0px;float: none;margin-left: auto;border-left: 0px;margin-right: auto;border-bottom: 0px" height="493" alt="Development" src="http://blog.prskavec.net/wp-content/uploads/2008/11/development-thumb.png" width="635" border="0" /></a> Vývojář PHP má výhodu libovolného IDE (preferuji Eclipse PDT). Pro zdrojové kódy používám jako SCM Subversion. Nedávno jsem přidal pre-commit hook skript na kontrolu syntaxe. Používám ho hlavně pro kontrolu projektů v Zend Frameworku. PHP_CodeSniffer podporuje <a href="http://checkstyle.sourceforge.net/">Checkstyle</a> tak není problém výstup zaintegrovat i do jiných programů. Jako post-commit skript používám generován XML logů, které používá stránka s náhledy na projekty na kterých pracuji.</p>  <p>Protože jsem si oblíbil <a href="http://blog.prskavec.net/?p=142">Phing</a> pro automatizaci tvroby buildu hledal jsem něco co by to celé zastřešilo. Řešení je <a href="http://en.wikipedia.org/wiki/Continuous_integration">Continuous integration</a> a pro php jsou použitelné jen dva projekty a to <a href="http://www.phpundercontrol.org">phpUnderControl</a> a <a href="http://code.google.com/p/xinc/">Xinc</a>. Oba umí stejné nebo podobné věci a přece jenom se trochu liší jak vznikli a jak se provozují.</p>  <p>Jako první jsem zkoušel phpUnderControl. Ten je založený jako plugin do <a href="http://cruisecontrol.sourceforge.net/">Cruisecontrolu</a>, který je napsaný v Jave a běží jako vlastní webový server, který používá <a href="http://ant.apache.org/">Ant</a> a může volat víceméně přes něj cokoliv si zamanete. V phpUnderControl je integrována podpora pro PHPUnit (<a href="http://www.phpunit.de/pocket_guide/3.2/en/code-coverage-analysis.html">Code Coverage</a>, Project Mess Detection and Software Metrics), PHPDocumentor a PHP_CodeSniffer. Pro zobrazení dat je připravena sada XSL stylesheetů pro Cruisecontrol, tak jsou vidět <a href="http://www.phpundercontrol.org/images/0.3.5-metrics.png">pěkné grafy</a>.</p>  <p>Jedinou nevýhodu vidím v tom, že je to odělený systém běžící na Javě, ale to může být pro někoho klidně i výhoda.</p>  <p>Další CI server jsem vyzkoušel Xinc, ten má výhodu, že je napsaný v PHP a stačí mu Apache a skript který slouží jako CRON pro buildy. Místo Antu je použitý Phing a má ještě navíc podporu pro XDebug, který také umí Code Coverage Analysis a Profiling.</p>  <p>Xinc má vzhled založený na knihovně <a href="http://ezcomponents.org/">eZ Components</a>, používá <a href="http://ezcomponents.org/docs/tutorials/Base">Base</a> a <a href="http://ezcomponents.org/docs/tutorials/Graph">Graph</a>. Chybí mi v defaultních templates lepší podpora pro zobrazování výsledků z PHPDocumentor, PHP_CodeSniffer jak to má udělené phpUnderControl. Jak je vidět např. v <a href="http://www.xinc.eu/#xinc">demu</a>, tak pokud se podívate na jednotlivý projekt je to jen log a odkazy, není to příliš elegantní a nejsou to jednotlivé html stránky na které lze odkazovat. Vývoj ale intenzivně pokračuje a uvidíme jakých vylepšení se dočkáme ve verzi 2.1. Výhody Xincu také vidím ve psaní pluginů přímo v php.</p>  <p>Zajímalo by mě jak to funguje jinde a případně, které řešení používate a proč.</p></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/11/">&larr; Older</a>
@@ -723,6 +811,10 @@ modprobe r5u870
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/">Jenkins 2.0 - novinky a vylepšení</a>
+      </li>
     
       <li class="post">
         <a href="/2016/10/prednaska-o-sre-na-devops-meetupu/">Přednáška o SRE na DevOPS meetupu</a>
@@ -758,10 +850,6 @@ modprobe r5u870
     
       <li class="post">
         <a href="/2015/02/docker-cluster-management/">Docker cluster management</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
       </li>
     
   </ul>

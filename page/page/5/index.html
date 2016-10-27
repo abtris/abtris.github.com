@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="V poslední době se objevilo hodně článků o RabbitMQ a připravuje se kniha kde většina příkladů je v PHP. Připravil jsem malou demonstraci jak se &hellip;">
+  <meta name="description" content="Jako vývojář jsem si vybral přednášky v Development Room a Development Hall. V pátek začnu na přednášce co má Michal Táborský o Architektuře &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,62 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/09/webexpo-2011-na-co-pujdu/">WebExpo 2011 - Na co půjdu</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-19T00:00:00+02:00" pubdate data-updated="true">19. 09. 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Jako vývojář jsem si vybral přednášky v Development Room a Development Hall.</p>
+
+<p>V pátek začnu na přednášce co má Michal Táborský o Architektuře škálovatelných aplikací, jistě se dozvíme jak to dělají v Mall.cz. Michala znám a jeho vyprávění a postřehy mi přijdou velmi podobné tomu jako to řešíme v práci i my. Pokračovat budu na své přednášce, kde řeknu něco o tom proč automatizovat deployment, co na to použít. Jak to řešíme v LMC (Jobs.cz, Prace.cz). Po mě na podobné téma Honza Mittner bude pokračovat o konkrétním řešení deploymentu pro PHP u nich v agentuře.</p>
+
+<p>V další sekci je na téma Javascript. JIŘÍ KNESL bude ukazovat Test Driven Development v CoffeeScriptu. Po něm bude pokračovat VOJTA JÍNA s MVC frameworkem  AngularJS. Protože používím BackboneJS, zajímá mě srovnání s AngularJS.</p>
+
+<p>Protože ve svých projektech používám Google Maps Api, zajímají mě přednášky o konkurenci. Podívám se jak to dělají u Nokie (MICHAL AICHINGER, Nestačí vám vaše oblíbené mapové API? Zkuste Nokia mapy) a u Seznamu, kde nám ADAM CHVAJA řekne o On-line mapách u nás a ve světě.</p>
+
+<p>Protože, pracuji s CouchDB a provoz MongoDB se spíše vyhýbám, tak se těším na zkušenosti z Centra v přednášce Lukáše LINHARTa o  MongoDB.</p>
+
+<p>Nakonec to nejlepší DOUGLAS CROCKFORD, Serversideness, jednoznačná nejzajímavější přednáška letošního Webexpa, doufám, že nezklame.</p>
+
+<p>V sobotu budeme pokračovat, nejprve se podívám na to co bude PAVEL CAMPR a JIŘÍ PRAUS povídat o Symfony 2, které mi přijde asi jako nejpropracovanější PHP framework dneška. RASMUS LERDORF a jeho PHP in 2011 je povinnost pro každého kdo programuje aspoň trochu v PHP. Michal Špaček ze Skypu a jaho Strategie kešování jistě nezklame.</p>
+
+<p>Velice se těším na přednášku Scala &ndash; jazyk budoucnosti, ZDENĚK FARANA nám ukáže v čem je tento jazyk tak zajímavý a já dám možná JVM ještě někdy šanci.</p>
+
+<p>KAREL MINAŘÍK a LUKÁŠ VLČEK jsou nejznámější vývojáři co mají u nás dělají s ElasticSearch. Karel je autorem ruby gemu Tire na práci s ES a Lukáš napsal jeden z nástrojů pro monitoring a přispívá k vývoji ES. Jejich ElasticSearch: Za hranice běžného fulltextového vyhledávání bude jistě jedna z nejzajímavějších přednášek Webexpa.</p>
+
+<p>HONZA KRÁL je známý Python vývojář a ukáže nám jak se má psát kód tak, aby byl testovatelný a jeho Testování prakticky určitě bude zajímavé pro všechny vývojáře i testery. JAKUB VRÁNA s přednáškou Ajaxizace určitě zaujme.</p>
+
+<p>Doufám, že se tam uvidíme a zkuste dát svoje tipy co vás zaujalo.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1126,217 +1182,6 @@ class App_Log_Writer_MongoDb extends Zend_Log_Writer_Abstract
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/08/zend-framework-a-nosql-pro-ukladani-logu-ve-webovych-aplikaci-dil-1-couchdb/">Zend Framework a NoSQL pro ukládání logů ve webových aplikací, díl prvnío CouchDb</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-08-24T00:00:00+02:00" pubdate data-updated="true">24. 08. 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Použití databáze pro ukládání logů se používá často pro analýzu logů. Technicky napojit databázi RBMS (MySQL) pomocí Zend_Log_Writer_Db není žádný problém. Ale vidím tu nevýhodu v tom, že musíte mít schema podle toho co ukládáte za logy. Pokud se rozhodnete použít NOSQL databázi (CouchDb, MongoDb) nemusíte se o schema starat.</p>
-
-<p>V tomto článku si napsat vlastní Zend_Log_Writer pro CouchDb a jak si potom lehce zobrazíme příslušné logy. Napíšeme si také jednoduchou map funkci pro view v CouchDb, kterou v aplikaci použijeme.</p>
-
-<p>Nejprve si projedeme jak se používá <a href="http://framework.zend.com/manual/en/zend.log.writers.html">Zend_Log_Writer_Db, syntaxi najdete v manuálu</a>. Tabulka v db musí mít pevně dané schéma, která namapujete v konfiguraci writeru.</p>
-
-<p>Implementaci vlastního App_Log_Writer_CouchDb provedeme třeba takto:</p>
-
-<pre class="code php">class App_Log_Writer_CouchDb extends Zend_Log_Writer_Abstract
-{
-    /**
-     * Db
-     * @var Phly_Couch
-     */
-    private $_db;
-    /**
-     * CouchDb host localhost default
-     * @var string
-     */
-    private $_host;
-    /**
-     * Couchdb port 3184 default
-     * @var int
-     */
-    private $_port;
-    /**
-     *
-     * @param array $params
-     * @return void
-     */
-    public function __construct($dbname, $options = null)
-    {
-        if (is_null($options)) {
-            $options['host'] = "localhost";
-            $options['port'] = "5984";
-            $options['db'] = $dbname;
-        }
-        $this-&gt;_db = new Phly_Couch($options);
-    }
-
-    static public function factory($config)
-    {
-        $config = self::_parseConfig($config);
-        return $config;
-    }
-    /**
-     * @param array $event
-     * @return void
-     */
-    protected function _write($event)
-    {
-        // action body
-        $doc = new Phly_Couch_Document($event);
-        $result = $this-&gt;_db-&gt;docSave($doc);
-        // return array ok, id, rev
-        $info = $result-&gt;getInfo();
-        if (!$info['ok']) {
-            throw new Zend_Log_Exception("Error in save to CouchDb");
-        }
-    }
-
-}</pre>
-
-
-<p>Není na tom jak vidíte nic složitého, implementuje funkce <em>_constructor, factory a </em>write funkci a je to.</p>
-
-<p>Samozřejmě je to kus Zend Frameworku, který potrebuje konfiguraci.</p>
-
-<pre class="code">autoloaderNamespaces.phly = "Phly_"
-autoloaderNamespaces.app = "App_"
-; Options for CouchDb
-couchdb.host = prskavec.couchone.com
-couchdb.port = 80
-couchdb.db = "test-log"
-</pre>
-
-
-<p>Pro správu CouchDb jsem použil vestavěný Futon.</p>
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2010/08/Screen-shot-2010-08-22-at-8.04.37.png"><img class="aligncenter size-medium wp-image-2613" title="CouchDb" src="http://blog.prskavec.net/wp-content/uploads/2010/08/Screen-shot-2010-08-22-at-8.04.37-300x187.png" alt="" width="300" height="187" /></a></p>
-
-<p>Vytvořil jsem testovací db <strong>&ldquo;test-log&rdquo;</strong> a v ní pohled, který v kódu potom používám. Vytvoříte temporary_view, které potom při ukládání ložíte do příslušného designu a view. U mě to bylo použité <code>logger/log_by_prior</code>.</p>
-
-<pre class="jush">  function(doc) {
-    if (doc.priority) {
-       emit(doc.priority, [doc.priorityName, doc.timestamp, doc.message, doc.module, doc.controller]);
-    }
-  }
-</pre>
-
-
-<p>Toto view potom volá controller, který načítá data pro zobrazení dat z databáze.</p>
-
-<pre class="code">class IndexController extends Zend_Controller_Action
-{
-    protected $_config;
-
-    public function preDispatch()
-    {
-            $this-&gt;_config = new Zend_Config_Ini('../application/configs/'.
-                    'application.ini', APPLICATION_ENV);
-    }
-
-    public function indexAction()
-    {
-         $db = new Phly_Couch($this-&gt;_config-&gt;couchdb);
-
-         $this-&gt;view-&gt;form = $form = new App_Form_Filter();
-         if ($this-&gt;getRequest()-&gt;isPost()) {
-             $formData = $this-&gt;getRequest()-&gt;getPost();
-             if ($form-&gt;isValid($formData)) {
-                 $filterValue = $form-&gt;getValue('filter');
-                 Zend_Debug::dump($filterValue);
-                 if (empty($filterValue) &amp;&amp; $filterValue===0) $filterValue = null;
-                 $result = $db-&gt;view('logger','log_by_prior', $filterValue, array("db"=&gt;$this-&gt;_config-&gt;couchdb-&gt;db));
-             } else {
-             $form-&gt;populate($formData);
-             }
-         } else {
-            $result = $db-&gt;view('logger','log_by_prior', null, array("db"=&gt;$this-&gt;_config-&gt;couchdb-&gt;db));
-         }
-         $this-&gt;view-&gt;docs = $result-&gt;toArray();
-         $this-&gt;view-&gt;messages = $this-&gt;_helper-&gt;flashMessenger-&gt;getMessages();
-
-         $logger = new Zend_Log();
-         $r = new ReflectionClass($logger);
-         $this-&gt;view-&gt;priorities = array_flip($r-&gt;getConstants());
-
-    }
-
-    public function logAction()
-    {
-          $id = $this-&gt;_request-&gt;getParam('id', 0);  
-
-          $logger = new Zend_Log();
-          $format = '%timestamp% %priorityName% (%priority%): '.
-            '[%module%] [%controller%] %message%';
-          $formatter = new Zend_Log_Formatter_Simple($format);
-
-          $writer = new App_Log_Writer_CouchDb($this-&gt;_config-&gt;couchdb-&gt;db, $this-&gt;_config-&gt;couchdb);
-          $writer-&gt;setFormatter($formatter);
-
-          $logger-&gt;addWriter($writer);
-          $logger-&gt;setEventItem('module', $this-&gt;getRequest()-&gt;getModuleName());
-          $logger-&gt;setEventItem('controller', $this-&gt;getRequest()-&gt;getControllerName());
-          $logger-&gt;log("Testovani chyba", $id);
-          $this-&gt;_helper-&gt;flashMessenger-&gt;addMessage('Log item saved');
-          $this-&gt;_helper-&gt;redirector('index');
-    }
-
-}
-</pre>
-
-
-<p>Controller obsahuje dvě akce a to vlastní zobrazení v indexAction a metodu, která záznamy vytváří logAction. V logAction je vidět výhoda neexistence schématu, protože jsem si přidal další informace bez potřeby měnit schéma databáze.</p>
-
-<h3>PHP a CouchDb</h3>
-
-
-<p>Použil jsem knihovnu <a href="http://weierophinney.net/phly/">Phly_Couch pro práci s CouchDb</a>, jen jsem musel funkci lehce aktualizovat pro současnou verzi CouchDb 1.0.1, kterou jsem použil.</p>
-
-<p>Aktualizovanou verzi Phly_CouchDb najdete v mém <a href="http://github.com/abtris/phly">forku na githubu</a>, celou ukázkovou aplikaci <a href="http://github.com/abtris/phplogger-couchdb">php_couchdb_logger</a> také.</p>
-
-<p>Pro přístup ke CouchDb můžete použít i jiné knihovny, například <a href="http://arbitracker.org/phpillow.html">PHPillow</a>, která vypadá celkem aktualizovaně. Já jsem použil knihovnu, kterou napsal Matthew Weier O&#8217;Phinney hlavně proto, že je psaná přímo pro Zend Framework. Má přehledný a dobře napsaný kód, kde jsem si upravil jen to co jsem se potřeboval.</p>
-
-<h3>CouchDb</h3>
-
-
-<p>Na Mac OS X si můžete nainstalovat CouchDb jako na linuxu ze zdrojáků nebo použít balík, který mi přijde ideální. Podrobné informace o <a href="http://wiki.apache.org/couchdb/Installation">instalaci jsou ve wiki</a>, případně se podívejte tam.</p>
-
-<h3>Závěr</h3>
-
-
-<p>Myslím, že to je jednoduchý příklad jak například použít CouchDb, který se pro začátek práce s CouchDb může hodit. Pokud chcete dělat náročnějši vyhledavání na logy, je potřeba použit <a href="http://github.com/rnewson/couchdb-lucene/">CouchDb Lucene</a>. Pokud se chcete dozvědět více o CouchDb tak doporučuji jít na přednášku <a href="http://webexpo.cz/prednasky/development/">Karla Minaříka na letošním Webexpu</a>.</p>
-
-<p>V dalším pokračování si ukážeme jak by se to dělalo v MongoDb.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/6/">&larr; Older</a>
@@ -1368,6 +1213,10 @@ couchdb.db = "test-log"
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/">Jenkins 2.0 - novinky a vylepšení</a>
+      </li>
     
       <li class="post">
         <a href="/2016/10/prednaska-o-sre-na-devops-meetupu/">Přednáška o SRE na DevOPS meetupu</a>
@@ -1403,10 +1252,6 @@ couchdb.db = "test-log"
     
       <li class="post">
         <a href="/2015/02/docker-cluster-management/">Docker cluster management</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
       </li>
     
   </ul>

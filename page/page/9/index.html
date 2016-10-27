@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Zend Server 4.0.2 Zend aktualizoval Zend Server na verzi 4.0.2, přidána hlavně podpora pro ZF 1.8 a další drobné změny. Jen mi z repozitory pro &hellip;">
+  <meta name="description" content="Wolfram Alpha (WA) je nový vyhledávač, který zatím běží v experimentálním provozu, ale je to něco úplně jiného než tradiční vyhledávače jako je &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,50 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/05/wolfram-alpha/">Wolfram Alpha</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-16T00:00:00+02:00" pubdate data-updated="true">16. 05. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.wolframalpha.com">Wolfram Alpha (WA)</a> je nový vyhledávač, který zatím běží v experimentálním provozu, ale je to něco úplně jiného než tradiční vyhledávače jako je Google, Live, Yahoo, Altavista apod. Nepracuje s fulltextem a informacemi sbíraných robotem, ale je to matematický počítač, který vyhodnocuje zadaný dotaz (umí jen anglicky) a zpracuje ho pomocí svojí databáze a matematických operacích, které umí a potom vytiskne report, který obsahuje text, vzorce a grafiku, který je možné si např. stáhnout v PDF. </p>
+
+
+<p><img src="http://blog.prskavec.net/wp-content/uploads/2009/05/wolframalpha_12424634710871.png" alt="wolframalpha_12424634710871" title="wolframalpha_12424634710871" width="596" height="696" class="aligncenter size-full wp-image-564" /></p>
+
+<p>Doporučuji k vyzkoušení je to zajímavý počin s dobrým výhledem do budoucna. Přikládám nějaké příklady, které jsem zkoušel vyhledat. Umí to hledat podle datumů, zemí, matematické výrazy, ekonomické pojmy apod. Podrobněji to máte na orignálních stránkách <a href="http://www.wolframalpha.com/examples/">http://www.wolframalpha.com/examples/</a>.</p>
+
+
+<p>[gallery link=&ldquo;file&rdquo;]</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -925,132 +969,6 @@ Z pyramid mě zaujali čísla kolem LOC (počet řádků kódu) v porodnání s 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/02/git-svn-vs-bzr-svn/">Git-SVN vs Bzr-SVN</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-23T00:00:00+01:00" pubdate data-updated="true">23. 02. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Aktualizace (1.7.2009)</strong>
-Dnes jsem zkoušel novy git 1.6.0.4 (svn 1.5.4) na práci s SVN repozitory. Konečně práce s repozitory funguje bez problémů a když provádím clone netrvá to 25min, ale pár vteřin jako u bzr. Asi to byla nějaká chyba, kterou vývojáři opravili.</p>
-
-<p>Nedávno se tu vedla debata o tom jak nejlépe pracovat s Subversion když jsme offline. Nejlepší řešení je přejít na distribuovaný verzovací systém. Bavíme se o řešení na straně klienta, server bude stále Subversion.</p>
-
-<p>Vytvořil jsem tento skript pomocí kterého si můžu udělat kolik chci revizi do repozitáře, je to primitivní ale pro základní testování to stačilo. Vytvořil jsem repozitory, které má 150 commitů a chci s ním pracovat pomocí git-svn nebo bzr-svn.</p>
-
-<pre>
-#!/bin/bash
-# Settings
-START=2
-COUNT=50
-WC=/home/prskavecl/websites/svn_tests/test2/test2
-
-cd $WC
-touch $WC/trunk/testfile
-svn add $WC/trunk/testfile
-# cyklus pro vytvoreni revizi
-x=$START;     # inicializuje hodnotu x na 0
-while [ "$x" -le $COUNT ]; do
-  echo "Aktuální hodnota x: $x"
-  # zvýšení hodnoty x o 1
-  echo $x &gt;&gt;$WC/trunk/testfile
-  x=$(expr $x + 1)
-  svn commit --message "Insert value $x"
-done 
-svn up
-</pre>
-
-
-<p>Testování jsem prováděl na Dellu D830 (2,4 GHz,Intel Core 2 Duo, 2GB RAM) v Ubuntu 8.10.</p>
-
-<p>Verze použitých programů:</p>
-
-<ul>
-    <li>git 1.5.6.3,</li>
-    <li>svn 1.5.1,</li>
-    <li>bzr 1.6.1 (bzr-svn 0.4.13-2)</li>
-</ul>
-
-
-<p>Postup testování, šlo mi hlavně porovnat rychlost práce. Proto provedu tyto operace.</p>
-
-<ol>
-    <li>checkout</li>
-    <li>odpojení od centrálního repozitory</li>
-    <li>změnu v souboru</li>
-    <li>lokální commit</li>
-    <li>napojení na centrální repozitory</li>
-    <li>přenesení změn do centrálního repozitory</li>
-</ol>
-
-
-
-
-<h3>bzr-svn</h3>
-
-
-<ol>
-    <li>bzr checkout file:///home/svn/repos/test</li>
-    <li>bzr unbind</li>
-        <li>nano /trunk/testfile</li>
-    <li>bzr commit</li>
-        <li>bzr bind</li>
-    <li>bzr push file:///home/svn/repos/test</li>
-</ol>
-
-
-<p>Tento postup lze zkrátit pomocí <code>bzr commit &mdash;local</code> potom nemusíme použít bind a unbind.</p>
-
-<p>Celá operace trvala vteřiny, ani jsem nepoznal, že pracuji s jiným SCM než je SVN.</p>
-
-<h3>git-svn</h3>
-
-
-<ol>
-    <li>git svn clone file:///home/prskavecl/repos/test</li>
-        <li>není třeba, ale checkout stále jede&#8230;po uplynutí 52 min jsem to málem vzdal</li>
-        <li>nano /trunk/testfile</li>
-        <li>git commit -a (5s)</li>
-        <li>není třeba</li>
-        <li>git svn dcommit (25s)</li>
-</ol>
-
-
-<p>Více o git a subversion najdete v článku <a href="http://www.root.cz/clanky/git-a-subversion/">Dana Horáka</a>.</p>
-
-<h3>Závěr</h3>
-
-
-<p>Vím, že spousta lidí fandí gitu, ale mě vůbec zatím nepřesvědčil, zatím u mne vede <a href="http://bazaar-vcs.org/">Bazzar</a>. Možná je to problém jen git-svn a ne samotného gitu, ale tento druh spolupráce je hrozně pomalý.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/10/">&larr; Older</a>
@@ -1082,6 +1000,10 @@ svn up
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/">Jenkins 2.0 - novinky a vylepšení</a>
+      </li>
     
       <li class="post">
         <a href="/2016/10/prednaska-o-sre-na-devops-meetupu/">Přednáška o SRE na DevOPS meetupu</a>
@@ -1117,10 +1039,6 @@ svn up
     
       <li class="post">
         <a href="/2015/02/docker-cluster-management/">Docker cluster management</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/">Zapier a zasílání zůstatku z banky zdarma na mobil</a>
       </li>
     
   </ul>
