@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Jenkins je nejznámější řešení na Continues Integration, který existuje už řadu let. Od září je venku konečně verze 2.x (aktuálně 2.19.1 LTS), která &hellip;">
+  <meta name="description" content="V minulé části jsem probíral proč je důležité mít definice v souboru a proč potřebujeme Continues Delivery Pipelines. V tomto příspěvku se budu &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,94 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/">Jenkins 2.0 - novinky a vylepšení - 2.část</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-10-31T10:26:00+01:00" pubdate data-updated="true">31. 10. 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>V minulé části jsem probíral proč je důležité mít definice v souboru a proč potřebujeme Continues Delivery Pipelines.</p>
+
+<p>V tomto příspěvku se budu věnovat dalším bodům:</p>
+
+<ul>
+<li>distributed job across multiple nodes</li>
+<li>autoscaling on traffic with lowest possible price</li>
+<li>solution for caching for installations</li>
+<li>docker support</li>
+<li>matrix builds</li>
+</ul>
+
+
+<p>V Jenkinsu je podpora pro distribuované agenty, dnes můžete mít jednotlivé stroje v AWS (pomocí ec2, ec2-fleet pluginů), OpenStack, Docker, Kubernetes apod.</p>
+
+<p>Aby jste byli schopni dosáhnou kvalitního autoscalingu za velmi dobrou cenu dají se velmi dobře využít <a href="https://aws.amazon.com/ec2/spot/">spot instance</a> od AWS. Můžete ušetřit až 90% nákladů oproti normálním instancím.</p>
+
+<p>Pokud provozujete vlastní Jenkins je potřeba vyřešit cache, ideální řešení je <a href="https://www.jfrog.com/artifactory/">JFrog Artifactory</a>, které podporuje caching pro velké množství vývojových nástrojů. Bohužel toto řešení poměrně drahé. Ale existuje <a href="http://www.sonatype.org/nexus/">Nexus repository</a>, které má komunitní verzi. Ale bohužel v Nexus OSS chybí například podpora pro PHP Composer.</p>
+
+<p>Matrix buildy jsou potřeba v Jenkinsu se jim říká Multi-configuration project. Můžete tu vytvořit vlatní matice podle čeho chcete a Jenkins vygeneruje potřebné projekty s parametry které potřebujete, podobně jako když by jste použili <a href="https://wiki.jenkins-ci.org/display/JENKINS/Job+DSL+Plugin">Job DSL plugin</a>. To se hodí od testovaní různých verzí operačního systému, verzí programovacího jazyka apod.</p>
+
+<p>Poslední věc je podpora Dockeru. V Jenkinsu je několik pluginů pro Docker. Využití může být také různé. Buď to použijete na vytvoření agentů nebo přímo můžete pouštět projekt v docker containeru. Bohužel toto funguje spolehlivě jen na linuxu.</p>
+
+<p><img src="/images/jenkins//docker-build-env.png" alt="" /></p>
+
+<p>Takto se docker popíše v Jenkins pipelines.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">node</span><span class="o">(</span><span class="s1">&#39;docker&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'> <span class="c1">// My project sources include both build.xml and a Dockerfile to run it in.</span>
+</span><span class='line'> <span class="n">git</span> <span class="s1">&#39;https://git.mycorp.com/myproject.git&#39;</span>
+</span><span class='line'> <span class="c1">// Ready?</span>
+</span><span class='line'> <span class="n">docker</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="s1">&#39;mycorp/ant-qwerty:latest&#39;</span><span class="o">).</span><span class="na">inside</span> <span class="o">{</span>
+</span><span class='line'>   <span class="n">sh</span> <span class="s1">&#39;ant dist-package&#39;</span>
+</span><span class='line'> <span class="o">}</span>
+</span><span class='line'> <span class="n">archive</span> <span class="s1">&#39;app.zip&#39;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hostované řešení jako je TravisCI nebo CircleCI mají výhodu pokud potřebujete začít. Ale postupem, když máte více lidí nebo potřebujete větší flexibilitu tak se můžete dostat do potíží. Jenkins je náročnější na údržbu, ale umožňuje velkou flexibilitu.</p>
+
+<h2>Shrnutí</h2>
+
+<p>Jenkins 2 přinesl deklarativní popis, lepší bezpečnost a stále zachoval zpětnou kompatibilitu. Vylepšené UI a tady se stále pracuje na dalších vylepšeních (Blue Ocean). S Blue Ocean potom přijde deklarativní popis continues delivery pipelines a také by měl tam být online visual editor pro pipelines. Na další rok mají plány také na přidání Configuration API a myslím, že by mohl Blue Ocean v budoucnu uplně nahradit dnešní UI a zároveň otevřít cestu pro to například kompletně používat Jenkins bez UI. Uvidíme jak to bude dlouho trvat, každopádně se už teď těším na další novinky.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -484,69 +572,6 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2015/02/docker-cluster-management/">Docker cluster management</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-07T18:09:00+01:00" pubdate data-updated="true">07. 02. 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><ul>
-<li>Update: přidal jsem do článku další věci zmíněné v komentářích, všem děkuji za příspěvky.</li>
-<li>Update 23.2.2015: Přidán odkaz na Centurion od New Relic</li>
-</ul>
-
-
-<p>V poslední době se zabývám technologiemi pro řízení clusterů s docker konteinery.</p>
-
-<p>Pokud by to někoho zajímalo, zkusím jsem shrnout s čím jsem se potkal a kde vidím možné využití.</p>
-
-<p>Nástroje, které můžete použít cluster management:</p>
-
-<ul>
-<li><a href="http://mesos.apache.org/">Apache Mesos</a> (cpp, api for java, python, c++)</li>
-<li><a href="https://github.com/docker/swarm/">Docker Swarm</a> (golang)</li>
-<li><a href="https://coreos.com/using-coreos/clustering/">CoreOS Fleet</a> (golang)</li>
-<li><a href="http://kubernetes.io/">Google Kubernetes</a> (golang)</li>
-<li><a href="https://github.com/spotify/helios">Spotify Helios</a> (java)</li>
-<li><a href="https://github.com/newrelic/centurion">New Relic Centurion</a> (ruby)</li>
-</ul>
-
-
-<p>potom k tomu ješte patří některé frameworky pro Mesos a to <a href="https://mesosphere.github.io/marathon/">Marathon</a> a <a href="http://airbnb.github.io/chronos/">Chronos</a>. <a href="https://github.com/mesosphere/kubernetes-mesos">A Kubernetes Framework for Apache Mesos</a>.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2015/02/docker-cluster-management/">Dále &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/2/">&larr; Older</a>
@@ -576,6 +601,10 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/">Jenkins 2.0 - novinky a vylepšení - 2.část</a>
+      </li>
     
       <li class="post">
         <a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/">Jenkins 2.0 - novinky a vylepšení</a>
@@ -611,10 +640,6 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
     
       <li class="post">
         <a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/02/docker-cluster-management/">Docker cluster management</a>
       </li>
     
   </ul>

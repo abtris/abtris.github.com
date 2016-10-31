@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Wolfram Alpha (WA) je nový vyhledávač, který zatím běží v experimentálním provozu, ale je to něco úplně jiného než tradiční vyhledávače jako je &hellip;">
+  <meta name="description" content="O práci s Zend Serverem jsem už tu psal. Normálně je nainstalovaný Zend Debugger, který má tu nevýhodu, že neumí spolupracovat s PHPUnit. Proto, když &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,82 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/05/zend-server-ce-a-xdebug/">Zend Server CE a Xdebug</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-18T00:00:00+02:00" pubdate data-updated="true">18. 05. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>O práci s Zend Serverem jsem už tu psal. Normálně je nainstalovaný Zend Debugger, který má tu nevýhodu, že neumí spolupracovat s PHPUnit. Proto, když píšu testy a mám v Hudsonu automatické zpracování reportů potřebuji <a href="http://www.xdebug.org">Xdebug</a>. Teď si ukážeme jak to na Ubuntu přidat do Zend Serveru podporu pro Xdebug. Pro windows by to mělo fungovat obdobně jen se vyhnete kompilaci Xdebugu ze zdrojového kódu a máte si možnost stáhnout zkompilovanou knihovnu.</p>
+
+<p>Nechápu moc Zend proč se trochu nesnaží, aby se dal Zend Debugger používat stejným způsobem jako Xdebug. Obzvláště když vím, že v Zend Studiu je code coverage a profiling dostupný.</p>
+
+<p>Teď už jak na to v Ubuntu:</p>
+
+<ol>
+    <li>Zend Server CE nainstalovaný dle <a href="http://blog.prskavec.net/2009/04/ubuntu-centos-5-a-php-529-v-zend-server-ce/">postupu</a></li>
+    <li>Musíte mít nainstalovaný balíček pro kompilaci
+<pre>sudo apt-get install build-essential
+sudo apt-get install autoconf</pre>
+</li>
+    <li>Stáhnout zdrojové kódy xdebugu, rozbalit a dat kompilovat.
+<pre>wget http://www.xdebug.org/files/xdebug-2.0.4.tgz
+tar -xzf xdebug-2.0.4.tgz
+cd xdebug-2.0.4/
+/usr/local/zend/bin/phpize
+./configure --enable-xdebug --with-php-config=/usr/local/zend/bin/php-config
+make</pre>
+</li>
+    <li>Knihovnu najdete v <code>xdebug-2.0.4/modules/xdebug.so</code></li>
+    <li>Knihovnu nakopirujte do <code>/usr/local/zend/lib/debugger/xdebug.so</code></li>
+<pre>sudo cp modules/xdebug.so /usr/local/zend/lib/debugger/xdebug.so</pre>
+    <li>Upravte soubor <code>/usr/local/zend/etc/ext.d/debugger.ini</code> a zakomentujte řádek
+<pre>;zend_extension_manager.dir.debugger=/usr/local/zend/lib/debugger</pre>
+</li>
+    <li>Přidejte nakonec do <code>/usr/local/zend/etc/php.ini</code> řádek
+<pre>zend_extension=/usr/local/zend/lib/debugger/xdebug.so</pre>
+</li>
+    <li>Nezapomeňte restartovat server <code>sudo /etc/init.d/zend-server restart</code></li>
+</ol>
+
+
+<p>Po instalaci by jste neměli mít problém spustit Ant s kompletním phpunit taskem i na Zend Serveru CE.</p>
+
+<pre>
+
+
+
+</pre>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -804,171 +880,6 @@ Z pyramid mě zaujali čísla kolem LOC (počet řádků kódu) v porodnání s 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/02/hudson-a-php/">Hudson a PHP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-26T00:00:00+01:00" pubdate data-updated="true">26. 02. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Hudson, extensible continuous integration engine</h3>
-
-
-<p><a href="https://hudson.dev.java.net/">Hudson</a> je obdoba <a href="http://blog.prskavec.net/category/continuous-integration/">CruiseControl a Xinc</a>, ale oproti těm má jednu zásadní výhodu a to, že jeho vývoj jede poměrně slušným tempem a programátoři v Javě co znám ho používají. Pokud jsme chtěli mít jeden server, kde běží integrace pro Javu a PHP je podle mě v této době nejlepší sáhnout právě po Hudson.</p>
-
-<h3>Instalace</h3>
-
-
-<ul>
-    <li>ze stránek si <a href="http://hudson.gotdns.com/latest/hudson.war">stáhnete war file</a> a buď ho spustíte přímo <code>java -jar hudson.war</code> (potřebujete volný port 8080 a JDK 1.5+)</li>
-    <li>nebo provede instalaci do některého servlet serveru (Tomcat, Jetty, JBoss, &#8230;)</li>
-    <li>potom už na <a href="http://localhost:8080">http://localhost:8080</a> běží hudson</li>
-    <li>pro php doporučuji nainstalovat tyto pluginy
-<ul>
-    <li><a href="http://hudson.gotdns.com/wiki/display/HUDSON/Checkstyle+Plugin">Hudson Checkstyle Plug-in</a></li>
-    <li><a href="http://wiki.hudson-ci.org/display/HUDSON/Clover+Plugin">Hudson Clover plugin</a></li>
-    <li><a href="http://wiki.hudson-ci.org/display/HUDSON/PMD+Plugin">Hudson PMD Plug-in</a></li>
-</ul>
-</li>
-</ul>
-
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/02/01_dashboard-hudson_1235663237019.png"><img class="aligncenter size-medium wp-image-370" src="http://blog.prskavec.net/wp-content/uploads/2009/02/01_dashboard-hudson_1235663237019-300x222.png" alt="01_dashboard-hudson_1235663237019" width="300" height="222" /></a></p>
-
-<h3>Build</h3>
-
-
-<ul>
-    <li>pro build jsem použil <a href="http://phing.info">Phing</a>, ale stejně můžete použít <a href="http://ant.apache.org">Ant</a></li>
-</ul>
-
-
-<pre>
-
-<!-- $Id: build.xml 102 2009-02-26 14:39:10Z abtris $ -->
-
-
-
-
-
-
-<!-- Main Target -->
-
-
-<!-- Create dirs -->
-
-
-
-<!-- PHP API Documentation -->
-
-
-
-
-
-
-<!-- PHP CodeSniffer -->
- ${builddir}/reports/checkstyle.xml" escape="false" /&gt;
-
-<!-- PHPUnit -->
-
-
-
-</pre>
-
-
-
-
-<h3>Příklad konfigurace</h3>
-
-
-<dl>
-    <dt><strong>Project name</strong></dt>
-       <dd>StartPage</dd>
-    <dt><strong>Source Code Management</strong></dt>
-<dd>Subversion
-<ul>
-    <li>Repository URL: <code>https://localhost/svn/start_page/trunk</code></li>
-    <li>Local module <a href="http://www.directorydomain.org/">directory</a> (optional): <code>source</code></li>
-    <li>Use update: true</li>
-</ul>
-</dd>
-<dt><strong>Build</strong></dt>
-<dd>Execute shell
-
-    <ul>
-      <li><code>phing -f $WORKSPACE/source/build.xml -Dws=$WORKSPACE -Dtmp=$WORKSPACE</code></li>
-</ul>
-</dd>
-
-<dt><strong>Post-build action</strong></dt>
-
-<dt>Publish Javadoc</dt>
-<dd>
-    <ul>
-      <li>Javadoc <a href="http://www.directorydomain.org/">directory</a> = <code>build/start_page/apidocs/</code></li>
-     <li>Retain javadoc for each successful build = <code>false</code></li>
-   </ul>
-</dd>
-<dt>Publish JUnit test result report</dt>
-<dd>Test report XMLs = <code>build/start_page/reports/phpunit.xml</code></dd>
-
-<dt>Publish Checkstyle analysis results</dt>
-<dd>Checkstyle results = <code>build/start_page/reports/checkstyle.xml</code></dd>
-
-<dt>Publish PMD analysis results</dt>
-
-   
-<dd>PMD results = <code>build/start_page/reports/phpunit.pmd.xml</code></dd>
-
-<dt>Publish Clover Coverage Report</dt>
-
-    <dd>Clover report directory = <code>build/start_page/reports/coverage/</code></dd>
-
-</dl>
-
-
-<br />
-
-
-<h3>Screenshots</h3>
-
-
-<p>V galerii jsou obrázky z Hudsona, nepřidal jsem obrázky, které vedou na dokumentaci v html formátu na code coverage report v html. Jsou tam jen výstupy, které zobrazuje Hudson nebo pluginy.</p>
-
-<p>[gallery link=&ldquo;file&rdquo;]</p>
-
-<h3>Závěr</h3>
-
-
-<p>Moje řešení není dokonalé, ale funkční a doufám, že to pomůže rozmnožit Hudson i mojo Java komunitu. Pokud Hudson pro PHP někdo použív budu rád, když se podělíte o zkušenosti v komentářích.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/10/">&larr; Older</a>
@@ -1000,6 +911,10 @@ Z pyramid mě zaujali čísla kolem LOC (počet řádků kódu) v porodnání s 
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/">Jenkins 2.0 - novinky a vylepšení - 2.část</a>
+      </li>
     
       <li class="post">
         <a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/">Jenkins 2.0 - novinky a vylepšení</a>
@@ -1035,10 +950,6 @@ Z pyramid mě zaujali čísla kolem LOC (počet řádků kódu) v porodnání s 
     
       <li class="post">
         <a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/02/docker-cluster-management/">Docker cluster management</a>
       </li>
     
   </ul>

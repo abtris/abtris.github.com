@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: jenkins | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/jenkins/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-10-27T10:51:54+02:00</updated>
+  <updated>2016-10-31T06:10:39+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -12,6 +12,58 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení - 2.část]]></title>
+    <link href="http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/"/>
+    <updated>2016-10-31T10:26:00+01:00</updated>
+    <id>http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast</id>
+    <content type="html"><![CDATA[<p>V minulé části jsem probíral proč je důležité mít definice v souboru a proč potřebujeme Continues Delivery Pipelines.</p>
+
+<p>V tomto příspěvku se budu věnovat dalším bodům:</p>
+
+<ul>
+<li>distributed job across multiple nodes</li>
+<li>autoscaling on traffic with lowest possible price</li>
+<li>solution for caching for installations</li>
+<li>docker support</li>
+<li>matrix builds</li>
+</ul>
+
+
+<p>V Jenkinsu je podpora pro distribuované agenty, dnes můžete mít jednotlivé stroje v AWS (pomocí ec2, ec2-fleet pluginů), OpenStack, Docker, Kubernetes apod.</p>
+
+<p>Aby jste byli schopni dosáhnou kvalitního autoscalingu za velmi dobrou cenu dají se velmi dobře využít <a href="https://aws.amazon.com/ec2/spot/">spot instance</a> od AWS. Můžete ušetřit až 90% nákladů oproti normálním instancím.</p>
+
+<p>Pokud provozujete vlastní Jenkins je potřeba vyřešit cache, ideální řešení je <a href="https://www.jfrog.com/artifactory/">JFrog Artifactory</a>, které podporuje caching pro velké množství vývojových nástrojů. Bohužel toto řešení poměrně drahé. Ale existuje <a href="http://www.sonatype.org/nexus/">Nexus repository</a>, které má komunitní verzi. Ale bohužel v Nexus OSS chybí například podpora pro PHP Composer.</p>
+
+<p>Matrix buildy jsou potřeba v Jenkinsu se jim říká Multi-configuration project. Můžete tu vytvořit vlatní matice podle čeho chcete a Jenkins vygeneruje potřebné projekty s parametry které potřebujete, podobně jako když by jste použili <a href="https://wiki.jenkins-ci.org/display/JENKINS/Job+DSL+Plugin">Job DSL plugin</a>. To se hodí od testovaní různých verzí operačního systému, verzí programovacího jazyka apod.</p>
+
+<p>Poslední věc je podpora Dockeru. V Jenkinsu je několik pluginů pro Docker. Využití může být také různé. Buď to použijete na vytvoření agentů nebo přímo můžete pouštět projekt v docker containeru. Bohužel toto funguje spolehlivě jen na linuxu.</p>
+
+<p><img src="/images/jenkins//docker-build-env.png" alt="" /></p>
+
+<p>Takto se docker popíše v Jenkins pipelines.</p>
+
+<p><code>groovy
+node('docker') {
+ // My project sources include both build.xml and a Dockerfile to run it in.
+ git 'https://git.mycorp.com/myproject.git'
+ // Ready?
+ docker.build('mycorp/ant-qwerty:latest').inside {
+   sh 'ant dist-package'
+ }
+ archive 'app.zip'
+}
+</code></p>
+
+<p>Hostované řešení jako je TravisCI nebo CircleCI mají výhodu pokud potřebujete začít. Ale postupem, když máte více lidí nebo potřebujete větší flexibilitu tak se můžete dostat do potíží. Jenkins je náročnější na údržbu, ale umožňuje velkou flexibilitu.</p>
+
+<h2>Shrnutí</h2>
+
+<p>Jenkins 2 přinesl deklarativní popis, lepší bezpečnost a stále zachoval zpětnou kompatibilitu. Vylepšené UI a tady se stále pracuje na dalších vylepšeních (Blue Ocean). S Blue Ocean potom přijde deklarativní popis continues delivery pipelines a také by měl tam být online visual editor pro pipelines. Na další rok mají plány také na přidání Configuration API a myslím, že by mohl Blue Ocean v budoucnu uplně nahradit dnešní UI a zároveň otevřít cestu pro to například kompletně používat Jenkins bez UI. Uvidíme jak to bude dlouho trvat, každopádně se už teď těším na další novinky.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení]]></title>
@@ -326,66 +378,6 @@ curl http://jenkins.firma.cz/jenkins/git/notifyCommit?url=ssh://git@git.firma.cz
 <p>Přednášku jsem o tom měl na poledním čtvrtku. Slidy jsou k dispozici <a href="http://slidesha.re/MtbUvD">http://slidesha.re/MtbUvD</a>.</p>
 
 <p>Pokud vám na školení o integraci něco chybí co by jste tam chtěli, neváhejte a oslovte mě emailem nebo v komentářích.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Jenkins – použití Continuous Integration engine pro PHP]]></title>
-    <link href="http://blog.prskavec.net/2011/11/jenkins-pouziti-continuous-integration-engine-pro-php/"/>
-    <updated>2011-11-24T20:24:00+01:00</updated>
-    <id>http://blog.prskavec.net/2011/11/jenkins-pouziti-continuous-integration-engine-pro-php</id>
-    <content type="html"><![CDATA[<p>Vyvíjíte větší PHP projekt a potřebujete zlepšit koordinaci vašeho týmu a vaše softwarové procesy? Přístup Continuous Integration a nástroj Jenkins, který jej umožňuje implementovat, vám pomohou. Dozvíte se, jak Jenkins nainstalovat, jak ověřovat kvalitu softwarového produktu, jak řešit spouštění automatických testů, jak testovat coding standard, jaké si stanovovat softwarové metriky či jak kontinuálně deployovat vaše průběžné výsledky.</p>
-
-<!--more-->
-
-
-<p>Všechno ukazuji na praktických příkladech s pomocí Ubuntu a virtualizace (VirtualBox) a za použití nástroje <a href="http://www.vagrantup.com">Vagrant</a>.</p>
-
-<h2>Osnova školení pro <a href="http://webexpo.cz/blog/#prskavec">WebExpo Academy</a></h2>
-
-<ul>
-<li>Automatizace buildu</li>
-<li>Instalace Jenkins</li>
-<li>Continuous Integration</li>
-<li>Continuous Inspection
-
-<ul>
-<li>API dokumentace</li>
-<li>Softwarove metriky</li>
-<li>Duplicitni kod</li>
-<li>Coding standard</li>
-<li>Agregace vysledku</li>
-</ul>
-</li>
-<li>Automatizace automatizace</li>
-<li>Continuous Delivery</li>
-</ul>
-
-
-<h2>Informace o školení</h2>
-
-<p>Termín: pátek 16. 12. 2011 10:00 – 18:00</p>
-
-<p>Cena 4 490,&ndash; Kč. V prosinci jen za 2 290,&ndash; Kč!</p>
-
-<p>Kapacita: Zbývají 2 místa.</p>
-
-<p>Objednávky: <a href="mailto:academy@webexpo.net"><a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x61;&#x63;&#x61;&#x64;&#101;&#x6d;&#121;&#x40;&#x77;&#101;&#x62;&#x65;&#120;&#x70;&#x6f;&#x2e;&#x6e;&#101;&#116;">&#97;&#x63;&#x61;&#x64;&#101;&#109;&#121;&#x40;&#x77;&#x65;&#98;&#101;&#x78;&#x70;&#111;&#46;&#110;&#x65;&#116;</a></a>, +420 775 477 457</p>
-
-<p>Školení se konají v Praze v prostoru WebHub, adresa: Kafkova 16, Praha 6, dvě minuty pěšky od metra Dejvická.</p>
-
-<h2>Související články</h2>
-
-<ul>
-<li><a href="http://blog.prskavec.net/2009/12/php-codebrowser/">http://blog.prskavec.net/2009/12/php-codebrowser/</a></li>
-<li><a href="http://blog.prskavec.net/2009/02/hudson-a-php/">http://blog.prskavec.net/2009/02/hudson-a-php/</a></li>
-<li><a href="http://blog.prskavec.net/2009/04/phphudson/">http://blog.prskavec.net/2009/04/phphudson/</a></li>
-<li><a href="http://blog.prskavec.net/2009/03/pdepend-a-php-frameworky/">http://blog.prskavec.net/2009/03/pdepend-a-php-frameworky/</a></li>
-<li><a href="http://blog.prskavec.net/2009/03/pdepend-a-php-frameworky-dodatek/">http://blog.prskavec.net/2009/03/pdepend-a-php-frameworky-dodatek/</a></li>
-<li><a href="http://blog.prskavec.net/2008/11/phpundercontrol-vs-xinc/">http://blog.prskavec.net/2008/11/phpundercontrol-vs-xinc/</a></li>
-<li><a href="http://blog.prskavec.net/2008/06/phing-svnlogtask/">http://blog.prskavec.net/2008/06/phing-svnlogtask/</a></li>
-</ul>
-
 ]]></content>
   </entry>
   

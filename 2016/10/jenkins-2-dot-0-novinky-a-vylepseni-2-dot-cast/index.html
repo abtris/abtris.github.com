@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Subversion dnes a zítra - Prskavčí blog</title>
+  <title>Jenkins 2.0 - novinky a vylepšení - 2.část - Prskavčí blog</title>
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Já osobně jsem začal pracovat s někde kolem roku 2000 se systémem CVS z kterého jsem nebyl vůbec nadšený, hned jak jsem se pokusil něco přejmenovat &hellip;">
+  <meta name="description" content="V minulé části jsem probíral proč je důležité mít definice v souboru a proč potřebujeme Continues Delivery Pipelines. V tomto příspěvku se budu &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.prskavec.net/2010/04/subversion-dnes-a-zitra/">
+  <link rel="canonical" href="http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
@@ -62,7 +62,7 @@
   
   <header>
     
-      <h1 class="entry-title">Subversion dnes a zítra</h1>
+      <h1 class="entry-title">Jenkins 2.0 - novinky a vylepšení - 2.část</h1>
     
     
       <p class="meta">
@@ -78,96 +78,66 @@
   
 
 
-<time datetime="2010-04-30T00:00:00+02:00" pubdate data-updated="true">30. 04. 2010</time>
+<time datetime="2016-10-31T10:26:00+01:00" pubdate data-updated="true">31. 10. 2016</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><!--        @page { margin: 0.79in }        P { margin-bottom: 0.08in } -->
+<div class="entry-content"><p>V minulé části jsem probíral proč je důležité mít definice v souboru a proč potřebujeme Continues Delivery Pipelines.</p>
 
-
-<p>Já osobně jsem začal pracovat s někde kolem roku 2000 se systémem CVS z kterého jsem nebyl vůbec nadšený, hned jak jsem se pokusil něco přejmenovat. Později jsem přešel na Subversion, který mě v té době nadechl a to mi celkem vydrželo po dlouhou dobu než jsem před několika lety začal koketovat s distribuovanými systémy a teď asi rok už aktivně používám Git a pře ním jsem si hrál s Bazaar a Mercurialem. Na Subversion jsem, ale nijak nezanevřel a stále ho používáme ve firmě jako jediný verzovací systém v poměrně slušném nasazení (asi 100 repositářů, několik desítek GB místa). Znám limity Subversion a podle toho s ním zacházím.</p>
-
-<p>Verzovací systémy jsou tu už 38 let, první verzovací systém SCCS vznikal v Bellových laboratořích v roce 1972. Dodnes existuje na mnoha unixových systémech v GNU variantě.</p>
-
-<p>Protože SCCS to byl proprietární verzovací systém, vytvořil na Walter F. Tichy  na Pordue University open source variantu tohoto software pojmenovanou RCS. RCS se dodnes používá například v Twiki pro uchovávání historie stránek.</p>
-
-<p>Následovali další jako CVS, PRCS (Project Revision Control systém). CVS byla původně jen nadstavba na RCS, sada skriptů, které používali příkazy RCS. Většinu vlastností CVS má poděděnou od RCS.</p>
-
-<p>Subversion vznikl nový verzovací systém, který odstraní chyby co lidem vadili v CVS a byl napsán úplně znova i když filozoficky se hodně držel původního CVS, ale byl tree oriented, což přineslo některé výhody, ale i nevýhody.</p>
-
-<p>Protože řada vývojářů nebyla s CVS spokojená vznikali další systémy a za některými stál i Microsoft, který přišel se svým verzovacím systémem Delta v roce 1994. Tento systém dlouho nevydržel, protože MS udělal výhodou akvizici a koupil firmu SourceSafe a další rok už vydal nový verzovací systém VSS. Tento systém měl mnoho nevýhod a pokud někdo s ním pracoval určitě mi dá za pravdu, že to nebylo jednoduché. Problémy se zamykáním souborů, přenos přes sdílené disky apod. V roce 2005 naštěstí MS představil moderní centralizovaný systém, který je součásti TFS, který jako datové úložiště používá MS SQL.</p>
-
-<p>Larry McVoy je klíčová osobnost návrhu verzovacích systémů. Stál u vývoje verzovacího systému  Sun TeamWare, který vedl Evan Adams a potom na základě těchto zkušeností vytvořil BitKeeper. To jsou první distribuované verzovací systémy. TeamWare byl postavený na základech SCCS, přesto přinesl spoustu nových věcí, které dali později vzniknou dnešním systémům. Implementace TeamWare začala v roce 1991, to můžeme považovat za datum vzniku distribuovaných systémů.</p>
-
-<p>TeamWare to začal, ale BitKeeper může za vznik Gitu a Mercurialu, kteří patří dnes mezi nejznámější distribuované verzovací systémy. Společnost BitKeeper se na základě událostí v roce 2005 rozhodla odebrat (reverse enginnering na linux konferenci pomoci telnetu) volné použití linuxové komunitě, která BitKeeper používala k vývoji jádra.</p>
-
-<p>To vedlo ke vzniku Gitu (Linus Torvald) a Mercurial (Matt Mackall) v roce 2005. Git je inspirován BitKeeperem a Monotone (sha1 hash), také velkou část práce na něm udělal Petr Baudiš, který stojí například za frontendem Cogito  a příklad git-filter-branch.</p>
-
-<p>Výhody Gitu vidím v těchto vlastnostech:</p>
+<p>V tomto příspěvku se budu věnovat dalším bodům:</p>
 
 <ul>
-    <li>pružnost   (moderní různá worklow)</li>
-    <li>lokální   větve</li>
-    <li>jednoduchý a   rychlý merge</li>
-    <li>rychlost a  offline commit</li>
-    <li>vysoký     failover, díky lokálním kompletním kopiím</li>
+<li>distributed job across multiple nodes</li>
+<li>autoscaling on traffic with lowest possible price</li>
+<li>solution for caching for installations</li>
+<li>docker support</li>
+<li>matrix builds</li>
 </ul>
 
 
-<p>Tak proč všichni nepoužívají Git, ale Subversion? Je proto několik důvodů.</p>
+<p>V Jenkinsu je podpora pro distribuované agenty, dnes můžete mít jednotlivé stroje v AWS (pomocí ec2, ec2-fleet pluginů), OpenStack, Docker, Kubernetes apod.</p>
 
-<ol>
-    <li>ne všichni     považují tyto výhody za důležité, priority mají jinde</li>
-    <li>pro SVN mluví  vysoká rozšířenost, snadná dostupnost v mnoha IDE</li>
-    <li>vynikající    TortoiseSVN, který pomáhá více než by se na první pohled mohlo    zdát</li>
-    <li>dostupný   placený support včetně tvoření balíků pro linux, windows     (CollabNet)</li>
-    <li>http, apache    pro snadné začlenění do každé sítě</li>
-    <li>napojeni    ldap, active diretory nastavení práv až na úrověň každého   adresáře</li>
-    <li>znalost</li>
-</ol>
+<p>Aby jste byli schopni dosáhnou kvalitního autoscalingu za velmi dobrou cenu dají se velmi dobře využít <a href="https://aws.amazon.com/ec2/spot/">spot instance</a> od AWS. Můžete ušetřit až 90% nákladů oproti normálním instancím.</p>
 
+<p>Pokud provozujete vlastní Jenkins je potřeba vyřešit cache, ideální řešení je <a href="https://www.jfrog.com/artifactory/">JFrog Artifactory</a>, které podporuje caching pro velké množství vývojových nástrojů. Bohužel toto řešení poměrně drahé. Ale existuje <a href="http://www.sonatype.org/nexus/">Nexus repository</a>, které má komunitní verzi. Ale bohužel v Nexus OSS chybí například podpora pro PHP Composer.</p>
 
-<p>Proto více než 80% firem dnes používá Subversion.</p>
+<p>Matrix buildy jsou potřeba v Jenkinsu se jim říká Multi-configuration project. Můžete tu vytvořit vlatní matice podle čeho chcete a Jenkins vygeneruje potřebné projekty s parametry které potřebujete, podobně jako když by jste použili <a href="https://wiki.jenkins-ci.org/display/JENKINS/Job+DSL+Plugin">Job DSL plugin</a>. To se hodí od testovaní různých verzí operačního systému, verzí programovacího jazyka apod.</p>
 
-<p>Dnes je důležité používat určitě aktuální verzi Subversion, vůbec nedoporučuji pracovat s verzemi 1.4 a nižší, které nepodporovali mergeinfo. Subversion má desetileté výročí. Ale stále je to malé dítě, které potřebuje dospět. Už jsou pryč dětské nemoci, ale některé problémy přetrvávají.</p>
+<p>Poslední věc je podpora Dockeru. V Jenkinsu je několik pluginů pro Docker. Využití může být také různé. Buď to použijete na vytvoření agentů nebo přímo můžete pouštět projekt v docker containeru. Bohužel toto funguje spolehlivě jen na linuxu.</p>
 
-<p>Subversion byl začleněn pod Apache Foudation do toho doufám, že se trochu akceleruje vývoj Subversion k následujícím verzím. Tým kolem SVN si je dobře vědom věcí, které SVN scházejí a dobře vědí, že to není jednoduché je odstranit. Proto existuje tato roadmapa.</p>
+<p><img src="/images/jenkins//docker-build-env.png" alt="" /></p>
 
-<p>Je to roadmapa přibližně na 4 roky dopředu, klíčový bude letošek a uvidíme jak se podaří vývoj verze 1.7 o které budu teď. K ostatním verzím se vrátím později.</p>
+<p>Takto se docker popíše v Jenkins pipelines.</p>
 
-<p>Verze 1.7 by měla obsahovat tyto novinky</p>
-
-<ul>
-    <li>httpv2</li>
-    <li>wc-ng</li>
-    <li>svn patch</li>
-</ul>
-
-
-<p>Nová verze HTTPv2 by měla přinést větší rychlost při zachování všech výhod http protokolu.</p>
-
-<p>Pracovní kopie nové generace je důležitá součást nutná pro další následné změny, které odstraní dnešní problémy (tree conflict, rename tracking). Bude to sqlite databáze v jednom adresáři .svn, kde budou všechny potřebná metadata o repository.</p>
-
-<p>Svn patch jen umožní to co umí příkaz patch v linux, drobnost, která v svn chyběla.</p>
-
-<p>Ve verzi 1.8, která by měla být za rok bychom se snad díky nové WC-NG mohli již dočkat sledování přejmenovaných souborů napříč historii. Nastavení pro jednotlivé repository ne jen globálně a vylepšení problémů s tree conflicty.</p>
-
-<p>Co bude v dalších verzích uvidíme, autoři slibují nový FS, nový editor a další vylepšení. Uvidíme zda se do budoucna dočkáme třeba i offline commitů.</p>
-
-<p>Na závěr bych chtěl shrnout co by jste si měli odnést těchto 4 věci:</p>
-
-<ul>
-    <li>pokud máte         subversion, ujistěte se že používáte poslední verze</li>
-    <li>pokud chcete        přejít na DVCS mějte pro to dobré zdůvodnění nedělejte to       je kvůli módě</li>
-    <li>na      subversion se stále pracuje</li>
-    <li>existují       distribuované verzovací systémy a přinášejí něco nového</li>
-</ul>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">node</span><span class="o">(</span><span class="s1">&#39;docker&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'> <span class="c1">// My project sources include both build.xml and a Dockerfile to run it in.</span>
+</span><span class='line'> <span class="n">git</span> <span class="s1">&#39;https://git.mycorp.com/myproject.git&#39;</span>
+</span><span class='line'> <span class="c1">// Ready?</span>
+</span><span class='line'> <span class="n">docker</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="s1">&#39;mycorp/ant-qwerty:latest&#39;</span><span class="o">).</span><span class="na">inside</span> <span class="o">{</span>
+</span><span class='line'>   <span class="n">sh</span> <span class="s1">&#39;ant dist-package&#39;</span>
+</span><span class='line'> <span class="o">}</span>
+</span><span class='line'> <span class="n">archive</span> <span class="s1">&#39;app.zip&#39;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Tento článek je přepis mojí přednášky na <a href="http://www.slideshare.net/ladislavprskavec/subversion-dnes-a-ztra">Teched 2010</a>.</p>
+<p>Hostované řešení jako je TravisCI nebo CircleCI mají výhodu pokud potřebujete začít. Ale postupem, když máte více lidí nebo potřebujete větší flexibilitu tak se můžete dostat do potíží. Jenkins je náročnější na údržbu, ale umožňuje velkou flexibilitu.</p>
+
+<h2>Shrnutí</h2>
+
+<p>Jenkins 2 přinesl deklarativní popis, lepší bezpečnost a stále zachoval zpětnou kompatibilitu. Vylepšené UI a tady se stále pracuje na dalších vylepšeních (Blue Ocean). S Blue Ocean potom přijde deklarativní popis continues delivery pipelines a také by měl tam být online visual editor pro pipelines. Na další rok mají plány také na přidání Configuration API a myslím, že by mohl Blue Ocean v budoucnu uplně nahradit dnešní UI a zároveň otevřít cestu pro to například kompletně používat Jenkins bez UI. Uvidíme jak to bude dlouho trvat, každopádně se už teď těším na další novinky.</p>
 </div>
 
 
@@ -190,8 +160,14 @@
   
 
 
-<time datetime="2010-04-30T00:00:00+02:00" pubdate data-updated="true">30. 04. 2010</time>
+<time datetime="2016-10-31T10:26:00+01:00" pubdate data-updated="true">31. 10. 2016</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/categories/jenkins/'>jenkins</a>
+  
+</span>
 
 
     </p>
@@ -205,14 +181,18 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2010/04/5-alternativnich-systemu-jak-tvorit-slidy/" title="Previous Post: 5 alternativních systémů jak tvořit slidy">&laquo; 5 alternativních systémů jak tvořit slidy</a>
+        <a class="basic-alignment left" href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/" title="Previous Post: Jenkins 2.0 - novinky a vylepšení">&laquo; Jenkins 2.0 - novinky a vylepšení</a>
       
-      
-        <a class="basic-alignment right" href="/2010/05/subversion-post-commit-pro-vice-projektu-v-jednom-repository/" title="Next Post: Subversion post-commit pro více projektů v jednom repository">Subversion post-commit pro více projektů v jednom repository &raquo;</a>
       
     </p>
   </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -384,7 +364,10 @@ var trackerName=ga[_0x5d8e[4]]()[0][_0x5d8e[3]](_0x5d8e[2]);var isGTMhere=false;
       var disqus_shortname = 'prskavecblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/';
+        var disqus_url = 'http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

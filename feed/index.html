@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-10-27T10:51:54+02:00</updated>
+  <updated>2016-10-31T06:10:39+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení - 2.část]]></title>
+    <link href="http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/"/>
+    <updated>2016-10-31T10:26:00+01:00</updated>
+    <id>http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast</id>
+    <content type="html"><![CDATA[<p>V minulé části jsem probíral proč je důležité mít definice v souboru a proč potřebujeme Continues Delivery Pipelines.</p>
+
+<p>V tomto příspěvku se budu věnovat dalším bodům:</p>
+
+<ul>
+<li>distributed job across multiple nodes</li>
+<li>autoscaling on traffic with lowest possible price</li>
+<li>solution for caching for installations</li>
+<li>docker support</li>
+<li>matrix builds</li>
+</ul>
+
+
+<p>V Jenkinsu je podpora pro distribuované agenty, dnes můžete mít jednotlivé stroje v AWS (pomocí ec2, ec2-fleet pluginů), OpenStack, Docker, Kubernetes apod.</p>
+
+<p>Aby jste byli schopni dosáhnou kvalitního autoscalingu za velmi dobrou cenu dají se velmi dobře využít <a href="https://aws.amazon.com/ec2/spot/">spot instance</a> od AWS. Můžete ušetřit až 90% nákladů oproti normálním instancím.</p>
+
+<p>Pokud provozujete vlastní Jenkins je potřeba vyřešit cache, ideální řešení je <a href="https://www.jfrog.com/artifactory/">JFrog Artifactory</a>, které podporuje caching pro velké množství vývojových nástrojů. Bohužel toto řešení poměrně drahé. Ale existuje <a href="http://www.sonatype.org/nexus/">Nexus repository</a>, které má komunitní verzi. Ale bohužel v Nexus OSS chybí například podpora pro PHP Composer.</p>
+
+<p>Matrix buildy jsou potřeba v Jenkinsu se jim říká Multi-configuration project. Můžete tu vytvořit vlatní matice podle čeho chcete a Jenkins vygeneruje potřebné projekty s parametry které potřebujete, podobně jako když by jste použili <a href="https://wiki.jenkins-ci.org/display/JENKINS/Job+DSL+Plugin">Job DSL plugin</a>. To se hodí od testovaní různých verzí operačního systému, verzí programovacího jazyka apod.</p>
+
+<p>Poslední věc je podpora Dockeru. V Jenkinsu je několik pluginů pro Docker. Využití může být také různé. Buď to použijete na vytvoření agentů nebo přímo můžete pouštět projekt v docker containeru. Bohužel toto funguje spolehlivě jen na linuxu.</p>
+
+<p><img src="http://blog.prskavec.net/images/jenkins//docker-build-env.png" alt="" /></p>
+
+<p>Takto se docker popíše v Jenkins pipelines.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">node</span><span class="o">(</span><span class="s1">&#39;docker&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'> <span class="c1">// My project sources include both build.xml and a Dockerfile to run it in.</span>
+</span><span class='line'> <span class="n">git</span> <span class="s1">&#39;https://git.mycorp.com/myproject.git&#39;</span>
+</span><span class='line'> <span class="c1">// Ready?</span>
+</span><span class='line'> <span class="n">docker</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="s1">&#39;mycorp/ant-qwerty:latest&#39;</span><span class="o">).</span><span class="na">inside</span> <span class="o">{</span>
+</span><span class='line'>   <span class="n">sh</span> <span class="s1">&#39;ant dist-package&#39;</span>
+</span><span class='line'> <span class="o">}</span>
+</span><span class='line'> <span class="n">archive</span> <span class="s1">&#39;app.zip&#39;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hostované řešení jako je TravisCI nebo CircleCI mají výhodu pokud potřebujete začít. Ale postupem, když máte více lidí nebo potřebujete větší flexibilitu tak se můžete dostat do potíží. Jenkins je náročnější na údržbu, ale umožňuje velkou flexibilitu.</p>
+
+<h2>Shrnutí</h2>
+
+<p>Jenkins 2 přinesl deklarativní popis, lepší bezpečnost a stále zachoval zpětnou kompatibilitu. Vylepšené UI a tady se stále pracuje na dalších vylepšeních (Blue Ocean). S Blue Ocean potom přijde deklarativní popis continues delivery pipelines a také by měl tam být online visual editor pro pipelines. Na další rok mají plány také na přidání Configuration API a myslím, že by mohl Blue Ocean v budoucnu uplně nahradit dnešní UI a zároveň otevřít cestu pro to například kompletně používat Jenkins bez UI. Uvidíme jak to bude dlouho trvat, každopádně se už teď těším na další novinky.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení]]></title>
@@ -178,7 +239,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
 
 <p>Hodně je vidět jaký velký rozdíl a kolik práce to dá pokud chcete firmu předělat na SRE (brownfielding) nebo začnete hned.</p>
 
-<h3>The Many Ways Your Monitoring Is Lying to You &ndash; Sebastian Kirsch, Google, <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#115;&#107;&#x69;&#x72;&#115;&#x63;&#x68;&#x40;&#103;&#111;&#111;&#103;&#108;&#101;&#46;&#x63;&#111;&#x6d;">&#x73;&#107;&#105;&#x72;&#x73;&#x63;&#104;&#64;&#103;&#x6f;&#x6f;&#103;&#x6c;&#x65;&#x2e;&#x63;&#111;&#x6d;</a></h3>
+<h3>The Many Ways Your Monitoring Is Lying to You &ndash; Sebastian Kirsch, Google, <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#x73;&#x6b;&#x69;&#x72;&#115;&#x63;&#104;&#x40;&#x67;&#x6f;&#x6f;&#x67;&#108;&#x65;&#x2e;&#99;&#x6f;&#x6d;">&#115;&#107;&#105;&#x72;&#x73;&#99;&#104;&#x40;&#x67;&#111;&#111;&#x67;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;</a></h3>
 
 <p>Skvělá přednáška o tom jak nemůžete věřit každému grafu v monitoringu. Doporučuji schlédnout až bude video, bylo tam hodně příkladů. Jde o to, že věci, které uváděl nejsou pro mě například vůbec nové díky lekcím z numerické matematiky a statistiky na ČVUT, ale ne každý má statistický background a nebývá to až tak běžná součást Computer Science.</p>
 
@@ -1444,28 +1505,6 @@ export PATH=$PATH:~/app-root/repo/node_modules/coffee-script/bin
 <h2>Další RailsGirls</h2>
 
 <p>S ostatními co jsme se shodli, že pokračování bude. Dostali jsme pozitivní zpětnou vazbu ode všech kdo se účastnili a za to jsme rádi. Chtěli bychom mít lepší prostor, se spolehlivým internetem. Vylepšit rozdělení do skupin, přidat další věci kolem.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[PragueJS pořádá s GoodData přednášku o Ember.js. Přednáší autoři frameworku Yehuda Katz a Tom Dale.]]></title>
-    <link href="http://blog.prskavec.net/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale/"/>
-    <updated>2012-10-03T17:57:00+02:00</updated>
-    <id>http://blog.prskavec.net/2012/10/praguejs-porada-s-gooddata-prednasku-o-ember-dot-js-prednasi-autori-frameworku-yehuda-katz-a-tom-dale</id>
-    <content type="html"><![CDATA[<p>Ve čtvrtek 11.10. proběhne <a href="http://praguejs.cz">javascriptový meetup</a> v <a href="http://node5.cz">Node5</a> s tématem <a href="http://emberjs.com">Ember.js</a>. GoodData přivezou do Prahy hlavní vývojáře tohoto frameworku.</p>
-
-<!--more-->
-
-
-<p>Oba představitelé pracuji pro startup <a href="http://www.tilde.io/">Tilde.io</a>, který společně založili, jehož hlavní náplní je dodávat kompletní řešení pro prostředí moderního webu.</p>
-
-<p><em>Yehuda Katz</em> je hlavní vývojář mnoha projektů, včetně Ruby on Rails, jQuery a Ember.js.</p>
-
-<p><em>Tom Dale</em> je Ember.js maintainer a dříve člen Sproutcore týmu. Je to bývalý zaměstnanec Apple, který pracoval na MobileMe a iCloud aplikacích. Takže o témata k diskuzi by neměla být vůbec nouze.</p>
-
-<p>Začátek v 18h v prostorách Node5 v Praze. Přihlásit se můžete na <a href="http://srazy.info/js-meetup/2731">srazy.info</a> nebo na <a href="https://www.facebook.com/events/460090940679989/">facebooku</a>.</p>
-
-<p>Více infomací na <a href="http://praguejs.cz">praguejs.cz</a>.</p>
 ]]></content>
   </entry>
   
