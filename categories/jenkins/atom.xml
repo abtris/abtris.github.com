@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: jenkins | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/jenkins/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-10-31T06:10:39+01:00</updated>
+  <updated>2016-10-31T06:31:45+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -40,8 +40,6 @@
 <p>Matrix buildy jsou potřeba v Jenkinsu se jim říká Multi-configuration project. Můžete tu vytvořit vlatní matice podle čeho chcete a Jenkins vygeneruje potřebné projekty s parametry které potřebujete, podobně jako když by jste použili <a href="https://wiki.jenkins-ci.org/display/JENKINS/Job+DSL+Plugin">Job DSL plugin</a>. To se hodí od testovaní různých verzí operačního systému, verzí programovacího jazyka apod.</p>
 
 <p>Poslední věc je podpora Dockeru. V Jenkinsu je několik pluginů pro Docker. Využití může být také různé. Buď to použijete na vytvoření agentů nebo přímo můžete pouštět projekt v docker containeru. Bohužel toto funguje spolehlivě jen na linuxu.</p>
-
-<p><img src="/images/jenkins//docker-build-env.png" alt="" /></p>
 
 <p>Takto se docker popíše v Jenkins pipelines.</p>
 
