@@ -102,6 +102,9 @@
 
 <p>Aby jste byli schopni dosáhnou kvalitního autoscalingu za velmi dobrou cenu dají se velmi dobře využít <a href="https://aws.amazon.com/ec2/spot/">spot instance</a> od AWS. Můžete ušetřit až 90% nákladů oproti normálním instancím.</p>
 
+<!-- more -->
+
+
 <p>Pokud provozujete vlastní Jenkins je potřeba vyřešit cache, ideální řešení je <a href="https://www.jfrog.com/artifactory/">JFrog Artifactory</a>, které podporuje caching pro velké množství vývojových nástrojů. Bohužel toto řešení poměrně drahé. Ale existuje <a href="http://www.sonatype.org/nexus/">Nexus repository</a>, které má komunitní verzi. Ale bohužel v Nexus OSS chybí například podpora pro PHP Composer.</p>
 
 <p>Matrix buildy jsou potřeba v Jenkinsu se jim říká Multi-configuration project. Můžete tu vytvořit vlatní matice podle čeho chcete a Jenkins vygeneruje potřebné projekty s parametry které potřebujete, podobně jako když by jste použili <a href="https://wiki.jenkins-ci.org/display/JENKINS/Job+DSL+Plugin">Job DSL plugin</a>. To se hodí od testovaní různých verzí operačního systému, verzí programovacího jazyka apod.</p>

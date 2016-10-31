@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: jenkins | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/jenkins/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-10-31T06:31:45+01:00</updated>
+  <updated>2016-10-31T06:33:53+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -34,6 +34,9 @@
 <p>V Jenkinsu je podpora pro distribuované agenty, dnes můžete mít jednotlivé stroje v AWS (pomocí ec2, ec2-fleet pluginů), OpenStack, Docker, Kubernetes apod.</p>
 
 <p>Aby jste byli schopni dosáhnou kvalitního autoscalingu za velmi dobrou cenu dají se velmi dobře využít <a href="https://aws.amazon.com/ec2/spot/">spot instance</a> od AWS. Můžete ušetřit až 90% nákladů oproti normálním instancím.</p>
+
+<!-- more -->
+
 
 <p>Pokud provozujete vlastní Jenkins je potřeba vyřešit cache, ideální řešení je <a href="https://www.jfrog.com/artifactory/">JFrog Artifactory</a>, které podporuje caching pro velké množství vývojových nástrojů. Bohužel toto řešení poměrně drahé. Ale existuje <a href="http://www.sonatype.org/nexus/">Nexus repository</a>, které má komunitní verzi. Ale bohužel v Nexus OSS chybí například podpora pro PHP Composer.</p>
 
