@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Git a pre-commit hook pro kontrolu syntaxe - Prskavčí blog</title>
+  <title>Jenkins Declarative Pipelines - Prskavčí blog</title>
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Pokud pracujete s gitem nebo jiným verzovacím systémem, určitě jste se setkali s hooky. Pro kontrolu než provedete commit, který se jmenuje pre- &hellip;">
+  <meta name="description" content="Dnes Jenkins zveřejnil betu nového formátu pro popis Continues Delivery Pipelines. Pipeline se serie kroků, které vám dovolí orchestovat práci, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/">
+  <link rel="canonical" href="http://blog.prskavec.net/2016/12/jenkins-declarative-pipelines/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/all.css?v=1412111641" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/feed/index.html" rel="alternate" title="Prskavčí blog" type="application/atom+xml">
@@ -62,7 +62,7 @@
   
   <header>
     
-      <h1 class="entry-title">Git a pre-commit hook pro kontrolu syntaxe</h1>
+      <h1 class="entry-title">Jenkins Declarative Pipelines</h1>
     
     
       <p class="meta">
@@ -78,41 +78,180 @@
   
 
 
-<time datetime="2014-01-06T19:29:00+01:00" pubdate data-updated="true">06. 01. 2014</time>
+<time datetime="2016-12-20T16:52:00+01:00" pubdate data-updated="true">20. 12. 2016</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Pokud pracujete s gitem nebo jiným verzovacím systémem, určitě jste se setkali s hooky. Pro kontrolu než provedete commit, který se jmenuje pre-commit a hodí se zejména pro kontrolu syntaxe. Já mám několik hooků, které kontrolují php, js, xml a ruby. Říkal jsem si, že by to chtělo je refactorovat a udělat z nich použitelný kód.</p>
+<div class="entry-content"><p>Dnes Jenkins <a href="https://jenkins.io/blog/2016/12/19/declarative-pipeline-beta/">zveřejnil betu</a> nového formátu pro popis Continues Delivery Pipelines.</p>
 
-<h2>Ochtra</h2>
+<p>Pipeline se serie kroků, které vám dovolí orchestovat práci, kterou potřebujete k buildu, testovaní a nasazení aplikace. Pipelines jsou definovány v souboru <code>Jenkinsfile</code> a je uložen v
+kořenovém adresáři repozitáře projektu.</p>
 
-<p>Naštěstí jsem to dělat nemusel, protože vznikl malý projekt <a href="https://github.com/kvz/ochtra">ochtra</a>  (One Commit Hook To Rule All).</p>
+<!-- more -->
 
-<p>Tento projekt teď umí kontrolovat Ruby, JavaScript, Python, Bash, Dash, Go, PHP, XML, JSON, YAML. A co se mi zvláště líbí je, že autor pěkně popsal instalaci, která je potřeba, aby vám hook fungoval automaticky, když použijete git clone.</p>
 
-<h3>Instalace</h3>
+<p>Stávájící formát pipelines je psaný v Groovy DSL a vypadá takto:</p>
 
-<p>Potřebujete git 1.7, kde je podpora pro git templates.</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">node</span> <span class="o">{</span>
+</span><span class='line'>   <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Preparation&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">git</span> <span class="s1">&#39;https://github.com/abtris/bee.git&#39;</span>
+</span><span class='line'>      <span class="nl">poll:</span> <span class="kc">true</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'>   <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Deps&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>       <span class="n">env</span><span class="o">.</span><span class="na">PACKAGE</span><span class="o">=</span><span class="s2">&quot;github.com/abtris/bee&quot;</span>
+</span><span class='line'>       <span class="n">env</span><span class="o">.</span><span class="na">GOPATH</span><span class="o">=</span><span class="s2">&quot;/Users/abtris/go&quot;</span>
+</span><span class='line'>       <span class="n">env</span><span class="o">.</span><span class="na">GOROOT</span><span class="o">=</span><span class="s2">&quot;/usr/local/opt/go/libexec&quot;</span>
+</span><span class='line'>       <span class="n">sh</span> <span class="s1">&#39;glide --no-color install&#39;</span>
+</span><span class='line'>       <span class="n">sh</span> <span class="s1">&#39;mkdir -p release&#39;</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'>   <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Test&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>       <span class="n">sh</span> <span class="s1">&#39;make xunit&#39;</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'>   <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Build&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>         <span class="n">parallel</span> <span class="o">(</span>
+</span><span class='line'>            <span class="nl">linux64:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;GOOS=linux GOARCH=amd64 go build -o release/bee-linux-amd64 ${PACKAGE}&quot;</span> <span class="o">},</span>
+</span><span class='line'>            <span class="nl">linux32:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;GOOS=linux GOARCH=386 go build -o release/bee-linux-386 ${PACKAGE}&quot;</span> <span class="o">},</span>
+</span><span class='line'>            <span class="nl">mac64:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;GOOS=darwin GOARCH=amd64 go build -o release/bee-darwin-amd64 ${PACKAGE}&quot;</span> <span class="o">},</span>
+</span><span class='line'>            <span class="nl">win64:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;GOOS=windows GOARCH=amd64 go build -o release/bee-windows-amd64 ${PACKAGE}&quot;</span> <span class="o">}</span>
+</span><span class='line'>          <span class="o">)</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'>   <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Results&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">archive</span> <span class="s1">&#39;release/*&#39;</span>
+</span><span class='line'>      <span class="n">junit</span> <span class="s1">&#39;tests.xml&#39;</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<pre><code>mkdir -p ~/.gittemplate/hooks
-curl https://raw.github.com/kvz/ochtra/master/pre-commit -o ~/.gittemplate/hooks/pre-commit \
- &amp;&amp; chmod u+x $_
-git config --global init.templatedir '~/.gittemplate'
-</code></pre>
 
-<p>Instalace vytvoří adresář s template pro git, která se použije pokud dáte git clone, případne git init.</p>
+<p>a nový formát zjednodušuje tento zápis i pro ty kteří Groovy nevládnou a je více deklarativní s podporou pro editor, který Jenkins Blue Ocean tým vyvíjí.</p>
 
-<p>Git init potřebujete pokud už máte projekty někde vyclonované.</p>
+<p>Tady je přepsaný příklad ze shora do nového formátu.</p>
 
-<pre><code>cd my-project
-rm .git/hooks/pre-commit
-git init
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">pipeline</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">agent</span> <span class="n">any</span>
+</span><span class='line'>  <span class="n">environment</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">PACKAGE</span><span class="o">=</span><span class="s2">&quot;github.com/abtris/bee&quot;</span>
+</span><span class='line'>    <span class="n">GOPATH</span><span class="o">=</span><span class="s2">&quot;/Users/abtris/go&quot;</span>
+</span><span class='line'>    <span class="n">GOROOT</span><span class="o">=</span><span class="s2">&quot;/usr/local/opt/go/libexec&quot;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="n">stages</span> <span class="o">{</span>
+</span><span class='line'>     <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Preparation&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">steps</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">git</span> <span class="s1">&#39;https://github.com/abtris/bee.git&#39;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>     <span class="o">}</span>
+</span><span class='line'>     <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Deps&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">steps</span> <span class="o">{</span>
+</span><span class='line'>           <span class="n">sh</span> <span class="s1">&#39;glide --no-color install&#39;</span>
+</span><span class='line'>           <span class="n">sh</span> <span class="s1">&#39;mkdir -p release&#39;</span>
+</span><span class='line'>       <span class="o">}</span>
+</span><span class='line'>     <span class="o">}</span>
+</span><span class='line'>     <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Test&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">steps</span> <span class="o">{</span>
+</span><span class='line'>         <span class="n">sh</span> <span class="s1">&#39;make xunit&#39;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>     <span class="o">}</span>
+</span><span class='line'>     <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Build&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">steps</span> <span class="o">{</span>
+</span><span class='line'>           <span class="n">parallel</span> <span class="o">(</span>
+</span><span class='line'>              <span class="nl">linux64:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;GOOS=linux GOARCH=amd64 go build -o release/bee-linux-amd64 ${PACKAGE}&quot;</span> <span class="o">},</span>
+</span><span class='line'>              <span class="nl">linux32:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;GOOS=linux GOARCH=386 go build -o release/bee-linux-386 ${PACKAGE}&quot;</span> <span class="o">},</span>
+</span><span class='line'>              <span class="nl">mac64:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;GOOS=darwin GOARCH=amd64 go build -o release/bee-darwin-amd64 ${PACKAGE}&quot;</span> <span class="o">},</span>
+</span><span class='line'>              <span class="nl">win64:</span> <span class="o">{</span> <span class="n">sh</span> <span class="s2">&quot;GOOS=windows GOARCH=amd64 go build -o release/bee-windows-amd64 ${PACKAGE}&quot;</span> <span class="o">}</span>
+</span><span class='line'>            <span class="o">)</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>     <span class="o">}</span>
+</span><span class='line'>     <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Results&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">steps</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">archive</span> <span class="s1">&#39;release/*&#39;</span>
+</span><span class='line'>          <span class="n">junit</span> <span class="s1">&#39;tests.xml&#39;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>     <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Celý projekt má i testy a podpora je pro všechno co mě napadlo. Pokud něco někomu chybí tak se ozvěte nebude to problém přidat.</p>
+
+<p>Celou syntaxi si můžete prohlédnout <a href="https://github.com/jenkinsci/pipeline-model-definition-plugin/blob/master/SYNTAX.md">v dokumentaci</a>.</p>
+
+<p>Hlavní rozdíl je v tom, že přidali další bloky jako je hlavní <code>pipelines</code> a je potřeba deklarovat vždy agenta, který může být v různém formátu. Taky se vyměnilo nazvosloví a z <code>node</code> je vlastně <code>agent</code>. Můžete pustit celý byl jednoduše například v dockeru pomocí: <code>agent docker:'node:6.3'</code> nebo pokud nechcete to řešit tak můžete dát <code>agent any</code> jako já, co se hodí například pro lokální testování a není to rozhodně vhodné pro nějaké větší nasazení, kdy potřebujete orchestrovat jednotlivé agenty. Deklarace <code>environment</code> na začátku zpřehledňuje celý zápis. Každá <code>stage</code> má teď <code>steps</code>, které dřívě nebyli.</p>
+
+<p>I když celý tento projekt v beta fázi, přijde mi to jako krok správným směrem a spolu s čím dál lepším <a href="https://jenkins.io/blog/2016/05/26/introducing-blue-ocean/">Blue Ocean</a> to bude příští rok hlavní novinka v Jenkinsu.</p>
 </div>
 
 
@@ -135,12 +274,12 @@ git init
   
 
 
-<time datetime="2014-01-06T19:29:00+01:00" pubdate data-updated="true">06. 01. 2014</time>
+<time datetime="2016-12-20T16:52:00+01:00" pubdate data-updated="true">20. 12. 2016</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/categories/git/'>git</a>
+    <a class='category' href='/categories/jenkins/'>jenkins</a>
   
 </span>
 
@@ -156,10 +295,8 @@ git init
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/2013/11/docker/" title="Previous Post: docker">&laquo; docker</a>
+        <a class="basic-alignment left" href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/" title="Previous Post: Jenkins 2.0 - novinky a vylepšení - 2.část">&laquo; Jenkins 2.0 - novinky a vylepšení - 2.část</a>
       
-      
-        <a class="basic-alignment right" href="/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/" title="Next Post: Zapier a zasílání zůstatku z banky zdarma na mobil">Zapier a zasílání zůstatku z banky zdarma na mobil &raquo;</a>
       
     </p>
   </footer>
@@ -342,8 +479,8 @@ var trackerName=ga[_0x5d8e[4]]()[0][_0x5d8e[3]](_0x5d8e[2]);var isGTMhere=false;
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/';
-        var disqus_url = 'http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/';
+        var disqus_identifier = 'http://blog.prskavec.net/2016/12/jenkins-declarative-pipelines/';
+        var disqus_url = 'http://blog.prskavec.net/2016/12/jenkins-declarative-pipelines/';
         var disqus_script = 'embed.js';
       
     (function () {

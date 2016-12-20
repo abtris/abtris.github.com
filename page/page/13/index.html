@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Pro projekt jsem potřeboval zobrazit celou stránku, ale při tak dlouhé stránce to není možné, ale existuje freeware Webshot, který udělal právě co &hellip;">
+  <meta name="description" content="V nové verzi Zend Framework 1.5 byla do Zend_Auth přidána podpora pro LDAP. Protože u mě v práci se bez toho neobejde ani ta nejjednoduší aplikace, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,131 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/05/zkuenosti-s-zend_auth_adapter_ldap/">Zkušenosti s Zend_Auth_Adapter_Ldap</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-05-05T00:00:00+02:00" pubdate data-updated="true">05. 05. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>V nové verzi Zend Framework 1.5 byla do Zend_Auth přidána podpora pro LDAP. Protože u mě v práci se bez toho neobejde ani ta nejjednoduší aplikace, zkusil jsem ho a seznámím vás s problémy na které jsem narazil a jak jsem je obešel.</p>
+
+<p>Nejprve standarní řešení přes Ldap modul v PHP. Něco o našem LDAPu, používáme port 1636 a pro bind vlastní DN, které kopíruje naší strukturu. Pro bind nepotřebuje aplikace žádného vlastního uživatele použije se jméno a heslo toho kdo se hlásí. Část kódu, která je podstatná pro naše porovnání.</p>
+
+<pre name='code' class="php">/**
+     * Autentizace proti OpenLDAP Usermap (SSU)
+     * @param string $uid
+     * @param string $pass
+     * @return bool
+     */
+    private function Autentizace_LDAP($uid,$pass)
+    {
+        $ds = ldap_connect($this-&gt;_config-&gt;ldaphost);
+        @$r = ldap_bind($ds, "cvutLoginName=$uid,ou=People,ou=usermap,o=cvut,c=cz",$pass);
+        ldap_close($ds);
+        if ($r)
+        {
+            $this-&gt;logger-&gt;info("Uspesna autentizace k LDAP ($uid)");
+            return true;
+        }
+        else
+        {
+            $this-&gt;logger-&gt;error("Chyba autentizace k LDAP ($uid)");
+            return false;
+        }
+    }</pre>
+
+
+<p>V Zendu se to řeší pomocí tohoto kódu, který je odvozen od toho v <a href="http://framework.zend.com/manual/en/zend.ldap.html">manuálu</a>, ale musel projít úpravou v sekci $options, protože LDAP modul v Auth nějak nepočítá s tím, že nemáte uživatele pro přístup k Ldapu, což je pokud vím dost běžná situace.</p>
+
+<pre name='code' class="php">class AuthController extends Zend_Controller_Action
+{
+    function indexAction()
+    {
+      $username = $this-&gt;_request-&gt;getParam('username');
+      $password = $this-&gt;_request-&gt;getParam('password');
+$auth = Zend_Auth::getInstance();
+   $registry = Zend_Registry::getInstance();
+      $config=$registry-&gt;get('config');
+      $log_path = $config-&gt;ldap-&gt;log_path;
+      $options = $config-&gt;ldap-&gt;toArray();
+     // modifikovani options
+      $options['server1']['username'] = "cvutloginname=$username,ou=People,ou=usermap,o=cvut,c=cz";
+      $options['server1']['password'] = $password;
+      unset($options['log_path']);
+      $adapter = new Zend_Auth_Adapter_Ldap($options, $username, $password);
+      $result = $auth-&gt;authenticate($adapter);
+      if ($log_path)
+      {
+          $messages = $result-&gt;getMessages();
+          $logger = new Zend_Log();
+          $logger-&gt;addWriter(new Zend_Log_Writer_Stream($log_path));
+          //$filter = new Zend_Log_Filter_Priority(Zend_Log::DEBUG);
+          $filter = new Zend_Log_Filter_Priority(Zend_Log::INFO);
+          $logger-&gt;addFilter($filter);
+          foreach ($messages as $i =&gt; $message)
+          {
+              if ($i-- &gt; 1) { // $messages[2] and up are log messages
+                  $message = str_replace("\n", "\n  ", $message);
+                  $logger-&gt;log("Ldap: $i: $message", Zend_Log::DEBUG);
+              }
+          }
+      }
+      // vypis
+      if ($result-&gt;isValid())
+      {
+      $this-&gt;view-&gt;status = "You are logged-in as " . $auth-&gt;getIdentity() . "&lt;br&gt;\n";
+      }
+      else
+      {
+      $this-&gt;view-&gt;status = "Error. You are not logged. &lt;a href='../../'&gt;Please login again&lt;/a&gt;.";
+      }
+    }
+}</pre>
+
+
+<p>ještě moje options:</p>
+
+<pre name='code' class="php">[stage]
+ldap.log_path = ../logs/ldap.log;
+Typical options for OpenLDAP
+ldap.server1.host = usermap.cvut.cz
+ldap.server1.port = 1636
+ldap.server1.useSsl = true
+ldap.server1.baseDn = "ou=People,ou=usermap,o=cvut,c=cz"
+ldap.server1.bindRequiresDn = true
+ldap.server1.accountFilterFormat = "(&amp;(objectClass=person)(uid=%s))"</pre>
+
+
+<p>v další fázi se obvykle ještě snažíme vytáhnout některá data jako je osobní číslo podle kterého se potom pracuje s aplikací, ale to bude dobře možné až pomocí <a href="http://framework.zend.com/wiki/display/ZFPROP/Zend_Ldap_Ext+Proposal">Zend_Ldap_Ext</a>, která je zatím ve vývoji, ale můžete samozřejmě použít stávající Ldap funkce v php.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -532,70 +657,6 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/04/statsvn-a-fisheye/">StatSVN a FishEYE</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-04-10T00:00:00+02:00" pubdate data-updated="true">10. 04. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://blog.prskavec.net/?p=49">Nedávno</a> jsem si tu stěžoval, že sháním něco co dává náhled na práci se SVN, sám jsem si naprogoramoval malý jednoduchý tool, který zobrazuje aktuální working copy (wc)  u mě na disku a k tomu příslušné changelogy, které se generují skriptem. Rozhodně jsem si nemyslel, že by něco takového nenapdalo nikoho před tím. Časem jsem narazil na dva produkty, které zhruba splňují co jsem od toho čekal.</p>
-
-<p>První je StatSVN a druhý FishEYE. Nevýhodou FishEYE je jenom cena $1200 pro 10 uživatelů není pro organizaci moc, ale pro mě ano.</p>
-
-<p>FishEYE je webová aplikace běžící pod Tomcatem napsaná v Javě. Umožňuje skvělý náhled na changelog v repository, krásně zobrazuje diffy mezi verzemi, příslušnou historii, ukazuje i smazané adresáře v předchozích revizích. Náhled na to jak se rozrůstá projekt ukazuje Line history, při nějaké stagnaci nebo prudké změně se dá lehce najít co se dělo. K dispozici máte kompletní informace na jednom místě a vlastní repository mohou být klidně na různých serverech a FishEYE si dělá vlastní index a po přidání celého většího repository to chvíli trvá než si ho zaindexuje.</p>
-
-<p><img style="border-top-width: 0px; border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/04/image1.png" border="0" alt="image" width="477" height="476" /></p>
-
-<p>StatSVN je opensource projekt, poskytuje podobné informace. Je také napsán v Javě, ale funguje jako řádkový interpretr, který pošlete na log exportovaný ze SVN. Funguje to trochu méně komfortně, ale výsledky jsou podobné.</p>
-
-<p>Nejdříve potřebujete wc vašeho projektu ze SVN. Typický příkaz na řádce vypá takto:</p>
-
-<p><code>svn co svn://server/repo/trunk/modulename</code></p>
-
-<p>Samozřejmě můžete checkout udělat třeba pomocí TSVN. Potom je potřeba udělat log ve formátu XML. To bohužel TSVN pokud vím zatím neumí a na to potřebujete příkaz:</p>
-
-<p><code>svn log -v &mdash;xml &gt; logfile.log</code></p>
-
-<p>Potom už můžete spustit StatSVN a pohnat ho na log.</p>
-
-<p><code>java -jar /path/to/statsvn.jar /path/to/module/logfile.log /path/to/module</code></p>
-
-<p>StatSVN vytvoří HTML report v aktuálním adresáři (<a href="http://www.softwareengineering.ca/statsvn/statsvn/">ukázka takového reportu</a>).</p>
-
-<ul>
-    <li>Homepage StatSVN <a title="http://www.statsvn.org/" href="http://www.statsvn.org/">http://www.statsvn.org/</a></li>
-    <li>Homepage FishEYE <a title="http://www.atlassian.com/software/fisheye/" href="http://www.atlassian.com/software/fisheye/">http://www.atlassian.com/software/fisheye/</a></li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/14/">&larr; Older</a>
@@ -627,6 +688,10 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/12/jenkins-declarative-pipelines/">Jenkins Declarative Pipelines</a>
+      </li>
     
       <li class="post">
         <a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/">Jenkins 2.0 - novinky a vylepšení - 2.část</a>
@@ -662,10 +727,6 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
     
       <li class="post">
         <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a>
       </li>
     
   </ul>

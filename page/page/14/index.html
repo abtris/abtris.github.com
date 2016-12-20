@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Celkově lze konstatovat, že konference WebCamp&#8217;08 byla úspěšná. Organizátoři Jakub Vrána a Vilém Málek poskytli odpověď na pár otázek. Kdy &hellip;">
+  <meta name="description" content="Nedávno jsem si tu stěžoval, že sháním něco co dává náhled na práci se SVN, sám jsem si naprogoramoval malý jednoduchý tool, který zobrazuje aktuální &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,70 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/04/statsvn-a-fisheye/">StatSVN a FishEYE</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-10T00:00:00+02:00" pubdate data-updated="true">10. 04. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://blog.prskavec.net/?p=49">Nedávno</a> jsem si tu stěžoval, že sháním něco co dává náhled na práci se SVN, sám jsem si naprogoramoval malý jednoduchý tool, který zobrazuje aktuální working copy (wc)  u mě na disku a k tomu příslušné changelogy, které se generují skriptem. Rozhodně jsem si nemyslel, že by něco takového nenapdalo nikoho před tím. Časem jsem narazil na dva produkty, které zhruba splňují co jsem od toho čekal.</p>
+
+<p>První je StatSVN a druhý FishEYE. Nevýhodou FishEYE je jenom cena $1200 pro 10 uživatelů není pro organizaci moc, ale pro mě ano.</p>
+
+<p>FishEYE je webová aplikace běžící pod Tomcatem napsaná v Javě. Umožňuje skvělý náhled na changelog v repository, krásně zobrazuje diffy mezi verzemi, příslušnou historii, ukazuje i smazané adresáře v předchozích revizích. Náhled na to jak se rozrůstá projekt ukazuje Line history, při nějaké stagnaci nebo prudké změně se dá lehce najít co se dělo. K dispozici máte kompletní informace na jednom místě a vlastní repository mohou být klidně na různých serverech a FishEYE si dělá vlastní index a po přidání celého většího repository to chvíli trvá než si ho zaindexuje.</p>
+
+<p><img style="border-top-width: 0px; border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/04/image1.png" border="0" alt="image" width="477" height="476" /></p>
+
+<p>StatSVN je opensource projekt, poskytuje podobné informace. Je také napsán v Javě, ale funguje jako řádkový interpretr, který pošlete na log exportovaný ze SVN. Funguje to trochu méně komfortně, ale výsledky jsou podobné.</p>
+
+<p>Nejdříve potřebujete wc vašeho projektu ze SVN. Typický příkaz na řádce vypá takto:</p>
+
+<p><code>svn co svn://server/repo/trunk/modulename</code></p>
+
+<p>Samozřejmě můžete checkout udělat třeba pomocí TSVN. Potom je potřeba udělat log ve formátu XML. To bohužel TSVN pokud vím zatím neumí a na to potřebujete příkaz:</p>
+
+<p><code>svn log -v &mdash;xml &gt; logfile.log</code></p>
+
+<p>Potom už můžete spustit StatSVN a pohnat ho na log.</p>
+
+<p><code>java -jar /path/to/statsvn.jar /path/to/module/logfile.log /path/to/module</code></p>
+
+<p>StatSVN vytvoří HTML report v aktuálním adresáři (<a href="http://www.softwareengineering.ca/statsvn/statsvn/">ukázka takového reportu</a>).</p>
+
+<ul>
+    <li>Homepage StatSVN <a title="http://www.statsvn.org/" href="http://www.statsvn.org/">http://www.statsvn.org/</a></li>
+    <li>Homepage FishEYE <a title="http://www.atlassian.com/software/fisheye/" href="http://www.atlassian.com/software/fisheye/">http://www.atlassian.com/software/fisheye/</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -487,45 +551,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2007/11/windows-live/">Windows Live</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-11-10T00:00:00+01:00" pubdate data-updated="true">10. 11. 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Nemyslím, že všechno co vydá Microsoft je zrovna perfektní software, ale jedna věc se mi v poslední době líbí. Microsoft propaguje svůj portál Live.com, jeho vyhledávání se dá dobře použít přes SOAP a občas jsem to v PHP využil. Live sice není tak kvalitní jako Google, ale použitelný je.</p>
-
-
-<p>  <p>Včera vyšla finální verze balíčku, kterým se MS propaguje dále, obsahuje Live Messenger, Live Mail, Live Writer, případně Fotogalerie vše k napojení na služby Live.com. Stáhnout se to dá na <a href="http://get.live.com">get.live.com</a> a potřebujete samozřejmě Windows. Zkušel jsem instalaci na Win XP a Windows Vista, oproti betě vše proběhlo v pořádku. </p>  <h3>Windows Live Writer</h3>  <p>Proč o tom píšu je aplikace <a href="http://windowslivewriter.spaces.live.com/">Windows Live Writer</a>. Tato aplikace je ideální desktopové řešení pro psaní blogu, a to mi docela chybělo. Rád si svoje příspěvky napíšu online, ale někdy také a ne a potom se mi zdá tato zdařilá aplikace velmi kvalitní, neviděl jsem žádnou její obdobu pro Linux nebo Windows. Umí plně komunikovat přes <a href="http://www.xmlrpc.com/metaWeblogApi">MetaWeblog API</a>, podporuje mnohem více možností než např. <a href="http://docs.google.com">Google Docs</a>. Kromě vlastního publikování příspěvků umožňuje nastavit jejich možnosti, kategorie apod. což Google nemá zatím implementované. Jde také otevřít staré příspěvky a editovat, upravovat apod. Můžete pracovat na konceptu a ten uložit na server a potom si to jinde a jiny otevřít v prohlížeči a pokračovat v editaci. </p>  <p>Já vidím jako ideální řešení pro ty co chtějí psát a přitom se o webové technologie moc nezajímají a pokud použijí jako já např. <a href="http://wordpress.org/">Wordpress 2.3.1</a> není co řešit funguje to bez problémů. Mohu Windows Live Writer vřele doporučit.</p></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/15/">&larr; Older</a>
@@ -557,6 +582,10 @@
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/12/jenkins-declarative-pipelines/">Jenkins Declarative Pipelines</a>
+      </li>
     
       <li class="post">
         <a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/">Jenkins 2.0 - novinky a vylepšení - 2.část</a>
@@ -592,10 +621,6 @@
     
       <li class="post">
         <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a>
       </li>
     
   </ul>

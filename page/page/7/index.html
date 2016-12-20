@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Vývojových prostředí pro PHP je docela hojnost. Sám používám v práci Zend Studio 7.1 a doma Netbeans 6.8. Minulý rok přišla firma JetBrains, která je &hellip;">
+  <meta name="description" content="Pokud chcete použít ve Wordpressu odkazy do dokumentace pomocí JUSH, můžete použít plugin do Wordpressu. Ukázka: &lt;table onclick="alert(this.rows. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,63 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/jush-wordpress-plugin/">JUSH Wordpress plugin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-02T00:00:00+02:00" pubdate data-updated="true">02. 04. 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Pokud chcete použít ve Wordpressu <a href="http://php.vrana.cz/vytvareni-odkazu-do-dokumentace.php">odkazy do dokumentace</a> pomocí <a href="http://jush.sourceforge.net/">JUSH</a>, můžete použít <a href="http://github.com/abtris/jushplugin">plugin do Wordpressu</a>.</p>
+
+<p><strong>Ukázka:</strong></p>
+
+<pre class="jush">
+&lt;table onclick="alert(this.rows.length);" cellspacing="0" cellpadding="2"&gt;
+&lt;meta http-equiv="Content-Type: text/html"&gt;
+</pre>
+
+
+
+
+<pre class="jush-php">
+mail("", "", "", "From:")
+ini_set("display_errors", true)
+</pre>
+
+
+<pre class="jush-sql">
+SELECT NOW() FROM `table` WHERE `id` > 22 GROUP BY `text` ORDER BY `name`
+</pre>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -697,130 +754,6 @@ Nastavte co chcete, dal jsem <strong>PHP CodeBrowser</strong></li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2009/09/ie-8-bug-s-cookie-a-domenou-jobs-cz/">IE 8 bug s cookie a doménou jobs.cz</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-09-14T00:00:00+02:00" pubdate data-updated="true">14. 09. 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>V práci jsme se setkali se zajímavým problémem, který se vyskytuje ojediněle, ale zato postihuje jen určitou doménu. Máme problém s Microsoft Internet Explorerem 8 a doménou jobs.cz.</p>
-
-<p>IE8 odmítá nastavit cookies na doménu druhé úrovně. Nefunguje to pouze a jen pro jobs.cz, pro všechny jiné domény je to v pořádku. Je to záhada, kterou nebude jednoduché vyřešit.</p>
-
-<p>Fungují všechny starší verze MS IE i všechny ostatní prohlížeče i všechny jiné domény druhé úrovně, které jsme zkusili. Nefunguje zápis serverový ani klientský. Cookies na domény třetí úrovně (www.jobs.cz apod.) rovněž bez problémů.</p>
-
-<p>Zkušební skript může vypadat takto:</p>
-
-<pre>
-
-
-<title>cookie test</title>
-
-
-
-
-
-YAHOO.util.Cookie.set("jobsClientFull", "client", { path: "/"});
-YAHOO.util.Cookie.set("jobsClient2ndA", "client", { path: "/", domain: ".jobs.cz" });
-YAHOO.util.Cookie.set("jobsClient2ndB", "client", { path: "/", domain: "jobs.cz" });
-YAHOO.util.Cookie.set("jopsClientFull", "client", { path: "/"});
-YAHOO.util.Cookie.set("jopsClient2ndA", "client", { path: "/", domain: ".jops.cz" });
-YAHOO.util.Cookie.set("jopsClient2ndB", "client", { path: "/", domain: "jops.cz" });
-
-
-<h2>Cookies obtained</h2>
-
-
-
-
-</pre>
-
-
-<p>nebo v jednodušší podobě</p>
-
-<pre>&lt;?php
-setcookie(&quot;serverTestCookie&quot;, &quot;server&quot;, 0, &quot;/&quot;, &quot;.<a href="http://jobs.cz/">jobs.cz</a>");
-?&gt;
-
-
-<title>cookie test</title>
-&lt;script type=&quot;text/javascript&quot; src=&quot;<a href="http://yui.yahooapis.com/2.7.0/build/yahoo/yahoo-min.js">http://yui.yahooapis.com/2.7.0/build/yahoo/yahoo-min.js</a>"&gt;
-&lt;script type=&quot;text/javascript&quot; src=&quot;<a href="http://yui.yahooapis.com/2.7.0/build/cookie/cookie-min.js">http://yui.yahooapis.com/2.7.0/build/cookie/cookie-min.js</a>"&gt;
-
-
-
-YAHOO.util.Cookie.set("clientTestCookie", "client", { path: "/", domain: ".<a href="http://jobs.cz/">jobs.cz</a>" });
-
-
-<h2>Cookies obtained</h2>
-
-
-
-
-</pre>
-
-
-<p>příslušní virtualní host si na lokálním počítači nastavím třeba takto</p>
-
-<pre>
-DocumentRoot /srv/cookie
-ServerName <a href="http://jobs.cz/">jobs.cz</a>
-ServerAlias <a href="http://www.jobs.cz/">www.jobs.cz</a> <a href="http://jobs.cz/">jobs.cz</a> <a href="http://jops.cz/">jops.cz</a> <a href="http://www.jops.cz/">www.jops.cz</a>
-</pre>
-
-
-<p>a k tomu nějakého hosta</p>
-
-<pre>127.0.0.1    wwww.jobs.cz jobs.cz www.jops.cz jops.cz</pre>
-
-
-<p>Po prvním načtení bude kolekce cookies samozřejmě prázdná, ale už po tom druhem jsou v IE8 nastaveny pouze cookies na doménu třetí úrovně, druhé nic.</p>
-
-<p><strong>Závěr</strong></p>
-
-<p>Problém zřejmě souvisí s implementaci prohlížečích viz (<a href="http://docs.google.com/gview?a=v&amp;q=cache%3AtwPPceC8eq4J%3Awww.ietf.org%2Fproceedings%2F66%2Fslides%2Fdnsop-1.pdf+opera+cookie+domain+problem&amp;hl=cs&amp;pli=1">1</a>, <a href="http://tools.ietf.org/html/draft-pettersen-dns-cookie-validate-00">2</a>). V <a href="http://en.wikipedia.org/wiki/List_of_Internet_top-level_domains">TLD</a> existuje .jobs a proto se dá usuzovat, že k ní IE8 chová nějak jinak. Ale proč to nepostihuje např. travel.cz, museum.cz info.cz je záhadou. Zatím to vypadá na chybu v IE8, která nám opravdu hodně znepříjemňuje život.</p>
-
-<p>Všichni si to můžete vyzkoušet na <a href="http://lmc.jobs.cz/cookie.php"><a href="http://lmc.jobs.cz/cookie.php">http://lmc.jobs.cz/cookie.php</a></a>.</p>
-
-<p>Udělejte refresh stránky a dostanete tento výsledek kromě MS IE8, proboha proč?</p>
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/09/cookie_test_ok.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/09/cookie_test_ok.png" alt="cookie_test_ok" width="205" height="161" class="aligncenter size-full wp-image-709" /></a></p>
-
-<p><a href="http://blog.prskavec.net/wp-content/uploads/2009/09/cookie_test_fail.png"><img src="http://blog.prskavec.net/wp-content/uploads/2009/09/cookie_test_fail-300x182.png" alt="cookie_test_fail" width="300" height="182" class="aligncenter size-medium wp-image-712" /></a></p>
-
-<p>Pokud by byl někdo schopný pomoci s nápravou této chyby budeme vděční za pomoc.</p>
-
-<p><strong>Aktualizace:</strong>
-Pokud si dáte v Internet Exploreru <a href="//urlmon.dll/ietldlist.xml">res://urlmon.dll/ietldlist.xml</a> dostanete se k blokovaným TLD doménám. Bohužel na něm je z ČR i jobs.cz.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page//page/8/">&larr; Older</a>
@@ -852,6 +785,10 @@ Pokud si dáte v Internet Exploreru <a href="//urlmon.dll/ietldlist.xml">res://u
 <section>
   <h1>Poslední příspěvky</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/12/jenkins-declarative-pipelines/">Jenkins Declarative Pipelines</a>
+      </li>
     
       <li class="post">
         <a href="/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/">Jenkins 2.0 - novinky a vylepšení - 2.část</a>
@@ -887,10 +824,6 @@ Pokud si dáte v Internet Exploreru <a href="//urlmon.dll/ietldlist.xml">res://u
     
       <li class="post">
         <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a>
       </li>
     
   </ul>

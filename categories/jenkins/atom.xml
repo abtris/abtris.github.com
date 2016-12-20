@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: jenkins | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/jenkins/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-11-11T11:04:35+01:00</updated>
+  <updated>2016-12-20T17:11:47+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -12,6 +12,130 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Jenkins Declarative Pipelines]]></title>
+    <link href="http://blog.prskavec.net/2016/12/jenkins-declarative-pipelines/"/>
+    <updated>2016-12-20T16:52:00+01:00</updated>
+    <id>http://blog.prskavec.net/2016/12/jenkins-declarative-pipelines</id>
+    <content type="html"><![CDATA[<p>Dnes Jenkins <a href="https://jenkins.io/blog/2016/12/19/declarative-pipeline-beta/">zveřejnil betu</a> nového formátu pro popis Continues Delivery Pipelines.</p>
+
+<p>Pipeline se serie kroků, které vám dovolí orchestovat práci, kterou potřebujete k buildu, testovaní a nasazení aplikace. Pipelines jsou definovány v souboru <code>Jenkinsfile</code> a je uložen v
+kořenovém adresáři repozitáře projektu.</p>
+
+<!-- more -->
+
+
+<p>Stávájící formát pipelines je psaný v Groovy DSL a vypadá takto:</p>
+
+<p>```groovy
+node {
+   stage(&lsquo;Preparation&rsquo;) {</p>
+
+<pre><code>  git 'https://github.com/abtris/bee.git'
+  poll: true
+</code></pre>
+
+<p>   }
+   stage(&lsquo;Deps&rsquo;) {</p>
+
+<pre><code>   env.PACKAGE="github.com/abtris/bee"
+   env.GOPATH="/Users/abtris/go"
+   env.GOROOT="/usr/local/opt/go/libexec"
+   sh 'glide --no-color install'
+   sh 'mkdir -p release'
+</code></pre>
+
+<p>   }
+   stage(&lsquo;Test&rsquo;) {</p>
+
+<pre><code>   sh 'make xunit'
+</code></pre>
+
+<p>   }
+   stage(&lsquo;Build&rsquo;) {</p>
+
+<pre><code>     parallel (
+        linux64: { sh "GOOS=linux GOARCH=amd64 go build -o release/bee-linux-amd64 ${PACKAGE}" },
+        linux32: { sh "GOOS=linux GOARCH=386 go build -o release/bee-linux-386 ${PACKAGE}" },
+        mac64: { sh "GOOS=darwin GOARCH=amd64 go build -o release/bee-darwin-amd64 ${PACKAGE}" },
+        win64: { sh "GOOS=windows GOARCH=amd64 go build -o release/bee-windows-amd64 ${PACKAGE}" }
+      )
+</code></pre>
+
+<p>   }
+   stage(&lsquo;Results&rsquo;) {</p>
+
+<pre><code>  archive 'release/*'
+  junit 'tests.xml'
+</code></pre>
+
+<p>   }
+}
+```</p>
+
+<p>a nový formát zjednodušuje tento zápis i pro ty kteří Groovy nevládnou a je více deklarativní s podporou pro editor, který Jenkins Blue Ocean tým vyvíjí.</p>
+
+<p>Tady je přepsaný příklad ze shora do nového formátu.</p>
+
+<p>```groovy
+pipeline {
+  agent any
+  environment {</p>
+
+<pre><code>PACKAGE="github.com/abtris/bee"
+GOPATH="/Users/abtris/go"
+GOROOT="/usr/local/opt/go/libexec"
+</code></pre>
+
+<p>  }
+  stages {</p>
+
+<pre><code> stage('Preparation') {
+    steps {
+      git 'https://github.com/abtris/bee.git'
+    }
+ }
+ stage('Deps') {
+    steps {
+       sh 'glide --no-color install'
+       sh 'mkdir -p release'
+   }
+ }
+ stage('Test') {
+    steps {
+     sh 'make xunit'
+    }
+ }
+ stage('Build') {
+    steps {
+       parallel (
+          linux64: { sh "GOOS=linux GOARCH=amd64 go build -o release/bee-linux-amd64 ${PACKAGE}" },
+          linux32: { sh "GOOS=linux GOARCH=386 go build -o release/bee-linux-386 ${PACKAGE}" },
+          mac64: { sh "GOOS=darwin GOARCH=amd64 go build -o release/bee-darwin-amd64 ${PACKAGE}" },
+          win64: { sh "GOOS=windows GOARCH=amd64 go build -o release/bee-windows-amd64 ${PACKAGE}" }
+        )
+    }
+ }
+ stage('Results') {
+    steps {
+      archive 'release/*'
+      junit 'tests.xml'
+    }
+ }
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>Celou syntaxi si můžete prohlédnout <a href="https://github.com/jenkinsci/pipeline-model-definition-plugin/blob/master/SYNTAX.md">v dokumentaci</a>.</p>
+
+<p>Hlavní rozdíl je v tom, že přidali další bloky jako je hlavní <code>pipelines</code> a je potřeba deklarovat vždy agenta, který může být v různém formátu. Taky se vyměnilo nazvosloví a z <code>node</code> je vlastně <code>agent</code>. Můžete pustit celý byl jednoduše například v dockeru pomocí: <code>agent docker:'node:6.3'</code> nebo pokud nechcete to řešit tak můžete dát <code>agent any</code> jako já, co se hodí například pro lokální testování a není to rozhodně vhodné pro nějaké větší nasazení, kdy potřebujete orchestrovat jednotlivé agenty. Deklarace <code>environment</code> na začátku zpřehledňuje celý zápis. Každá <code>stage</code> má teď <code>steps</code>, které dřívě nebyli.</p>
+
+<p>I když celý tento projekt v beta fázi, přijde mi to jako krok správným směrem a spolu s čím dál lepším <a href="https://jenkins.io/blog/2016/05/26/introducing-blue-ocean/">Blue Ocean</a> to bude příští rok hlavní novinka v Jenkinsu.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení - 2.část]]></title>
@@ -362,23 +486,6 @@ curl http://jenkins.firma.cz/jenkins/git/notifyCommit?url=ssh://git@git.firma.cz
 <p><img class="center" src="/images/scmpolling/graph-04.png" title="&lsquo;Prehled z munina&rsquo;" ></p>
 
 <p>Další doporučení a tipy triky z praxe se dozvíte na mém školení <a href="http://bit.ly/k-ci">Jenkins &ndash; jak na Continuous Integration v PHP a Javascriptu</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Jenkins - jak na Continuous Integration v PHP a Javascriptu 26.6.2012]]></title>
-    <link href="http://blog.prskavec.net/2012/06/jenkins-jak-na-continuous-integration-v-php-a-javascriptu-26-dot-6-2012/"/>
-    <updated>2012-06-14T14:32:00+02:00</updated>
-    <id>http://blog.prskavec.net/2012/06/jenkins-jak-na-continuous-integration-v-php-a-javascriptu-26-dot-6-2012</id>
-    <content type="html"><![CDATA[<h2>Aktuání školeni 26.6.2012</h2>
-
-<p>Přijděte si popovídat o integraci vašich aplikací v PHP a Javascriptu na moje školení v úterý 26.6. <a href="bit.ly/k-ci">bit.ly/k-ci</a>.</p>
-
-<p>Pro tento termín jsem připravil aktualnizaci, kde kromě PHP je přidána continous integration pro Javascript.</p>
-
-<p>Přednášku jsem o tom měl na poledním čtvrtku. Slidy jsou k dispozici <a href="http://slidesha.re/MtbUvD">http://slidesha.re/MtbUvD</a>.</p>
-
-<p>Pokud vám na školení o integraci něco chybí co by jste tam chtěli, neváhejte a oslovte mě emailem nebo v komentářích.</p>
 ]]></content>
   </entry>
   
