@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-12-20T17:11:47+01:00</updated>
+  <updated>2016-12-20T17:20:52+01:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -182,7 +182,11 @@ kořenovém adresáři repozitáře projektu.</p>
 
 <p>Celou syntaxi si můžete prohlédnout <a href="https://github.com/jenkinsci/pipeline-model-definition-plugin/blob/master/SYNTAX.md">v dokumentaci</a>.</p>
 
-<p>Hlavní rozdíl je v tom, že přidali další bloky jako je hlavní <code>pipelines</code> a je potřeba deklarovat vždy agenta, který může být v různém formátu. Taky se vyměnilo nazvosloví a z <code>node</code> je vlastně <code>agent</code>. Můžete pustit celý byl jednoduše například v dockeru pomocí: <code>agent docker:'node:6.3'</code> nebo pokud nechcete to řešit tak můžete dát <code>agent any</code> jako já, co se hodí například pro lokální testování a není to rozhodně vhodné pro nějaké větší nasazení, kdy potřebujete orchestrovat jednotlivé agenty. Deklarace <code>environment</code> na začátku zpřehledňuje celý zápis. Každá <code>stage</code> má teď <code>steps</code>, které dřívě nebyli.</p>
+<p>Hlavní rozdíl je v tom, že přidali další bloky jako je hlavní <code>pipelines</code> a je potřeba deklarovat vždy agenta, který může být v různém formátu. Vyměnilo nazvosloví a z <code>node</code> je <code>agent</code>.</p>
+
+<p>Build můžete pustit jednoduše například v Dockeru pomocí: <code>agent docker:'node:6.3'</code> nebo pokud nechcete to řešit tak můžete dát <code>agent any</code> jako v příkladu, to se hodí například pro lokální testování a není to rozhodně vhodné pro nějaké větší nasazení, kdy potřebujete orchestrovat jednotlivé agenty.</p>
+
+<p>Deklarace <code>environment</code> na začátku zpřehledňuje celý zápis a každá <code>stage</code> má teď <code>steps</code>, které jsou nové. Přidali sekci <code>post</code>, která má kroky <code>always</code>, <code>success</code> a <code>failure</code> pro ošetření konce buildu a poslání notifikací. Nechybí ani <code>options</code>, <code>parameters</code> a <code>triggers</code>, kde nastavíte co potřebujete.</p>
 
 <p>I když celý tento projekt v beta fázi, přijde mi to jako krok správným směrem a spolu s čím dál lepším <a href="https://jenkins.io/blog/2016/05/26/introducing-blue-ocean/">Blue Ocean</a> to bude příští rok hlavní novinka v Jenkinsu.</p>
 ]]></content>
@@ -415,7 +419,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
 
 <p>Hodně je vidět jaký velký rozdíl a kolik práce to dá pokud chcete firmu předělat na SRE (brownfielding) nebo začnete hned.</p>
 
-<h3>The Many Ways Your Monitoring Is Lying to You &ndash; Sebastian Kirsch, Google, <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x73;&#107;&#105;&#114;&#115;&#99;&#104;&#x40;&#x67;&#x6f;&#111;&#x67;&#x6c;&#101;&#x2e;&#99;&#x6f;&#109;">&#x73;&#107;&#x69;&#x72;&#115;&#x63;&#104;&#64;&#x67;&#x6f;&#x6f;&#103;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#x6d;</a></h3>
+<h3>The Many Ways Your Monitoring Is Lying to You &ndash; Sebastian Kirsch, Google, <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#115;&#107;&#x69;&#114;&#115;&#x63;&#x68;&#x40;&#x67;&#x6f;&#x6f;&#103;&#108;&#x65;&#46;&#x63;&#x6f;&#x6d;">&#115;&#x6b;&#x69;&#114;&#x73;&#x63;&#x68;&#x40;&#x67;&#111;&#111;&#103;&#x6c;&#101;&#46;&#x63;&#x6f;&#x6d;</a></h3>
 
 <p>Skvělá přednáška o tom jak nemůžete věřit každému grafu v monitoringu. Doporučuji schlédnout až bude video, bylo tam hodně příkladů. Jde o to, že věci, které uváděl nejsou pro mě například vůbec nové díky lekcím z numerické matematiky a statistiky na ČVUT, ale ne každý má statistický background a nebývá to až tak běžná součást Computer Science.</p>
 

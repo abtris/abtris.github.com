@@ -249,7 +249,11 @@ kořenovém adresáři repozitáře projektu.</p>
 
 <p>Celou syntaxi si můžete prohlédnout <a href="https://github.com/jenkinsci/pipeline-model-definition-plugin/blob/master/SYNTAX.md">v dokumentaci</a>.</p>
 
-<p>Hlavní rozdíl je v tom, že přidali další bloky jako je hlavní <code>pipelines</code> a je potřeba deklarovat vždy agenta, který může být v různém formátu. Taky se vyměnilo nazvosloví a z <code>node</code> je vlastně <code>agent</code>. Můžete pustit celý byl jednoduše například v dockeru pomocí: <code>agent docker:'node:6.3'</code> nebo pokud nechcete to řešit tak můžete dát <code>agent any</code> jako já, co se hodí například pro lokální testování a není to rozhodně vhodné pro nějaké větší nasazení, kdy potřebujete orchestrovat jednotlivé agenty. Deklarace <code>environment</code> na začátku zpřehledňuje celý zápis. Každá <code>stage</code> má teď <code>steps</code>, které dřívě nebyli.</p>
+<p>Hlavní rozdíl je v tom, že přidali další bloky jako je hlavní <code>pipelines</code> a je potřeba deklarovat vždy agenta, který může být v různém formátu. Vyměnilo nazvosloví a z <code>node</code> je <code>agent</code>.</p>
+
+<p>Build můžete pustit jednoduše například v Dockeru pomocí: <code>agent docker:'node:6.3'</code> nebo pokud nechcete to řešit tak můžete dát <code>agent any</code> jako v příkladu, to se hodí například pro lokální testování a není to rozhodně vhodné pro nějaké větší nasazení, kdy potřebujete orchestrovat jednotlivé agenty.</p>
+
+<p>Deklarace <code>environment</code> na začátku zpřehledňuje celý zápis a každá <code>stage</code> má teď <code>steps</code>, které jsou nové. Přidali sekci <code>post</code>, která má kroky <code>always</code>, <code>success</code> a <code>failure</code> pro ošetření konce buildu a poslání notifikací. Nechybí ani <code>options</code>, <code>parameters</code> a <code>triggers</code>, kde nastavíte co potřebujete.</p>
 
 <p>I když celý tento projekt v beta fázi, přijde mi to jako krok správným směrem a spolu s čím dál lepším <a href="https://jenkins.io/blog/2016/05/26/introducing-blue-ocean/">Blue Ocean</a> to bude příští rok hlavní novinka v Jenkinsu.</p>
 </div>
