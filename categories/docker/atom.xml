@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: docker | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/docker/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2017-04-21T08:41:28-05:00</updated>
+  <updated>2017-04-21T09:54:36-05:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -84,7 +84,8 @@ CMD [&ldquo;./heroku-datadog-drain-go&rdquo;]
 
 <p><code>
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-drain               latest              bd90aaa048dc        13 hours ago        10M
+drain               latest              7a7abced7a9d        6 seconds ago       10MB
+&lt;none&gt;              &lt;none&gt;              edabce509d75        7 seconds ago       752MB
 golang              1.8                 c0ccf5f2c036        13 days ago         703MB
 </code></p>
 
