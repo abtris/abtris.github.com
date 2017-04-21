@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Hlavní novinky jsem představil už v TortoiseSVN 1.5.0-beta1 a podrobně s tím seznámím postupně jak s tím budu také delší dobu pracovat. Originální &hellip;">
+  <meta name="description" content="Phing obsahuje ve verzi 2.3 tyto Tasky pro práci se Subversion. SvnCheckoutTask SvnExportTask SvnLastRevisionTask SvnUpdateTask To se hodí a také ve &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,312 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2008/06/phing-svnlogtask/">Phing - SvnLogTask</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-29T00:00:00-05:00" pubdate data-updated="true">29. 06. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://phing.info/trac/">Phing</a> obsahuje ve verzi 2.3 tyto Tasky pro práci se Subversion.</p>
+
+<ul>
+    <li>SvnCheckoutTask</li>
+    <li>SvnExportTask</li>
+    <li>SvnLastRevisionTask</li>
+    <li>SvnUpdateTask</li>
+</ul>
+
+
+<p>To se hodí a také ve svém buildu používám tento postup:</p>
+
+<ol>
+    <li>udělám export HEAD revision (SvnExportTask)</li>
+    <li>načtu si číslo HEAD revision (SvnLastRevisionTask)</li>
+    <li>potom vygeneruju SVN Log (<strong>SvnLogTask</strong>)</li>
+    <li>vygeneruju API dokumentaci pro build (PhpDocumentorTask)</li>
+    <li>všechno zakomprimuji do souboru s dokumentací a se zdrojáky a uložím kam potřebuju (ZipTask)</li>
+</ol>
+
+
+<p>V postupu je něco co není standardní součástí <a href="http://phing.info/docs/guide/current/">Phingu</a> i když si myslím, že se to tam objeví. Phing pro práci se SVN používá <a href="http://pear.php.net/package/VersionControl_SVN/">VersionControl_SVN</a> 0.3.1 alpha. Bohužel neexistuje zatím stable verze této PEAR knihovny což je škoda, protože funguje celkem dobře a má implementováno vše co potřebuji. Když používáte VersionControl_SVN dá se pracovat s několika návratovými typy:</p>
+
+<ul>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_ASSOC,</li>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_OBJECT,</li>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_XML,</li>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_RAW,</li>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_ALL,</li>
+    <li>VERSIONCONTROL_SVN_FETCHMODE_ARRAY</li>
+</ul>
+
+
+<p>V Phingu se používá, ale výhradně VERSIONCONTROL_SVN_FETCHMODE_ASSOC což není někdy úplně vhodné. V případě, že máte totiž zapnutý přepínač pro výpis v XML je lepší návratový typ VERSIONCONTROL_SVN_FETCHMODE_XML. Proto jsem musel upravit <code>phing\tasks\ext\svn\SvnBaseTask.php</code>.</p>
+
+<p>Tuto část</p>
+
+<pre name='code' class="php">
+$options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ASSOC, 'svn_path' => $this->getSvnPath());
+</pre>
+
+
+<p>jsem nahradil tímto kódem</p>
+
+<pre name='code' class="php">
+        // Set up runtime options. Will be passed to all
+        // subclasses.
+        if ($mode=="log")
+        {
+        $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_XML, 'svn_path' => $this->getSvnPath());       
+        }
+        else
+        {
+        $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ASSOC, 'svn_path' => $this->getSvnPath());
+        }
+</pre>
+
+
+<p>Po této úpravě, která jistě by šla udělat lépe. Jsem se dal do psaní vlastního tasku SvnLogTask.php. Task vrátí log z repozitory v XML formátu. Pokud chceme plain text, tak to prožene XSLT transformací a potom ještě vymaže whitespaces z celého dokumentu.</p>
+
+<pre name='code' class="php">
+require_once 'phing/Task.php';
+require_once 'phing/tasks/ext/svn/SvnBaseTask.php';
+
+class SvnLogTask extends SvnBaseTask
+{
+    private $name = 'log.xml';
+    private $xml = true;
+    private $verbose = false;
+    /**
+     * The setter for the attribute "name"
+     */
+    public function setName($str) {
+        $this->name = $str;
+    }
+    /**
+     * The setter for the attribute "xml"
+     */
+    public function setXML($str) {
+        $this->xml = $str;
+    }   
+    /**
+     * The setter for the attribute "verbose"
+     */
+    public function setVerbose($str) {
+        $this->verbose = $str;
+    }       
+    /**
+     * The main entry point
+     *
+     * @throws BuildException
+     */
+    function main()
+    {
+        $this->setup('log');
+        $this->log("Log SVN"); 
+       
+         $switches = array('verbose' => $this->verbose);
+         $output=$this->run(array(), $switches);
+
+        $doc = new DOMDocument();
+        $doc->formatOutput = true;        
+        $doc->loadXML($output);             
+        // output format 
+        
+        if ($this->xml=="true")
+        {        
+          $doc->save($this->getToDir()."/".$this->name);
+        }
+        else
+        {                 
+         // print in plain
+         $xsl = new DOMDocument;
+         $xsl->load(dirname(__FILE__).'\LogTxt.xsl');
+         $proc = new XSLTProcessor;
+         $proc->importStyleSheet($xsl); // attach the xsl rules
+         $output=$proc->transformToDoc($doc)->firstChild->wholeText;
+
+         $pat[0] = "/^\s+/";
+         $pat[1] = "/\s{2,}/";
+         $pat[2] = "/\s+\$/";
+         $rep[0] = "";
+         $rep[1] = " ";
+         $rep[2] = "";
+         $after=preg_replace($pat, $rep, $output);
+         $str=str_replace("\\n ","\n", $after);         
+         file_put_contents($this->getToDir()."/".$this->name,$str);
+        }
+    }
+}
+</pre>
+
+
+<p>Potom se to dá už použít v <code>build.xml</code>.</p>
+
+<pre name='code' class="xml">
+        &lt;taskdef name="svnlog" classname="phing.tasks.ext.svn.SvnLogTask" /&gt;
+        &lt;svnlog
+           svnpath="${svnpath}"
+           repositoryurl="${rep}"
+           name="CHANGELOG"
+           xml="true"
+           verbose="true"
+           todir="${tmp}\log"/&gt;
+</pre>
+
+
+<p>Moje vlastní XSLT transformace (<code>phing\tasks\ext\svn\LogTxt.xsl</code>) na plain text není přiliš vhodná pro nějaké systémové řešení. Lepší je parametr nechat zapnutý. Vzít XML a pomocí XsltFilter aplikovat vlastní transformaci.</p>
+
+<pre name='code' class="xml">
+&lt;?xml version="1.0"?&gt;
+&lt;xsl:stylesheet version="1.0" 
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+ 
+&lt;xsl:template match="log"&gt;                
+            CHANGELOG\n
+            &lt;xsl:apply-templates select='logentry'/&gt;
+&lt;/xsl:template&gt;
+ 
+ 
+&lt;xsl:template match="logentry"&gt;       
+            \n R&lt;xsl:apply-templates select='@revision'/&gt;\n
+            &lt;xsl:apply-templates select='date' /&gt; - &lt;xsl:apply-templates select='author'/&gt;\n
+            &lt;xsl:apply-templates select='msg'/&gt;\n         
+&lt;/xsl:template&gt;
+ 
+&lt;/xsl:stylesheet&gt;
+</pre>
+
+
+<p>Nakonec přidám ještě moje build.propeties a buid.xml jednoho moje projektu pro ilustraci.</p>
+
+<pre name='code' class="bash">
+# Property files contain key/value pairs
+# key=value
+tmp = c:\tmp
+svnpath = c:\apps\svn\bin\svn.exe
+rep = file:///rootwww/rep_cvut/akce/trunk
+wc =  c:\rootwww\wc_cvut\akce
+</pre>
+
+
+<p>Tady v build.propeties si všimněte jen jediného detailu, ale ten vás může stát hodně času. Cesty k svn a k repozitory neobsahují mezery, pokud máte Subversion např. v Program Files může to nadělat více problémů než užitku a chyby se projevují různě a ne zcela systémově. Doporučuji se tomu předem vyhnout, ušetříte si čas a nervy.</p>
+
+<pre name='code' class="xml">
+&lt;?xml version="1.0" ?&gt;
+&lt;project name="akce2" basedir="." default="main"&gt;
+
+    &lt;!-- Sets the DSTAMP, TSTAMP and TODAY properties --&gt;  
+    &lt;tstamp/&gt;  
+  
+    &lt;!-- Load our configuration --&gt;  
+    &lt;property file="./build.properties" /&gt;
+    &lt;taskdef name="svnlog" classname="phing.tasks.ext.svn.SvnLogTask" /&gt;
+    
+    &lt;property name="package"  value="${phing.project.name}" override="true" /&gt;
+    &lt;property name="builddir" value="${tmp}/build/${phing.project.name}" override="true" /&gt;
+    &lt;property name="srcdir"   value="${project.basedir}" override="true" /&gt;
+
+
+    &lt;target name="svn" description="SVN executes"&gt;
+         &lt;!-- Export HEAD copy do /tmp/ --&gt;       
+       &lt;svnexport
+       svnpath="${svnpath}"
+       repositoryurl="${rep}"
+       force="yes"
+       todir="${tmp}\export\${phing.project.name}"/&gt;
+        &lt;!-- Získání čísla HEAD --&gt;
+        &lt;svnlastrevision
+           svnpath="${svnpath}"
+           workingcopy="${wc}"
+           propertyname="svn.lastrevision"/&gt;       
+        &lt;!-- Vygenerování aktuálního logu --&gt;           
+        &lt;svnlog
+           svnpath="${svnpath}"
+           repositoryurl="${rep}"
+           name="CHANGELOG"
+           xml="false"
+           verbose="true"
+           todir="${tmp}\export\${phing.project.name}"/&gt;    
+    &lt;/target&gt;
+
+    &lt;target name="phpdoc" description="API Documentation" depends="svn"&gt;
+        &lt;!-- Generování phpdoc dokumentace --&gt;
+        &lt;phpdoc title="Akce2008 API Documentation"
+          destdir="${builddir}/apidocs"
+          sourcecode="yes"
+          defaultpackagename="Akce2008"
+          output="HTML:default:default"&gt;
+           &lt;fileset dir="${tmp}/export/${phing.project.name}"&gt;
+              &lt;include name="*/*.php" /&gt;      
+              &lt;exclude name="inc/phpmailer/**" /&gt;
+              &lt;exclude name="build/**" /&gt;
+           &lt;/fileset&gt;
+            &lt;projdocfileset dir="."&gt;
+                  &lt;include name="CHANGELOG" /&gt;
+             &lt;/projdocfileset&gt;           
+        &lt;/phpdoc&gt;
+      &lt;/target&gt;
+
+        &lt;!-- Fileset for all files --&gt;
+        &lt;fileset dir="${tmp}/export/${phing.project.name}" id="allfiles"&gt;
+            &lt;include name="**" /&gt;
+            &lt;exclude name="build.xml" /&gt;
+            &lt;exclude name="build.properties" /&gt;
+        &lt;/fileset&gt;
+
+    &lt;!-- Main Target --&gt;
+    &lt;target name="main" description="main target" depends="phpdoc"&gt;
+        &lt;!-- Zdrojové kódy pro příslušnou revizi --&gt;
+        &lt;zip destfile="${builddir}/${phing.project.name}-R${svn.lastrevision}-${DSTAMP}${TSTAMP}.zip" basedir="${tmp}/export/${phing.project.name}" /&gt;                    
+        &lt;!-- Vygenerovanou dokumentaci přesunu do ZIP s číslem příslušné revize --&gt;
+        &lt;zip destfile="${builddir}/${phing.project.name}-apidocs-R${svn.lastrevision}-${DSTAMP}${TSTAMP}.zip" basedir="${builddir}/apidocs" /&gt;        
+        &lt;!-- Smazaní temp adresáře --&gt;
+        &lt;delete dir="${builddir}/apidocs" includeemptydirs="true" verbose="true" failonerror="true" /&gt;
+
+    &lt;/target&gt;
+&lt;/project&gt;
+</pre>
+
+
+<p>Vlastní build se pustí pomocí <code>phing</code> z příkazové řádky tam kde máte <code>build.xml</code> uložený. Pokud se nedaří Phing nainstalovat a nakonfigurovat pro chod např. s PHPDoc, tak doporučuji postup ze stránek Phingu.</p>
+
+<pre name='code' class="bash">
+pear channel-discover pear.phing.info
+pear install -a phing/phing
+pear install channel://pear.php.net/VersionControl_SVN-0.3.1
+</pre>
+
+
+<p>Doufám, že někomu rady budou k užitku, Phing je skvělý produkt i když většina asi dá za přednost <a href="http://ant.apache.org/">Antu</a> pokud nedělají čistě PHP.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2008/06/subversion-15-vydn/">Subversion 1.5 vydán!</a></h1>
     
     
@@ -81,7 +387,7 @@
   
 
 
-<time datetime="2008-06-23T00:00:00+02:00" pubdate data-updated="true">23. 06. 2008</time>
+<time datetime="2008-06-23T00:00:00-05:00" pubdate data-updated="true">23. 06. 2008</time>
         
       </p>
     
@@ -120,7 +426,7 @@
   
 
 
-<time datetime="2008-06-23T00:00:00+02:00" pubdate data-updated="true">23. 06. 2008</time>
+<time datetime="2008-06-23T00:00:00-05:00" pubdate data-updated="true">23. 06. 2008</time>
         
       </p>
     
@@ -177,7 +483,7 @@ FOR /F  %%M IN (dir1.txt) DO (
   
 
 
-<time datetime="2008-06-19T00:00:00+02:00" pubdate data-updated="true">19. 06. 2008</time>
+<time datetime="2008-06-19T00:00:00-05:00" pubdate data-updated="true">19. 06. 2008</time>
         
       </p>
     
@@ -228,7 +534,7 @@ FOR /F  %%M IN (dir1.txt) DO (
   
 
 
-<time datetime="2008-06-18T00:00:00+02:00" pubdate data-updated="true">18. 06. 2008</time>
+<time datetime="2008-06-18T00:00:00-05:00" pubdate data-updated="true">18. 06. 2008</time>
         
       </p>
     
@@ -283,7 +589,7 @@ FOR /F  %%M IN (dir1.txt) DO (
   
 
 
-<time datetime="2008-06-12T00:00:00+02:00" pubdate data-updated="true">12. 06. 2008</time>
+<time datetime="2008-06-12T00:00:00-05:00" pubdate data-updated="true">12. 06. 2008</time>
         
       </p>
     
@@ -393,7 +699,7 @@ print "";</pre>
   
 
 
-<time datetime="2008-06-10T00:00:00+02:00" pubdate data-updated="true">10. 06. 2008</time>
+<time datetime="2008-06-10T00:00:00-05:00" pubdate data-updated="true">10. 06. 2008</time>
         
       </p>
     
@@ -432,7 +738,7 @@ print "";</pre>
   
 
 
-<time datetime="2008-06-02T00:00:00+02:00" pubdate data-updated="true">02. 06. 2008</time>
+<time datetime="2008-06-02T00:00:00-05:00" pubdate data-updated="true">02. 06. 2008</time>
         
       </p>
     
@@ -471,7 +777,7 @@ print "";</pre>
   
 
 
-<time datetime="2008-05-30T00:00:00+02:00" pubdate data-updated="true">30. 05. 2008</time>
+<time datetime="2008-05-30T00:00:00-05:00" pubdate data-updated="true">30. 05. 2008</time>
         
       </p>
     
@@ -526,7 +832,7 @@ print "";</pre>
   
 
 
-<time datetime="2008-05-21T00:00:00+02:00" pubdate data-updated="true">21. 05. 2008</time>
+<time datetime="2008-05-21T00:00:00-05:00" pubdate data-updated="true">21. 05. 2008</time>
         
       </p>
     
@@ -537,84 +843,6 @@ print "";</pre>
 
 
 <p> <p>Nejprve prohlížeče. Kromě malých problémů s Firefoxem jak vidíte na obrázcích to všechny prohlížeče zvládají.</p> <h3>Firefox 2.0.0.14 &ndash; výchozí prohlížeč u mne</h3> <p>Tato chyba se stala po kliknutí na odkaz v RSS v Thunderbirdu.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="400" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb.png" width="644" border="0" /></a></p> <p>Tak jsem se jak to napsat tam ručně. A tohle z toho FF udělal, ale aspoň to funguje.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image1.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="232" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb1.png" width="562" border="0" /></a> </p> <h3>Opera 9.5 beta </h3> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image2.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="183" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb2.png" width="466" border="0" /></a> </p> <h3>IE 7</h3> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image3.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="217" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb3.png" width="404" border="0" /></a> </p> <h3>Safari 3.1.1</h3> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image4.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="196" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb4.png" width="362" border="0" /></a> </p> <p>S mailem to bylo horší náš SMTP server mi odeslání mailu na <a href="mailto:testmail@háčkyčárky.cz">testmail@háčkyčárky.cz</a> nedovolil s tím, že jde o nesprávnou adresu.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image5.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="122" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb5.png" width="566" border="0" /></a> </p> <p>GMail hlásí podobné varování, co teď? email prostě asi neodešlu.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image6.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="176" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb6.png" width="446" border="0" /></a> </p> <p>Tak zatím bych si doménu s háčky a čárky nepořizoval, přineslo by to více problémů než výhod, snad jedině jako alias k přesměrování na tu normální.</p></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/05/pr-tipu-pro-prci-s-formtem-icalendar/">Pár tipů pro práci s formátem iCalendar</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-05-13T00:00:00+02:00" pubdate data-updated="true">13. 05. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Dělám na PHP aplikaci, která kromě RSS generuje také <a href="http://cs.wikipedia.org/wiki/ICalendar">iCalendar</a> pro Lighting a iCal na Mac OS X. Někomu stačí asi <a href="http://tools.ietf.org/html/rfc2445">RFC 2445</a> a hravě si s tím poradí, ale pro ty ostatní pár tipů, které mi pomohli a které mě trochu mátli. Ještě může bý napomocný <a href="http://www.kanzaki.com/docs/ical/">iCalendar Specification Excerpts</a>.  Data mám v mysql kde je datum a čas odděleně a pokud událost nemá čas (je <code>NULL</code>) tak je to celodenní událost. Pokud má jen čas od tak končí za nějakou stanovenou dobu třeba 90 min jako ve škole. Pokud má jen datum od tak je to jednodenní akce.  Pár zásad při tvorbě iCalendar exportu</p>
-
-<ul>
-    <li>jednotlivé tagy jsou velkými písmeny a na samostatných řádcích</li>
-    <li>tagy jsou volitelné a je jich mnoho vyberte si ty které opravdu potřebujete</li>
-    <li>datum se dá udávat několika způsoby:
-<ul>
-    <li><code>DTSTART;VALUE=DATE:YYYYMMDD</code> - jen datum asi nejednoduší forma</li>
-    <li><code>DTSTART:YYYYMMDDTHHMMSS</code> - formát s časem v lokálním formátu</li>
-    <li><code>DTSTART:YYYYMMDDTHHMMSSZ</code> - tady pozor Z na konci udává, že máte hodnoty v UTC (pokud ne vzniká čas posun)</li>
-    <li><code>DTEND</code> je obdobně</li>
-    <li><code>RRULE:FREQ=DAILY;UNTIL=YYYYMMDDTHHMMSS</code> - pro opakované události</li>
-</ul>
-</li>
-    <li><code>URL</code> - nesmí obsahovat entity (nepodporuje Google Calendar)</li>
-    <li><code>DESCRIPTION</code> - dlouhý popis</li>
-    <li><code>SUMMARY</code> - nadpis</li>
-    <li><code>LOCATION</code> - místo konání akce</li>
-</ul>
-
-
-<p>Formát si zkontrolujte <a href="http://severinghaus.org/projects/icv/">validátorem</a>, to nikdy neškodí.  Já potom zkouším genrovaný iCalendar v Lightingu, Windows Calendar a Google Calendar. iCal pro Mac OS X nemám snad to v něm bude fungovat také.  Pro správné zobrazení češtiny v Google calendar nezapomeňte hlavičku, ostatní si poradí i bez ní, nevím proč Google ne. <code>header(&ldquo;Content-Type: text/<a href="http://www.dadsplan.com/">calendar</a>; charset=utf-8&rdquo;); header(&ldquo;Content-Disposition: attachment; filename=calendar.ics&rdquo;);</code> Základní objekt iCalendar, který popisuje &ldquo;Den oslav dobytí Bastily&rdquo; jako událost konající se od 14. července 1997 17:00 (UTC) do 15. července 1997 03:59:59 (UTC)</p>
-
-<pre>BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//hacksw/handcal//NONSGML v1.0//EN
-BEGIN:VEVENT
-DTSTART:19970714T170000Z
-DTEND:19970715T035959Z
-SUMMARY:Bastille Day Party
-END:VEVENT
-END:VCALENDAR</pre>
-
-
-<h3>Update</h3>
-
-
-<ul>
-    <li>v SQL se hodí použít <code>SELECT DATE_FORMAT(datum,'%Y%m%d') as datum, TIME_FORMAT(cas,'%H%i%s') as cas, ...</code></li>
-    <li>jako konce řádek je dobré napsat přímo <code>chr(13).chr(10)</code></li>
-    <li>u <code>DESCRIPTION</code> nezapoměňte <code>htmlspecialchars_decode(str_replace(chr(13).chr(10),"\\n"))</code></li>
-</ul>
-
 </div>
   
   
@@ -655,6 +883,10 @@ END:VCALENDAR</pre>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2017/04/docker-multi-stage-build/">Docker - multi stage build</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/12/jenkins-declarative-pipelines/">Jenkins Declarative Pipelines</a>
       </li>
     
@@ -688,10 +920,6 @@ END:VCALENDAR</pre>
     
       <li class="post">
         <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
       </li>
     
   </ul>
@@ -734,7 +962,7 @@ END:VCALENDAR</pre>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2016 - Ladislav Prskavec -
+  Copyright &copy; 2017 - Ladislav Prskavec -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

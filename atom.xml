@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-12-20T17:20:52+01:00</updated>
+  <updated>2017-04-21T08:41:28-05:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -14,9 +14,129 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Docker - multi stage build]]></title>
+    <link href="http://blog.prskavec.net/2017/04/docker-multi-stage-build/"/>
+    <updated>2017-04-21T08:10:00-05:00</updated>
+    <id>http://blog.prskavec.net/2017/04/docker-multi-stage-build</id>
+    <content type="html"><![CDATA[<p>Tato novinka je dostupná v poslední verzi Dockeru 17.05, musíte mít <a href="https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac">Edge edici</a> a se zapnutými experimentálním funkcemi, ale objeví se to v další stabilní verzi. Je pro jistotu tady je výpis z mého <code>docker version</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ docker version
+</span><span class='line'>Client:
+</span><span class='line'> Version:      17.05.0-ce-rc1
+</span><span class='line'> API version:  1.29
+</span><span class='line'> Go version:   go1.7.5
+</span><span class='line'> Git commit:   2878a85
+</span><span class='line'> Built:        Tue Apr 11 20:55:05 2017
+</span><span class='line'> OS/Arch:      darwin/amd64
+</span><span class='line'>
+</span><span class='line'>Server:
+</span><span class='line'> Version:      17.05.0-ce-rc1
+</span><span class='line'> API version:  1.29 (minimum version 1.12)
+</span><span class='line'> Go version:   go1.7.5
+</span><span class='line'> Git commit:   2878a85
+</span><span class='line'> Built:        Tue Apr 11 20:55:05 2017
+</span><span class='line'> OS/Arch:      linux/amd64
+</span><span class='line'> Experimental: true</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<h2>Multi stage</h2>
+
+<p>O co vlastně jde v tom multi stage. Pokud potřebujete vyrobit image pro aplikaci, která má artefakty (C/C++, Go, Java, etc.) tak potřebujete jen malou část těch závislostí pro běh v produkci, ale při výrobě těchto artefaktů musíte nainstalovat hodně a většinou ne malých závislostí. Řešilo se to patternem builder za pomocí dvou Dockerfile souborů, ale teď existuje jednodušší řešení.</p>
+
+<p>Řešení v jednom souboru kde máte dvě sekce, každá začíná deklarací <code>FROM</code>. Tady je ukázka pro Go lang.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>FROM golang:1.8 as builder
+</span><span class='line'>
+</span><span class='line'>ENV GLIDE_VERSION 0.10.2
+</span><span class='line'>ENV APP_VERSION 1.0.2
+</span><span class='line'>
+</span><span class='line'>ADD https://github.com/Masterminds/glide/releases/download/${GLIDE_VERSION}/glide-${GLIDE_VERSION}-linux-amd64.tar.gz /tmp/glide-${GLIDE_VERSION}-linux-amd64.tar.gz
+</span><span class='line'>
+</span><span class='line'>RUN cd /tmp && \
+</span><span class='line'>    tar -zxvf /tmp/glide-${GLIDE_VERSION}-linux-amd64.tar.gz && \
+</span><span class='line'>    cp /tmp/linux-amd64/glide /usr/local/bin/glide && \
+</span><span class='line'>    chmod 755 /usr/local/bin/glide && \
+</span><span class='line'>    rm /tmp/glide-${GLIDE_VERSION}-linux-amd64.tar.gz && rm -rf /tmp/linux-amd64/
+</span><span class='line'>
+</span><span class='line'>COPY . /go/src/github.com/apiaryio/heroku-datadog-drain-go
+</span><span class='line'>
+</span><span class='line'>RUN cd /go/src/github.com/apiaryio/heroku-datadog-drain-go && \
+</span><span class='line'>    glide install && \
+</span><span class='line'>    go install
+</span><span class='line'>
+</span><span class='line'>FROM scratch
+</span><span class='line'>COPY --from=builder /go/bin/heroku-datadog-drain-go .
+</span><span class='line'>CMD ["./heroku-datadog-drain-go"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>V první části se použije image golang a nainstaluje se glide (package manager) a vyrobí se binární soubor, který potom v druhé část (<code>FROM scratch</code>) se použije a pomocí <code>COPY --from=builder</code> se překopíruje artefakt z jednoho image do druhého. Pokud si image v první sekci nepojmenujete tak použijte číselné označení <code>COPY --from=0</code>.</p>
+
+<p>Výsledné image potom vypadají takto:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+</span><span class='line'>drain               latest              bd90aaa048dc        13 hours ago        10M
+</span><span class='line'>golang              1.8                 c0ccf5f2c036        13 days ago         703MB</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Máte dva image jeden pro produkci a druhý můžete klidne smazat.</p>
+
+<h2>Závěr</h2>
+
+<p>Tato inovace zjednodušší život mnoha lidem a je to super. Pokud si to chcete vyzkoušet můžete na <a href="http://training.play-with-docker.com/multi-stage/">webu v bez nutnosti instalovat si poslední Docker</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Jenkins Declarative Pipelines]]></title>
     <link href="http://blog.prskavec.net/2016/12/jenkins-declarative-pipelines/"/>
-    <updated>2016-12-20T16:52:00+01:00</updated>
+    <updated>2016-12-20T16:52:00-06:00</updated>
     <id>http://blog.prskavec.net/2016/12/jenkins-declarative-pipelines</id>
     <content type="html"><![CDATA[<p>Dnes Jenkins <a href="https://jenkins.io/blog/2016/12/19/declarative-pipeline-beta/">zveřejnil betu</a> nového formátu pro popis Continues Delivery Pipelines.</p>
 
@@ -195,7 +315,7 @@ kořenovém adresáři repozitáře projektu.</p>
   <entry>
     <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení - 2.část]]></title>
     <link href="http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/"/>
-    <updated>2016-10-31T10:26:00+01:00</updated>
+    <updated>2016-10-31T10:26:00-05:00</updated>
     <id>http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast</id>
     <content type="html"><![CDATA[<p>V minulé části jsem probíral proč je důležité mít definice v souboru a proč potřebujeme Continues Delivery Pipelines.</p>
 
@@ -257,7 +377,7 @@ kořenovém adresáři repozitáře projektu.</p>
   <entry>
     <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení]]></title>
     <link href="http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/"/>
-    <updated>2016-10-26T19:02:00+02:00</updated>
+    <updated>2016-10-26T19:02:00-05:00</updated>
     <id>http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni</id>
     <content type="html"><![CDATA[<p>Jenkins je nejznámější řešení na Continues Integration, který existuje už řadu let. Od září je venku konečně verze 2.x (aktuálně 2.19.1 LTS), která obsahuje několik zásadních novinek.</p>
 
@@ -363,7 +483,7 @@ kořenovém adresáři repozitáře projektu.</p>
   <entry>
     <title type="html"><![CDATA[Přednáška o SRE na DevOPS meetupu]]></title>
     <link href="http://blog.prskavec.net/2016/10/prednaska-o-sre-na-devops-meetupu/"/>
-    <updated>2016-10-17T08:22:00+02:00</updated>
+    <updated>2016-10-17T08:22:00-05:00</updated>
     <id>http://blog.prskavec.net/2016/10/prednaska-o-sre-na-devops-meetupu</id>
     <content type="html"><![CDATA[<p>O <a href="http://blog.prskavec.net/2016/03/co-to-je-sre/">SRE</a> ve startup budu mluvit 31. řijna na
 <a href="https://www.meetup.com/Prague-DevOps-Meetup/events/233883552/">DevOps Meetupu</a>.</p>
@@ -375,7 +495,7 @@ kořenovém adresáři repozitáře projektu.</p>
   <entry>
     <title type="html"><![CDATA[SREcon'16 Europe]]></title>
     <link href="http://blog.prskavec.net/2016/07/srecon-16-europe/"/>
-    <updated>2016-07-14T08:13:00+02:00</updated>
+    <updated>2016-07-14T08:13:00-05:00</updated>
     <id>http://blog.prskavec.net/2016/07/srecon-16-europe</id>
     <content type="html"><![CDATA[<p>Letošní <a href="https://www.usenix.org/conference/srecon16europe">SREcon</a> byl zase v Dublinu. Od 11.7. do 13.7. se zde setkali velcí hráči (Google, Facebook, Microsoft, Amazon) s těmi menšími a vyměňovali si spoustu zkušeností. Letos jsem se mohl poprvé zúčastnit. Nebyl jsem z ČR sám, zastoupení měli Avast, Seznam nebo Skype či Algolia. Dohromady asi 5 lidí.
 Konference byla vyprodaná a hodně míst měli lidé z Googlu a pokud vás zajímalo jak se pracuje v Dublinském Googlu nebo Facebooku mohli jste si o tom s lidmi promluvit.
@@ -419,7 +539,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
 
 <p>Hodně je vidět jaký velký rozdíl a kolik práce to dá pokud chcete firmu předělat na SRE (brownfielding) nebo začnete hned.</p>
 
-<h3>The Many Ways Your Monitoring Is Lying to You &ndash; Sebastian Kirsch, Google, <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#115;&#107;&#x69;&#114;&#115;&#x63;&#x68;&#x40;&#x67;&#x6f;&#x6f;&#103;&#108;&#x65;&#46;&#x63;&#x6f;&#x6d;">&#115;&#x6b;&#x69;&#114;&#x73;&#x63;&#x68;&#x40;&#x67;&#111;&#111;&#103;&#x6c;&#101;&#46;&#x63;&#x6f;&#x6d;</a></h3>
+<h3>The Many Ways Your Monitoring Is Lying to You &ndash; Sebastian Kirsch, Google, <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#107;&#x69;&#114;&#x73;&#x63;&#x68;&#x40;&#103;&#111;&#x6f;&#x67;&#108;&#x65;&#46;&#99;&#111;&#x6d;">&#x73;&#107;&#x69;&#114;&#x73;&#x63;&#104;&#64;&#x67;&#111;&#111;&#x67;&#108;&#x65;&#x2e;&#99;&#x6f;&#109;</a></h3>
 
 <p>Skvělá přednáška o tom jak nemůžete věřit každému grafu v monitoringu. Doporučuji schlédnout až bude video, bylo tam hodně příkladů. Jde o to, že věci, které uváděl nejsou pro mě například vůbec nové díky lekcím z numerické matematiky a statistiky na ČVUT, ale ne každý má statistický background a nebývá to až tak běžná součást Computer Science.</p>
 
@@ -473,7 +593,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
   <entry>
     <title type="html"><![CDATA[Serverless jako něco víc než Docker]]></title>
     <link href="http://blog.prskavec.net/2016/06/serverless-jako-neco-vic-nez-docker/"/>
-    <updated>2016-06-06T13:50:00+02:00</updated>
+    <updated>2016-06-06T13:50:00-05:00</updated>
     <id>http://blog.prskavec.net/2016/06/serverless-jako-neco-vic-nez-docker</id>
     <content type="html"><![CDATA[<h2>Serverless</h2>
 
@@ -509,7 +629,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
   <entry>
     <title type="html"><![CDATA[Co to je SRE?]]></title>
     <link href="http://blog.prskavec.net/2016/03/co-to-je-sre/"/>
-    <updated>2016-03-10T08:45:00+01:00</updated>
+    <updated>2016-03-10T08:45:00-06:00</updated>
     <id>http://blog.prskavec.net/2016/03/co-to-je-sre</id>
     <content type="html"><![CDATA[<p>Včera jsem měl <a href="http://srazy.info/jak-nejlepe-nasadit-docker-kontejnery-do-cloudu/6197">přednášku v Brně o dockeru</a> a ptal jsem se lidí kolem na meetup a v hospodě potom zda znají Site Reliability Engineering (SRE) ze svého okolí. Tento koncept od Googlu rozšiřuje klasické pojetí DevOps a myslím, že je to jedna z nejlepších věcí co Google vymyslel.</p>
 
@@ -545,7 +665,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
   <entry>
     <title type="html"><![CDATA[Suchý docker]]></title>
     <link href="http://blog.prskavec.net/2016/02/suchy-docker/"/>
-    <updated>2016-02-05T09:20:00+01:00</updated>
+    <updated>2016-02-05T09:20:00-06:00</updated>
     <id>http://blog.prskavec.net/2016/02/suchy-docker</id>
     <content type="html"><![CDATA[<p><a href="http://suchejunor.cz/">Suchý únor</a> je skvělá akce a tak jsem říkal, zda s Dockerem nebudeme také na suchu. Našťěstí včera se situace změnila a vyšli nové verze Docker Engine, Docker Swarm and Docker Compose.</p>
 
@@ -647,7 +767,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
   <entry>
     <title type="html"><![CDATA[Nástroje co používám pro vývoj a správu]]></title>
     <link href="http://blog.prskavec.net/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/"/>
-    <updated>2015-12-03T10:35:00+01:00</updated>
+    <updated>2015-12-03T10:35:00-06:00</updated>
     <id>http://blog.prskavec.net/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu</id>
     <content type="html"><![CDATA[<p>Sublime Text, Terminal</p>
 
@@ -736,7 +856,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
   <entry>
     <title type="html"><![CDATA[Porovnání implementace service v NodeJS a Go lang]]></title>
     <link href="http://blog.prskavec.net/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/"/>
-    <updated>2015-09-16T10:54:00+02:00</updated>
+    <updated>2015-09-16T10:54:00-05:00</updated>
     <id>http://blog.prskavec.net/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang</id>
     <content type="html"><![CDATA[<h2>Datadog a log parsing service</h2>
 
@@ -777,7 +897,7 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
   <entry>
     <title type="html"><![CDATA[Amazon Elastic Beanstalk a docker]]></title>
     <link href="http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker/"/>
-    <updated>2015-05-14T11:36:00+02:00</updated>
+    <updated>2015-05-14T11:36:00-05:00</updated>
     <id>http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker</id>
     <content type="html"><![CDATA[<p>Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době přidal podporu <a href="http://www.docker.io">Dockeru</a>. Díky podpoře docker kontejnerů je možné pustit víceméně cokoliv.</p>
 
@@ -1007,7 +1127,7 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
   <entry>
     <title type="html"><![CDATA[Docker cluster management]]></title>
     <link href="http://blog.prskavec.net/2015/02/docker-cluster-management/"/>
-    <updated>2015-02-07T18:09:00+01:00</updated>
+    <updated>2015-02-07T18:09:00-06:00</updated>
     <id>http://blog.prskavec.net/2015/02/docker-cluster-management</id>
     <content type="html"><![CDATA[<ul>
 <li>Update: přidal jsem do článku další věci zmíněné v komentářích, všem děkuji za příspěvky.</li>
@@ -1066,7 +1186,7 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
   <entry>
     <title type="html"><![CDATA[Zapier a zasílání zůstatku z banky zdarma na mobil]]></title>
     <link href="http://blog.prskavec.net/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/"/>
-    <updated>2014-12-11T16:29:00+01:00</updated>
+    <updated>2014-12-11T16:29:00-06:00</updated>
     <id>http://blog.prskavec.net/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil</id>
     <content type="html"><![CDATA[<h2>Motivace</h2>
 
@@ -1098,7 +1218,7 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
   <entry>
     <title type="html"><![CDATA[Git a pre-commit hook pro kontrolu syntaxe]]></title>
     <link href="http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/"/>
-    <updated>2014-01-06T19:29:00+01:00</updated>
+    <updated>2014-01-06T19:29:00-06:00</updated>
     <id>http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich</id>
     <content type="html"><![CDATA[<p>Pokud pracujete s gitem nebo jiným verzovacím systémem, určitě jste se setkali s hooky. Pro kontrolu než provedete commit, který se jmenuje pre-commit a hodí se zejména pro kontrolu syntaxe. Já mám několik hooků, které kontrolují php, js, xml a ruby. Říkal jsem si, že by to chtělo je refactorovat a udělat z nich použitelný kód.</p>
 
@@ -1134,7 +1254,7 @@ git init
   <entry>
     <title type="html"><![CDATA[docker]]></title>
     <link href="http://blog.prskavec.net/2013/11/docker/"/>
-    <updated>2013-11-28T08:25:00+01:00</updated>
+    <updated>2013-11-28T08:25:00-06:00</updated>
     <id>http://blog.prskavec.net/2013/11/docker</id>
     <content type="html"><![CDATA[<p>Pokud se zajímáte o to jak nasazovat aplikace na svoje servery, pronajaté VPS nebo doc cloudu, měli by jste si něco o této poměrně mladé technologii přečíst nebo vidět.</p>
 
@@ -1161,7 +1281,7 @@ git init
   <entry>
     <title type="html"><![CDATA[Jenkins polling a git-notify]]></title>
     <link href="http://blog.prskavec.net/2013/09/jenkins-polling-a-git-notify/"/>
-    <updated>2013-09-05T10:01:00+02:00</updated>
+    <updated>2013-09-05T10:01:00-05:00</updated>
     <id>http://blog.prskavec.net/2013/09/jenkins-polling-a-git-notify</id>
     <content type="html"><![CDATA[<p>Minulý rok jsem psal o tom, že <a href="http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo/">polling v Jenkinsu je zlo</a>. To stále platí, ale i když máte tento přístup nemusí to stačit.</p>
 
@@ -1323,7 +1443,7 @@ curl "http://jenkins.firma.cz/git/notifyCommit?url=ssh://git@git.firma.cz/$REPOS
   <entry>
     <title type="html"><![CDATA[Firebase a AngularJS]]></title>
     <link href="http://blog.prskavec.net/2013/08/firebase-a-angularjs/"/>
-    <updated>2013-08-29T11:31:00+02:00</updated>
+    <updated>2013-08-29T11:31:00-05:00</updated>
     <id>http://blog.prskavec.net/2013/08/firebase-a-angularjs</id>
     <content type="html"><![CDATA[<p>Dnešní většina aplikací v javascriptu má architekturu klient server. Pokud nechcete psát nějaký backend pro vaši aplikaci, můžete se tomu vyhnout pokud použijete nějaký druh úložiště (databáze), která vám k tomu přidá i funkce, které má nějaký backend napsaný např. v nodejs nebo php.</p>
 
@@ -1424,7 +1544,7 @@ $scope.logout = function() {
   <entry>
     <title type="html"><![CDATA[Jaký bude AngularJS 1.2?]]></title>
     <link href="http://blog.prskavec.net/2013/06/angularjs-1-dot-2/"/>
-    <updated>2013-06-13T22:08:00+02:00</updated>
+    <updated>2013-06-13T22:08:00-05:00</updated>
     <id>http://blog.prskavec.net/2013/06/angularjs-1-dot-2</id>
     <content type="html"><![CDATA[<p>Pokud sledujete dění kolem frameworku <a href="http://angularjs.org">AngularJS</a> tak jste jistě zaznamenali, že se pracuje na nové verzi 1.2, která je teď blízko k dokončení. V masteru mají dnes verzi pojmenovanou jako verzi 1.1.8 a brzy se snad dočkáme finální verze. Zkusím zde popsat nejdůležitější věci z <a href="https://docs.google.com/presentation/d/1WHCcp3G3HxoE7b_ut_ERKJF4zQK_P4qFlESjE2E9AUQ/preview?sle=true#slide=id.geaf70e8e_16">prezentace</a> na meetupu 11.6. co prezentovali Igor Minár a Brad Green.</p>
 
@@ -1497,97 +1617,11 @@ Konečně lze napsat:</p>
   <entry>
     <title type="html"><![CDATA[Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)]]></title>
     <link href="http://blog.prskavec.net/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/"/>
-    <updated>2013-06-01T11:23:00+02:00</updated>
+    <updated>2013-06-01T11:23:00-05:00</updated>
     <id>http://blog.prskavec.net/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs</id>
     <content type="html"><![CDATA[<p>Javascriptový framework AngularJS se stává čím dám tím populárnější. Letos vyjde několik prvních knih na něj zaměřených. Recenzi té úplně první z nich vám dnes nabízíme.</p>
 
 <p>Více na <a href="http://www.zdrojak.cz/clanky/menard-instant-angularjs-starter-recenze/">zdrojak.cz</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[NodeJS Hosting]]></title>
-    <link href="http://blog.prskavec.net/2013/03/nodejs-hosting/"/>
-    <updated>2013-03-31T21:20:00+02:00</updated>
-    <id>http://blog.prskavec.net/2013/03/nodejs-hosting</id>
-    <content type="html"><![CDATA[<p>Mám několik webů, které jsou na NodeJS. Spousta lidí zná moje weby o javascriptu <a href="http://praguejs.cz">PragueJS</a>, které běží na NodeJS a je napsaný <a href="http://expressjs.com/">ExpressJS</a>. Web je napsaný v coffee-scriptu. Nic extra, ale řešil jsem kde web hostovat.</p>
-
-<!--more-->
-
-
-<h2>Heroku</h2>
-
-<p>Jako první jsem zvolil <a href="http://heroku.com/">Heroku</a>, kde musíte upravit a lehce nastavení v package.json, aby Heroku vědělo jakou verzi NodeJS a NPM má pro kompilaci použít.</p>
-
-<p>package.json</p>
-
-<pre><code>...
-"main" : "app.coffee",
-"scripts": {
-    "start": "NODE_ENV=production coffee app.coffee"
-},
-"engines": {
-    "node": "0.8.x",
-    "npm":  "1.2.x"
-},
-...
-</code></pre>
-
-<p>Nastavit environment properties na production</p>
-
-<pre><code>heroku config:set NODE_ENV=production
-</code></pre>
-
-<p> a nastavení portu na kterém to na Heroku běží (PORT).</p>
-
-<pre><code>app.set 'port', process.env.PORT or 5000
-app.listen app.settings.port
-</code></pre>
-
-<p>Pro spuštění je potřeba nastavit Procfile, kde je co se má pouštět.</p>
-
-<p>Procfile</p>
-
-<pre><code>web: coffee app.coffee
-</code></pre>
-
-<p>Kompletní dokumentaci najdete přímo na stránkách <a href="https://devcenter.heroku.com/articles/nodejs">Heroku</a>.</p>
-
-<h2>OpenShift</h2>
-
-<p>Pro zálohu jsem využil <a href="https://www.openshift.com/">RedHat PaaS Openshift</a>, kde musíte využít jejich vlastní nástroj na vytvoření základ aplikace.</p>
-
-<p>V .openshift adresáři se nastaví všechno včetně kompilace různé verze NodeJS.</p>
-
-<p>.openshift/action_hooks/pre_start_nodejs-0.6</p>
-
-<pre><code>export NODE_ENV=production
-export PATH=$PATH:~/app-root/repo/node_modules/coffee-script/bin
-</code></pre>
-
-<p>Web běží za proxy a narozdíl od Heroku je potřeba nastavit kromě portu (OPENSHIFT_NODEJS_PORT) i interní IP adresu (OPENSHIFT_INTERNAL_IP).</p>
-
-<pre><code>  app.set 'port', process.env.OPENSHIFT_NODEJS_PORT || 8080;
-  app.set 'ipaddress', process.env.OPENSHIFT_INTERNAL_IP
-</code></pre>
-
-<p>Musel upravit package.json, aby šel přímo pustit coffee-script, protože ho OpenShift ho zatím v době implementace nepodporoval.</p>
-
-<pre><code>...
-"main" : "app.coffee",
-  "scripts": {
-    "start": "~/app-root/repo/node_modules/coffee-script/bin/coffee app.coffee"
-},    
-...
-</code></pre>
-
-<h2>Další hostingy</h2>
-
-<p>Na <a href="http://saewitz.com/node-dot-js-websocket-hosting-roundup/">webu</a> najdete zajímavé srovnání z pohledu podpory WebSockets. V tomhle ohledu je problém hlavně v nejvíce používanému Heroku, kde je podpora velmi špatná.</p>
-
-<p>Další hostingy jako jsou <a href="http://www.nodejitsu.com">Nodejitsu</a>, <a href="http://aws.amazon.com/elasticbeanstalk/">AWS Elastic Beanstalk</a>, <a href="https://modulus.io/">Modulus</a> a <a href="https://www.appfog.com/">AppFog</a> jsou podobné a služby poskytují. Nejlepší podporu pro Websockety má Nodejitsu a Modulus, které jsou placené. Na Openshiftu jsem websockety nezkoušel podpora byt tam měla být.</p>
-
-<p>Všechy moje zdrojáky jsou k dispoci na Githubu, <a href="https://github.com/abtris/cologne-js">Heroku na masteru</a> a <a href="https://github.com/abtris/cologne-js/tree/openshift">Openshift</a>.</p>
 ]]></content>
   </entry>
   

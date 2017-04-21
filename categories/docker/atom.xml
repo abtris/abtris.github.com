@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: docker | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/docker/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-12-20T17:20:52+01:00</updated>
+  <updated>2017-04-21T08:41:28-05:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -14,9 +14,92 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Docker - multi stage build]]></title>
+    <link href="http://blog.prskavec.net/2017/04/docker-multi-stage-build/"/>
+    <updated>2017-04-21T08:10:00-05:00</updated>
+    <id>http://blog.prskavec.net/2017/04/docker-multi-stage-build</id>
+    <content type="html"><![CDATA[<p>Tato novinka je dostupná v poslední verzi Dockeru 17.05, musíte mít <a href="https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac">Edge edici</a> a se zapnutými experimentálním funkcemi, ale objeví se to v další stabilní verzi. Je pro jistotu tady je výpis z mého <code>docker version</code>.</p>
+
+<p>```
+$ docker version
+Client:
+ Version:      17.05.0-ce-rc1
+ API version:  1.29
+ Go version:   go1.7.5
+ Git commit:   2878a85
+ Built:        Tue Apr 11 20:55:05 2017
+ OS/Arch:      darwin/amd64</p>
+
+<p>Server:
+ Version:      17.05.0-ce-rc1
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   2878a85
+ Built:        Tue Apr 11 20:55:05 2017
+ OS/Arch:      linux/amd64
+ Experimental: true
+```</p>
+
+<!-- more -->
+
+
+<h2>Multi stage</h2>
+
+<p>O co vlastně jde v tom multi stage. Pokud potřebujete vyrobit image pro aplikaci, která má artefakty (C/C++, Go, Java, etc.) tak potřebujete jen malou část těch závislostí pro běh v produkci, ale při výrobě těchto artefaktů musíte nainstalovat hodně a většinou ne malých závislostí. Řešilo se to patternem builder za pomocí dvou Dockerfile souborů, ale teď existuje jednodušší řešení.</p>
+
+<p>Řešení v jednom souboru kde máte dvě sekce, každá začíná deklarací <code>FROM</code>. Tady je ukázka pro Go lang.</p>
+
+<p>```
+FROM golang:1.8 as builder</p>
+
+<p>ENV GLIDE_VERSION 0.10.2
+ENV APP_VERSION 1.0.2</p>
+
+<p>ADD <a href="https://github.com/Masterminds/glide/releases/download/$">https://github.com/Masterminds/glide/releases/download/$</a>{GLIDE_VERSION}/glide-${GLIDE_VERSION}-linux-amd64.tar.gz /tmp/glide-${GLIDE_VERSION}-linux-amd64.tar.gz</p>
+
+<p>RUN cd /tmp &amp;&amp; \</p>
+
+<pre><code>tar -zxvf /tmp/glide-${GLIDE_VERSION}-linux-amd64.tar.gz &amp;&amp; \
+cp /tmp/linux-amd64/glide /usr/local/bin/glide &amp;&amp; \
+chmod 755 /usr/local/bin/glide &amp;&amp; \
+rm /tmp/glide-${GLIDE_VERSION}-linux-amd64.tar.gz &amp;&amp; rm -rf /tmp/linux-amd64/
+</code></pre>
+
+<p>COPY . /go/src/github.com/apiaryio/heroku-datadog-drain-go</p>
+
+<p>RUN cd /go/src/github.com/apiaryio/heroku-datadog-drain-go &amp;&amp; \</p>
+
+<pre><code>glide install &amp;&amp; \
+go install
+</code></pre>
+
+<p>FROM scratch
+COPY &mdash;from=builder /go/bin/heroku-datadog-drain-go .
+CMD [&ldquo;./heroku-datadog-drain-go&rdquo;]
+```</p>
+
+<p>V první části se použije image golang a nainstaluje se glide (package manager) a vyrobí se binární soubor, který potom v druhé část (<code>FROM scratch</code>) se použije a pomocí <code>COPY --from=builder</code> se překopíruje artefakt z jednoho image do druhého. Pokud si image v první sekci nepojmenujete tak použijte číselné označení <code>COPY --from=0</code>.</p>
+
+<p>Výsledné image potom vypadají takto:</p>
+
+<p><code>
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+drain               latest              bd90aaa048dc        13 hours ago        10M
+golang              1.8                 c0ccf5f2c036        13 days ago         703MB
+</code></p>
+
+<p>Máte dva image jeden pro produkci a druhý můžete klidne smazat.</p>
+
+<h2>Závěr</h2>
+
+<p>Tato inovace zjednodušší život mnoha lidem a je to super. Pokud si to chcete vyzkoušet můžete na <a href="http://training.play-with-docker.com/multi-stage/">webu v bez nutnosti instalovat si poslední Docker</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Suchý docker]]></title>
     <link href="http://blog.prskavec.net/2016/02/suchy-docker/"/>
-    <updated>2016-02-05T09:20:00+01:00</updated>
+    <updated>2016-02-05T09:20:00-06:00</updated>
     <id>http://blog.prskavec.net/2016/02/suchy-docker</id>
     <content type="html"><![CDATA[<p><a href="http://suchejunor.cz/">Suchý únor</a> je skvělá akce a tak jsem říkal, zda s Dockerem nebudeme také na suchu. Našťěstí včera se situace změnila a vyšli nové verze Docker Engine, Docker Swarm and Docker Compose.</p>
 
@@ -113,7 +196,7 @@ volumes:
   <entry>
     <title type="html"><![CDATA[Amazon Elastic Beanstalk a docker]]></title>
     <link href="http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker/"/>
-    <updated>2015-05-14T11:36:00+02:00</updated>
+    <updated>2015-05-14T11:36:00-05:00</updated>
     <id>http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker</id>
     <content type="html"><![CDATA[<p>Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době přidal podporu <a href="http://www.docker.io">Dockeru</a>. Díky podpoře docker kontejnerů je možné pustit víceméně cokoliv.</p>
 
@@ -272,7 +355,7 @@ docker run \</p>
   <entry>
     <title type="html"><![CDATA[Docker cluster management]]></title>
     <link href="http://blog.prskavec.net/2015/02/docker-cluster-management/"/>
-    <updated>2015-02-07T18:09:00+01:00</updated>
+    <updated>2015-02-07T18:09:00-06:00</updated>
     <id>http://blog.prskavec.net/2015/02/docker-cluster-management</id>
     <content type="html"><![CDATA[<ul>
 <li>Update: přidal jsem do článku další věci zmíněné v komentářích, všem děkuji za příspěvky.</li>
@@ -331,7 +414,7 @@ docker run \</p>
   <entry>
     <title type="html"><![CDATA[docker]]></title>
     <link href="http://blog.prskavec.net/2013/11/docker/"/>
-    <updated>2013-11-28T08:25:00+01:00</updated>
+    <updated>2013-11-28T08:25:00-06:00</updated>
     <id>http://blog.prskavec.net/2013/11/docker</id>
     <content type="html"><![CDATA[<p>Pokud se zajímáte o to jak nasazovat aplikace na svoje servery, pronajaté VPS nebo doc cloudu, měli by jste si něco o této poměrně mladé technologii přečíst nebo vidět.</p>
 

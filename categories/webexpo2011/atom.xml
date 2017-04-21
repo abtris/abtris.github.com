@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: webexpo2011 | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/webexpo2011/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-12-20T17:20:52+01:00</updated>
+  <updated>2017-04-21T08:41:28-05:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Deployment prakticky - WebExpo 2011]]></title>
     <link href="http://blog.prskavec.net/2011/09/deployment-prakticky-webexpo-2011/"/>
-    <updated>2011-09-25T00:00:00+02:00</updated>
+    <updated>2011-09-25T00:00:00-05:00</updated>
     <id>http://blog.prskavec.net/2011/09/deployment-prakticky-webexpo-2011</id>
     <content type="html"><![CDATA[<p>Letos jsem přednášel na Webexpu na téma deployment. Ve 30 minutách se nedá říci dost, aby jste se dozvěděli všechno tak zkusím v tomto článku shrnout o čem jsem mluvil a přidat nějaké zdroje, které pomůžou v dalších úsilí při automatizaci deploymentu.</p>
 

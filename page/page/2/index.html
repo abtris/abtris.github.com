@@ -9,7 +9,8 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době &hellip;">
+  <meta name="description" content="Datadog a log parsing service Pro používání Datadog na Heroku je potřeba několik věcí.
+Za prvé, pro datadog agenta potřebujete custom buildpack, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,52 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-16T10:54:00-05:00" pubdate data-updated="true">16. 09. 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Datadog a log parsing service</h2>
+
+<p>Pro používání <a href="https://www.datadoghq.com/">Datadog</a> na <a href="https://heroku.com">Heroku</a> je potřeba několik věcí.
+Za prvé, pro datadog agenta potřebujete <a href="https://github.com/miketheman/heroku-buildpack-datadog.git">custom buildpack</a>, který v kombinaci s vaším buildpackem vám umožní mít vše pohromadě. Pokud to nechcete můžete udělat samostatnou service přes kterou se dají parsovat logy pomocí této <a href="https://github.com/ozinc/heroku-datadog-drain">knihovny v NodeJS</a>.
+Pokud chcete do Datadogu zapisovat deploy na Heroku použijte <a href="https://devcenter.heroku.com/articles/deploy-hooks#email">emailový post deploy hook</a>.
+Aplikaci a její metriky můžete posílat přes Datadog API.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Dále &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2015/05/amazon-elastic-beanstalk-a-docker/">Amazon Elastic Beanstalk a docker</a></h1>
     
     
@@ -81,7 +128,7 @@
   
 
 
-<time datetime="2015-05-14T11:36:00+02:00" pubdate data-updated="true">14. 05. 2015</time>
+<time datetime="2015-05-14T11:36:00-05:00" pubdate data-updated="true">14. 05. 2015</time>
         
       </p>
     
@@ -122,7 +169,7 @@
   
 
 
-<time datetime="2015-02-07T18:09:00+01:00" pubdate data-updated="true">07. 02. 2015</time>
+<time datetime="2015-02-07T18:09:00-06:00" pubdate data-updated="true">07. 02. 2015</time>
         
       </p>
     
@@ -185,7 +232,7 @@
   
 
 
-<time datetime="2014-12-11T16:29:00+01:00" pubdate data-updated="true">11. 12. 2014</time>
+<time datetime="2014-12-11T16:29:00-06:00" pubdate data-updated="true">11. 12. 2014</time>
         
       </p>
     
@@ -228,7 +275,7 @@
   
 
 
-<time datetime="2014-01-06T19:29:00+01:00" pubdate data-updated="true">06. 01. 2014</time>
+<time datetime="2014-01-06T19:29:00-06:00" pubdate data-updated="true">06. 01. 2014</time>
         
       </p>
     
@@ -291,7 +338,7 @@ git init
   
 
 
-<time datetime="2013-11-28T08:25:00+01:00" pubdate data-updated="true">28. 11. 2013</time>
+<time datetime="2013-11-28T08:25:00-06:00" pubdate data-updated="true">28. 11. 2013</time>
         
       </p>
     
@@ -339,7 +386,7 @@ git init
   
 
 
-<time datetime="2013-09-05T10:01:00+02:00" pubdate data-updated="true">05. 09. 2013</time>
+<time datetime="2013-09-05T10:01:00-05:00" pubdate data-updated="true">05. 09. 2013</time>
         
       </p>
     
@@ -380,7 +427,7 @@ git init
   
 
 
-<time datetime="2013-08-29T11:31:00+02:00" pubdate data-updated="true">29. 08. 2013</time>
+<time datetime="2013-08-29T11:31:00-05:00" pubdate data-updated="true">29. 08. 2013</time>
         
       </p>
     
@@ -421,7 +468,7 @@ git init
   
 
 
-<time datetime="2013-06-13T22:08:00+02:00" pubdate data-updated="true">13. 06. 2013</time>
+<time datetime="2013-06-13T22:08:00-05:00" pubdate data-updated="true">13. 06. 2013</time>
         
       </p>
     
@@ -462,7 +509,7 @@ git init
   
 
 
-<time datetime="2013-06-01T11:23:00+02:00" pubdate data-updated="true">01. 06. 2013</time>
+<time datetime="2013-06-01T11:23:00-05:00" pubdate data-updated="true">01. 06. 2013</time>
         
       </p>
     
@@ -474,47 +521,6 @@ git init
 <p>Více na <a href="http://www.zdrojak.cz/clanky/menard-instant-angularjs-starter-recenze/">zdrojak.cz</a></p>
 </div>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2013/03/nodejs-hosting/">NodeJS Hosting</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-31T21:20:00+02:00" pubdate data-updated="true">31. 03. 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Mám několik webů, které jsou na NodeJS. Spousta lidí zná moje weby o javascriptu <a href="http://praguejs.cz">PragueJS</a>, které běží na NodeJS a je napsaný <a href="http://expressjs.com/">ExpressJS</a>. Web je napsaný v coffee-scriptu. Nic extra, ale řešil jsem kde web hostovat.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2013/03/nodejs-hosting/">Dále &rarr;</a>
-    </footer>
   
 
 
@@ -553,6 +559,10 @@ git init
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2017/04/docker-multi-stage-build/">Docker - multi stage build</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/12/jenkins-declarative-pipelines/">Jenkins Declarative Pipelines</a>
       </li>
     
@@ -586,10 +596,6 @@ git init
     
       <li class="post">
         <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
       </li>
     
   </ul>
@@ -632,7 +638,7 @@ git init
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2016 - Ladislav Prskavec -
+  Copyright &copy; 2017 - Ladislav Prskavec -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: jenkins | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/jenkins/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-12-20T17:20:52+01:00</updated>
+  <updated>2017-04-21T08:41:28-05:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Jenkins Declarative Pipelines]]></title>
     <link href="http://blog.prskavec.net/2016/12/jenkins-declarative-pipelines/"/>
-    <updated>2016-12-20T16:52:00+01:00</updated>
+    <updated>2016-12-20T16:52:00-06:00</updated>
     <id>http://blog.prskavec.net/2016/12/jenkins-declarative-pipelines</id>
     <content type="html"><![CDATA[<p>Dnes Jenkins <a href="https://jenkins.io/blog/2016/12/19/declarative-pipeline-beta/">zveřejnil betu</a> nového formátu pro popis Continues Delivery Pipelines.</p>
 
@@ -144,7 +144,7 @@ GOROOT="/usr/local/opt/go/libexec"
   <entry>
     <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení - 2.část]]></title>
     <link href="http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/"/>
-    <updated>2016-10-31T10:26:00+01:00</updated>
+    <updated>2016-10-31T10:26:00-05:00</updated>
     <id>http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast</id>
     <content type="html"><![CDATA[<p>V minulé části jsem probíral proč je důležité mít definice v souboru a proč potřebujeme Continues Delivery Pipelines.</p>
 
@@ -197,7 +197,7 @@ node('docker') {
   <entry>
     <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení]]></title>
     <link href="http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/"/>
-    <updated>2016-10-26T19:02:00+02:00</updated>
+    <updated>2016-10-26T19:02:00-05:00</updated>
     <id>http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni</id>
     <content type="html"><![CDATA[<p>Jenkins je nejznámější řešení na Continues Integration, který existuje už řadu let. Od září je venku konečně verze 2.x (aktuálně 2.19.1 LTS), která obsahuje několik zásadních novinek.</p>
 
@@ -290,7 +290,7 @@ Jenkinsfile je [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) v p
   <entry>
     <title type="html"><![CDATA[Jenkins polling a git-notify]]></title>
     <link href="http://blog.prskavec.net/2013/09/jenkins-polling-a-git-notify/"/>
-    <updated>2013-09-05T10:01:00+02:00</updated>
+    <updated>2013-09-05T10:01:00-05:00</updated>
     <id>http://blog.prskavec.net/2013/09/jenkins-polling-a-git-notify</id>
     <content type="html"><![CDATA[<p>Minulý rok jsem psal o tom, že <a href="http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo/">polling v Jenkinsu je zlo</a>. To stále platí, ale i když máte tento přístup nemusí to stačit.</p>
 
@@ -452,7 +452,7 @@ curl "http://jenkins.firma.cz/git/notifyCommit?url=ssh://git@git.firma.cz/$REPOS
   <entry>
     <title type="html"><![CDATA[Jenkins SCM polling je zlo!]]></title>
     <link href="http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo/"/>
-    <updated>2012-06-20T18:54:00+02:00</updated>
+    <updated>2012-06-20T18:54:00-05:00</updated>
     <id>http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo</id>
     <content type="html"><![CDATA[<p>Moc jsem nechápal problémy, které řešil <a href="http://kohsuke.org/2011/12/01/polling-must-die-triggering-jenkins-builds-from-a-git-hook/">Kohsuke Kawaguchi</a> na konci roku. Ale brzo jsem to měl zjistit. Před časem přišel za mnou kolega, že chce zkonfigurovat polling stylem popisovaným v článku.</p>
 

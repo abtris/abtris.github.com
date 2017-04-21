@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: angularjs | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/angularjs/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2016-12-20T17:20:52+01:00</updated>
+  <updated>2017-04-21T08:41:28-05:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Firebase a AngularJS]]></title>
     <link href="http://blog.prskavec.net/2013/08/firebase-a-angularjs/"/>
-    <updated>2013-08-29T11:31:00+02:00</updated>
+    <updated>2013-08-29T11:31:00-05:00</updated>
     <id>http://blog.prskavec.net/2013/08/firebase-a-angularjs</id>
     <content type="html"><![CDATA[<p>Dnešní většina aplikací v javascriptu má architekturu klient server. Pokud nechcete psát nějaký backend pro vaši aplikaci, můžete se tomu vyhnout pokud použijete nějaký druh úložiště (databáze), která vám k tomu přidá i funkce, které má nějaký backend napsaný např. v nodejs nebo php.</p>
 
@@ -117,7 +117,7 @@ $scope.logout = function() {
   <entry>
     <title type="html"><![CDATA[Šablony v AngularJS]]></title>
     <link href="http://blog.prskavec.net/2012/08/angualarjs-templates/"/>
-    <updated>2012-08-14T21:40:00+02:00</updated>
+    <updated>2012-08-14T21:40:00-05:00</updated>
     <id>http://blog.prskavec.net/2012/08/angualarjs-templates</id>
     <content type="html"><![CDATA[<p>Pokud začínáte s <a href="http://www.angularjs.org">AngularJS</a> je dobré pro aplikace použít <a href="https://github.com/angular/angular-seed">angular-seed</a>.</p>
 

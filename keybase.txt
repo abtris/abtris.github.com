@@ -1,0 +1,54 @@
+==================================================================
+https://keybase.io/abtris
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://blog.prskavec.net
+  * I am abtris (https://keybase.io/abtris) on keybase.
+  * I have a public key ASAAZQ6Q4Yo3CFX5b9jUKeu6hE-6v6hq2vZpCg87O16AhAo
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "010194446ce8b0d004dbb4a2e41c2d90af83f21a955c523d97ff4482cd54481149db0a",
+            "host": "keybase.io",
+            "kid": "012000650e90e18a370855f96fd8d429ebba844fbabfa86adaf6690a0f3b3b5e80840a",
+            "uid": "243a27ed12c10ef940793317c0251500",
+            "username": "abtris"
+        },
+        "service": {
+            "hostname": "blog.prskavec.net",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.20"
+    },
+    "ctime": 1490459443,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1490459381,
+        "hash": "ec68047738ee819f3646697770d486030e144562856f2970da890fd5a2c12cbca5a8cc686650069b54b59f9234c7305675edf8a1920e5853b2263a935ab89770",
+        "seqno": 977837
+    },
+    "prev": "ea52d4c136f936d28a78e06b1e95b991422084f290d458e27ea6d22ac41cabb0",
+    "seqno": 12,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgAGUOkOGKNwhV+W/Y1CnruoRPur+oatr2aQoPOztegIQKp3BheWxvYWTFAvd7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxOTQ0NDZjZThiMGQwMDRkYmI0YTJlNDFjMmQ5MGFmODNmMjFhOTU1YzUyM2Q5N2ZmNDQ4MmNkNTQ0ODExNDlkYjBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwMDA2NTBlOTBlMThhMzcwODU1Zjk2ZmQ4ZDQyOWViYmE4NDRmYmFiZmE4NmFkYWY2NjkwYTBmM2IzYjVlODA4NDBhIiwidWlkIjoiMjQzYTI3ZWQxMmMxMGVmOTQwNzkzMzE3YzAyNTE1MDAiLCJ1c2VybmFtZSI6ImFidHJpcyJ9LCJzZXJ2aWNlIjp7Imhvc3RuYW1lIjoiYmxvZy5wcnNrYXZlYy5uZXQiLCJwcm90b2NvbCI6Imh0dHA6In0sInR5cGUiOiJ3ZWJfc2VydmljZV9iaW5kaW5nIiwidmVyc2lvbiI6MX0sImNsaWVudCI6eyJuYW1lIjoia2V5YmFzZS5pbyBnbyBjbGllbnQiLCJ2ZXJzaW9uIjoiMS4wLjIwIn0sImN0aW1lIjoxNDkwNDU5NDQzLCJleHBpcmVfaW4iOjUwNDU3NjAwMCwibWVya2xlX3Jvb3QiOnsiY3RpbWUiOjE0OTA0NTkzODEsImhhc2giOiJlYzY4MDQ3NzM4ZWU4MTlmMzY0NjY5Nzc3MGQ0ODYwMzBlMTQ0NTYyODU2ZjI5NzBkYTg5MGZkNWEyYzEyY2JjYTVhOGNjNjg2NjUwMDY5YjU0YjU5ZjkyMzRjNzMwNTY3NWVkZjhhMTkyMGU1ODUzYjIyNjNhOTM1YWI4OTc3MCIsInNlcW5vIjo5Nzc4Mzd9LCJwcmV2IjoiZWE1MmQ0YzEzNmY5MzZkMjhhNzhlMDZiMWU5NWI5OTE0MjIwODRmMjkwZDQ1OGUyN2VhNmQyMmFjNDFjYWJiMCIsInNlcW5vIjoxMiwidGFnIjoic2lnbmF0dXJlIn2jc2lnxEAZKzCIrSs12ThZxFU9QXWRi+nhoAqyGshpuMCLZtO+T6NlTBWvHTe+bcDcygeTXxusACh4LB+RFZb3pSBvyGQCqHNpZ190eXBlIKRoYXNogqR0eXBlCKV2YWx1ZcQgpG3XXDth5ggJhV+GszNSqZVsfwxWWlmYbvMfpIhu4OajdGFnzQICp3ZlcnNpb24B
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/abtris
+
+==================================================================

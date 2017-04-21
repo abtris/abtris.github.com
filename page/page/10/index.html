@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="pDepend http://www.pdepend.org Php Depend (pDepend) patří do skupiny nástrojů QA (Quality assurance) pro kód a je odvozen od JDepend, kde je také &hellip;">
+  <meta name="description" content="V příspěvku pDepend a php frameworky jsem uvedl porovnání několika frameworků pomocí PHP Depend. Do příspěvku už se nevešli Akelos, YII a Kohana. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,63 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2009/03/pdepend-a-php-frameworky-dodatek/">pDepend a php frameworky dodatek</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-03-20T00:00:00-05:00" pubdate data-updated="true">20. 03. 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>V příspěvku <a href="http://blog.prskavec.net/2009/03/pdepend-a-php-frameworky/">pDepend a php frameworky</a> jsem uvedl porovnání několika frameworků pomocí <a href="http://www.pdepend.org/">PHP Depend</a>. Do příspěvku už se nevešli <a href="http://www.akelos.org/">Akelos</a>, <a href="http://www.yiiframework.com/">YII</a> a <a href="http://kohanaphp.com/">Kohana</a>. Kohana je fork CodeIgniteru, tak vás nepřekvapí podobné výsledky, jen posunuté trochu více do abtraktního pole v grafu. YII neprošel kvůli chybě: <pre>Invalid token &ldquo;{&rdquo; on line 158 in file: /phpdepend/yii-read-only/framework/cli/views/shell/crud/controller.php</pre>  Ještě jsem zkoušel <a href="http://ez.no/ezcomponents">eZ components</a> a to havarovalo na</p>
+
+<pre>Fatal error: Maximum function nesting level of '100' reached, aborting! in /usr/share/php/PHP/Depend/Metrics/NPathComplexity/Analyzer.php on line 330</pre>
+
+
+<p>Protože příspěvek měl docela dobrou čtenost chci se zeptat zda někomu tam nechyběl nějaký zajímavý php framework, který třeba neznám, rád ho zahrnu.</p>
+
+<p>Pokud se zajímáte o problematiku QA tak bych vám chtěl doporučit článek a slidy Sebastian Bergmanna (<a href="http://sebastian-bergmann.de/archives/856-Quality-Assurance-Tools-for-PHP.html">Quality Assurance Tools for PHP</a>, <a href="http://www.slideshare.net/sebastian_bergmann/quality-assurance-in-php-projects-1163460?type=powerpoint">Quality Assurance in PHP Projects</a>). Bergmann sice prosazuje CC a  PhpUc a já jsem pro nasazení Hudson v Continuous Integration, ale slidy jsou velmi zajímavé a určitě se k této problematice vrátím v nějakém dalším článku.</p>
+
+<h3>Kohana</h3>
+
+
+<p> <a href="http://kohanaphp.com/"><a href="http://kohanaphp.com/">http://kohanaphp.com/</a></a>
+<img src="http://blog.prskavec.net/wp-content/uploads/2009/03/kohana-jdepend.png" alt="kohana-jdepend" />
+<img src="http://blog.prskavec.net/wp-content/uploads/2009/03/kohana-pyramid.png" alt="kohana-pyramid" /></p>
+
+<h3>Akelos</h3>
+
+
+<p>
+<img src="http://blog.prskavec.net/wp-content/uploads/2009/03/akelos-jdepend.png" alt="akelos-jdepend" />
+<img src="http://blog.prskavec.net/wp-content/uploads/2009/03/akelos-pyramid.png" alt="akelos-pyramid" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2009/03/pdepend-a-php-frameworky/">pDepend a php frameworky</a></h1>
     
     
@@ -81,7 +138,7 @@
   
 
 
-<time datetime="2009-03-16T00:00:00+01:00" pubdate data-updated="true">16. 03. 2009</time>
+<time datetime="2009-03-16T00:00:00-05:00" pubdate data-updated="true">16. 03. 2009</time>
         
       </p>
     
@@ -194,7 +251,7 @@ Z pyramid mě zaujali čísla kolem LOC (počet řádků kódu) v porodnání s 
   
 
 
-<time datetime="2009-02-26T00:00:00+01:00" pubdate data-updated="true">26. 02. 2009</time>
+<time datetime="2009-02-26T00:00:00-06:00" pubdate data-updated="true">26. 02. 2009</time>
         
       </p>
     
@@ -359,7 +416,7 @@ Z pyramid mě zaujali čísla kolem LOC (počet řádků kódu) v porodnání s 
   
 
 
-<time datetime="2009-02-23T00:00:00+01:00" pubdate data-updated="true">23. 02. 2009</time>
+<time datetime="2009-02-23T00:00:00-06:00" pubdate data-updated="true">23. 02. 2009</time>
         
       </p>
     
@@ -485,7 +542,7 @@ svn up
   
 
 
-<time datetime="2009-02-18T00:00:00+01:00" pubdate data-updated="true">18. 02. 2009</time>
+<time datetime="2009-02-18T00:00:00-06:00" pubdate data-updated="true">18. 02. 2009</time>
         
       </p>
     
@@ -556,7 +613,7 @@ svn up
   
 
 
-<time datetime="2009-02-09T00:00:00+01:00" pubdate data-updated="true">09. 02. 2009</time>
+<time datetime="2009-02-09T00:00:00-06:00" pubdate data-updated="true">09. 02. 2009</time>
         
       </p>
     
@@ -600,7 +657,7 @@ svn up
   
 
 
-<time datetime="2009-02-03T00:00:00+01:00" pubdate data-updated="true">03. 02. 2009</time>
+<time datetime="2009-02-03T00:00:00-06:00" pubdate data-updated="true">03. 02. 2009</time>
         
       </p>
     
@@ -671,7 +728,7 @@ svn up
   
 
 
-<time datetime="2009-01-28T00:00:00+01:00" pubdate data-updated="true">28. 01. 2009</time>
+<time datetime="2009-01-28T00:00:00-06:00" pubdate data-updated="true">28. 01. 2009</time>
         
       </p>
     
@@ -710,7 +767,7 @@ svn up
   
 
 
-<time datetime="2009-01-19T00:00:00+01:00" pubdate data-updated="true">19. 01. 2009</time>
+<time datetime="2009-01-19T00:00:00-06:00" pubdate data-updated="true">19. 01. 2009</time>
         
       </p>
     
@@ -775,7 +832,7 @@ done</pre>
   
 
 
-<time datetime="2009-01-12T00:00:00+01:00" pubdate data-updated="true">12. 01. 2009</time>
+<time datetime="2009-01-12T00:00:00-06:00" pubdate data-updated="true">12. 01. 2009</time>
         
       </p>
     
@@ -796,43 +853,6 @@ done</pre>
 <a href="http://blog.prskavec.net/2007/11/tvorba-caroveho-kodu-v-php/">Tvorba čárového kódu v PHP</a></p>
 
 <p>Jsem rád, že se některé články líbíli i když většinou žádná extra diskuze neproběhla, za ohlasy ke všem článkům všem přispěvovatelům děkuji a snad to se mnou vydržíte i v novém roce.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/12/pf-2009/">PF 2009</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-12-23T00:00:00+01:00" pubdate data-updated="true">23. 12. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div align="center"><img style="max-width: 800px;" src="http://blog.prskavec.net/wp-content/uploads/2008/12/pf2009.png" /><br />Přejí veselé vánoce a šťasný nový rok také čtenářům mého blogu.<br /></div>
-
 </div>
   
   
@@ -873,6 +893,10 @@ done</pre>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2017/04/docker-multi-stage-build/">Docker - multi stage build</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/12/jenkins-declarative-pipelines/">Jenkins Declarative Pipelines</a>
       </li>
     
@@ -906,10 +930,6 @@ done</pre>
     
       <li class="post">
         <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/">Porovnání implementace service v NodeJS a Go lang</a>
       </li>
     
   </ul>
@@ -952,7 +972,7 @@ done</pre>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2016 - Ladislav Prskavec -
+  Copyright &copy; 2017 - Ladislav Prskavec -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
