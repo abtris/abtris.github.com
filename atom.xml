@@ -4,7 +4,7 @@
   <title><![CDATA[Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2017-04-21T09:54:36-05:00</updated>
+  <updated>2017-06-28T17:04:37+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -14,9 +14,54 @@
 
   
   <entry>
+    <title type="html"><![CDATA[JAM stack]]></title>
+    <link href="http://blog.prskavec.net/2017/06/jam-stack/"/>
+    <updated>2017-06-28T15:26:00+02:00</updated>
+    <id>http://blog.prskavec.net/2017/06/jam-stack</id>
+    <content type="html"><![CDATA[<p>Co to je <a href="https://jamstack.org/">JAM Stack</a>? To je pojmenování moderního způsobu jak vytvářet weby pomocí clientského Javascriptu, API a Markupu.</p>
+
+<p>Tento stack není žádná novinka, ale dlouho chybělo dobré pojmenování. Nejlepší příklad většího použití podle mne je přechod <a href="https://www.smashingmagazine.com/">Smashing Magazine</a>, který pěkně poslali v <a href="https://www.netlify.com/blog/2017/03/16/smashing-magazine-just-got-10x-faster/">článku</a>.</p>
+
+<p>Nejdůležitější věci co definují JAMstack:</p>
+
+<ul>
+<li>používá CDN</li>
+<li>používá místo databáze Git</li>
+<li>markup se převádí pomocí automatického buildu</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Javascript</h2>
+
+<p>Pokud máte JAMstack nemusíte rezignovat na CMS, je tu několik CMS napsaných jako Javascriptové SPA aplikace &ndash; <a href="https://headlesscms.org/">A List of Content Management Systems for JAMstack Sites</a>. Nejznámější řešení je <a href="https://www.netlifycms.org/">Netlify CMS &ndash; An open-source CMS for your Git workflow</a>, které je open source, ale i nabízená jako <a href="https://www.netlify.com/">SaaS</a>.</p>
+
+<p>Zajímavé řešení nění jen na Javascriptu, ale například na <a href="https://getshifter.io">WordPressu</a>, kde Wordpress funguje jako CMS, ale stránky jsou staticky vygenerované. Další podobné řešení je <a href="https://forestry.io">Forestry</a> a určitě najdete další.</p>
+
+<h2>API</h2>
+
+<p>Samozřejmě nevystačíte jen statickými stránkami a potřebujete přidat funkce na zpracování formulářů nebo napojit na eshop. Například <a href="https://snipcart.com">Javascript Shopping Cart</a> řeší eshop a můžete využít <a href="https://serverless.com/">Serverless</a> a implementovat co potřebujete pokud využijete <a href="http://graphql.org/">GraphQL</a> a například <a href="https://www.graph.cool/">Graphcool</a> kombinuje GraphQL a AWS Lambdu i jiné FaaS.</p>
+
+<p>Další API které se používají například v Smashing magazine a jsou <a href="https://www.netlify.com/open-source/">open source</a>.</p>
+
+<h2>Markup</h2>
+
+<p>Statické generátory (<a href="http://jekyllrb.com/">jekyll</a>, <a href="http://gohugo.io/">hugo</a>) jsou oblíbené a najdete jich velký seznam na <a href="https://www.staticgen.com/">Top Open-Source Static Site Generators</a>. Například Hugo je napsaný v Go langu a je velmi rychlý a stále se hodně rozvíjí. Jekyll se součást <a href="https://pages.github.com/">Github Pages</a> a proto je hodně oblíbený mezi vývojáři na Githubu.</p>
+
+<h2>Závěr</h2>
+
+<p>Pokud vás to zajímá tak doporučuji <a href="http://www.heavybit.com/library/podcasts/jamstack-radio/ep-1-introducing-jamstack-radio/">podcast JAMstack Radio</a>, kde je spousta zajímavých hostů a zdrojů k inspiraci.</p>
+
+<p>Pokud si chcete popovídat o GraphQL zastavte se na <a href="https://www.meetup.com/apiaryio/events/240962821/">Hive talks</a> 11.7. v Karlíně.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Docker - multi stage build]]></title>
     <link href="http://blog.prskavec.net/2017/04/docker-multi-stage-build/"/>
-    <updated>2017-04-21T08:10:00-05:00</updated>
+    <updated>2017-04-21T08:10:00+02:00</updated>
     <id>http://blog.prskavec.net/2017/04/docker-multi-stage-build</id>
     <content type="html"><![CDATA[<p>Tato novinka je dostupná v poslední verzi Dockeru 17.05, musíte mít <a href="https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac">Edge edici</a> a se zapnutými experimentálním funkcemi, ale objeví se to v další stabilní verzi. Je pro jistotu tady je výpis z mého <code>docker version</code>.</p>
 
@@ -138,7 +183,7 @@
   <entry>
     <title type="html"><![CDATA[Jenkins Declarative Pipelines]]></title>
     <link href="http://blog.prskavec.net/2016/12/jenkins-declarative-pipelines/"/>
-    <updated>2016-12-20T16:52:00-06:00</updated>
+    <updated>2016-12-20T16:52:00+01:00</updated>
     <id>http://blog.prskavec.net/2016/12/jenkins-declarative-pipelines</id>
     <content type="html"><![CDATA[<p>Dnes Jenkins <a href="https://jenkins.io/blog/2016/12/19/declarative-pipeline-beta/">zveřejnil betu</a> nového formátu pro popis Continues Delivery Pipelines.</p>
 
@@ -317,7 +362,7 @@ kořenovém adresáři repozitáře projektu.</p>
   <entry>
     <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení - 2.část]]></title>
     <link href="http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast/"/>
-    <updated>2016-10-31T10:26:00-05:00</updated>
+    <updated>2016-10-31T10:26:00+01:00</updated>
     <id>http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni-2-dot-cast</id>
     <content type="html"><![CDATA[<p>V minulé části jsem probíral proč je důležité mít definice v souboru a proč potřebujeme Continues Delivery Pipelines.</p>
 
@@ -379,7 +424,7 @@ kořenovém adresáři repozitáře projektu.</p>
   <entry>
     <title type="html"><![CDATA[Jenkins 2.0 - novinky a vylepšení]]></title>
     <link href="http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni/"/>
-    <updated>2016-10-26T19:02:00-05:00</updated>
+    <updated>2016-10-26T19:02:00+02:00</updated>
     <id>http://blog.prskavec.net/2016/10/jenkins-2-dot-0-novinky-a-vylepseni</id>
     <content type="html"><![CDATA[<p>Jenkins je nejznámější řešení na Continues Integration, který existuje už řadu let. Od září je venku konečně verze 2.x (aktuálně 2.19.1 LTS), která obsahuje několik zásadních novinek.</p>
 
@@ -485,7 +530,7 @@ kořenovém adresáři repozitáře projektu.</p>
   <entry>
     <title type="html"><![CDATA[Přednáška o SRE na DevOPS meetupu]]></title>
     <link href="http://blog.prskavec.net/2016/10/prednaska-o-sre-na-devops-meetupu/"/>
-    <updated>2016-10-17T08:22:00-05:00</updated>
+    <updated>2016-10-17T08:22:00+02:00</updated>
     <id>http://blog.prskavec.net/2016/10/prednaska-o-sre-na-devops-meetupu</id>
     <content type="html"><![CDATA[<p>O <a href="http://blog.prskavec.net/2016/03/co-to-je-sre/">SRE</a> ve startup budu mluvit 31. řijna na
 <a href="https://www.meetup.com/Prague-DevOps-Meetup/events/233883552/">DevOps Meetupu</a>.</p>
@@ -497,7 +542,7 @@ kořenovém adresáři repozitáře projektu.</p>
   <entry>
     <title type="html"><![CDATA[SREcon'16 Europe]]></title>
     <link href="http://blog.prskavec.net/2016/07/srecon-16-europe/"/>
-    <updated>2016-07-14T08:13:00-05:00</updated>
+    <updated>2016-07-14T08:13:00+02:00</updated>
     <id>http://blog.prskavec.net/2016/07/srecon-16-europe</id>
     <content type="html"><![CDATA[<p>Letošní <a href="https://www.usenix.org/conference/srecon16europe">SREcon</a> byl zase v Dublinu. Od 11.7. do 13.7. se zde setkali velcí hráči (Google, Facebook, Microsoft, Amazon) s těmi menšími a vyměňovali si spoustu zkušeností. Letos jsem se mohl poprvé zúčastnit. Nebyl jsem z ČR sám, zastoupení měli Avast, Seznam nebo Skype či Algolia. Dohromady asi 5 lidí.
 Konference byla vyprodaná a hodně míst měli lidé z Googlu a pokud vás zajímalo jak se pracuje v Dublinském Googlu nebo Facebooku mohli jste si o tom s lidmi promluvit.
@@ -541,7 +586,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
 
 <p>Hodně je vidět jaký velký rozdíl a kolik práce to dá pokud chcete firmu předělat na SRE (brownfielding) nebo začnete hned.</p>
 
-<h3>The Many Ways Your Monitoring Is Lying to You &ndash; Sebastian Kirsch, Google, <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#115;&#107;&#x69;&#114;&#115;&#x63;&#x68;&#64;&#x67;&#111;&#x6f;&#103;&#108;&#101;&#46;&#99;&#111;&#109;">&#115;&#x6b;&#x69;&#114;&#115;&#x63;&#x68;&#64;&#103;&#111;&#111;&#103;&#x6c;&#x65;&#46;&#x63;&#x6f;&#x6d;</a></h3>
+<h3>The Many Ways Your Monitoring Is Lying to You &ndash; Sebastian Kirsch, Google, <a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x73;&#107;&#105;&#x72;&#x73;&#99;&#x68;&#x40;&#x67;&#111;&#x6f;&#x67;&#108;&#x65;&#46;&#99;&#x6f;&#109;">&#115;&#x6b;&#x69;&#114;&#115;&#99;&#104;&#x40;&#103;&#111;&#111;&#x67;&#108;&#x65;&#x2e;&#99;&#111;&#x6d;</a></h3>
 
 <p>Skvělá přednáška o tom jak nemůžete věřit každému grafu v monitoringu. Doporučuji schlédnout až bude video, bylo tam hodně příkladů. Jde o to, že věci, které uváděl nejsou pro mě například vůbec nové díky lekcím z numerické matematiky a statistiky na ČVUT, ale ne každý má statistický background a nebývá to až tak běžná součást Computer Science.</p>
 
@@ -595,7 +640,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
   <entry>
     <title type="html"><![CDATA[Serverless jako něco víc než Docker]]></title>
     <link href="http://blog.prskavec.net/2016/06/serverless-jako-neco-vic-nez-docker/"/>
-    <updated>2016-06-06T13:50:00-05:00</updated>
+    <updated>2016-06-06T13:50:00+02:00</updated>
     <id>http://blog.prskavec.net/2016/06/serverless-jako-neco-vic-nez-docker</id>
     <content type="html"><![CDATA[<h2>Serverless</h2>
 
@@ -631,7 +676,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
   <entry>
     <title type="html"><![CDATA[Co to je SRE?]]></title>
     <link href="http://blog.prskavec.net/2016/03/co-to-je-sre/"/>
-    <updated>2016-03-10T08:45:00-06:00</updated>
+    <updated>2016-03-10T08:45:00+01:00</updated>
     <id>http://blog.prskavec.net/2016/03/co-to-je-sre</id>
     <content type="html"><![CDATA[<p>Včera jsem měl <a href="http://srazy.info/jak-nejlepe-nasadit-docker-kontejnery-do-cloudu/6197">přednášku v Brně o dockeru</a> a ptal jsem se lidí kolem na meetup a v hospodě potom zda znají Site Reliability Engineering (SRE) ze svého okolí. Tento koncept od Googlu rozšiřuje klasické pojetí DevOps a myslím, že je to jedna z nejlepších věcí co Google vymyslel.</p>
 
@@ -667,7 +712,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
   <entry>
     <title type="html"><![CDATA[Suchý docker]]></title>
     <link href="http://blog.prskavec.net/2016/02/suchy-docker/"/>
-    <updated>2016-02-05T09:20:00-06:00</updated>
+    <updated>2016-02-05T09:20:00+01:00</updated>
     <id>http://blog.prskavec.net/2016/02/suchy-docker</id>
     <content type="html"><![CDATA[<p><a href="http://suchejunor.cz/">Suchý únor</a> je skvělá akce a tak jsem říkal, zda s Dockerem nebudeme také na suchu. Našťěstí včera se situace změnila a vyšli nové verze Docker Engine, Docker Swarm and Docker Compose.</p>
 
@@ -769,7 +814,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
   <entry>
     <title type="html"><![CDATA[Nástroje co používám pro vývoj a správu]]></title>
     <link href="http://blog.prskavec.net/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/"/>
-    <updated>2015-12-03T10:35:00-06:00</updated>
+    <updated>2015-12-03T10:35:00+01:00</updated>
     <id>http://blog.prskavec.net/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu</id>
     <content type="html"><![CDATA[<p>Sublime Text, Terminal</p>
 
@@ -858,7 +903,7 @@ Kurt mluvil o knize <a href="https://www.amazon.com/Team-Teams-Rules-Engagement-
   <entry>
     <title type="html"><![CDATA[Porovnání implementace service v NodeJS a Go lang]]></title>
     <link href="http://blog.prskavec.net/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang/"/>
-    <updated>2015-09-16T10:54:00-05:00</updated>
+    <updated>2015-09-16T10:54:00+02:00</updated>
     <id>http://blog.prskavec.net/2015/09/porovnani-implementace-microservice-v-nodejs-and-go-lang</id>
     <content type="html"><![CDATA[<h2>Datadog a log parsing service</h2>
 
@@ -899,7 +944,7 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
   <entry>
     <title type="html"><![CDATA[Amazon Elastic Beanstalk a docker]]></title>
     <link href="http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker/"/>
-    <updated>2015-05-14T11:36:00-05:00</updated>
+    <updated>2015-05-14T11:36:00+02:00</updated>
     <id>http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker</id>
     <content type="html"><![CDATA[<p>Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době přidal podporu <a href="http://www.docker.io">Dockeru</a>. Díky podpoře docker kontejnerů je možné pustit víceméně cokoliv.</p>
 
@@ -1129,7 +1174,7 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
   <entry>
     <title type="html"><![CDATA[Docker cluster management]]></title>
     <link href="http://blog.prskavec.net/2015/02/docker-cluster-management/"/>
-    <updated>2015-02-07T18:09:00-06:00</updated>
+    <updated>2015-02-07T18:09:00+01:00</updated>
     <id>http://blog.prskavec.net/2015/02/docker-cluster-management</id>
     <content type="html"><![CDATA[<ul>
 <li>Update: přidal jsem do článku další věci zmíněné v komentářích, všem děkuji za příspěvky.</li>
@@ -1188,7 +1233,7 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
   <entry>
     <title type="html"><![CDATA[Zapier a zasílání zůstatku z banky zdarma na mobil]]></title>
     <link href="http://blog.prskavec.net/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil/"/>
-    <updated>2014-12-11T16:29:00-06:00</updated>
+    <updated>2014-12-11T16:29:00+01:00</updated>
     <id>http://blog.prskavec.net/2014/12/zapier-a-zasilani-zustatku-z-banky-zdarma-na-mobil</id>
     <content type="html"><![CDATA[<h2>Motivace</h2>
 
@@ -1220,7 +1265,7 @@ Aplikaci a její metriky můžete posílat přes Datadog API.</p>
   <entry>
     <title type="html"><![CDATA[Git a pre-commit hook pro kontrolu syntaxe]]></title>
     <link href="http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/"/>
-    <updated>2014-01-06T19:29:00-06:00</updated>
+    <updated>2014-01-06T19:29:00+01:00</updated>
     <id>http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich</id>
     <content type="html"><![CDATA[<p>Pokud pracujete s gitem nebo jiným verzovacím systémem, určitě jste se setkali s hooky. Pro kontrolu než provedete commit, který se jmenuje pre-commit a hodí se zejména pro kontrolu syntaxe. Já mám několik hooků, které kontrolují php, js, xml a ruby. Říkal jsem si, že by to chtělo je refactorovat a udělat z nich použitelný kód.</p>
 
@@ -1256,7 +1301,7 @@ git init
   <entry>
     <title type="html"><![CDATA[docker]]></title>
     <link href="http://blog.prskavec.net/2013/11/docker/"/>
-    <updated>2013-11-28T08:25:00-06:00</updated>
+    <updated>2013-11-28T08:25:00+01:00</updated>
     <id>http://blog.prskavec.net/2013/11/docker</id>
     <content type="html"><![CDATA[<p>Pokud se zajímáte o to jak nasazovat aplikace na svoje servery, pronajaté VPS nebo doc cloudu, měli by jste si něco o této poměrně mladé technologii přečíst nebo vidět.</p>
 
@@ -1283,7 +1328,7 @@ git init
   <entry>
     <title type="html"><![CDATA[Jenkins polling a git-notify]]></title>
     <link href="http://blog.prskavec.net/2013/09/jenkins-polling-a-git-notify/"/>
-    <updated>2013-09-05T10:01:00-05:00</updated>
+    <updated>2013-09-05T10:01:00+02:00</updated>
     <id>http://blog.prskavec.net/2013/09/jenkins-polling-a-git-notify</id>
     <content type="html"><![CDATA[<p>Minulý rok jsem psal o tom, že <a href="http://blog.prskavec.net/2012/06/jenkins-scm-polling-je-zlo/">polling v Jenkinsu je zlo</a>. To stále platí, ale i když máte tento přístup nemusí to stačit.</p>
 
@@ -1445,7 +1490,7 @@ curl "http://jenkins.firma.cz/git/notifyCommit?url=ssh://git@git.firma.cz/$REPOS
   <entry>
     <title type="html"><![CDATA[Firebase a AngularJS]]></title>
     <link href="http://blog.prskavec.net/2013/08/firebase-a-angularjs/"/>
-    <updated>2013-08-29T11:31:00-05:00</updated>
+    <updated>2013-08-29T11:31:00+02:00</updated>
     <id>http://blog.prskavec.net/2013/08/firebase-a-angularjs</id>
     <content type="html"><![CDATA[<p>Dnešní většina aplikací v javascriptu má architekturu klient server. Pokud nechcete psát nějaký backend pro vaši aplikaci, můžete se tomu vyhnout pokud použijete nějaký druh úložiště (databáze), která vám k tomu přidá i funkce, které má nějaký backend napsaný např. v nodejs nebo php.</p>
 
@@ -1546,7 +1591,7 @@ $scope.logout = function() {
   <entry>
     <title type="html"><![CDATA[Jaký bude AngularJS 1.2?]]></title>
     <link href="http://blog.prskavec.net/2013/06/angularjs-1-dot-2/"/>
-    <updated>2013-06-13T22:08:00-05:00</updated>
+    <updated>2013-06-13T22:08:00+02:00</updated>
     <id>http://blog.prskavec.net/2013/06/angularjs-1-dot-2</id>
     <content type="html"><![CDATA[<p>Pokud sledujete dění kolem frameworku <a href="http://angularjs.org">AngularJS</a> tak jste jistě zaznamenali, že se pracuje na nové verzi 1.2, která je teď blízko k dokončení. V masteru mají dnes verzi pojmenovanou jako verzi 1.1.8 a brzy se snad dočkáme finální verze. Zkusím zde popsat nejdůležitější věci z <a href="https://docs.google.com/presentation/d/1WHCcp3G3HxoE7b_ut_ERKJF4zQK_P4qFlESjE2E9AUQ/preview?sle=true#slide=id.geaf70e8e_16">prezentace</a> na meetupu 11.6. co prezentovali Igor Minár a Brad Green.</p>
 
@@ -1613,17 +1658,6 @@ Konečně lze napsat:</p>
 <h2>Shrnutí</h2>
 
 <p>Přibude jestě několik vylepšení pro bezpečnost (CSP) a vylepší error hlášky, také by se měla zlepšit dokumentace a bude interaktivní tutorial. Dema a detaily najdete také ve videu na <a href="https://www.youtube.com/watch?v=W13qDdJDHp8&amp;feature=c4-overview">youtube</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Zdroják - Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)]]></title>
-    <link href="http://blog.prskavec.net/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs/"/>
-    <updated>2013-06-01T11:23:00-05:00</updated>
-    <id>http://blog.prskavec.net/2013/06/zdrojak-dan-menard-instant-angularjs-starter-recenze-prvni-knihy-o-angularjs</id>
-    <content type="html"><![CDATA[<p>Javascriptový framework AngularJS se stává čím dám tím populárnější. Letos vyjde několik prvních knih na něj zaměřených. Recenzi té úplně první z nich vám dnes nabízíme.</p>
-
-<p>Více na <a href="http://www.zdrojak.cz/clanky/menard-instant-angularjs-starter-recenze/">zdrojak.cz</a></p>
 ]]></content>
   </entry>
   

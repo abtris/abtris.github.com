@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: git | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/git/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2017-04-21T09:54:36-05:00</updated>
+  <updated>2017-06-28T17:04:37+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Git a pre-commit hook pro kontrolu syntaxe]]></title>
     <link href="http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich/"/>
-    <updated>2014-01-06T19:29:00-06:00</updated>
+    <updated>2014-01-06T19:29:00+01:00</updated>
     <id>http://blog.prskavec.net/2014/01/git-a-pre-commit-hook-pro-kontrolu-syntaxe-v-mnoha-jazycich</id>
     <content type="html"><![CDATA[<p>Pokud pracujete s gitem nebo jiným verzovacím systémem, určitě jste se setkali s hooky. Pro kontrolu než provedete commit, který se jmenuje pre-commit a hodí se zejména pro kontrolu syntaxe. Já mám několik hooků, které kontrolují php, js, xml a ruby. Říkal jsem si, že by to chtělo je refactorovat a udělat z nich použitelný kód.</p>
 

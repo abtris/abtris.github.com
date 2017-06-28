@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Kategorie: jamstack | Prskavčí blog]]></title>
+  <link href="http://blog.prskavec.net/categories/jamstack/atom.xml" rel="self"/>
+  <link href="http://blog.prskavec.net/"/>
+  <updated>2017-06-28T17:04:37+02:00</updated>
+  <id>http://blog.prskavec.net/</id>
+  <author>
+    <name><![CDATA[Ladislav Prskavec]]></name>
+    <email><![CDATA[ladislav@prskavec.net]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[JAM stack]]></title>
+    <link href="http://blog.prskavec.net/2017/06/jam-stack/"/>
+    <updated>2017-06-28T15:26:00+02:00</updated>
+    <id>http://blog.prskavec.net/2017/06/jam-stack</id>
+    <content type="html"><![CDATA[<p>Co to je <a href="https://jamstack.org/">JAM Stack</a>? To je pojmenování moderního způsobu jak vytvářet weby pomocí clientského Javascriptu, API a Markupu.</p>
+
+<p>Tento stack není žádná novinka, ale dlouho chybělo dobré pojmenování. Nejlepší příklad většího použití podle mne je přechod <a href="https://www.smashingmagazine.com/">Smashing Magazine</a>, který pěkně poslali v <a href="https://www.netlify.com/blog/2017/03/16/smashing-magazine-just-got-10x-faster/">článku</a>.</p>
+
+<p>Nejdůležitější věci co definují JAMstack:</p>
+
+<ul>
+<li>používá CDN</li>
+<li>používá místo databáze Git</li>
+<li>markup se převádí pomocí automatického buildu</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Javascript</h2>
+
+<p>Pokud máte JAMstack nemusíte rezignovat na CMS, je tu několik CMS napsaných jako Javascriptové SPA aplikace &ndash; <a href="https://headlesscms.org/">A List of Content Management Systems for JAMstack Sites</a>. Nejznámější řešení je <a href="https://www.netlifycms.org/">Netlify CMS &ndash; An open-source CMS for your Git workflow</a>, které je open source, ale i nabízená jako <a href="https://www.netlify.com/">SaaS</a>.</p>
+
+<p>Zajímavé řešení nění jen na Javascriptu, ale například na <a href="https://getshifter.io">WordPressu</a>, kde Wordpress funguje jako CMS, ale stránky jsou staticky vygenerované. Další podobné řešení je <a href="https://forestry.io">Forestry</a> a určitě najdete další.</p>
+
+<h2>API</h2>
+
+<p>Samozřejmě nevystačíte jen statickými stránkami a potřebujete přidat funkce na zpracování formulářů nebo napojit na eshop. Například <a href="https://snipcart.com">Javascript Shopping Cart</a> řeší eshop a můžete využít <a href="https://serverless.com/">Serverless</a> a implementovat co potřebujete pokud využijete <a href="http://graphql.org/">GraphQL</a> a například <a href="https://www.graph.cool/">Graphcool</a> kombinuje GraphQL a AWS Lambdu i jiné FaaS.</p>
+
+<p>Další API které se používají například v Smashing magazine a jsou <a href="https://www.netlify.com/open-source/">open source</a>.</p>
+
+<h2>Markup</h2>
+
+<p>Statické generátory (<a href="http://jekyllrb.com/">jekyll</a>, <a href="http://gohugo.io/">hugo</a>) jsou oblíbené a najdete jich velký seznam na <a href="https://www.staticgen.com/">Top Open-Source Static Site Generators</a>. Například Hugo je napsaný v Go langu a je velmi rychlý a stále se hodně rozvíjí. Jekyll se součást <a href="https://pages.github.com/">Github Pages</a> a proto je hodně oblíbený mezi vývojáři na Githubu.</p>
+
+<h2>Závěr</h2>
+
+<p>Pokud vás to zajímá tak doporučuji <a href="http://www.heavybit.com/library/podcasts/jamstack-radio/ep-1-introducing-jamstack-radio/">podcast JAMstack Radio</a>, kde je spousta zajímavých hostů a zdrojů k inspiraci.</p>
+
+<p>Pokud si chcete popovídat o GraphQL zastavte se na <a href="https://www.meetup.com/apiaryio/events/240962821/">Hive talks</a> 11.7. v Karlíně.</p>
+]]></content>
+  </entry>
+  
+</feed>

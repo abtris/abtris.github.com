@@ -9,7 +9,7 @@
   <meta name="author" content="Ladislav Prskavec">
 
   
-  <meta name="description" content="Dělám na PHP aplikaci, která kromě RSS generuje také iCalendar pro Lighting a iCal na Mac OS X. Někomu stačí asi RFC 2445 a hravě si s tím poradí, &hellip;">
+  <meta name="description" content="CZ NIC spustil doménu http://www.háčkyčárky.cz, jal jsem se to hned vyzkoušet a narazil jsem na několik problémů. Nejprve prohlížeče. Kromě malých &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,45 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2008/05/problmy-s-internationalized-domain-names/">Problémy s Internationalized domain names</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-05-21T00:00:00+02:00" pubdate data-updated="true">21. 05. 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>CZ NIC spustil <a href="http://www.exohosting.sk/webhosting/">doménu</a> <a title="http://www.háčkyčárky.cz" href="http://www.háčkyčárky.cz">http://www.háčkyčárky.cz</a>, jal jsem se to hned vyzkoušet a narazil jsem na několik problémů. </p>
+
+
+<p> <p>Nejprve prohlížeče. Kromě malých problémů s Firefoxem jak vidíte na obrázcích to všechny prohlížeče zvládají.</p> <h3>Firefox 2.0.0.14 &ndash; výchozí prohlížeč u mne</h3> <p>Tato chyba se stala po kliknutí na odkaz v RSS v Thunderbirdu.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="400" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb.png" width="644" border="0" /></a></p> <p>Tak jsem se jak to napsat tam ručně. A tohle z toho FF udělal, ale aspoň to funguje.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image1.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="232" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb1.png" width="562" border="0" /></a> </p> <h3>Opera 9.5 beta </h3> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image2.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="183" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb2.png" width="466" border="0" /></a> </p> <h3>IE 7</h3> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image3.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="217" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb3.png" width="404" border="0" /></a> </p> <h3>Safari 3.1.1</h3> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image4.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="196" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb4.png" width="362" border="0" /></a> </p> <p>S mailem to bylo horší náš SMTP server mi odeslání mailu na <a href="mailto:testmail@háčkyčárky.cz">testmail@háčkyčárky.cz</a> nedovolil s tím, že jde o nesprávnou adresu.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image5.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="122" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb5.png" width="566" border="0" /></a> </p> <p>GMail hlásí podobné varování, co teď? email prostě asi neodešlu.</p> <p><a href="http://blog.prskavec.net/wp-content/uploads/2008/05/image6.png"><img style="border-right: 0px;border-top: 0px;border-left: 0px;border-bottom: 0px" height="176" alt="image" src="http://blog.prskavec.net/wp-content/uploads/2008/05/image-thumb6.png" width="446" border="0" /></a> </p> <p>Tak zatím bych si doménu s háčky a čárky nepořizoval, přineslo by to více problémů než výhod, snad jedině jako alias k přesměrování na tu normální.</p></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2008/05/pr-tipu-pro-prci-s-formtem-icalendar/">Pár tipů pro práci s formátem iCalendar</a></h1>
     
     
@@ -81,7 +120,7 @@
   
 
 
-<time datetime="2008-05-13T00:00:00-05:00" pubdate data-updated="true">13. 05. 2008</time>
+<time datetime="2008-05-13T00:00:00+02:00" pubdate data-updated="true">13. 05. 2008</time>
         
       </p>
     
@@ -159,7 +198,7 @@ END:VCALENDAR</pre>
   
 
 
-<time datetime="2008-05-05T00:00:00-05:00" pubdate data-updated="true">05. 05. 2008</time>
+<time datetime="2008-05-05T00:00:00+02:00" pubdate data-updated="true">05. 05. 2008</time>
         
       </p>
     
@@ -284,7 +323,7 @@ ldap.server1.accountFilterFormat = "(&amp;(objectClass=person)(uid=%s))"</pre>
   
 
 
-<time datetime="2008-04-30T00:00:00-05:00" pubdate data-updated="true">30. 04. 2008</time>
+<time datetime="2008-04-30T00:00:00+02:00" pubdate data-updated="true">30. 04. 2008</time>
         
       </p>
     
@@ -334,7 +373,7 @@ ldap.server1.accountFilterFormat = "(&amp;(objectClass=person)(uid=%s))"</pre>
   
 
 
-<time datetime="2008-04-28T00:00:00-05:00" pubdate data-updated="true">28. 04. 2008</time>
+<time datetime="2008-04-28T00:00:00+02:00" pubdate data-updated="true">28. 04. 2008</time>
         
       </p>
     
@@ -397,7 +436,7 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
   
 
 
-<time datetime="2008-04-26T00:00:00-05:00" pubdate data-updated="true">26. 04. 2008</time>
+<time datetime="2008-04-26T00:00:00+02:00" pubdate data-updated="true">26. 04. 2008</time>
         
       </p>
     
@@ -433,7 +472,7 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
   
 
 
-<time datetime="2008-04-25T00:00:00-05:00" pubdate data-updated="true">25. 04. 2008</time>
+<time datetime="2008-04-25T00:00:00+02:00" pubdate data-updated="true">25. 04. 2008</time>
         
       </p>
     
@@ -472,7 +511,7 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
   
 
 
-<time datetime="2008-04-23T00:00:00-05:00" pubdate data-updated="true">23. 04. 2008</time>
+<time datetime="2008-04-23T00:00:00+02:00" pubdate data-updated="true">23. 04. 2008</time>
         
       </p>
     
@@ -511,7 +550,7 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
   
 
 
-<time datetime="2008-04-23T00:00:00-05:00" pubdate data-updated="true">23. 04. 2008</time>
+<time datetime="2008-04-23T00:00:00+02:00" pubdate data-updated="true">23. 04. 2008</time>
         
       </p>
     
@@ -594,7 +633,7 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
   
 
 
-<time datetime="2008-04-18T00:00:00-05:00" pubdate data-updated="true">18. 04. 2008</time>
+<time datetime="2008-04-18T00:00:00+02:00" pubdate data-updated="true">18. 04. 2008</time>
         
       </p>
     
@@ -610,85 +649,6 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
 <p>Komerční firmy tam předváděli řešení pro firemní sféru založená na Linuxu, kromě tradičních firem IBM, Sun, HP, Oracle mě zaujala nabídka ESET, jejich Nod32 je na Windows dost populární.</p>
 
 <p>Celkem mě se tento ročník líbil méně než minulý a nedozvědel jsem nic podstatného, aspoň takový je dojem z výstavy, doufám, že přednášky přinesli více.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/04/wordpress-themes/">Wordpress Themes</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-04-16T00:00:00-05:00" pubdate data-updated="true">16. 04. 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Po aktualizaci na nový WP jsem se také podíval po nějakém novém designu a překvapilo mě kolik je pěkných designů volně k dispozici. Tady jsem uvedl pět, které mě nějak zaujali.</p>
-
-<h2>iTheme</h2>
-
-
-<p><a href="http://www.ndesign-studio.com/resources/wp-themes/itheme/"><img style="border-top-width: 0px; border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/04/image3.png" border="0" alt="image" width="244" height="177" /></a></p>
-
-<h2>Several3</h2>
-
-
-<p><a href="http://themespack.com/several3-wordpress-theme.html"><img style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/04/image4.png" border="0" alt="image" width="244" height="186" /></a></p>
-
-<h2>DM-Bloodless</h2>
-
-
-<p><a href="http://deafmusician.com/dm-bloodless/"><img style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/04/image5.png" border="0" alt="image" width="244" height="212" /></a></p>
-
-<h2>Theme Sandbox</h2>
-
-
-<p><a href="http://demo.ifelse.co.uk/"><img style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/04/image6.png" border="0" alt="image" width="242" height="244" /></a></p>
-
-<h2>PocketT for WordPress</h2>
-
-
-<p><a href="http://www.nyssajbrown.net/pockett/"><img style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" src="http://blog.prskavec.net/wp-content/uploads/2008/04/image7.png" border="0" alt="image" width="244" height="180" /></a></p>
-
-<p>Rád budu pokud do komentářů uvedete nějaké svoje oblíbené skiny pro WP.</p>
-
-<h3>Zdroje kde jsem hledal</h3>
-
-
-<ul>
-    <li><a href="http://www.wpdesigner.com/">WPDesigner.com</a></li>
-    <li><a href="http://wordpressthemesthatdontsuck.com/">WordPress Themes That Don’t Suck</a></li>
-    <li><a href="http://www.blogperfume.com/category/wordpress-theme/">BlogPerfume WordPress Themes</a></li>
-    <li><a href="http://scribblescratch.com/themes">ScribbleScratch.com</a></li>
-    <li><a href="http://www.skinpress.com/category/wordpress/">Skinpress.com</a></li>
-    <li><a href="http://courtneytuttle.com/seo-wordpress-themes/">48 SEO WordPress Themes</a></li>
-    <li><a href="http://www.teknobites.com/2007/08/30/photoblog-themes-for-wordpress/">Photoblog Themes</a></li>
-    <li><a href="http://www.clazh.com/free-magazine-style-wordpress-themes-and-more/">Clazh.com</a></li>
-    <li><a href="http://themeplayground.com/the-best-wordpress-magazine-themes-available">Best WordPress Magazine Themes</a></li>
-</ul>
-
 </div>
   
   
@@ -729,6 +689,10 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2017/06/jam-stack/">JAM stack</a>
+      </li>
+    
+      <li class="post">
         <a href="/2017/04/docker-multi-stage-build/">Docker - multi stage build</a>
       </li>
     
@@ -762,10 +726,6 @@ Pokud potřebujete např. provést update a potom poslat mail doporučuju člán
     
       <li class="post">
         <a href="/2016/02/suchy-docker/">Suchý docker</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/12/nastroje-co-pouzivam-pro-vyvoj-a-spravu/">Nástroje co používám pro vývoj a správu</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Kategorie: docker | Prskavčí blog]]></title>
   <link href="http://blog.prskavec.net/categories/docker/atom.xml" rel="self"/>
   <link href="http://blog.prskavec.net/"/>
-  <updated>2017-04-21T09:54:36-05:00</updated>
+  <updated>2017-06-28T17:04:37+02:00</updated>
   <id>http://blog.prskavec.net/</id>
   <author>
     <name><![CDATA[Ladislav Prskavec]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Docker - multi stage build]]></title>
     <link href="http://blog.prskavec.net/2017/04/docker-multi-stage-build/"/>
-    <updated>2017-04-21T08:10:00-05:00</updated>
+    <updated>2017-04-21T08:10:00+02:00</updated>
     <id>http://blog.prskavec.net/2017/04/docker-multi-stage-build</id>
     <content type="html"><![CDATA[<p>Tato novinka je dostupná v poslední verzi Dockeru 17.05, musíte mít <a href="https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac">Edge edici</a> a se zapnutými experimentálním funkcemi, ale objeví se to v další stabilní verzi. Je pro jistotu tady je výpis z mého <code>docker version</code>.</p>
 
@@ -100,7 +100,7 @@ golang              1.8                 c0ccf5f2c036        13 days ago         
   <entry>
     <title type="html"><![CDATA[Suchý docker]]></title>
     <link href="http://blog.prskavec.net/2016/02/suchy-docker/"/>
-    <updated>2016-02-05T09:20:00-06:00</updated>
+    <updated>2016-02-05T09:20:00+01:00</updated>
     <id>http://blog.prskavec.net/2016/02/suchy-docker</id>
     <content type="html"><![CDATA[<p><a href="http://suchejunor.cz/">Suchý únor</a> je skvělá akce a tak jsem říkal, zda s Dockerem nebudeme také na suchu. Našťěstí včera se situace změnila a vyšli nové verze Docker Engine, Docker Swarm and Docker Compose.</p>
 
@@ -197,7 +197,7 @@ volumes:
   <entry>
     <title type="html"><![CDATA[Amazon Elastic Beanstalk a docker]]></title>
     <link href="http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker/"/>
-    <updated>2015-05-14T11:36:00-05:00</updated>
+    <updated>2015-05-14T11:36:00+02:00</updated>
     <id>http://blog.prskavec.net/2015/05/amazon-elastic-beanstalk-a-docker</id>
     <content type="html"><![CDATA[<p>Amazon Elastic Beanstalk je Platform as Service podobný známému Heroku. Jen je součást Amazon Web Services. Podporuje řadu jazyků a v neposlední době přidal podporu <a href="http://www.docker.io">Dockeru</a>. Díky podpoře docker kontejnerů je možné pustit víceméně cokoliv.</p>
 
@@ -356,7 +356,7 @@ docker run \</p>
   <entry>
     <title type="html"><![CDATA[Docker cluster management]]></title>
     <link href="http://blog.prskavec.net/2015/02/docker-cluster-management/"/>
-    <updated>2015-02-07T18:09:00-06:00</updated>
+    <updated>2015-02-07T18:09:00+01:00</updated>
     <id>http://blog.prskavec.net/2015/02/docker-cluster-management</id>
     <content type="html"><![CDATA[<ul>
 <li>Update: přidal jsem do článku další věci zmíněné v komentářích, všem děkuji za příspěvky.</li>
@@ -415,7 +415,7 @@ docker run \</p>
   <entry>
     <title type="html"><![CDATA[docker]]></title>
     <link href="http://blog.prskavec.net/2013/11/docker/"/>
-    <updated>2013-11-28T08:25:00-06:00</updated>
+    <updated>2013-11-28T08:25:00+01:00</updated>
     <id>http://blog.prskavec.net/2013/11/docker</id>
     <content type="html"><![CDATA[<p>Pokud se zajímáte o to jak nasazovat aplikace na svoje servery, pronajaté VPS nebo doc cloudu, měli by jste si něco o této poměrně mladé technologii přečíst nebo vidět.</p>
 
